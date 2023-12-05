@@ -29,5 +29,11 @@ namespace aoc
 
         public static BigInteger Product<T>(this IEnumerable<T> collection, Func<T, BigInteger> selector) =>
             collection.Aggregate(BigInteger.One, (a, v) => a * selector(v));
+
+        public static long TryMin(this IEnumerable<long> collection, long value) =>
+            collection.Any() ? collection.Min() : value;
+
+        public static long TryMin<T>(this IEnumerable<T> collection, Func<T, long> selector, long value) =>
+            collection.Any() ? collection.Min(selector) : value;
     }
 }
