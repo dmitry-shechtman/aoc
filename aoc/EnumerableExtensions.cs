@@ -7,10 +7,13 @@ namespace aoc
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> collection, int chunk) =>
-            collection.Select((v, i) => (v, i))
-                .GroupBy(t => t.i / chunk)
-                .Select(g => g.Select(t => t.v).ToArray());
+        public static IEnumerable<(T Value, int Index)> Select<T>(this IEnumerable<T> source) =>
+            source.Select((v, i) => (v, i));
+
+        public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int chunk) =>
+            source.Select()
+                .GroupBy(t => t.Index / chunk)
+                .Select(g => g.Select(t => t.Value).ToArray());
 
         public static int Product(this IEnumerable<int> collection) =>
             collection.Aggregate(1, (a, v) => a * v);
