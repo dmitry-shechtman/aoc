@@ -35,5 +35,11 @@ namespace aoc
 
         public static long TryMin<T>(this IEnumerable<T> collection, Func<T, long> selector, long value) =>
             collection.Any() ? collection.Min(selector) : value;
+
+        public static long TryMax(this IEnumerable<long> collection, long value) =>
+            collection.Any() ? collection.Max() : value;
+
+        public static long TryMax<T>(this IEnumerable<T> collection, Func<T, long> selector, long value) =>
+            collection.Any() ? collection.Max(selector) : value;
     }
 }
