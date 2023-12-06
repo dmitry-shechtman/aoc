@@ -16,8 +16,14 @@ namespace aoc
         public static IOrderedEnumerable<T> Order<T>(this IEnumerable<T> source) =>
             source.OrderBy(v => v);
 
+        public static IOrderedEnumerable<T> Order<T>(this IEnumerable<T> source, IComparer<T> comparer) =>
+            source.OrderBy(v => v, comparer);
+
         public static IOrderedEnumerable<T> OrderDescending<T>(this IEnumerable<T> source) =>
             source.OrderByDescending(v => v);
+
+        public static IOrderedEnumerable<T> OrderDescending<T>(this IEnumerable<T> source, IComparer<T> comparer) =>
+            source.OrderByDescending(v => v, comparer);
 
         public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int chunk) =>
             source.Select()
