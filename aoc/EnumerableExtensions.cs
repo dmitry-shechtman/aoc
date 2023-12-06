@@ -10,6 +10,9 @@ namespace aoc
         public static IEnumerable<(T Value, int Index)> Select<T>(this IEnumerable<T> source) =>
             source.Select((v, i) => (v, i));
 
+        public static IEnumerable<T> SelectMany<T>(this IEnumerable<IEnumerable<T>> source) =>
+            source.SelectMany(v => v);
+
         public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int chunk) =>
             source.Select()
                 .GroupBy(t => t.Index / chunk)
