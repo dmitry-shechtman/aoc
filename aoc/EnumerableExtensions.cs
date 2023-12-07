@@ -41,6 +41,18 @@ namespace aoc
             source.OrderByDescending(keySelector).First();
 #endif
 
+        public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select(predicate).Count();
+
+        public static long LongCount<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select(predicate).LongCount();
+
+        public static TResult Min<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector) =>
+            source.Select(selector).Min();
+
+        public static TResult Max<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector) =>
+            source.Select(selector).Max();
+
         public static int Sum<TSource>(this IEnumerable<TSource> source, Func<TSource, int, int> selector) =>
             source.Select(selector).Sum();
 
@@ -80,10 +92,16 @@ namespace aoc
         public static TResult TryMin<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
             source.Any() ? source.Min(selector) : result;
 
+        public static TResult TryMin<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
+            source.Any() ? source.Min(selector) : result;
+
         public static TSource TryMax<TSource>(this IEnumerable<TSource> source, TSource result) =>
             source.Any() ? source.Max() : result;
 
         public static TResult TryMax<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
+            source.Any() ? source.Max(selector) : result;
+
+        public static TResult TryMax<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
             source.Any() ? source.Max(selector) : result;
     }
 }
