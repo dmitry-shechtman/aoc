@@ -41,6 +41,12 @@ namespace aoc
             source.OrderByDescending(keySelector).First();
 #endif
 
+        public static int Sum<TSource>(this IEnumerable<TSource> source, Func<TSource, int, int> selector) =>
+            source.Select(selector).Sum();
+
+        public static long Sum<TSource>(this IEnumerable<TSource> source, Func<TSource, int, long> selector) =>
+            source.Select(selector).Sum();
+
         public static int Product(this IEnumerable<int> collection) =>
             collection.Aggregate(1, (a, v) => a * v);
 
