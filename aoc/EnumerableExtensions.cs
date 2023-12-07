@@ -56,28 +56,16 @@ namespace aoc
         public static BigInteger Product<T>(this IEnumerable<T> collection, Func<T, BigInteger> selector) =>
             collection.Aggregate(BigInteger.One, (a, v) => a * selector(v));
 
-        public static int TryMin(this IEnumerable<int> collection, int value) =>
-            collection.Any() ? collection.Min() : value;
+        public static TSource TryMin<TSource>(this IEnumerable<TSource> source, TSource result) =>
+            source.Any() ? source.Min() : result;
 
-        public static int TryMin<T>(this IEnumerable<T> collection, Func<T, int> selector, int value) =>
-            collection.Any() ? collection.Min(selector) : value;
+        public static TResult TryMin<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
+            source.Any() ? source.Min(selector) : result;
 
-        public static int TryMax(this IEnumerable<int> collection, int value) =>
-            collection.Any() ? collection.Max() : value;
+        public static TSource TryMax<TSource>(this IEnumerable<TSource> source, TSource result) =>
+            source.Any() ? source.Max() : result;
 
-        public static int TryMax<T>(this IEnumerable<T> collection, Func<T, int> selector, int value) =>
-            collection.Any() ? collection.Max(selector) : value;
-
-        public static long TryMin(this IEnumerable<long> collection, long value) =>
-            collection.Any() ? collection.Min() : value;
-
-        public static long TryMin<T>(this IEnumerable<T> collection, Func<T, long> selector, long value) =>
-            collection.Any() ? collection.Min(selector) : value;
-
-        public static long TryMax(this IEnumerable<long> collection, long value) =>
-            collection.Any() ? collection.Max() : value;
-
-        public static long TryMax<T>(this IEnumerable<T> collection, Func<T, long> selector, long value) =>
-            collection.Any() ? collection.Max(selector) : value;
+        public static TResult TryMax<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
+            source.Any() ? source.Max(selector) : result;
     }
 }
