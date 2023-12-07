@@ -25,6 +25,9 @@ namespace aoc
         public static IOrderedEnumerable<T> OrderDescending<T>(this IEnumerable<T> source, IComparer<T> comparer) =>
             source.OrderByDescending(v => v, comparer);
 
+        public static IEnumerable<IGrouping<T, T>> Group<T>(this IEnumerable<T> source) =>
+            source.GroupBy(v => v);
+
 #if !NET_6_0_OR_GREATER
         public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int size) =>
             source.Select()
