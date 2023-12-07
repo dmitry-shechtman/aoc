@@ -25,10 +25,12 @@ namespace aoc
         public static IOrderedEnumerable<T> OrderDescending<T>(this IEnumerable<T> source, IComparer<T> comparer) =>
             source.OrderByDescending(v => v, comparer);
 
-        public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int chunk) =>
+#if !NET_6_0_OR_GREATER
+        public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int size) =>
             source.Select()
-                .GroupBy(t => t.Index / chunk)
+                .GroupBy(t => t.Index / size)
                 .Select(g => g.Select(t => t.Value).ToArray());
+#endif
 
         public static int Product(this IEnumerable<int> collection) =>
             collection.Aggregate(1, (a, v) => a * v);
