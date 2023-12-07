@@ -53,17 +53,26 @@ namespace aoc
         public static int Product<T>(this IEnumerable<T> collection, Func<T, int> selector) =>
             collection.Aggregate(1, (a, v) => a * selector(v));
 
+        public static int Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, int> selector) =>
+            source.Select(selector).Product();
+
         public static long Product(this IEnumerable<long> collection) =>
             collection.Aggregate(1L, (a, v) => a * v);
 
         public static long Product<T>(this IEnumerable<T> collection, Func<T, long> selector) =>
             collection.Aggregate(1L, (a, v) => a * selector(v));
 
+        public static long Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, long> selector) =>
+            source.Select(selector).Product();
+
         public static BigInteger Product(this IEnumerable<BigInteger> collection) =>
             collection.Aggregate(BigInteger.One, (a, v) => a * v);
 
         public static BigInteger Product<T>(this IEnumerable<T> collection, Func<T, BigInteger> selector) =>
             collection.Aggregate(BigInteger.One, (a, v) => a * selector(v));
+
+        public static BigInteger Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, BigInteger> selector) =>
+            source.Select(selector).Product();
 
         public static TSource TryMin<TSource>(this IEnumerable<TSource> source, TSource result) =>
             source.Any() ? source.Min() : result;
