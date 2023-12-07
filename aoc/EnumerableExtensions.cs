@@ -30,6 +30,12 @@ namespace aoc
             source.Select()
                 .GroupBy(t => t.Index / size)
                 .Select(g => g.Select(t => t.Value).ToArray());
+
+        public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector) =>
+            source.OrderBy(keySelector).First();
+
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector) =>
+            source.OrderByDescending(keySelector).First();
 #endif
 
         public static int Product(this IEnumerable<int> collection) =>
