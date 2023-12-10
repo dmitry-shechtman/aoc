@@ -41,6 +41,18 @@ namespace aoc
         public static bool IsMatch(LongRange left, LongRange right) =>
             left.IsMatch(right);
 
+        public readonly bool Contains(long value) =>
+            IsMatch(value);
+
+        public static bool Contains(LongRange range, long value) =>
+            range.Contains(value);
+
+        public readonly bool Contains(LongRange other) =>
+            other.Min >= Min && other.Max <= Max;
+
+        public static bool Contains(LongRange left, LongRange right) =>
+            left.Contains(right);
+
         public readonly LongRange Union(LongRange other) =>
             new(Math.Min(Min, other.Min), Math.Max(Max, other.Max));
 
