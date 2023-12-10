@@ -32,14 +32,14 @@ namespace aoc
             max = Max;
         }
 
-        public readonly bool Match(long value) =>
+        public readonly bool IsMatch(long value) =>
             value >= Min && value <= Max;
 
-        public readonly bool Match(LongRange other) =>
+        public readonly bool IsMatch(LongRange other) =>
             other.Min <= Max && other.Max >= Min;
 
-        public static bool Match(LongRange left, LongRange right) =>
-            left.Match(right);
+        public static bool IsMatch(LongRange left, LongRange right) =>
+            left.IsMatch(right);
 
         public readonly LongRange Union(LongRange other) =>
             new(Math.Min(Min, other.Min), Math.Max(Max, other.Max));
