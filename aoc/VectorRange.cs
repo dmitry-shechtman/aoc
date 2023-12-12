@@ -103,7 +103,7 @@ namespace aoc
             s.IndexOf('\n');
 
         private static int GetHeight(string s) =>
-            (s.Length + 1) / GetWidth(s);
+            (s.Length + 1) / (GetWidth(s) + 1);
 
         public static implicit operator (Vector min, Vector max)(VectorRange value) =>
             (value.Min, value.Max);
