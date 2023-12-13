@@ -349,10 +349,16 @@ namespace aoc
             return vector != default;
         }
 
-        public static HashSet<Vector> ParseField(string s, char separator = '\n', char c = '#') =>
+        public static HashSet<Vector> ParseField(string s) =>
+            ParseField(s, '\n');
+
+        public static HashSet<Vector> ParseField(string s, char separator, char c = '#') =>
             ParseField(s.Split(separator), c);
 
-        public static HashSet<Vector> ParseField(string[] ss, char c = '#')
+        public static HashSet<Vector> ParseField(string[] ss) =>
+            ParseField(ss, '#');
+
+        public static HashSet<Vector> ParseField(string[] ss, char c)
         {
             HashSet<Vector> pp = new();
             for (int y = 0; y < ss.Length; y++)
