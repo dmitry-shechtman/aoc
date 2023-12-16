@@ -4,7 +4,7 @@ namespace aoc
 {
     public static class ArrayExtensions
     {
-        public static void Clear<T>(this T[] array) =>
+        public static void Clear(this Array array) =>
             Array.Clear(array, 0, array.Length);
 
         public static int IndexOf<T>(this T[] array, T value) =>
