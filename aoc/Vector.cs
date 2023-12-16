@@ -462,11 +462,17 @@ namespace aoc
         public static Vector FindChar(string s, char c) =>
             FindChar(s, c, VectorRange.FromField(s));
 
+        public char GetChar(string s, VectorRange range) =>
+            s[y * (range.Width + 1) + x];
+
         public static char GetChar(Vector p, string s, VectorRange range) =>
-            s[p.y * (range.Width + 1) + p.x];
+            p.GetChar(s, range);
+
+        public char GetChar(string s) =>
+            GetChar(s, VectorRange.FromField(s));
 
         public static char GetChar(Vector p, string s) =>
-            GetChar(p, s, VectorRange.FromField(s));
+            p.GetChar(s);
 
         public readonly Vector Add(Vector other) =>
             new(x + other.x, y + other.y);
