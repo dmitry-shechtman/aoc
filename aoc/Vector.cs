@@ -474,6 +474,32 @@ namespace aoc
         public static char GetChar(Vector p, string s) =>
             p.GetChar(s);
 
+        public T GetValue<T>(T[] array, VectorRange range) =>
+            array[y * range.Width + x];
+
+        public static T GetValue<T>(Vector p, T[] array, VectorRange range) =>
+            p.GetValue(array, range);
+
+        public bool TryGetValue<T>(T[] array, VectorRange range, out T value)
+        {
+            if (!range.IsMatch(this))
+            {
+                value = default;
+                return false;
+            }
+            value = GetValue(array, range);
+            return true;
+        }
+
+        public static bool TryGetValue<T>(Vector p, T[] array, VectorRange range, out T value) =>
+            p.TryGetValue(array, range, out value);
+
+        public T SetValue<T>(T[] array, T value, VectorRange range) =>
+            array[y * range.Width + x] = value;
+
+        public static T SetValue<T>(Vector p, T[] array, T value, VectorRange range) =>
+            p.SetValue(array, value, range);
+
         public readonly Vector Add(Vector other) =>
             new(x + other.x, y + other.y);
 
