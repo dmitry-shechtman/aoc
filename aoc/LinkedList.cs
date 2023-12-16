@@ -17,12 +17,30 @@ namespace aoc
             return First;
         }
 
+        public T RemoveFirst()
+        {
+            var node = First;
+            node.Remove();
+            if ((First = node.Next) is null)
+                Last = null;
+            return node.Value;
+        }
+
         public LinkedListNode<T> AddLast(T value)
         {
             Last = new(value, Last, null);
             if (Last.Previous is null)
                 First = Last;
             return Last;
+        }
+
+        public T RemoveLast()
+        {
+            var node = Last;
+            node.Remove();
+            if ((Last = node.Previous) is null)
+                First = null;
+            return node.Value;
         }
 
         public void Remove(LinkedListNode<T> node)
@@ -58,5 +76,6 @@ namespace aoc
 
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
     }
 }
