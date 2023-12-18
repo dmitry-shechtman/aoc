@@ -462,25 +462,31 @@ namespace aoc
         public static Vector FindChar(string s, char c) =>
             FindChar(s, c, VectorRange.FromField(s));
 
-        public char GetChar(string s, VectorRange range) =>
+        public readonly char GetChar(string s, VectorRange range) =>
             s[y * (range.Width + 1) + x];
 
         public static char GetChar(Vector p, string s, VectorRange range) =>
             p.GetChar(s, range);
 
-        public char GetChar(string s) =>
+        public readonly char GetChar(string s) =>
             GetChar(s, VectorRange.FromField(s));
 
         public static char GetChar(Vector p, string s) =>
             p.GetChar(s);
 
-        public T GetValue<T>(T[] array, VectorRange range) =>
-            array[y * range.Width + x];
+        public readonly T GetValue<T>(T[] array, VectorRange range) =>
+            array[GetIndex(range)];
 
         public static T GetValue<T>(Vector p, T[] array, VectorRange range) =>
             p.GetValue(array, range);
 
-        public bool TryGetValue<T>(T[] array, VectorRange range, out T value)
+        public readonly T GetValue<T>(T[] array, Vector size) =>
+            array[GetIndex(size)];
+
+        public static T GetValue<T>(Vector p, T[] array, Vector size) =>
+            p.GetValue(array, size);
+
+        public readonly bool TryGetValue<T>(T[] array, VectorRange range, out T value)
         {
             if (!range.IsMatch(this))
             {
@@ -494,11 +500,23 @@ namespace aoc
         public static bool TryGetValue<T>(Vector p, T[] array, VectorRange range, out T value) =>
             p.TryGetValue(array, range, out value);
 
-        public T SetValue<T>(T[] array, T value, VectorRange range) =>
-            array[y * range.Width + x] = value;
+        public readonly T SetValue<T>(T[] array, T value, VectorRange range) =>
+            array[GetIndex(range)] = value;
 
         public static T SetValue<T>(Vector p, T[] array, T value, VectorRange range) =>
             p.SetValue(array, value, range);
+
+        public readonly T SetValue<T>(T[] array, T value, Vector size) =>
+            array[GetIndex(size)] = value;
+
+        public static T SetValue<T>(Vector p, T[] array, T value, Vector size) =>
+            p.SetValue(array, value, size);
+
+        public readonly int GetIndex(VectorRange range) =>
+            x + y * range.Width;
+
+        public readonly int GetIndex(Vector size) =>
+            x + y * size.x;
 
         public readonly Vector Add(Vector other) =>
             new(x + other.x, y + other.y);
