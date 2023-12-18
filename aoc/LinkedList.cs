@@ -52,18 +52,18 @@ namespace aoc
                 Last = node.Previous;
         }
 
-        public LinkedListNode<T> Find(Func<T, bool> predicate)
+        public LinkedListNode<T> Find(Predicate<T> match)
         {
             for (var node = First; node is not null; node = node.Next)
-                if (predicate(node.Value))
+                if (match(node.Value))
                     return node;
             return null;
         }
 
-        public LinkedListNode<T> FindLast(Func<T, bool> predicate)
+        public LinkedListNode<T> FindLast(Predicate<T> match)
         {
             for (var node = Last; node is not null; node = node.Previous)
-                if (predicate(node.Value))
+                if (match(node.Value))
                     return node;
             return null;
         }
