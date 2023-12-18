@@ -9,6 +9,32 @@ namespace aoc
         public LinkedListNode<T> First { get; private set; }
         public LinkedListNode<T> Last  { get; private set; }
 
+        public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value)
+        {
+            if (node is null)
+                return AddLast(value);
+            node = new(value, node.Previous, node);
+            if (node.Previous is null)
+                First = node;
+            return node;
+        }
+
+        public LinkedListNode<T> AddBefore(Predicate<T> match, T value) =>
+            AddBefore(Find(match), value);
+
+        public LinkedListNode<T> AddAfter(LinkedListNode<T> node, T value)
+        {
+            if (node is null)
+                return AddFirst(value);
+            node = new(value, node, node.Next);
+            if (node.Next is null)
+                Last = node;
+            return node;
+        }
+
+        public LinkedListNode<T> AddAfter(Predicate<T> match, T value) =>
+            AddAfter(Find(match), value);
+
         public LinkedListNode<T> AddFirst(T value)
         {
             First = new(value, null, First);
@@ -83,6 +109,5 @@ namespace aoc
 
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
-
     }
 }
