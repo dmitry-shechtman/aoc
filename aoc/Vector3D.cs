@@ -1,0 +1,262 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace aoc
+{
+    public struct Vector3D : IEquatable<Vector3D>, IFormattable
+    {
+        public static readonly Vector3D Zero = default;
+
+        public static readonly Vector3D North = ( 0, -1,  0);
+        public static readonly Vector3D East  = ( 1,  0,  0);
+        public static readonly Vector3D South = ( 0,  1,  0);
+        public static readonly Vector3D West  = (-1,  0,  0);
+        public static readonly Vector3D Up    = ( 0,  0, -1);
+        public static readonly Vector3D Down  = ( 0,  0,  1);
+
+        public static readonly Vector3D[] Headings = { North, East, South, West, Up, Down };
+
+        public readonly int x;
+        public readonly int y;
+        public readonly int z;
+
+        public Vector3D(int x, int y, int z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public Vector3D(Vector v, int z = 0)
+            : this(v.x, v.y, z)
+        {
+        }
+
+        public readonly override bool Equals(object obj) =>
+            obj is Vector3D other && Equals(other);
+
+        public readonly bool Equals(Vector3D other) =>
+            x == other.x &&
+            y == other.y &&
+            z == other.z;
+
+        public readonly override int GetHashCode() =>
+            HashCode.Combine(x, y, z);
+
+        public readonly override string ToString() =>
+            $"{x},{y},{z}";
+
+        private static readonly string[] FormatStrings = { "neswud" };
+
+        public readonly string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format?.Length != 1)
+                return ToString();
+            int index = Headings.IndexOf(this);
+            if (index < 0)
+                return ToString();
+            char c = char.ToLowerInvariant(format[0]);
+            string s = FormatStrings.Find(s => s.Contains(c));
+            if (s.Length == 0)
+                return ToString();
+            return char.IsUpper(format[0])
+                ? char.ToUpperInvariant(s[index]).ToString()
+                : s[index].ToString();
+        }
+
+        public readonly void Deconstruct(out int x, out int y, out int z)
+        {
+            x = this.x;
+            y = this.y;
+            z = this.z;
+        }
+
+        public readonly int Abs() =>
+            Math.Abs(x) + Math.Abs(y) + Math.Abs(z);
+
+        public readonly Vector3D Abs2() =>
+            new(Math.Abs(x), Math.Abs(y), Math.Abs(z));
+
+        public readonly Vector3D Sign() =>
+            new(Math.Sign(x), Math.Sign(y), Math.Sign(z));
+
+        public static IEnumerable<Vector3D> Range(Vector3D toExclusive) =>
+            Range(Zero, toExclusive);
+
+        public static IEnumerable<Vector3D> Range(Vector3D fromInclusive, Vector3D toExclusive)
+        {
+            for (var z = fromInclusive.z; z < toExclusive.z; z++)
+                for (var y = fromInclusive.y; y < toExclusive.y; y++)
+                    for (var x = fromInclusive.x; x < toExclusive.x; x++)
+                        yield return new(x, y, z);
+        }
+
+        public static int CountNeighbors(Vector3D p, IEnumerable<Vector3D> points)
+        {
+            int count = 0;
+            for (var z = p.z - 1; z <= p.z + 1; z++)
+                for (var y = p.y - 1; y <= p.y + 1; y++)
+                    for (var x = p.x - 1; x <= p.x + 1; x++)
+                        count += p != (x, y, z) && points.Contains((x, y, z)) ? 1 : 0;
+            return count;
+        }
+
+        public static int CountNeighborsAndSelf(Vector3D p, IEnumerable<Vector3D> points)
+        {
+            int count = 0;
+            for (var z = p.z - 1; z <= p.z + 1; z++)
+                for (var y = p.y - 1; y <= p.y + 1; y++)
+                    for (var x = p.x - 1; x <= p.x + 1; x++)
+                        count += points.Contains((x, y, z)) ? 1 : 0;
+            return count;
+        }
+
+        public static IEnumerable<Vector3D> GetNeighbors(Vector3D p)
+        {
+            for (var z = p.z - 1; z <= p.z + 1; z++)
+                for (var y = p.y - 1; y <= p.y + 1; y++)
+                    for (var x = p.x - 1; x <= p.x + 1; x++)
+                        if (p != (x, y, z))
+                            yield return new(x, y, z);
+        }
+
+        public static IEnumerable<Vector3D> GetNeighborsAndSelf(Vector3D p)
+        {
+            for (var z = p.z - 1; z <= p.z + 1; z++)
+                for (var y = p.y - 1; y <= p.y + 1; y++)
+                    for (var x = p.x - 1; x <= p.x + 1; x++)
+                        yield return new(x, y, z);
+        }
+
+        public static Vector3D[] GetNeighborsJVN(Vector3D p) => new Vector3D[]
+        {
+            new(p.x, p.y, p.z - 1),
+            new(p.x, p.y - 1, p.z),
+            new(p.x + 1, p.y, p.z),
+            new(p.x, p.y + 1, p.z),
+            new(p.x - 1, p.y, p.z),
+            new(p.x, p.y, p.z + 1)
+        };
+
+        public static Vector3D[] GetNeighborsJVNAndSelf(Vector3D p) => new Vector3D[]
+        {
+            new(p.x, p.y, p.z),
+            new(p.x, p.y, p.z - 1),
+            new(p.x, p.y - 1, p.z),
+            new(p.x + 1, p.y, p.z),
+            new(p.x, p.y + 1, p.z),
+            new(p.x - 1, p.y, p.z),
+            new(p.x, p.y, p.z + 1)
+        };
+
+        public static HashSet<Vector3D> GetNext(HashSet<Vector3D> pp) =>
+            GetNext(pp, GetNeighborsAndSelf, FilterInclusive);
+
+        public static HashSet<Vector3D> GetNext(HashSet<Vector3D> pp, Func<Vector3D, IEnumerable<Vector3D>> getNeighbors, Func<Vector3D, int, HashSet<Vector3D>, bool> filter) =>
+            pp.SelectMany(getNeighbors).Distinct().AsParallel()
+                .Select(p => (p, c: getNeighbors(p).Count(pp.Contains)))
+                .Where(t => filter(t.p, t.c, pp))
+                .Select(t => t.p)
+                .ToHashSet();
+
+        public static bool Filter(Vector3D p, int count, HashSet<Vector3D> pp) =>
+            count == 3 || count == 2 && pp.Contains(p);
+
+        public static bool FilterInclusive(Vector3D p, int count, HashSet<Vector3D> pp) =>
+            count == 3 || count == 4 && pp.Contains(p);
+
+        public static Vector3D Parse(string s, char separator = ',') =>
+            TryParse(s, out Vector3D vector, separator)
+                ? vector
+                : throw new InvalidOperationException($"Incorrect string format: {s}");
+
+        public static bool TryParse(string s, out Vector3D vector, char separator = ',')
+        {
+            var ss = s.Trim().Split(separator);
+            vector = default;
+            if (ss.Length != 3 ||
+                !int.TryParse(ss[0], out int x) ||
+                !int.TryParse(ss[1], out int y) ||
+                !int.TryParse(ss[2], out int z))
+                return false;
+            vector = new(x, y, z);
+            return true;
+        }
+
+        public readonly Vector3D Add(Vector3D other) =>
+            new(x + other.x, y + other.y, z + other.z);
+
+        public static Vector3D Add(Vector3D left, Vector3D right) =>
+            left.Add(right);
+
+        public static Vector3D operator +(Vector3D left, Vector3D right) =>
+            left.Add(right);
+
+        public readonly Vector3D Sub(Vector3D other) =>
+            new(x - other.x, y - other.y, z - other.z);
+
+        public static Vector3D Sub(Vector3D left, Vector3D right) =>
+            left.Sub(right);
+
+        public static Vector3D operator -(Vector3D left, Vector3D right) =>
+            left.Sub(right);
+
+        public readonly Vector3D Negate() =>
+            new(-x, -y, -z);
+
+        public static Vector3D Negate(Vector3D vector) =>
+            vector.Negate();
+
+        public static Vector3D operator -(Vector3D vector) =>
+            vector.Negate();
+
+        public readonly Vector3D Dot(Vector3D other) =>
+            new(x * other.x, y * other.y, z * other.z);
+
+        public static Vector3D Dot(Vector3D left, Vector3D right) =>
+            left.Dot(right);
+
+        public readonly Vector3D Mul(int scalar) =>
+            new(x * scalar, y * scalar, z * scalar);
+
+        public static Vector3D Mul(Vector3D vector, int scalar) =>
+            vector.Mul(scalar);
+
+        public static Vector3D operator *(Vector3D vector, int scalar) =>
+            vector.Mul(scalar);
+
+        public static Vector3D operator *(int scalar, Vector3D vector) =>
+            vector.Mul(scalar);
+
+        public readonly Vector3D Div(int scalar) =>
+            new(x / scalar, y / scalar, z / scalar);
+
+        public static Vector3D Div(Vector3D vector, int scalar) =>
+            vector.Div(scalar);
+
+        public static Vector3D operator /(Vector3D vector, int scalar) =>
+            vector.Div(scalar);
+
+        public static Vector3D Min(Vector3D left, Vector3D right) =>
+            new(Math.Min(left.x, right.x), Math.Min(left.y, right.y), Math.Min(left.z, right.z));
+
+        public static Vector3D Max(Vector3D left, Vector3D right) =>
+            new(Math.Max(left.x, right.x), Math.Max(left.y, right.y), Math.Max(left.z, right.z));
+
+        public static implicit operator (int x, int y, int z)(Vector3D value) =>
+            (value.x, value.y, value.z);
+
+        public static implicit operator Vector3D((int x, int y, int z) value) =>
+            new(value.x, value.y, value.z);
+
+        public static explicit operator Vector(Vector3D value) =>
+            new(value.x, value.y);
+
+        public static bool operator ==(Vector3D left, Vector3D right) =>
+            left.Equals(right);
+
+        public static bool operator !=(Vector3D left, Vector3D right) =>
+            !left.Equals(right);
+    }
+}
