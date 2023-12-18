@@ -402,7 +402,7 @@ namespace aoc
             return pp;
         }
 
-        public static IEnumerable<(Vector, int)> ParsePath(string s, GridType grid = GridType.Square)
+        public static IEnumerable<(Vector v, int d)> ParsePath(string s, GridType grid = GridType.Square)
         {
             for (int i = 0; i < s.Length;)
             {
@@ -411,20 +411,20 @@ namespace aoc
             }
         }
 
-        public static IEnumerable<(Vector, int)> ParsePath(string s, char separator, GridType grid = GridType.Square) =>
+        public static IEnumerable<(Vector v, int d)> ParsePath(string s, char separator, GridType grid = GridType.Square) =>
             ParsePath(s.Split(separator), grid);
 
-        public static IEnumerable<(Vector, int)> ParsePath(string s, string separator, GridType grid = GridType.Square) =>
+        public static IEnumerable<(Vector v, int d)> ParsePath(string s, string separator, GridType grid = GridType.Square) =>
             ParsePath(s.Split(separator), grid);
 
-        public static IEnumerable<(Vector, int)> ParsePath(string[] ss, GridType grid = GridType.Square) =>
+        public static IEnumerable<(Vector v, int d)> ParsePath(string[] ss, GridType grid = GridType.Square) =>
             ss.Select(s => ParsePathSegment(s, grid));
 
-        public static IEnumerable<(Vector, int)> ParsePath(string[] ss, string separator, GridType grid = GridType.Square) =>
+        public static IEnumerable<(Vector v, int d)> ParsePath(string[] ss, string separator, GridType grid = GridType.Square) =>
             ss.Select(s => s.Split(separator))
                 .Select(tt => ParsePathSegment(tt, grid));
 
-        public static IEnumerable<(Vector, int)> ParsePath(string[] ss, char separator, GridType grid = GridType.Square) =>
+        public static IEnumerable<(Vector v, int d)> ParsePath(string[] ss, char separator, GridType grid = GridType.Square) =>
             ss.Select(s => s.Split(separator))
                 .Select(tt => ParsePathSegment(tt, grid));
 
