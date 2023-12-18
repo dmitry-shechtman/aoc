@@ -20,7 +20,7 @@ namespace aoc
         Self  = 4
     }
 
-    public struct Vector : IEquatable<Vector>
+    public struct Vector : IEquatable<Vector>, IFormattable
     {
         public static readonly Vector Zero      = default;
                                                 
@@ -62,6 +62,24 @@ namespace aoc
 
         public readonly override string ToString() =>
             $"{x},{y}";
+
+        private static readonly string[] FormatStrings = { "nesw", "urdl", "^>v<" };
+
+        public readonly string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format?.Length != 1)
+                return ToString();
+            int index = Headings.IndexOf(this);
+            if (index < 0)
+                return ToString();
+            char c = char.ToLowerInvariant(format[0]);
+            string s = FormatStrings.Find(s => s.Contains(c));
+            if (s.Length == 0)
+                return ToString();
+            return char.IsUpper(format[0])
+                ? char.ToUpperInvariant(s[index]).ToString()
+                : s[index].ToString();
+        }
 
         public readonly void Deconstruct(out int x, out int y)
         {
