@@ -451,10 +451,17 @@ namespace aoc
             return p;
         }
 
-        public static int FloodFill(Vector from, HashSet<Vector> pp, NeighborhoodType neighborhood = NeighborhoodType.JVN) =>
-             pp.Add(from)
-                ? 1 + GetNeighbors(from, neighborhood).Sum(q => FloodFill(q, pp, neighborhood))
-                : 0;
+        public static int FloodFill(Vector from, HashSet<Vector> pp, NeighborhoodType neighborhood = NeighborhoodType.JVN)
+        {
+            Queue<Vector> queue = new();
+            if (pp.Add(from))
+                queue.Enqueue(from);
+            int count = 0;
+            for (; queue.TryDequeue(out from); ++count)
+                foreach (var p in GetNeighbors(from, neighborhood).Where(pp.Add))
+                    queue.Enqueue(p);
+            return count;
+        }
 
         public static Vector FindChar(string s, char c, VectorRange range) =>
             new(s.IndexOf(c) % (range.Width + 1), s.IndexOf(c) / (range.Width + 1));
