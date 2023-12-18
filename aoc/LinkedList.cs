@@ -52,27 +52,34 @@ namespace aoc
                 Last = node.Previous;
         }
 
-        public LinkedListNode<T> Find(Predicate<T> match)
+        public static LinkedListNode<T> Find(LinkedListNode<T> node, Predicate<T> match)
         {
-            for (var node = First; node is not null; node = node.Next)
-                if (match(node.Value))
-                    return node;
-            return null;
+            while (node is not null && !match(node.Value))
+                node = node.Next;
+            return node;
         }
 
-        public LinkedListNode<T> FindLast(Predicate<T> match)
+        public LinkedListNode<T> Find(Predicate<T> match) =>
+            Find(First, match);
+
+        public static LinkedListNode<T> FindPrevious(LinkedListNode<T> node, Predicate<T> match)
         {
-            for (var node = Last; node is not null; node = node.Previous)
-                if (match(node.Value))
-                    return node;
-            return null;
+            while (node is not null && !match(node.Value))
+                node = node.Previous;
+            return node;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public LinkedListNode<T> FindLast(Predicate<T> match) =>
+            FindPrevious(Last, match);
+
+        public static IEnumerator<T> GetEnumerator(LinkedListNode<T> node)
         {
-            for (var node = First; node is not null; node = node.Next)
+            for (; node is not null; node = node.Next)
                 yield return node.Value;
         }
+
+        public IEnumerator<T> GetEnumerator() =>
+            GetEnumerator(First);
 
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
