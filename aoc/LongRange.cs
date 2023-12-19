@@ -59,10 +59,16 @@ namespace aoc
         public static LongRange Union(LongRange left, LongRange right) =>
             left.Union(right);
 
+        public static LongRange operator |(LongRange left, LongRange right) =>
+            left.Union(right);
+
         public readonly LongRange Intersect(LongRange other) =>
             new(Math.Max(Min, other.Min), Math.Min(Max, other.Max));
 
         public static LongRange Intersect(LongRange left, LongRange right) =>
+            left.Intersect(right);
+
+        public static LongRange operator &(LongRange left, LongRange right) =>
             left.Intersect(right);
 
         public static implicit operator (long min, long max)(LongRange value) =>

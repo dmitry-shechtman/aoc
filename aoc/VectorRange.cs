@@ -82,10 +82,16 @@ namespace aoc
         public static VectorRange Union(VectorRange left, VectorRange right) =>
             left.Union(right);
 
+        public static VectorRange operator |(VectorRange left, VectorRange right) =>
+            left.Union(right);
+
         public readonly VectorRange Intersect(VectorRange other) =>
             new(min: Vector.Max(Min, other.Min), max: Vector.Min(Max, other.Max));
 
         public static VectorRange Intersect(VectorRange left, VectorRange right) =>
+            left.Intersect(right);
+
+        public static VectorRange operator &(VectorRange left, VectorRange right) =>
             left.Intersect(right);
 
         public readonly VectorRange SplitWest(int width) =>
