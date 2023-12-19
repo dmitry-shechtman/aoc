@@ -13,6 +13,12 @@ namespace aoc
         public static IEnumerable<T> SelectMany<T>(this IEnumerable<IEnumerable<T>> source) =>
             source.SelectMany(v => v);
 
+        public static bool All<T>(this IEnumerable<T> source, Func<T, int, bool> predicate) =>
+            source.Select().All(t => predicate(t.Value, t.Index));
+
+        public static bool Any<T>(this IEnumerable<T> source, Func<T, int, bool> predicate) =>
+            source.Select().Any(t => predicate(t.Value, t.Index));
+
         public static IOrderedEnumerable<T> Order<T>(this IEnumerable<T> source) =>
             source.OrderBy(v => v);
 
