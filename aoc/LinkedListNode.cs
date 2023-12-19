@@ -29,5 +29,21 @@
             if (Next is not null)
                 Next.Previous = Previous;
         }
+
+        public LinkedListNode<T> Skip(int count)
+        {
+            var node = this;
+            for (int i = 0; i < count; i++)
+                node = node.Next;
+            return node;
+        }
+
+        public LinkedListNode<T> SkipBack(int count)
+        {
+            var node = this;
+            for (int i = 0; i < count; i++)
+                node = node.Previous;
+            return node;
+        }
     }
 }
