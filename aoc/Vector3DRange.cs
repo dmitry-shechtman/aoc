@@ -30,6 +30,9 @@ namespace aoc
         public int Depth  => Max.z - Min.z + 1;
         public int Count  => Width * Height * Depth;
 
+        public long LongCount =>
+            (long)Width * Height * Depth;
+
         public readonly override bool Equals(object obj) =>
             obj is Vector3DRange other && Equals(other);
 

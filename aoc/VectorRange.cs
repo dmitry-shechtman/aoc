@@ -29,6 +29,9 @@ namespace aoc
         public int Height => Max.y - Min.y + 1;
         public int Count  => Width * Height;
 
+        public long LongCount =>
+            (long)Width * Height;
+
         public readonly override bool Equals(object obj) =>
             obj is VectorRange other && Equals(other);
 
