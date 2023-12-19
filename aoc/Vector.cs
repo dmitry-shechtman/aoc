@@ -22,6 +22,8 @@ namespace aoc
 
     public struct Vector : IEquatable<Vector>, IFormattable
     {
+        private const int Cardinality = 3;
+
         public static readonly Vector Zero      = default;
                                                 
         public static readonly Vector North     = ( 0, -1);
@@ -48,6 +50,11 @@ namespace aoc
         {
             this.x = x;
             this.y = y;
+        }
+
+        public Vector(int[] values)
+            : this(values[0], values[1])
+        {
         }
 
         public readonly override bool Equals(object obj) =>
@@ -86,6 +93,13 @@ namespace aoc
             x = this.x;
             y = this.y;
         }
+
+        public readonly int this[int i] => i switch
+        {
+            0 => x,
+            1 => y,
+            _ => throw new IndexOutOfRangeException(),
+        };
 
         public readonly int Abs(GridType grid) => grid switch
         {
@@ -259,15 +273,23 @@ namespace aoc
                 ? vector
                 : throw new InvalidOperationException($"Incorrect string format: {s}");
 
-        public static bool TryParse(string s, out Vector vector, char separator = ',')
+        public static bool TryParse(string s, out Vector vector, char separator = ',') =>
+            TryParse(s.Trim().Split(separator), out vector);
+
+        public static Vector Parse(string[] ss) =>
+            TryParse(ss, out Vector vector)
+                ? vector
+                : throw new InvalidOperationException($"Input string was not in a correct format.");
+
+        public static bool TryParse(string[] ss, out Vector vector)
         {
-            var ss = s.Trim().Split(separator);
             vector = default;
-            if (ss.Length != 2 ||
-                !int.TryParse(ss[0], out int x) ||
-                !int.TryParse(ss[1], out int y))
+            if (ss.Length < Cardinality)
                 return false;
-            vector = new(x, y);
+            int[] values = new int[Cardinality];
+            if (ss[..Cardinality].Any((s, i) => !int.TryParse(s, out values[i])))
+                return false;
+            vector = new(values);
             return true;
         }
 
@@ -638,6 +660,9 @@ namespace aoc
 
         public static implicit operator Vector((int x, int y) value) =>
             new(value.x, value.y);
+
+        public static implicit operator Vector(int[] values) =>
+            new(values);
 
         public static bool operator ==(Vector left, Vector right) =>
             left.Equals(right);

@@ -6,6 +6,8 @@ namespace aoc
 {
     public struct Vector3D : IEquatable<Vector3D>, IFormattable
     {
+        private const int Cardinality = 3;
+
         public static readonly Vector3D Zero = default;
 
         public static readonly Vector3D North = ( 0, -1,  0);
@@ -30,6 +32,11 @@ namespace aoc
 
         public Vector3D(Vector v, int z = 0)
             : this(v.x, v.y, z)
+        {
+        }
+
+        public Vector3D(int[] values)
+            : this(values[0], values[1], values[2])
         {
         }
 
@@ -71,6 +78,14 @@ namespace aoc
             y = this.y;
             z = this.z;
         }
+
+        public readonly int this[int i] => i switch
+        {
+            0 => x,
+            1 => y,
+            2 => z,
+            _ => throw new IndexOutOfRangeException(),
+        };
 
         public readonly int Abs() =>
             Math.Abs(x) + Math.Abs(y) + Math.Abs(z);
@@ -171,16 +186,23 @@ namespace aoc
                 ? vector
                 : throw new InvalidOperationException($"Incorrect string format: {s}");
 
-        public static bool TryParse(string s, out Vector3D vector, char separator = ',')
+        public static bool TryParse(string s, out Vector3D vector, char separator = ',') =>
+            TryParse(s.Trim().Split(separator), out vector);
+
+        public static Vector3D Parse(string[] ss) =>
+            TryParse(ss, out Vector3D vector)
+                ? vector
+                : throw new InvalidOperationException($"Input string was not in a correct format.");
+
+        public static bool TryParse(string[] ss, out Vector3D vector)
         {
-            var ss = s.Trim().Split(separator);
             vector = default;
-            if (ss.Length != 3 ||
-                !int.TryParse(ss[0], out int x) ||
-                !int.TryParse(ss[1], out int y) ||
-                !int.TryParse(ss[2], out int z))
+            if (ss.Length < Cardinality)
                 return false;
-            vector = new(x, y, z);
+            int[] values = new int[Cardinality];
+            if (ss[..Cardinality].Any((s, i) => !int.TryParse(s, out values[i])))
+                return false;
+            vector = new(values);
             return true;
         }
 
@@ -315,6 +337,9 @@ namespace aoc
 
         public static implicit operator Vector3D((int x, int y, int z) value) =>
             new(value.x, value.y, value.z);
+
+        public static implicit operator Vector3D(int[] values) =>
+            new(values);
 
         public static explicit operator Vector(Vector3D value) =>
             new(value.x, value.y);
