@@ -525,6 +525,20 @@ namespace aoc
         public static bool TryGetValue<T>(Vector p, T[] array, VectorRange range, out T value) =>
             p.TryGetValue(array, range, out value);
 
+        public readonly bool TryGetValue<T>(T[] array, Vector size, out T value)
+        {
+            if (!size.Contains(this))
+            {
+                value = default;
+                return false;
+            }
+            value = GetValue(array, size);
+            return true;
+        }
+
+        public static bool TryGetValue<T>(Vector p, T[] array, Vector size, out T value) =>
+            p.TryGetValue(array, size, out value);
+
         public readonly T SetValue<T>(T[] array, T value, VectorRange range) =>
             array[GetIndex(range)] = value;
 
@@ -611,6 +625,13 @@ namespace aoc
 
         public static Vector Max(Vector left, Vector right) =>
             new(Math.Max(left.x, right.x), Math.Max(left.y, right.y));
+
+        public readonly bool Contains(Vector other) =>
+            other.x >= 0 && other.x < x &&
+            other.y >= 0 && other.y < y;
+
+        public static bool Contains(Vector size, Vector vector) =>
+            size.Contains(vector);
 
         public static implicit operator (int x, int y)(Vector value) =>
             (value.x, value.y);
