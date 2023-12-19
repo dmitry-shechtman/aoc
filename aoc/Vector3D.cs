@@ -184,6 +184,64 @@ namespace aoc
             return true;
         }
 
+        public readonly T GetValue<T>(T[] array, Vector3DRange range) =>
+            array[GetIndex(range)];
+
+        public static T GetValue<T>(Vector3D p, T[] array, Vector3DRange range) =>
+            p.GetValue(array, range);
+
+        public readonly T GetValue<T>(T[] array, Vector3D size) =>
+            array[GetIndex(size)];
+
+        public static T GetValue<T>(Vector3D p, T[] array, Vector3D size) =>
+            p.GetValue(array, size);
+
+        public readonly bool TryGetValue<T>(T[] array, Vector3DRange range, out T value)
+        {
+            if (!range.IsMatch(this))
+            {
+                value = default;
+                return false;
+            }
+            value = GetValue(array, range);
+            return true;
+        }
+
+        public static bool TryGetValue<T>(Vector3D p, T[] array, Vector3DRange range, out T value) =>
+            p.TryGetValue(array, range, out value);
+
+        public readonly bool TryGetValue<T>(T[] array, Vector3D size, out T value)
+        {
+            if (!size.Contains(this))
+            {
+                value = default;
+                return false;
+            }
+            value = GetValue(array, size);
+            return true;
+        }
+
+        public static bool TryGetValue<T>(Vector3D p, T[] array, Vector3D size, out T value) =>
+            p.TryGetValue(array, size, out value);
+
+        public readonly T SetValue<T>(T[] array, T value, Vector3DRange range) =>
+            array[GetIndex(range)] = value;
+
+        public static T SetValue<T>(Vector3D p, T[] array, T value, Vector3DRange range) =>
+            p.SetValue(array, value, range);
+
+        public readonly T SetValue<T>(T[] array, T value, Vector3D size) =>
+            array[GetIndex(size)] = value;
+
+        public static T SetValue<T>(Vector3D p, T[] array, T value, Vector3D size) =>
+            p.SetValue(array, value, size);
+
+        public readonly int GetIndex(Vector3DRange range) =>
+            x + range.Width * (y + range.Height * z);
+
+        public readonly int GetIndex(Vector3D size) =>
+            x + size.x * (y + size.y * z);
+
         public readonly Vector3D Add(Vector3D other) =>
             new(x + other.x, y + other.y, z + other.z);
 
@@ -243,6 +301,14 @@ namespace aoc
 
         public static Vector3D Max(Vector3D left, Vector3D right) =>
             new(Math.Max(left.x, right.x), Math.Max(left.y, right.y), Math.Max(left.z, right.z));
+
+        public readonly bool Contains(Vector3D other) =>
+            other.x >= 0 && other.x < x &&
+            other.y >= 0 && other.y < y &&
+            other.z >= 0 && other.z < z;
+
+        public static bool Contains(Vector3D size, Vector3D vector) =>
+            size.Contains(vector);
 
         public static implicit operator (int x, int y, int z)(Vector3D value) =>
             (value.x, value.y, value.z);
