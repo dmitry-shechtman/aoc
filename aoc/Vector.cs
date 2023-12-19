@@ -22,7 +22,7 @@ namespace aoc
 
     public struct Vector : IEquatable<Vector>, IFormattable
     {
-        private const int Cardinality = 3;
+        private const int Cardinality = 2;
 
         public static readonly Vector Zero      = default;
                                                 
