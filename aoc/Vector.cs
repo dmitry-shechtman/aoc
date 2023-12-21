@@ -510,22 +510,37 @@ namespace aoc
         }
 
         public static Vector FindChar(string s, char c, VectorRange range) =>
-            new(s.IndexOf(c) % (range.Width + 1), s.IndexOf(c) / (range.Width + 1));
+            FindChar(s, c, range.Width);
+
+        public static Vector FindChar(string s, char c, Vector size) =>
+            FindChar(s, c, size.x);
 
         public static Vector FindChar(string s, char c) =>
-            FindChar(s, c, VectorRange.FromField(s));
+            FindChar(s, c, GetFieldWidth(s));
+
+        private static Vector FindChar(string s, char c, int width) =>
+            FromFieldIndex(s.IndexOf(c), width);
 
         public readonly char GetChar(string s, VectorRange range) =>
-            s[y * (range.Width + 1) + x];
+            GetChar(s, range.Width);
 
         public static char GetChar(Vector p, string s, VectorRange range) =>
             p.GetChar(s, range);
 
+        public readonly char GetChar(string s, Vector size) =>
+            GetChar(s, size.x);
+
+        public static char GetChar(Vector p, string s, Vector size) =>
+            p.GetChar(s, size);
+
         public readonly char GetChar(string s) =>
-            GetChar(s, VectorRange.FromField(s));
+            GetChar(s, GetFieldWidth(s));
 
         public static char GetChar(Vector p, string s) =>
             p.GetChar(s);
+
+        private readonly char GetChar(string s, int width) =>
+            s[GetFieldIndex(width)];
 
         public readonly T GetValue<T>(T[] array, VectorRange range) =>
             array[GetIndex(range)];
@@ -580,10 +595,31 @@ namespace aoc
             p.SetValue(array, value, size);
 
         public readonly int GetIndex(VectorRange range) =>
-            x + y * range.Width;
+            GetIndex(range.Width);
 
         public readonly int GetIndex(Vector size) =>
-            x + y * size.x;
+            GetIndex(size.x);
+
+        private readonly int GetIndex(int width) =>
+            x + y * width;
+
+        private readonly int GetFieldIndex(int width) =>
+            x + y * (width + 1);
+
+        private static Vector FromFieldIndex(int index, int width) =>
+            new(index % (width + 1), index / (width + 1));
+
+        public static Vector FromField(string s) =>
+            FromField(s, GetFieldWidth(s));
+
+        private static Vector FromField(string s, int width) =>
+            new(width, GetFieldHeight(s, width));
+
+        internal static int GetFieldWidth(string s) =>
+            s.IndexOf('\n');
+
+        internal static int GetFieldHeight(string s, int width) =>
+            (s.Length + 1) / (width + 1);
 
         public readonly Vector Add(Vector other) =>
             new(x + other.x, y + other.y);

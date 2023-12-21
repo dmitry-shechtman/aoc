@@ -107,13 +107,10 @@ namespace aoc
             new(new(Min.x, Min.y + height), Max);
 
         public static VectorRange FromField(string s) =>
-            new(GetWidth(s) - 1, GetHeight(s) - 1);
+            FromField(s, Vector.GetFieldWidth(s));
 
-        private static int GetWidth(string s) =>
-            s.IndexOf('\n');
-
-        private static int GetHeight(string s) =>
-            (s.Length + 1) / (GetWidth(s) + 1);
+        private static VectorRange FromField(string s, int width) =>
+            new(width - 1, Vector.GetFieldHeight(s, width) - 1);
 
         public static implicit operator (Vector min, Vector max)(VectorRange value) =>
             (value.Min, value.Max);

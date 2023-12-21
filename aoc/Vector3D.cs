@@ -265,10 +265,13 @@ namespace aoc
             p.SetValue(array, value, size);
 
         public readonly int GetIndex(Vector3DRange range) =>
-            x + range.Width * (y + range.Height * z);
+            GetIndex(range.Width, range.Height);
 
         public readonly int GetIndex(Vector3D size) =>
-            x + size.x * (y + size.y * z);
+            GetIndex(size.x, size.y);
+
+        private readonly int GetIndex(int width, int height) =>
+            x + width * (y + height * z);
 
         public readonly Vector3D Add(Vector3D other) =>
             new(x + other.x, y + other.y, z + other.z);
