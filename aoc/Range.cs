@@ -71,6 +71,24 @@ namespace aoc
         public static Range operator &(Range left, Range right) =>
             left.Intersect(right);
 
+        public readonly Range Add(int size) =>
+            new(Min - size, Max + size);
+
+        public static Range Add(Range range, int size) =>
+            range.Add(size);
+
+        public static Range operator +(Range range, int size) =>
+            range.Add(size);
+
+        public readonly Range Sub(int size) =>
+            new(Min + size, Max - size);
+
+        public static Range Sub(Range range, int size) =>
+            range.Sub(size);
+
+        public static Range operator -(Range range, int size) =>
+            range.Sub(size);
+
         public static implicit operator (int min, int max)(Range value) =>
             (value.Min, value.Max);
 

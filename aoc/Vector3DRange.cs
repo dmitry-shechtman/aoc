@@ -99,6 +99,42 @@ namespace aoc
         public static Vector3DRange operator &(Vector3DRange left, Vector3DRange right) =>
             left.Intersect(right);
 
+        public readonly Vector3DRange Add(Vector3D size) =>
+            new(Min - size, Max + size);
+
+        public static Vector3DRange Add(Vector3DRange range, Vector3D size) =>
+            range.Add(size);
+
+        public static Vector3DRange operator +(Vector3DRange range, Vector3D size) =>
+            range.Add(size);
+
+        public readonly Vector3DRange Add(int size) =>
+            Add((size, size, size));
+
+        public static Vector3DRange Add(Vector3DRange range, int size) =>
+            range.Add(size);
+
+        public static Vector3DRange operator +(Vector3DRange range, int size) =>
+            range.Add(size);
+
+        public readonly Vector3DRange Sub(Vector3D size) =>
+            new(Min + size, Max - size);
+
+        public static Vector3DRange Sub(Vector3DRange range, Vector3D size) =>
+            range.Sub(size);
+
+        public static Vector3DRange operator -(Vector3DRange range, Vector3D size) =>
+            range.Sub(size);
+
+        public readonly Vector3DRange Sub(int size) =>
+            Sub((size, size, size));
+
+        public static Vector3DRange Sub(Vector3DRange range, int size) =>
+            range.Sub(size);
+
+        public static Vector3DRange operator -(Vector3DRange range, int size) =>
+            range.Sub(size);
+
         public readonly Vector3DRange SplitWest(int width) =>
             new(Min, new(Min.x + width, Max.y, Max.z));
 

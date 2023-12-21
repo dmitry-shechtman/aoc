@@ -94,6 +94,42 @@ namespace aoc
         public static VectorRange operator &(VectorRange left, VectorRange right) =>
             left.Intersect(right);
 
+        public readonly VectorRange Add(Vector size) =>
+            new(Min - size, Max + size);
+
+        public static VectorRange Add(VectorRange range, Vector size) =>
+            range.Add(size);
+
+        public static VectorRange operator +(VectorRange range, Vector size) =>
+            range.Add(size);
+
+        public readonly VectorRange Add(int size) =>
+            Add((size, size));
+
+        public static VectorRange Add(VectorRange range, int size) =>
+            range.Add(size);
+
+        public static VectorRange operator +(VectorRange range, int size) =>
+            range.Add(size);
+
+        public readonly VectorRange Sub(Vector size) =>
+            new(Min + size, Max - size);
+
+        public static VectorRange Sub(VectorRange range, Vector size) =>
+            range.Sub(size);
+
+        public static VectorRange operator -(VectorRange range, Vector size) =>
+            range.Sub(size);
+
+        public readonly VectorRange Sub(int size) =>
+            Sub((size, size));
+
+        public static VectorRange Sub(VectorRange range, int size) =>
+            range.Sub(size);
+
+        public static VectorRange operator -(VectorRange range, int size) =>
+            range.Sub(size);
+
         public readonly VectorRange SplitWest(int width) =>
             new(Min, new(Min.x + width, Max.y));
 
