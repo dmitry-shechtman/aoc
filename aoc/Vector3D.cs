@@ -96,6 +96,12 @@ namespace aoc
         public readonly Vector3D Sign() =>
             new(Math.Sign(x), Math.Sign(y), Math.Sign(z));
 
+        public readonly int Count =>
+            x * y * z;
+
+        public readonly long LongCount =>
+            (long)x * y * z;
+
         public static IEnumerable<Vector3D> Range(Vector3D toExclusive) =>
             Range(Zero, toExclusive);
 
