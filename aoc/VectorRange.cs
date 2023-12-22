@@ -125,7 +125,7 @@ namespace aoc
             left.Intersect(right);
 
         public readonly VectorRange Add(Vector vector) =>
-            Mul(Matrix.Translate(vector));
+            new(Min + vector, Max + vector);
 
         public static VectorRange Add(VectorRange range, Vector vector) =>
             range.Add(vector);
@@ -134,7 +134,7 @@ namespace aoc
             range.Add(vector);
 
         public readonly VectorRange Sub(Vector vector) =>
-            Mul(Matrix.Translate(-vector));
+            new(Min - vector, Max - vector);
 
         public static VectorRange Sub(VectorRange range, Vector vector) =>
             range.Sub(vector);

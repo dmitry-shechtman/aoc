@@ -130,7 +130,7 @@ namespace aoc
             left.Intersect(right);
 
         public readonly Vector3DRange Add(Vector3D vector) =>
-            Mul(Matrix3D.Translate(vector));
+            (Min + vector, Max + vector);
 
         public static Vector3DRange Add(Vector3DRange range, Vector3D vector) =>
             range.Add(vector);
@@ -139,7 +139,7 @@ namespace aoc
             range.Add(vector);
 
         public readonly Vector3DRange Sub(Vector3D vector) =>
-            Mul(Matrix3D.Translate(-vector));
+            (Min - vector, Max - vector);
 
         public static Vector3DRange Sub(Vector3DRange range, Vector3D vector) =>
             range.Sub(vector);
