@@ -109,23 +109,17 @@ namespace aoc
         public static LongRange operator &(LongRange left, LongRange right) =>
             left.Intersect(right);
 
-        public readonly LongRange Add(long size) =>
+        public readonly LongRange Grow(long size) =>
             new(Min - size, Max + size);
 
-        public static LongRange Add(LongRange range, long size) =>
-            range.Add(size);
+        public static LongRange Grow(LongRange range, long size) =>
+            range.Grow(size);
 
-        public static LongRange operator +(LongRange range, long size) =>
-            range.Add(size);
-
-        public readonly LongRange Sub(long size) =>
+        public readonly LongRange Shrink(long size) =>
             new(Min + size, Max - size);
 
-        public static LongRange Sub(LongRange range, long size) =>
-            range.Sub(size);
-
-        public static LongRange operator -(LongRange range, long size) =>
-            range.Sub(size);
+        public static LongRange Shrink(LongRange range, long size) =>
+            range.Shrink(size);
 
         public static implicit operator (long min, long max)(LongRange value) =>
             (value.Min, value.Max);

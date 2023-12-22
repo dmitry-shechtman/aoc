@@ -129,41 +129,29 @@ namespace aoc
         public static Vector3DRange operator &(Vector3DRange left, Vector3DRange right) =>
             left.Intersect(right);
 
-        public readonly Vector3DRange Add(Vector3D size) =>
+        public readonly Vector3DRange Grow(Vector3D size) =>
             new(Min - size, Max + size);
 
-        public static Vector3DRange Add(Vector3DRange range, Vector3D size) =>
-            range.Add(size);
+        public static Vector3DRange Grow(Vector3DRange range, Vector3D size) =>
+            range.Grow(size);
 
-        public static Vector3DRange operator +(Vector3DRange range, Vector3D size) =>
-            range.Add(size);
+        public readonly Vector3DRange Grow(int size) =>
+            Grow((size, size, size));
 
-        public readonly Vector3DRange Add(int size) =>
-            Add((size, size, size));
+        public static Vector3DRange Grow(Vector3DRange range, int size) =>
+            range.Grow(size);
 
-        public static Vector3DRange Add(Vector3DRange range, int size) =>
-            range.Add(size);
-
-        public static Vector3DRange operator +(Vector3DRange range, int size) =>
-            range.Add(size);
-
-        public readonly Vector3DRange Sub(Vector3D size) =>
+        public readonly Vector3DRange Shrink(Vector3D size) =>
             new(Min + size, Max - size);
 
-        public static Vector3DRange Sub(Vector3DRange range, Vector3D size) =>
-            range.Sub(size);
+        public static Vector3DRange Shrink(Vector3DRange range, Vector3D size) =>
+            range.Shrink(size);
 
-        public static Vector3DRange operator -(Vector3DRange range, Vector3D size) =>
-            range.Sub(size);
+        public readonly Vector3DRange Shrink(int size) =>
+            Shrink((size, size, size));
 
-        public readonly Vector3DRange Sub(int size) =>
-            Sub((size, size, size));
-
-        public static Vector3DRange Sub(Vector3DRange range, int size) =>
-            range.Sub(size);
-
-        public static Vector3DRange operator -(Vector3DRange range, int size) =>
-            range.Sub(size);
+        public static Vector3DRange Shrink(Vector3DRange range, int size) =>
+            range.Shrink(size);
 
         public readonly Vector3DRange Mul(Matrix3D matrix) =>
             new(Min * matrix, Max * matrix);

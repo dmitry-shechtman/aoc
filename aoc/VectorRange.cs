@@ -124,41 +124,29 @@ namespace aoc
         public static VectorRange operator &(VectorRange left, VectorRange right) =>
             left.Intersect(right);
 
-        public readonly VectorRange Add(Vector size) =>
+        public readonly VectorRange Grow(Vector size) =>
             new(Min - size, Max + size);
 
-        public static VectorRange Add(VectorRange range, Vector size) =>
-            range.Add(size);
+        public static VectorRange Grow(VectorRange range, Vector size) =>
+            range.Grow(size);
 
-        public static VectorRange operator +(VectorRange range, Vector size) =>
-            range.Add(size);
+        public readonly VectorRange Grow(int size) =>
+            Grow((size, size));
 
-        public readonly VectorRange Add(int size) =>
-            Add((size, size));
+        public static VectorRange Grow(VectorRange range, int size) =>
+            range.Grow(size);
 
-        public static VectorRange Add(VectorRange range, int size) =>
-            range.Add(size);
-
-        public static VectorRange operator +(VectorRange range, int size) =>
-            range.Add(size);
-
-        public readonly VectorRange Sub(Vector size) =>
+        public readonly VectorRange Shrink(Vector size) =>
             new(Min + size, Max - size);
 
-        public static VectorRange Sub(VectorRange range, Vector size) =>
-            range.Sub(size);
+        public static VectorRange Shrink(VectorRange range, Vector size) =>
+            range.Shrink(size);
 
-        public static VectorRange operator -(VectorRange range, Vector size) =>
-            range.Sub(size);
+        public readonly VectorRange Shrink(int size) =>
+            Shrink((size, size));
 
-        public readonly VectorRange Sub(int size) =>
-            Sub((size, size));
-
-        public static VectorRange Sub(VectorRange range, int size) =>
-            range.Sub(size);
-
-        public static VectorRange operator -(VectorRange range, int size) =>
-            range.Sub(size);
+        public static VectorRange Shrink(VectorRange range, int size) =>
+            range.Shrink(size);
 
         public readonly VectorRange Mul(Matrix matrix) =>
             new(Min * matrix, Max * matrix);
