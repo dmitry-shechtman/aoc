@@ -198,6 +198,9 @@ namespace aoc
         public static implicit operator Vector3DRange((Vector3D min, Vector3D max) value) =>
             new(value.min, value.max);
 
+        public static explicit operator VectorRange(Vector3DRange range) =>
+            new((Vector)range.Min, (Vector)range.Max);
+
         public static bool operator ==(Vector3DRange left, Vector3DRange right) =>
             left.Equals(right);
 
