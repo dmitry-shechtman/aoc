@@ -124,6 +124,24 @@ namespace aoc
         public static VectorRange operator &(VectorRange left, VectorRange right) =>
             left.Intersect(right);
 
+        public readonly VectorRange Add(Vector vector) =>
+            Mul(Matrix.Translate(vector));
+
+        public static VectorRange Add(VectorRange range, Vector vector) =>
+            range.Add(vector);
+
+        public static VectorRange operator +(VectorRange range, Vector vector) =>
+            range.Add(vector);
+
+        public readonly VectorRange Sub(Vector vector) =>
+            Mul(Matrix.Translate(-vector));
+
+        public static VectorRange Sub(VectorRange range, Vector vector) =>
+            range.Sub(vector);
+
+        public static VectorRange operator -(VectorRange range, Vector vector) =>
+            Sub(range, vector);
+
         public readonly VectorRange Grow(Vector size) =>
             new(Min - size, Max + size);
 

@@ -129,6 +129,24 @@ namespace aoc
         public static Vector3DRange operator &(Vector3DRange left, Vector3DRange right) =>
             left.Intersect(right);
 
+        public readonly Vector3DRange Add(Vector3D vector) =>
+            Mul(Matrix3D.Translate(vector));
+
+        public static Vector3DRange Add(Vector3DRange range, Vector3D vector) =>
+            range.Add(vector);
+
+        public static Vector3DRange operator +(Vector3DRange range, Vector3D vector) =>
+            range.Add(vector);
+
+        public readonly Vector3DRange Sub(Vector3D vector) =>
+            Mul(Matrix3D.Translate(-vector));
+
+        public static Vector3DRange Sub(Vector3DRange range, Vector3D vector) =>
+            range.Sub(vector);
+
+        public static Vector3DRange operator -(Vector3DRange range, Vector3D vector) =>
+            Sub(range, vector);
+
         public readonly Vector3DRange Grow(Vector3D size) =>
             new(Min - size, Max + size);
 
