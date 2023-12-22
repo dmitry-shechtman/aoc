@@ -160,6 +160,15 @@ namespace aoc
         public static VectorRange operator -(VectorRange range, int size) =>
             range.Sub(size);
 
+        public readonly VectorRange Mul(Matrix matrix) =>
+            new(Min * matrix, Max * matrix);
+
+        public static VectorRange Mul(VectorRange range, Matrix matrix) =>
+            range.Mul(matrix);
+
+        public static VectorRange operator *(VectorRange range, Matrix matrix) =>
+            range.Mul(matrix);
+
         public readonly VectorRange SplitWest(int width) =>
             new(Min, new(Min.x + width, Max.y));
 

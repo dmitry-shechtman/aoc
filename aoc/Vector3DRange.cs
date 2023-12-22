@@ -165,6 +165,15 @@ namespace aoc
         public static Vector3DRange operator -(Vector3DRange range, int size) =>
             range.Sub(size);
 
+        public readonly Vector3DRange Mul(Matrix3D matrix) =>
+            new(Min * matrix, Max * matrix);
+
+        public static Vector3DRange Mul(Vector3DRange range, Matrix3D matrix) =>
+            range.Mul(matrix);
+
+        public static Vector3DRange operator *(Vector3DRange range, Matrix3D matrix) =>
+            range.Mul(matrix);
+
         public readonly Vector3DRange SplitWest(int width) =>
             new(Min, new(Min.x + width, Max.y, Max.z));
 
