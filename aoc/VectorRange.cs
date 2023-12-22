@@ -43,7 +43,7 @@ namespace aoc
             HashCode.Combine(Min, Max);
 
         public readonly override string ToString() =>
-            $"{Min},{Max}";
+            $"{Min}~{Max}";
 
         public readonly void Deconstruct(out Vector min, out Vector max)
         {
@@ -60,6 +60,36 @@ namespace aoc
 
         readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
+        public static VectorRange Parse(string s) =>
+            Parse(s, '~');
+
+        public static VectorRange Parse(string s, char separator, char separator2 = ',') =>
+            TryParse(s, out VectorRange range, separator, separator2)
+                ? range
+                : throw new InvalidOperationException($"Incorrect string format: {s}");
+
+        public static bool TryParse(string s, out VectorRange range, char separator = '~', char separator2 = ',') =>
+            TryParse(s.Trim().Split(separator), out range, separator2);
+
+        public static VectorRange Parse(string[] ss) =>
+            Parse(ss, ',');
+
+        public static VectorRange Parse(string[] ss, char separator) =>
+            TryParse(ss, out VectorRange range, separator)
+                ? range
+                : throw new InvalidOperationException($"Input string was not in a correct format.");
+
+        public static bool TryParse(string[] ss, out VectorRange range, char separator = ',')
+        {
+            range = default;
+            if (ss.Length < 2 ||
+                !Vector.TryParse(ss[0], out Vector min, separator) ||
+                !Vector.TryParse(ss[1], out Vector max, separator))
+                return false;
+            range = new(min, max);
+            return true;
+        }
 
         public readonly bool IsMatch(Vector vector) =>
             vector.x >= Min.x && vector.x <= Max.x &&

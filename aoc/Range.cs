@@ -26,7 +26,7 @@ namespace aoc
             HashCode.Combine(Min, Max);
 
         public readonly override string ToString() =>
-            $"{Min},{Max}";
+            $"{Min}~{Max}";
 
         public readonly void Deconstruct(out int min, out int max)
         {
@@ -42,6 +42,33 @@ namespace aoc
 
         readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
+        public static Range Parse(string s) =>
+            Parse(s, '~');
+
+        public static Range Parse(string s, char separator) =>
+            TryParse(s, out Range range, separator)
+                ? range
+                : throw new InvalidOperationException($"Incorrect string format: {s}");
+
+        public static bool TryParse(string s, out Range range, char separator = '~') =>
+            TryParse(s.Trim().Split(separator), out range);
+
+        public static Range Parse(string[] ss) =>
+            TryParse(ss, out Range range)
+                ? range
+                : throw new InvalidOperationException($"Input string was not in a correct format.");
+
+        public static bool TryParse(string[] ss, out Range range)
+        {
+            range = default;
+            if (ss.Length < 2 ||
+                !int.TryParse(ss[0], out int min) ||
+                !int.TryParse(ss[1], out int max))
+                return false;
+            range = new(min, max);
+            return true;
+        }
 
         public readonly bool IsMatch(int value) =>
             value >= Min && value <= Max;
