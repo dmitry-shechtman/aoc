@@ -318,6 +318,17 @@ namespace aoc
         public static Vector3D operator *(int scalar, Vector3D vector) =>
             vector.Mul(scalar);
 
+        public readonly Vector3D Mul(Matrix3D m) =>
+            new(x * m.m11 + y * m.m21 + z * m.m31 + m.m41,
+                x * m.m12 + y * m.m22 + z * m.m32 + m.m42,
+                x * m.m13 + y * m.m23 + z * m.m33 + m.m43);
+
+        public static Vector3D Mul(Vector3D vector, Matrix3D matrix) =>
+            vector.Mul(matrix);
+
+        public static Vector3D operator *(Vector3D vector, Matrix3D matrix) =>
+            vector.Mul(matrix);
+
         public readonly Vector3D Div(int scalar) =>
             new(x / scalar, y / scalar, z / scalar);
 
