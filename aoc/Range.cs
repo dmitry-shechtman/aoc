@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct Range : IEquatable<Range>
+    public struct Range : IEquatable<Range>, IEnumerable<int>
     {
         public Range(int min, int max)
         {
@@ -31,6 +33,15 @@ namespace aoc
             min = Min;
             max = Max;
         }
+
+        public readonly IEnumerator<int> GetEnumerator()
+        {
+            for (var i = Min; i <= Max; i++)
+                yield return i;
+        }
+
+        readonly IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
 
         public readonly bool IsMatch(int value) =>
             value >= Min && value <= Max;
