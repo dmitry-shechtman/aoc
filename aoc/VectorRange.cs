@@ -148,6 +148,12 @@ namespace aoc
         public static VectorRange Shrink(VectorRange range, int size) =>
             range.Shrink(size);
 
+        public readonly IEnumerable<Vector> Border(int size = 1) =>
+            System.Linq.Enumerable.Except(this, Shrink(size));
+
+        public static IEnumerable<Vector> Border(VectorRange range, int size = 1) =>
+            range.Border(size);
+
         public readonly VectorRange Mul(Matrix matrix) =>
             new(Min * matrix, Max * matrix);
 

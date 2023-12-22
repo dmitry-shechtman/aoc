@@ -121,6 +121,12 @@ namespace aoc
         public static LongRange Shrink(LongRange range, long size) =>
             range.Shrink(size);
 
+        public readonly IEnumerable<long> Border(long size = 1) =>
+            System.Linq.Enumerable.Except(this, Shrink(size));
+
+        public static IEnumerable<long> Border(LongRange range, long size = 1) =>
+            range.Border(size);
+
         public static implicit operator (long min, long max)(LongRange value) =>
             (value.Min, value.Max);
 

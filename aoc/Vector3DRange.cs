@@ -153,6 +153,12 @@ namespace aoc
         public static Vector3DRange Shrink(Vector3DRange range, int size) =>
             range.Shrink(size);
 
+        public readonly IEnumerable<Vector3D> Border(int size = 1) =>
+            System.Linq.Enumerable.Except(this, Shrink(size));
+
+        public static IEnumerable<Vector3D> Border(Vector3DRange range, int size = 1) =>
+            range.Border(size);
+
         public readonly Vector3DRange Mul(Matrix3D matrix) =>
             new(Min * matrix, Max * matrix);
 
