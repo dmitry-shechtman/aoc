@@ -48,10 +48,10 @@ namespace aoc
 #endif
 
         public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
-            source.Select(predicate).Count();
+            source.Where(predicate).Count();
 
         public static long LongCount<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
-            source.Select(predicate).LongCount();
+            source.Where(predicate).LongCount();
 
         public static TResult Min<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector) =>
             source.Select(selector).Min();
