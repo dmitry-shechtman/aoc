@@ -7,6 +7,9 @@ namespace aoc
         public static void Clear(this Array array) =>
             Array.Clear(array, 0, array.Length);
 
+        public static void Fill<T>(this T[] array, T value) =>
+            Array.Fill(array, value);
+
         public static T Find<T>(this T[] array, Predicate<T> match) =>
             Array.Find(array, match);
 
