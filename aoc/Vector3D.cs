@@ -79,6 +79,12 @@ namespace aoc
             z = this.z;
         }
 
+        public readonly void Deconstruct(out Vector vector, out int z)
+        {
+            vector = new(x, y);
+            z = this.z;
+        }
+
         public readonly int this[int i] => i switch
         {
             0 => x,
@@ -357,6 +363,9 @@ namespace aoc
 
         public static implicit operator Vector3D((int x, int y, int z) value) =>
             new(value.x, value.y, value.z);
+
+        public static implicit operator Vector3D((Vector vector, int z) value) =>
+            new(value.vector, value.z);
 
         public static implicit operator Vector3D(int[] values) =>
             new(values);
