@@ -51,6 +51,15 @@ namespace aoc
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
 
+        public abstract TValue GetValue(int index, int index2);
+        public abstract void SetValue(int index, int index2, TValue value);
+
+        public TValue this[int index, int index2]
+        {
+            get => GetValue(index, index2);
+            set => SetValue(index, index2, value);
+        }
+
         private TEdges[] CreateEdges(Func<int, int, TValue> getValue, int count) =>
             Enumerable.Range(0, count)
                 .Select(i => CreateEdges(Enumerable.Range(0, count)
@@ -89,6 +98,17 @@ namespace aoc
         public bool Remove(int index1, int index2) =>
             outgoing[index1].Remove(index2) &&
             incoming[index2].Remove(index1);
+
+        public override bool GetValue(int index, int index2) =>
+            outgoing[index].Contains(index2);
+
+        public override void SetValue(int index, int index2, bool value)
+        {
+            if (value)
+                Add(index, index2);
+            else
+                Remove(index, index2);
+        }
 
         public IReadOnlyList<IReadOnlySet<int>> Outgoing =>
             outgoing;
@@ -130,6 +150,15 @@ namespace aoc
         public bool Remove(int index1, int index2) =>
             outgoing[index1].Remove(index2) &&
             incoming[index2].Remove(index1);
+
+        public override T GetValue(int index, int index2) =>
+            outgoing[index][index2];
+
+        public override void SetValue(int index1, int index2, T value)
+        {
+            outgoing[index1][index2] = value;
+            incoming[index2][index1] = value;
+        }
 
         public IReadOnlyList<IReadOnlyDictionary<int, T>> Outgoing =>
             outgoing;
