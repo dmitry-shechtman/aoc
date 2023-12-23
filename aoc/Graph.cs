@@ -166,8 +166,8 @@ namespace aoc
         public IReadOnlyList<IReadOnlyDictionary<int, T>> Incoming =>
             incoming;
 
-        protected override Dictionary<int, T> CreateEdges(IEnumerable<(int key, T value)> enumerable) =>
-            enumerable.ToDictionary(t => t.key, t => t.value);
+        protected override Dictionary<int, T> CreateEdges(IEnumerable<(int key, T value)> source) =>
+            source.ToDictionary(t => t.key, t => t.value);
 
         protected override Dictionary<int, T> CloneEdges(Dictionary<int, T> edges) =>
             new(edges);
