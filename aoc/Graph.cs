@@ -7,6 +7,7 @@ namespace aoc
 {
     public abstract class GraphBase<TSelf, TEdges, TValue> : ICloneable, IEnumerable<int>
         where TSelf : GraphBase<TSelf, TEdges, TValue>
+        where TEdges : new()
     {
         protected readonly TEdges[] outgoing;
         protected readonly TEdges[] incoming;
@@ -15,6 +16,17 @@ namespace aoc
         {
             outgoing = CreateEdges(getValue, count);
             incoming = CreateEdges((i, j) => getValue(j, i), count);
+        }
+
+        protected GraphBase(int count)
+        {
+            outgoing = new TEdges[count];
+            incoming = new TEdges[count];
+            for (int i = 0; i < count; i++)
+            {
+                outgoing[i] = new();
+                incoming[i] = new();
+            }
         }
 
         protected GraphBase(TSelf graph)
@@ -57,6 +69,11 @@ namespace aoc
         {
         }
 
+        public Graph(int count)
+            : base(count)
+        {
+        }
+
         public Graph(Graph graph)
             : base(graph)
         {
@@ -90,6 +107,11 @@ namespace aoc
     {
         public Graph(Func<int, int, T> getValue, int count)
             : base(getValue, count)
+        {
+        }
+
+        public Graph(int count)
+            : base(count)
         {
         }
 
