@@ -11,10 +11,10 @@ namespace aoc
         protected readonly TEdges[] outgoing;
         protected readonly TEdges[] incoming;
 
-        protected GraphBase(Func<int, int, TValue> predicate, int count)
+        protected GraphBase(Func<int, int, TValue> getValue, int count)
         {
-            outgoing = CreateEdges(predicate, count);
-            incoming = CreateEdges((i, j) => predicate(j, i), count);
+            outgoing = CreateEdges(getValue, count);
+            incoming = CreateEdges((i, j) => getValue(j, i), count);
         }
 
         protected GraphBase(TSelf graph)
@@ -39,10 +39,10 @@ namespace aoc
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
 
-        private TEdges[] CreateEdges(Func<int, int, TValue> predicate, int count) =>
+        private TEdges[] CreateEdges(Func<int, int, TValue> getValue, int count) =>
             Enumerable.Range(0, count)
                 .Select(i => CreateEdges(Enumerable.Range(0, count)
-                    .Select(j => (j, value: predicate(i, j)))
+                    .Select(j => (j, value: getValue(i, j)))
                     .Where(t => !Equals(t.value, default(TValue)))))
                 .ToArray();
 
@@ -88,8 +88,8 @@ namespace aoc
 
     public sealed class Graph<T> : GraphBase<Graph<T>, Dictionary<int, T>, T>
     {
-        public Graph(Func<int, int, T> predicate, int count)
-            : base(predicate, count)
+        public Graph(Func<int, int, T> getValue, int count)
+            : base(getValue, count)
         {
         }
 
