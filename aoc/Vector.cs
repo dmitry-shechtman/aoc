@@ -25,7 +25,7 @@ namespace aoc
         private const int Cardinality = 2;
 
         public static readonly Vector Zero      = default;
-                                                
+
         public static readonly Vector North     = ( 0, -1);
         public static readonly Vector East      = ( 1,  0);
         public static readonly Vector South     = ( 0,  1);
@@ -413,6 +413,12 @@ namespace aoc
                         pp.Add((x, y));
             return pp;
         }
+
+        public static HashSet<Vector>[] ParseField(string s, string cc) =>
+            ParseField(s, '\n', cc);
+
+        public static HashSet<Vector>[] ParseField(string s, char separator, string cc) =>
+            ParseField(s.Split(separator), cc);
 
         public static HashSet<Vector>[] ParseField(string[] ss, string cc)
         {
