@@ -100,9 +100,9 @@ namespace aoc
             Translate(vector);
 
         public static bool operator ==(Matrix3D left, Matrix3D right) =>
-            left.Equals((object)right);
+            left.Equals(right);
 
         public static bool operator !=(Matrix3D left, Matrix3D right) =>
-            !left.Equals((object)right);
+            !left.Equals(right);
     }
 }
