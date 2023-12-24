@@ -72,6 +72,15 @@ namespace aoc
             _ => throw new(),
         };
 
+        public readonly Vector Mul(Vector vector) =>
+            new(m11 * vector.x + m12 * vector.y, m21 * vector.x + m22 * vector.y);
+
+        public static Vector Mul(Matrix matrix, Vector vector) =>
+            matrix.Mul(vector);
+
+        public static Vector operator *(Matrix matrix, Vector vector) =>
+            matrix.Mul(vector);
+
         public static implicit operator Matrix((int m11, int m12, int m21, int m22) m) =>
             new(m.m11, m.m12, m.m21, m.m22);
 
