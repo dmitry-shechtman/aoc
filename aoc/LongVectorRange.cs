@@ -25,9 +25,9 @@ namespace aoc
         public LongVector Min { get; }
         public LongVector Max { get; }
 
-        public long Width => Max.x - Min.x + 1;
+        public long Width  => Max.x - Min.x + 1;
         public long Height => Max.y - Min.y + 1;
-        public long Count => Width * Height;
+        public long Count  => Width * Height;
 
         public readonly override bool Equals(object obj) =>
             obj is LongVectorRange other && Equals(other);
