@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct LongRange : IEquatable<LongRange>, IEnumerable<long>
+    public struct LongRange : IEquatable<LongRange>, IReadOnlyList<long>
     {
         public LongRange(long min, long max)
         {
@@ -14,7 +14,8 @@ namespace aoc
 
         public long Min { get; }
         public long Max { get; }
-        public long Length => Max - Min + 1;
+
+        public readonly long Count => Max - Min + 1;
 
         public readonly override bool Equals(object obj) =>
             obj is LongRange other && Equals(other);
@@ -42,6 +43,12 @@ namespace aoc
 
         readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
+        public readonly long this[int index] =>
+            Min + index;
+
+        readonly int IReadOnlyCollection<long>.Count =>
+            (int)Count;
 
         public static LongRange Parse(string s) =>
             Parse(s, '~');

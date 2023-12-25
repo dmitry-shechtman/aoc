@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct LongVectorRange : IEquatable<LongVectorRange>, IEnumerable<LongVector>
+    public struct LongVectorRange : IEquatable<LongVectorRange>, IReadOnlyList<LongVector>
     {
         public LongVectorRange(LongVector min, LongVector max)
         {
@@ -25,9 +25,9 @@ namespace aoc
         public LongVector Min { get; }
         public LongVector Max { get; }
 
-        public long Width  => Max.x - Min.x + 1;
-        public long Height => Max.y - Min.y + 1;
-        public long Count  => Width * Height;
+        public readonly long Width  => Max.x - Min.x + 1;
+        public readonly long Height => Max.y - Min.y + 1;
+        public readonly long Count  => Width * Height;
 
         public readonly override bool Equals(object obj) =>
             obj is LongVectorRange other && Equals(other);
@@ -57,6 +57,12 @@ namespace aoc
 
         readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
+        public readonly LongVector this[int index] =>
+            new(Min.x + index % Width, Min.y + index / Width);
+
+        readonly int IReadOnlyCollection<LongVector>.Count =>
+            (int)Count;
 
         public static LongVectorRange Parse(string s) =>
             Parse(s, '~');

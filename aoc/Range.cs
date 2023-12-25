@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct Range : IEquatable<Range>, IEnumerable<int>
+    public struct Range : IEquatable<Range>, IReadOnlyList<int>
     {
         public Range(int min, int max)
         {
@@ -14,7 +14,8 @@ namespace aoc
 
         public int Min { get; }
         public int Max { get; }
-        public int Length => Max - Min + 1;
+
+        public readonly int Count => Max - Min + 1;
 
         public readonly override bool Equals(object obj) =>
             obj is Range other && Equals(other);
@@ -42,6 +43,9 @@ namespace aoc
 
         readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
+        public readonly int this[int index] =>
+            Min + index;
 
         public static Range Parse(string s) =>
             Parse(s, '~');

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct DoubleVectorRange : IEquatable<DoubleVectorRange>, IEnumerable<DoubleVector>
+    public struct DoubleVectorRange : IEquatable<DoubleVectorRange>, IReadOnlyList<DoubleVector>
     {
         public DoubleVectorRange(DoubleVector min, DoubleVector max)
         {
@@ -25,9 +25,9 @@ namespace aoc
         public DoubleVector Min { get; }
         public DoubleVector Max { get; }
 
-        public double Width  => Max.x - Min.x + 1;
-        public double Height => Max.y - Min.y + 1;
-        public double Count  => Width * Height;
+        public readonly double Width  => Max.x - Min.x + 1;
+        public readonly double Height => Max.y - Min.y + 1;
+        public readonly double Count  => Width * Height;
 
         public readonly override bool Equals(object obj) =>
             obj is DoubleVectorRange other && Equals(other);
@@ -57,6 +57,12 @@ namespace aoc
 
         readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
+        public readonly DoubleVector this[int index] =>
+            new(Min.x + index % Width, Min.y + index / Width);
+
+        readonly int IReadOnlyCollection<DoubleVector>.Count =>
+            (int)Count;
 
         public static DoubleVectorRange Parse(string s) =>
             Parse(s, '~');

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct LongVector3DRange : IEquatable<LongVector3DRange>, IEnumerable<LongVector3D>
+    public struct LongVector3DRange : IEquatable<LongVector3DRange>, IReadOnlyList<LongVector3D>
     {
         public LongVector3DRange(LongVector3D min, LongVector3D max)
         {
@@ -30,10 +30,10 @@ namespace aoc
         public LongVector3D Min { get; }
         public LongVector3D Max { get; }
 
-        public long Width  => Max.x - Min.x + 1;
-        public long Height => Max.y - Min.y + 1;
-        public long Depth  => Max.z - Min.z + 1;
-        public long Count  => Width * Height * Depth;
+        public readonly long Width  => Max.x - Min.x + 1;
+        public readonly long Height => Max.y - Min.y + 1;
+        public readonly long Depth  => Max.z - Min.z + 1;
+        public readonly long Count  => Width * Height * Depth;
 
         public readonly override bool Equals(object obj) =>
             obj is LongVector3DRange other && Equals(other);
@@ -64,6 +64,12 @@ namespace aoc
 
         readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
+        public readonly LongVector3D this[int index] =>
+            new(Min.x + index % Width, Min.y + index / Width % Height, Min.z + index / (Width * Height));
+
+        readonly int IReadOnlyCollection<LongVector3D>.Count =>
+            (int)Count;
 
         public static LongVector3DRange Parse(string s) =>
             Parse(s, '~');
