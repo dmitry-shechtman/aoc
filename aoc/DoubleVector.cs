@@ -96,6 +96,9 @@ namespace aoc
             _ => throw new IndexOutOfRangeException(),
         };
 
+        public readonly double Length =>
+            x * y;
+
         public static DoubleVector Parse(string s, char separator = ',') =>
             TryParse(s, out DoubleVector vector, separator)
                 ? vector

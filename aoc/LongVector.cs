@@ -91,6 +91,9 @@ namespace aoc
             _ => throw new IndexOutOfRangeException(),
         };
 
+        public readonly long Length =>
+            x * y;
+
         public static LongVector Parse(string s, char separator = ',') =>
             TryParse(s, out LongVector vector, separator)
                 ? vector
