@@ -136,10 +136,10 @@ namespace aoc
         public readonly int AbsWE() =>
             Math.Abs(y) + Math.Abs(Math.Abs(y) - Math.Abs(x)) / 2;
 
-        public readonly int Count =>
+        public readonly int Length =>
             x * y;
 
-        public readonly long LongCount =>
+        public readonly long LongLength =>
             (long)x * y;
 
         public static IEnumerable<Vector> Range(Vector toExclusive) =>
