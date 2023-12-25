@@ -70,6 +70,14 @@ namespace aoc
             z = this.z;
         }
 
+        public readonly long this[int i] => i switch
+        {
+            0 => x,
+            1 => y,
+            2 => z,
+            _ => throw new IndexOutOfRangeException(),
+        };
+
         public static LongVector3D Parse(string s, char separator = ',') =>
             TryParse(s, out LongVector3D vector, separator)
                 ? vector
