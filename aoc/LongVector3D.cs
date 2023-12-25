@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 
 namespace aoc
 {
-    public struct LongVector3D : IEquatable<LongVector3D>
+    public struct LongVector3D : IEquatable<LongVector3D>, IFormattable
     {
         private const int Cardinality = 3;
 
@@ -56,6 +57,36 @@ namespace aoc
 
         public readonly override string ToString() =>
             $"{x},{y},{z}";
+
+        private static readonly string[] FormatKeys    = { "x", "y", "z" };
+        private static readonly string[] FormatStrings = { "neswud" };
+
+        public readonly string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (string.IsNullOrEmpty(format))
+                return ToString();
+            if (FormatKeys.Any(format.Contains))
+                return ReplaceFormat(format);
+            if (format.Length > 1)
+                return ToString();
+            int index = Headings.IndexOf(this);
+            if (index < 0)
+                return ToString();
+            char c = char.ToLowerInvariant(format[0]);
+            string s = FormatStrings.Find(s => s.Contains(c));
+            if (s.Length == 0)
+                return ToString();
+            return char.IsUpper(format[0])
+                ? char.ToUpperInvariant(s[index]).ToString()
+                : s[index].ToString();
+        }
+
+        private readonly string ReplaceFormat(string format)
+        {
+            for (int i = 0; i < FormatKeys.Length; i++)
+                format = format.Replace(FormatKeys[i], this[i].ToString());
+            return format;
+        }
 
         public readonly void Deconstruct(out long x, out long y, out long z)
         {
