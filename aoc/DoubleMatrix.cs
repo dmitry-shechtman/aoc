@@ -69,6 +69,20 @@ namespace aoc
         public static bool Invert(DoubleMatrix matrix, out DoubleMatrix inv) =>
             matrix.Invert(out inv);
 
+        public readonly bool Solve(DoubleVector b, out DoubleVector x)
+        {
+            if (!Invert(out DoubleMatrix inv))
+            {
+                x = default;
+                return false;
+            }
+            x = inv * b;
+            return true;
+        }
+
+        public static bool Solve(DoubleMatrix a, DoubleVector b, out DoubleVector x) =>
+            a.Solve(b, out x);
+
         public static DoubleMatrix Translate(int x, int y) =>
             Translate(new(x, y));
 
