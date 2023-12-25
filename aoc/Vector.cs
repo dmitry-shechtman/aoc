@@ -70,11 +70,16 @@ namespace aoc
         public readonly override string ToString() =>
             $"{x},{y}";
 
+        private static readonly string[] FormatKeys    = { "x", "y" };
         private static readonly string[] FormatStrings = { "nesw", "urdl", "^>v<" };
 
         public readonly string ToString(string format, IFormatProvider formatProvider)
         {
-            if (format?.Length != 1)
+            if (string.IsNullOrEmpty(format))
+                return ToString();
+            if (FormatKeys.Any(format.Contains))
+                return ReplaceFormat(format);
+            if (format.Length > 1)
                 return ToString();
             int index = Headings.IndexOf(this);
             if (index < 0)
@@ -86,6 +91,13 @@ namespace aoc
             return char.IsUpper(format[0])
                 ? char.ToUpperInvariant(s[index]).ToString()
                 : s[index].ToString();
+        }
+
+        private readonly string ReplaceFormat(string format)
+        {
+            for (int i = 0; i < FormatKeys.Length; i++)
+                format = format.Replace(FormatKeys[i], this[i].ToString());
+            return format;
         }
 
         public readonly void Deconstruct(out int x, out int y)
