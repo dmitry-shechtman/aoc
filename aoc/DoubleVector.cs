@@ -6,7 +6,14 @@ namespace aoc
     {
         private const int Cardinality = 2;
 
-        public static readonly DoubleVector Zero = default;
+        public static readonly DoubleVector Zero      = default;
+
+        public static readonly DoubleVector North     = ( 0, -1);
+        public static readonly DoubleVector East      = ( 1,  0);
+        public static readonly DoubleVector South     = ( 0,  1);
+        public static readonly DoubleVector West      = (-1,  0);
+
+        public static readonly DoubleVector[] Headings = { North, East, South, West };
 
         public readonly double x;
         public readonly double y;

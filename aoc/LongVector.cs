@@ -6,7 +6,14 @@ namespace aoc
     {
         private const int Cardinality = 2;
 
-        public static readonly LongVector Zero = default;
+        public static readonly LongVector Zero      = default;
+
+        public static readonly LongVector North     = ( 0, -1);
+        public static readonly LongVector East      = ( 1,  0);
+        public static readonly LongVector South     = ( 0,  1);
+        public static readonly LongVector West      = (-1,  0);
+
+        public static readonly LongVector[] Headings = { North, East, South, West };
 
         public readonly long x;
         public readonly long y;
