@@ -48,13 +48,13 @@ namespace aoc
         public readonly override int GetHashCode() =>
             HashCode.Combine(m11, m12, m21, m22, m31, m32);
 
-        public double GetDeterminant() =>
+        public readonly double GetDeterminant() =>
             m11 * m22 - m12 * m21;
 
         public static double GetDeterminant(DoubleMatrix matrix) =>
             matrix.GetDeterminant();
 
-        public bool Invert(out DoubleMatrix inv)
+        public readonly bool Invert(out DoubleMatrix inv)
         {
             double det = GetDeterminant();
             if (det == 0)
