@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace aoc
 {
-    public struct DoubleVector : IEquatable<DoubleVector>, IFormattable
+    public struct DoubleVector : IEquatable<DoubleVector>, IReadOnlyList<double>, IFormattable
     {
         private const int Cardinality = 2;
 
@@ -95,6 +97,18 @@ namespace aoc
             1 => y,
             _ => throw new IndexOutOfRangeException(),
         };
+
+        public readonly IEnumerator<double> GetEnumerator()
+        {
+            yield return x;
+            yield return y;
+        }
+
+        readonly IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
+
+        readonly int IReadOnlyCollection<double>.Count =>
+            Cardinality;
 
         public readonly double Length =>
             x * y;

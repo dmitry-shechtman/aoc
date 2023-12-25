@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,7 +21,7 @@ namespace aoc
         Self  = 4
     }
 
-    public struct Vector : IEquatable<Vector>, IFormattable
+    public struct Vector : IEquatable<Vector>, IReadOnlyList<int>, IFormattable
     {
         private const int Cardinality = 2;
 
@@ -106,12 +107,24 @@ namespace aoc
             y = this.y;
         }
 
+        public readonly IEnumerator<int> GetEnumerator()
+        {
+            yield return x;
+            yield return y;
+        }
+
+        readonly IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
+
         public readonly int this[int i] => i switch
         {
             0 => x,
             1 => y,
             _ => throw new IndexOutOfRangeException(),
         };
+
+        readonly int IReadOnlyCollection<int>.Count =>
+            Cardinality;
 
         public readonly int Abs(GridType grid) => grid switch
         {
