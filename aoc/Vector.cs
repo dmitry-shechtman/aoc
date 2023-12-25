@@ -68,36 +68,39 @@ namespace aoc
         public readonly override int GetHashCode() =>
             HashCode.Combine(x, y);
 
-        public readonly override string ToString() =>
-            $"{x},{y}";
+        private const string DefaultFormat = "x,y";
 
         private static readonly string[] FormatKeys    = { "x", "y" };
         private static readonly string[] FormatStrings = { "nesw", "urdl", "^>v<" };
 
-        public readonly string ToString(string format, IFormatProvider formatProvider)
+        public readonly override string ToString() =>
+            ToStringInner(DefaultFormat, null);
+
+        public readonly string ToString(IFormatProvider provider) =>
+            ToStringInner(DefaultFormat, provider);
+
+        public readonly string ToString(string format, IFormatProvider provider = null)
         {
             if (string.IsNullOrEmpty(format))
-                return ToString();
-            if (FormatKeys.Any(format.Contains))
-                return ReplaceFormat(format);
-            if (format.Length > 1)
-                return ToString();
+                format = DefaultFormat;
+            if (FormatKeys.Any(format.Contains) || format.Length > 1)
+                return ToStringInner(format, provider);
             int index = Headings.IndexOf(this);
             if (index < 0)
-                return ToString();
+                return ToStringInner(DefaultFormat, provider);
             char c = char.ToLowerInvariant(format[0]);
             string s = FormatStrings.Find(s => s.Contains(c));
             if (s.Length == 0)
-                return ToString();
+                return ToStringInner(DefaultFormat, provider);
             return char.IsUpper(format[0])
                 ? char.ToUpperInvariant(s[index]).ToString()
                 : s[index].ToString();
         }
 
-        private readonly string ReplaceFormat(string format)
+        private readonly string ToStringInner(string format, IFormatProvider provider)
         {
             for (int i = 0; i < FormatKeys.Length; i++)
-                format = format.Replace(FormatKeys[i], this[i].ToString());
+                format = format.Replace(FormatKeys[i], this[i].ToString(provider));
             return format;
         }
 
