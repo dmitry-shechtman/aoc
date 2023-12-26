@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace aoc
 {
-    public struct LongVector : IEquatable<LongVector>, IReadOnlyList<long>, IFormattable
+    public struct LongVector : IVector2D<LongVector, long>
     {
         private const int Cardinality = 2;
 
@@ -95,9 +94,6 @@ namespace aoc
             yield return y;
         }
 
-        readonly IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
-
         public readonly long this[int i] => i switch
         {
             0 => x,
@@ -105,8 +101,17 @@ namespace aoc
             _ => throw new IndexOutOfRangeException(),
         };
 
-        readonly int IReadOnlyCollection<long>.Count =>
-            Cardinality;
+        public readonly long Abs() =>
+            Math.Abs(x) + Math.Abs(y);
+
+        public readonly LongVector Abs2() =>
+            new(Math.Abs(x), Math.Abs(y));
+
+        public readonly LongVector Sign() =>
+            new(Math.Sign(x), Math.Sign(y));
+
+        public readonly long X => x;
+        public readonly long Y => y;
 
         public readonly long Length =>
             x * y;

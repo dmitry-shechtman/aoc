@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +20,7 @@ namespace aoc
         Self  = 4
     }
 
-    public struct Vector : IEquatable<Vector>, IReadOnlyList<int>, IFormattable
+    public struct Vector : IVector2D<Vector, int>
     {
         private const int Cardinality = 2;
 
@@ -116,18 +115,12 @@ namespace aoc
             yield return y;
         }
 
-        readonly IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
-
         public readonly int this[int i] => i switch
         {
             0 => x,
             1 => y,
             _ => throw new IndexOutOfRangeException(),
         };
-
-        readonly int IReadOnlyCollection<int>.Count =>
-            Cardinality;
 
         public readonly int Abs(GridType grid) => grid switch
         {
@@ -151,6 +144,9 @@ namespace aoc
 
         public readonly int AbsWE() =>
             Math.Abs(y) + Math.Abs(Math.Abs(y) - Math.Abs(x)) / 2;
+
+        public readonly int X => x;
+        public readonly int Y => y;
 
         public readonly int Length =>
             x * y;
