@@ -5,7 +5,7 @@ using static aoc.RangeParseHelper<aoc.DoubleVectorRange, aoc.DoubleVector>;
 
 namespace aoc
 {
-    public struct DoubleVectorRange : IRange<DoubleVectorRange, DoubleVector>, ISize2D<DoubleVectorRange, DoubleVector, double>
+    public struct DoubleVectorRange : IRange2D<DoubleVectorRange, DoubleVector, double>
     {
         public DoubleVectorRange(DoubleVector min, DoubleVector max)
         {

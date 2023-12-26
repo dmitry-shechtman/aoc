@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc
@@ -31,5 +30,19 @@ namespace aoc
     {
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+    }
+
+    public interface IRange2D<TSelf, TVector, T> : IRange<TSelf, TVector>, ISize2D<TSelf, TVector, T>
+        where TSelf : struct, IRange2D<TSelf, TVector, T>
+        where TVector : struct, IVector2D<TVector, T>
+        where T : struct
+    {
+    }
+
+    public interface IRange3D<TSelf, TVector, T> : IRange<TSelf, TVector>, ISize3D<TSelf, TVector, T>
+        where TSelf : struct, IRange3D<TSelf, TVector, T>
+        where TVector : struct, IVector3D<TVector, T>
+        where T : struct
+    {
     }
 }

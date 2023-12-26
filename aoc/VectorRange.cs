@@ -6,7 +6,7 @@ using static aoc.RangeParseHelper<aoc.VectorRange, aoc.Vector>;
 
 namespace aoc
 {
-    public struct VectorRange : IIntegerRange<VectorRange, Vector>, ISize2D<VectorRange, Vector, int>
+    public struct VectorRange : IIntegerRange<VectorRange, Vector>, IRange2D<VectorRange, Vector, int>
     {
         public VectorRange(Vector min, Vector max)
         {

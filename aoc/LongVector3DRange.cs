@@ -6,7 +6,7 @@ using static aoc.RangeParseHelper<aoc.LongVector3DRange, aoc.LongVector3D>;
 
 namespace aoc
 {
-    public struct LongVector3DRange : IIntegerRange<LongVector3DRange, LongVector3D>, ISize3D<LongVector3DRange, LongVector3D, long>
+    public struct LongVector3DRange : IIntegerRange<LongVector3DRange, LongVector3D>, IRange3D<LongVector3DRange, LongVector3D, long>
     {
         public LongVector3DRange(LongVector3D min, LongVector3D max)
         {

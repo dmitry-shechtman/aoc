@@ -6,7 +6,7 @@ using static aoc.RangeParseHelper<aoc.LongVectorRange, aoc.LongVector>;
 
 namespace aoc
 {
-    public struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>, ISize2D<LongVectorRange, LongVector, long>
+    public struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>, IRange2D<LongVectorRange, LongVector, long>
     {
         public LongVectorRange(LongVector min, LongVector max)
         {
