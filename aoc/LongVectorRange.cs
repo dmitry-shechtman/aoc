@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct LongVectorRange : IEquatable<LongVectorRange>, IReadOnlyList<LongVector>
+    public struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>
     {
         public LongVectorRange(LongVector min, LongVector max)
         {
@@ -54,9 +53,6 @@ namespace aoc
                 for (var x = Min.x; x <= Max.x; x++)
                     yield return new(x, y);
         }
-
-        readonly IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
 
         public readonly LongVector this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width);

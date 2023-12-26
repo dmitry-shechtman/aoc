@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct Vector3DRange : IEquatable<Vector3DRange>, IReadOnlyList<Vector3D>
+    public struct Vector3DRange : IIntegerRange<Vector3DRange, Vector3D>
     {
         public Vector3DRange(Vector3D min, Vector3D max)
         {
@@ -59,9 +58,6 @@ namespace aoc
                     for (var x = Min.x; x <= Max.x; x++)
                         yield return new(x, y, z);
         }
-
-        readonly IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
 
         public readonly Vector3D this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width % Height, Min.z + index / (Width * Height));

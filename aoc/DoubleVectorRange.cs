@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    public struct DoubleVectorRange : IEquatable<DoubleVectorRange>
+    public struct DoubleVectorRange : IRange<DoubleVectorRange, DoubleVector>
     {
         public DoubleVectorRange(DoubleVector min, DoubleVector max)
         {

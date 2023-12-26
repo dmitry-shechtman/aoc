@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct LongRange : IEquatable<LongRange>, IReadOnlyList<long>
+    public struct LongRange : IIntegerRange<LongRange, long>
     {
         public LongRange(long min, long max)
         {
@@ -40,9 +39,6 @@ namespace aoc
             for (var i = Min; i <= Max; i++)
                 yield return i;
         }
-
-        readonly IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
 
         public readonly long this[int index] =>
             Min + index;

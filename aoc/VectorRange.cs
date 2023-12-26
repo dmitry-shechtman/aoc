@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct VectorRange : IEquatable<VectorRange>, IReadOnlyList<Vector>
+    public struct VectorRange : IIntegerRange<VectorRange, Vector>
     {
         public VectorRange(Vector min, Vector max)
         {
@@ -57,9 +56,6 @@ namespace aoc
                 for (var x = Min.x; x <= Max.x; x++)
                     yield return new(x, y);
         }
-
-        readonly IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
 
         public readonly Vector this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width);

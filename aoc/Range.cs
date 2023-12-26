@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct Range : IEquatable<Range>, IReadOnlyList<int>
+    public struct Range : IIntegerRange<Range, int>
     {
         public Range(int min, int max)
         {
@@ -40,9 +39,6 @@ namespace aoc
             for (var i = Min; i <= Max; i++)
                 yield return i;
         }
-
-        readonly IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
 
         public readonly int this[int index] =>
             Min + index;
