@@ -28,7 +28,7 @@ namespace aoc
         where TSelf : struct, IVector2D<TSelf, T>
         where T : struct
     {
-        private const int Cardinality = 2;
+        internal const int Cardinality = 2;
 
         T X { get; }
         T Y { get; }
@@ -43,7 +43,7 @@ namespace aoc
         where TSelf : struct, IVector3D<TSelf, T>
         where T : struct
     {
-        private const int Cardinality = 3;
+        internal const int Cardinality = 3;
 
         T X { get; }
         T Y { get; }

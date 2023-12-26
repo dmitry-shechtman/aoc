@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using static aoc.ParseHelper;
+using static aoc.Vector3DParseHelper<aoc.Vector3D, int>;
+
 namespace aoc
 {
     public struct Vector3D : IVector3D<Vector3D, Vector, int>
     {
-        private const int Cardinality = 3;
-
         public static readonly Vector3D Zero = default;
 
         public static readonly Vector3D North = ( 0, -1,  0);
@@ -219,30 +220,23 @@ namespace aoc
         public static bool FilterInclusive(Vector3D p, int count, HashSet<Vector3D> pp) =>
             count == 3 || count == 4 && pp.Contains(p);
 
-        public static Vector3D Parse(string s, char separator = ',') =>
-            TryParse(s, out Vector3D vector, separator)
-                ? vector
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+        public static Vector3D Parse(string s) =>
+            Parse(s, ',');
+
+        public static Vector3D Parse(string s, char separator) =>
+            Parse<Vector3D>(s, TryParse, separator);
 
         public static bool TryParse(string s, out Vector3D vector, char separator = ',') =>
-            TryParse(s.Trim().Split(separator), out vector);
+            TryParse<Vector3D>(s, TryParse, separator, out vector);
 
         public static Vector3D Parse(string[] ss) =>
-            TryParse(ss, out Vector3D vector)
-                ? vector
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<Vector3D>(ss, TryParse);
 
-        public static bool TryParse(string[] ss, out Vector3D vector)
-        {
-            vector = default;
-            if (ss.Length < Cardinality)
-                return false;
-            int[] values = new int[Cardinality];
-            if (ss[..Cardinality].Any((s, i) => !int.TryParse(s, out values[i])))
-                return false;
-            vector = new(values);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out Vector3D vector) =>
+            TryParseVector(ss, int.TryParse, FromArray, out vector);
+
+        private static Vector3D FromArray(int[] values) =>
+            new(values);
 
         public readonly T GetValue<T>(T[] array, Vector3DRange range) =>
             array[GetIndex(range)];

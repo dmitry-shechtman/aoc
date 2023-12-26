@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using static aoc.ParseHelper;
+using static aoc.Vector2DParseHelper<aoc.LongVector, long>;
+
 namespace aoc
 {
     public struct LongVector : IVector2D<LongVector, long>
     {
-        private const int Cardinality = 2;
-
         public static readonly LongVector Zero      = default;
 
         public static readonly LongVector North     = ( 0, -1);
@@ -116,30 +117,23 @@ namespace aoc
         public readonly long Length =>
             x * y;
 
-        public static LongVector Parse(string s, char separator = ',') =>
-            TryParse(s, out LongVector vector, separator)
-                ? vector
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+        public static LongVector Parse(string s) =>
+            Parse(s, ',');
+
+        public static LongVector Parse(string s, char separator) =>
+            Parse<LongVector>(s, TryParse, separator);
 
         public static bool TryParse(string s, out LongVector vector, char separator = ',') =>
-            TryParse(s.Trim().Split(separator), out vector);
+            TryParse<LongVector>(s, TryParse, separator, out vector);
 
         public static LongVector Parse(string[] ss) =>
-            TryParse(ss, out LongVector vector)
-                ? vector
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<LongVector>(ss, TryParse);
 
-        public static bool TryParse(string[] ss, out LongVector vector)
-        {
-            vector = default;
-            if (ss.Length < Cardinality)
-                return false;
-            long[] values = new long[Cardinality];
-            if (ss[..Cardinality].Any((s, i) => !long.TryParse(s, out values[i])))
-                return false;
-            vector = new(values);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out LongVector vector) =>
+            TryParseVector(ss, long.TryParse, FromArray, out vector);
+
+        private static LongVector FromArray(long[] values) =>
+            new(values);
 
         public readonly LongVector Add(LongVector other) =>
             new(x + other.x, y + other.y);

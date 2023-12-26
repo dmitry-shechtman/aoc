@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using static aoc.ParseHelper;
+using static aoc.Vector3DParseHelper<aoc.LongVector3D, long>;
+
 namespace aoc
 {
     public struct LongVector3D : IVector3D<LongVector3D, LongVector, long>
     {
-        private const int Cardinality = 3;
-
         public static readonly LongVector3D Zero  = default;
 
         public static readonly LongVector3D North = ( 0, -1,  0);
@@ -136,30 +137,23 @@ namespace aoc
         public readonly long Length =>
             x * y * z;
 
-        public static LongVector3D Parse(string s, char separator = ',') =>
-            TryParse(s, out LongVector3D vector, separator)
-                ? vector
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+        public static LongVector3D Parse(string s) =>
+            Parse(s, ',');
+
+        public static LongVector3D Parse(string s, char separator) =>
+            Parse<LongVector3D>(s, TryParse, separator);
 
         public static bool TryParse(string s, out LongVector3D vector, char separator = ',') =>
-            TryParse(s.Trim().Split(separator), out vector);
+            TryParse<LongVector3D>(s, TryParse, separator, out vector);
 
         public static LongVector3D Parse(string[] ss) =>
-            TryParse(ss, out LongVector3D vector)
-                ? vector
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<LongVector3D>(ss, TryParse);
 
-        public static bool TryParse(string[] ss, out LongVector3D vector)
-        {
-            vector = default;
-            if (ss.Length < Cardinality)
-                return false;
-            long[] values = new long[Cardinality];
-            if (ss[..Cardinality].Any((s, i) => !long.TryParse(s, out values[i])))
-                return false;
-            vector = new(values);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out LongVector3D vector) =>
+            TryParseVector(ss, long.TryParse, FromArray, out vector);
+
+        private static LongVector3D FromArray(long[] values) =>
+            new(values);
 
         public readonly LongVector3D Add(LongVector3D other) =>
             new(x + other.x, y + other.y, z + other.z);

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using static aoc.ParseHelper;
+using static aoc.Vector2DParseHelper<aoc.DoubleVector, double>;
+
 namespace aoc
 {
     public struct DoubleVector : IVector2D<DoubleVector, double>
     {
-        private const int Cardinality = 2;
-
         public static readonly DoubleVector Zero      = default;
 
         public static readonly DoubleVector North     = ( 0, -1);
@@ -121,30 +122,23 @@ namespace aoc
         public readonly double Length =>
             x * y;
 
-        public static DoubleVector Parse(string s, char separator = ',') =>
-            TryParse(s, out DoubleVector vector, separator)
-                ? vector
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+        public static DoubleVector Parse(string s) =>
+            Parse(s, ',');
+
+        public static DoubleVector Parse(string s, char separator) =>
+            Parse<DoubleVector>(s, TryParse, separator);
 
         public static bool TryParse(string s, out DoubleVector vector, char separator = ',') =>
-            TryParse(s.Trim().Split(separator), out vector);
+            TryParse<DoubleVector>(s, TryParse, separator, out vector);
 
         public static DoubleVector Parse(string[] ss) =>
-            TryParse(ss, out DoubleVector vector)
-                ? vector
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<DoubleVector>(ss, TryParse);
 
-        public static bool TryParse(string[] ss, out DoubleVector vector)
-        {
-            vector = default;
-            if (ss.Length < Cardinality)
-                return false;
-            double[] values = new double[Cardinality];
-            if (ss[..Cardinality].Any((s, i) => !double.TryParse(s, out values[i])))
-                return false;
-            vector = new(values);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out DoubleVector vector) =>
+            TryParseVector(ss, double.TryParse, FromArray, out vector);
+
+        private static DoubleVector FromArray(double[] values) =>
+            new(values);
 
         public readonly DoubleVector Add(DoubleVector other) =>
             new(x + other.x, y + other.y);

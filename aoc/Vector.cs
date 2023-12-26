@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using static aoc.ParseHelper;
+using static aoc.Vector2DParseHelper<aoc.Vector, int>;
+
 namespace aoc
 {
     public enum GridType
@@ -22,8 +25,6 @@ namespace aoc
 
     public struct Vector : IVector2D<Vector, int>
     {
-        private const int Cardinality = 2;
-
         public static readonly Vector Zero      = default;
 
         public static readonly Vector North     = ( 0, -1);
@@ -298,30 +299,23 @@ namespace aoc
                 yield return Parse(s, ref i, neighborhood);
         }
 
-        public static Vector Parse(string s, char separator = ',') =>
-            TryParse(s, out Vector vector, separator)
-                ? vector
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+        public static Vector Parse(string s) =>
+            Parse(s, ',');
+
+        public static Vector Parse(string s, char separator) =>
+            Parse<Vector>(s, TryParse, separator);
 
         public static bool TryParse(string s, out Vector vector, char separator = ',') =>
-            TryParse(s.Trim().Split(separator), out vector);
+            TryParse<Vector>(s, TryParse, separator, out vector);
 
         public static Vector Parse(string[] ss) =>
-            TryParse(ss, out Vector vector)
-                ? vector
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<Vector>(ss, TryParse);
 
-        public static bool TryParse(string[] ss, out Vector vector)
-        {
-            vector = default;
-            if (ss.Length < Cardinality)
-                return false;
-            int[] values = new int[Cardinality];
-            if (ss[..Cardinality].Any((s, i) => !int.TryParse(s, out values[i])))
-                return false;
-            vector = new(values);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out Vector vector) =>
+            TryParseVector(ss, int.TryParse, FromArray, out vector);
+
+        private static Vector FromArray(int[] values) =>
+            new(values);
 
         public static Vector Parse(string s, NeighborhoodType neighborhood)
         {
