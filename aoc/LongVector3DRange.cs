@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using static aoc.ParseHelper;
+using static aoc.RangeParseHelper<aoc.LongVector3DRange, aoc.LongVector3D>;
+
 namespace aoc
 {
     public struct LongVector3DRange : IIntegerRange<LongVector3DRange, LongVector3D>
@@ -71,31 +74,22 @@ namespace aoc
             Parse(s, '~');
 
         public static LongVector3DRange Parse(string s, char separator, char separator2 = ',') =>
-            TryParse(s, out LongVector3DRange range, separator, separator2)
-                ? range
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+            Parse<LongVector3DRange>(s, TryParse, separator, separator2);
 
         public static bool TryParse(string s, out LongVector3DRange range, char separator = '~', char separator2 = ',') =>
-            TryParse(s.Trim().Split(separator), out range, separator2);
+            TryParse<LongVector3DRange>(s, TryParse, separator, separator2, out range);
 
         public static LongVector3DRange Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static LongVector3DRange Parse(string[] ss, char separator) =>
-            TryParse(ss, out LongVector3DRange range, separator)
-                ? range
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<LongVector3DRange>(ss, TryParse, separator);
 
-        public static bool TryParse(string[] ss, out LongVector3DRange range, char separator = ',')
-        {
-            range = default;
-            if (ss.Length < 2 ||
-                !LongVector3D.TryParse(ss[0], out LongVector3D min, separator) ||
-                !LongVector3D.TryParse(ss[1], out LongVector3D max, separator))
-                return false;
-            range = new(min, max);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out LongVector3DRange range, char separator = ',') =>
+            TryParseRange(ss, LongVector3D.TryParse, FromArray, out range, separator);
+
+        private static LongVector3DRange FromArray(LongVector3D[] values) =>
+            new(values[0], values[1]);
 
         public readonly bool IsMatch(LongVector3D vector) =>
             vector.x >= Min.x && vector.x <= Max.x &&

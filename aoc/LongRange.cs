@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using static aoc.ParseHelper;
+using static aoc.RangeParseHelper<aoc.LongRange, long>;
+
 namespace aoc
 {
     public struct LongRange : IIntegerRange<LongRange, long>
@@ -50,28 +53,19 @@ namespace aoc
             Parse(s, '~');
 
         public static LongRange Parse(string s, char separator) =>
-            TryParse(s, out LongRange range, separator)
-                ? range
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+            Parse<LongRange>(s, TryParse, separator);
 
         public static bool TryParse(string s, out LongRange range, char separator = '~') =>
-            TryParse(s.Trim().Split(separator), out range);
+            TryParse<LongRange>(s, TryParse, separator, out range);
 
         public static LongRange Parse(string[] ss) =>
-            TryParse(ss, out LongRange range)
-                ? range
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<LongRange>(ss, TryParse);
 
-        public static bool TryParse(string[] ss, out LongRange range)
-        {
-            range = default;
-            if (ss.Length < 2 ||
-                !long.TryParse(ss[0], out long min) ||
-                !long.TryParse(ss[1], out long max))
-                return false;
-            range = new(min, max);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out LongRange range) =>
+            TryParseRange(ss, long.TryParse, FromArray, out range);
+
+        private static LongRange FromArray(long[] values) =>
+            new(values[0], values[1]);
 
         public readonly bool IsMatch(long value) =>
             value >= Min && value <= Max;

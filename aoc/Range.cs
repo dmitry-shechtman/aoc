@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using static aoc.ParseHelper;
+using static aoc.RangeParseHelper<aoc.Range, int>;
+
 namespace aoc
 {
     public struct Range : IIntegerRange<Range, int>
@@ -47,28 +50,19 @@ namespace aoc
             Parse(s, '~');
 
         public static Range Parse(string s, char separator) =>
-            TryParse(s, out Range range, separator)
-                ? range
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+            Parse<Range>(s, TryParse, separator);
 
         public static bool TryParse(string s, out Range range, char separator = '~') =>
-            TryParse(s.Trim().Split(separator), out range);
+            TryParse<Range>(s, TryParse, separator, out range);
 
         public static Range Parse(string[] ss) =>
-            TryParse(ss, out Range range)
-                ? range
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<Range>(ss, TryParse);
 
-        public static bool TryParse(string[] ss, out Range range)
-        {
-            range = default;
-            if (ss.Length < 2 ||
-                !int.TryParse(ss[0], out int min) ||
-                !int.TryParse(ss[1], out int max))
-                return false;
-            range = new(min, max);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out Range range) =>
+            TryParseRange(ss, int.TryParse, FromArray, out range);
+
+        private static Range FromArray(int[] values) =>
+            new(values[0], values[1]);
 
         public readonly bool IsMatch(int value) =>
             value >= Min && value <= Max;

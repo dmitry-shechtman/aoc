@@ -1,5 +1,8 @@
 ﻿using System;
 
+using static aoc.ParseHelper;
+using static aoc.RangeParseHelper<aoc.DoubleVectorRange, aoc.DoubleVector>;
+
 namespace aoc
 {
     public struct DoubleVectorRange : IRange<DoubleVectorRange, DoubleVector>
@@ -50,31 +53,22 @@ namespace aoc
             Parse(s, '~');
 
         public static DoubleVectorRange Parse(string s, char separator, char separator2 = ',') =>
-            TryParse(s, out DoubleVectorRange range, separator, separator2)
-                ? range
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+            Parse<DoubleVectorRange>(s, TryParse, separator, separator2);
 
         public static bool TryParse(string s, out DoubleVectorRange range, char separator = '~', char separator2 = ',') =>
-            TryParse(s.Trim().Split(separator), out range, separator2);
+            TryParse<DoubleVectorRange>(s, TryParse, separator, separator2, out range);
 
         public static DoubleVectorRange Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static DoubleVectorRange Parse(string[] ss, char separator) =>
-            TryParse(ss, out DoubleVectorRange range, separator)
-                ? range
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<DoubleVectorRange>(ss, TryParse, separator);
 
-        public static bool TryParse(string[] ss, out DoubleVectorRange range, char separator = ',')
-        {
-            range = default;
-            if (ss.Length < 2 ||
-                !DoubleVector.TryParse(ss[0], out DoubleVector min, separator) ||
-                !DoubleVector.TryParse(ss[1], out DoubleVector max, separator))
-                return false;
-            range = new(min, max);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out DoubleVectorRange range, char separator = ',') =>
+            TryParseRange(ss, DoubleVector.TryParse, FromArray, out range, separator);
+
+        private static DoubleVectorRange FromArray(DoubleVector[] values) =>
+            new(values[0], values[1]);
 
         public readonly bool IsMatch(DoubleVector vector) =>
             vector.x >= Min.x && vector.x <= Max.x &&

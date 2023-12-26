@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using static aoc.ParseHelper;
+using static aoc.RangeParseHelper<aoc.LongVectorRange, aoc.LongVector>;
+
 namespace aoc
 {
     public struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>
@@ -64,31 +67,22 @@ namespace aoc
             Parse(s, '~');
 
         public static LongVectorRange Parse(string s, char separator, char separator2 = ',') =>
-            TryParse(s, out LongVectorRange range, separator, separator2)
-                ? range
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+            Parse<LongVectorRange>(s, TryParse, separator, separator2);
 
         public static bool TryParse(string s, out LongVectorRange range, char separator = '~', char separator2 = ',') =>
-            TryParse(s.Trim().Split(separator), out range, separator2);
+            TryParse<LongVectorRange>(s, TryParse, separator, separator2, out range);
 
         public static LongVectorRange Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static LongVectorRange Parse(string[] ss, char separator) =>
-            TryParse(ss, out LongVectorRange range, separator)
-                ? range
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<LongVectorRange>(ss, TryParse, separator);
 
-        public static bool TryParse(string[] ss, out LongVectorRange range, char separator = ',')
-        {
-            range = default;
-            if (ss.Length < 2 ||
-                !LongVector.TryParse(ss[0], out LongVector min, separator) ||
-                !LongVector.TryParse(ss[1], out LongVector max, separator))
-                return false;
-            range = new(min, max);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out LongVectorRange range, char separator = ',') =>
+            TryParseRange(ss, LongVector.TryParse, FromArray, out range, separator);
+
+        private static LongVectorRange FromArray(LongVector[] values) =>
+            new(values[0], values[1]);
 
         public readonly bool IsMatch(LongVector vector) =>
             vector.x >= Min.x && vector.x <= Max.x &&
