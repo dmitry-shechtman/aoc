@@ -672,12 +672,6 @@ namespace aoc
         public static Vector operator -(Vector vector) =>
             vector.Negate();
 
-        public readonly Vector Dot(Vector other) =>
-            new(x * other.x, y * other.y);
-
-        public static Vector Dot(Vector left, Vector right) =>
-            left.Dot(right);
-
         public readonly Vector Mul(int scalar) =>
             new(x * scalar, y * scalar);
 
@@ -707,6 +701,12 @@ namespace aoc
 
         public static Vector operator /(Vector vector, int scalar) =>
             vector.Div(scalar);
+
+        public readonly int Dot(Vector other) =>
+            x * other.x + y * other.y;
+
+        public static int Dot(Vector left, Vector right) =>
+            left.Dot(right);
 
         public static Vector Min(Vector left, Vector right) =>
             new(Math.Min(left.x, right.x), Math.Min(left.y, right.y));

@@ -326,12 +326,6 @@ namespace aoc
         public static Vector3D operator -(Vector3D vector) =>
             vector.Negate();
 
-        public readonly Vector3D Dot(Vector3D other) =>
-            new(x * other.x, y * other.y, z * other.z);
-
-        public static Vector3D Dot(Vector3D left, Vector3D right) =>
-            left.Dot(right);
-
         public readonly Vector3D Mul(int scalar) =>
             new(x * scalar, y * scalar, z * scalar);
 
@@ -363,6 +357,12 @@ namespace aoc
 
         public static Vector3D operator /(Vector3D vector, int scalar) =>
             vector.Div(scalar);
+
+        public readonly int Dot(Vector3D other) =>
+            x * other.x + y * other.y + z * other.z;
+
+        public static int Dot(Vector3D left, Vector3D right) =>
+            left.Dot(right);
 
         public static Vector3D Min(Vector3D left, Vector3D right) =>
             new(Math.Min(left.x, right.x), Math.Min(left.y, right.y), Math.Min(left.z, right.z));
