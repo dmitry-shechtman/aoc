@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    public struct Particle3D : IEquatable<Particle3D>
+    public struct Particle3D : IParticle<Particle3D, Vector3D, int>
     {
         public readonly Vector3D p;
         public readonly Vector3D v;

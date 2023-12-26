@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    public struct DoubleParticle : IEquatable<DoubleParticle>
+    public struct DoubleParticle : IParticle<DoubleParticle, DoubleVector, double>
     {
         public readonly DoubleVector p;
         public readonly DoubleVector v;

@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    public struct LongParticle3D : IEquatable<LongParticle3D>
+    public struct LongParticle3D : IParticle<LongParticle3D, LongVector3D, long>
     {
         public readonly LongVector3D p;
         public readonly LongVector3D v;

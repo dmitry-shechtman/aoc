@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    public struct LongParticle : IEquatable<LongParticle>
+    public struct LongParticle : IParticle<LongParticle, LongVector, long>
     {
         public readonly LongVector p;
         public readonly LongVector v;
