@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct DoubleVectorRange : IEquatable<DoubleVectorRange>, IReadOnlyList<DoubleVector>
+    public struct DoubleVectorRange : IEquatable<DoubleVectorRange>
     {
         public DoubleVectorRange(DoubleVector min, DoubleVector max)
         {
@@ -25,8 +23,8 @@ namespace aoc
         public DoubleVector Min { get; }
         public DoubleVector Max { get; }
 
-        public readonly double Width  => Max.x - Min.x + 1;
-        public readonly double Height => Max.y - Min.y + 1;
+        public readonly double Width  => Max.x - Min.x;
+        public readonly double Height => Max.y - Min.y;
         public readonly double Count  => Width * Height;
 
         public readonly override bool Equals(object obj) =>
@@ -47,22 +45,6 @@ namespace aoc
             min = Min;
             max = Max;
         }
-
-        public readonly IEnumerator<DoubleVector> GetEnumerator()
-        {
-            for (var y = Min.y; y <= Max.y; y++)
-                for (var x = Min.x; x <= Max.x; x++)
-                    yield return new(x, y);
-        }
-
-        readonly IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
-
-        public readonly DoubleVector this[int index] =>
-            new(Min.x + index % Width, Min.y + index / Width);
-
-        readonly int IReadOnlyCollection<DoubleVector>.Count =>
-            (int)Count;
 
         public static DoubleVectorRange Parse(string s) =>
             Parse(s, '~');
