@@ -299,6 +299,18 @@ namespace aoc
         private readonly int GetIndex(int width, int height) =>
             x + width * (y + height * z);
 
+        public static Vector3D operator +(Vector3D vector) =>
+            vector;
+
+        public readonly Vector3D Neg() =>
+            new(-x, -y, -z);
+
+        public static Vector3D Neg(Vector3D vector) =>
+            vector.Neg();
+
+        public static Vector3D operator -(Vector3D vector) =>
+            vector.Neg();
+
         public readonly Vector3D Add(Vector3D other) =>
             new(x + other.x, y + other.y, z + other.z);
 
@@ -316,15 +328,6 @@ namespace aoc
 
         public static Vector3D operator -(Vector3D left, Vector3D right) =>
             left.Sub(right);
-
-        public readonly Vector3D Negate() =>
-            new(-x, -y, -z);
-
-        public static Vector3D Negate(Vector3D vector) =>
-            vector.Negate();
-
-        public static Vector3D operator -(Vector3D vector) =>
-            vector.Negate();
 
         public readonly Vector3D Mul(int scalar) =>
             new(x * scalar, y * scalar, z * scalar);

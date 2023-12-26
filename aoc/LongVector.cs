@@ -135,6 +135,18 @@ namespace aoc
         private static LongVector FromArray(long[] values) =>
             new(values);
 
+        public static LongVector operator +(LongVector vector) =>
+            vector;
+
+        public readonly LongVector Neg() =>
+            new(-x, -y);
+
+        public static LongVector Neg(LongVector vector) =>
+            vector.Neg();
+
+        public static LongVector operator -(LongVector vector) =>
+            vector.Neg();
+
         public readonly LongVector Add(LongVector other) =>
             new(x + other.x, y + other.y);
 
@@ -152,6 +164,39 @@ namespace aoc
 
         public static LongVector operator -(LongVector left, LongVector right) =>
             left.Sub(right);
+
+        public readonly LongVector Mul(long scalar) =>
+            new(x * scalar, y * scalar);
+
+        public static LongVector Mul(LongVector vector, long scalar) =>
+            vector.Mul(scalar);
+
+        public static LongVector operator *(LongVector vector, long scalar) =>
+            vector.Mul(scalar);
+
+        public static LongVector operator *(long scalar, LongVector vector) =>
+            vector.Mul(scalar);
+
+        public readonly LongVector Div(long scalar) =>
+            new(x / scalar, y / scalar);
+
+        public static LongVector Div(LongVector vector, long scalar) =>
+            vector.Div(scalar);
+
+        public static LongVector operator /(LongVector vector, long scalar) =>
+            vector.Div(scalar);
+
+        public readonly long Dot(LongVector other) =>
+            x * other.x + y * other.y;
+
+        public static long Dot(LongVector left, LongVector right) =>
+            left.Dot(right);
+
+        public static LongVector Min(LongVector left, LongVector right) =>
+            new(Math.Min(left.x, right.x), Math.Min(left.y, right.y));
+
+        public static LongVector Max(LongVector left, LongVector right) =>
+            new(Math.Max(left.x, right.x), Math.Max(left.y, right.y));
 
         public static implicit operator (long x, long y)(LongVector value) =>
             (value.x, value.y);

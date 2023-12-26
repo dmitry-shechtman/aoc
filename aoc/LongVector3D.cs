@@ -155,6 +155,18 @@ namespace aoc
         private static LongVector3D FromArray(long[] values) =>
             new(values);
 
+        public static LongVector3D operator +(LongVector3D vector) =>
+            vector;
+
+        public readonly LongVector3D Neg() =>
+            new(-x, -y, -z);
+
+        public static LongVector3D Neg(LongVector3D vector) =>
+            vector.Neg();
+
+        public static LongVector3D operator -(LongVector3D vector) =>
+            vector.Neg();
+
         public readonly LongVector3D Add(LongVector3D other) =>
             new(x + other.x, y + other.y, z + other.z);
 
@@ -172,6 +184,39 @@ namespace aoc
 
         public static LongVector3D operator -(LongVector3D left, LongVector3D right) =>
             left.Sub(right);
+
+        public readonly LongVector3D Mul(long scalar) =>
+            new(x * scalar, y * scalar, z * scalar);
+
+        public static LongVector3D Mul(LongVector3D vector, long scalar) =>
+            vector.Mul(scalar);
+
+        public static LongVector3D operator *(LongVector3D vector, long scalar) =>
+            vector.Mul(scalar);
+
+        public static LongVector3D operator *(long scalar, LongVector3D vector) =>
+            vector.Mul(scalar);
+
+        public readonly LongVector3D Div(long scalar) =>
+            new(x / scalar, y / scalar, z / scalar);
+
+        public static LongVector3D Div(LongVector3D vector, long scalar) =>
+            vector.Div(scalar);
+
+        public static LongVector3D operator /(LongVector3D vector, long scalar) =>
+            vector.Div(scalar);
+
+        public readonly long Dot(LongVector3D other) =>
+            x * other.x + y * other.y + z * other.z;
+
+        public static long Dot(LongVector3D left, LongVector3D right) =>
+            left.Dot(right);
+
+        public static LongVector3D Min(LongVector3D left, LongVector3D right) =>
+            new(Math.Min(left.x, right.x), Math.Min(left.y, right.y), Math.Min(left.z, right.z));
+
+        public static LongVector3D Max(LongVector3D left, LongVector3D right) =>
+            new(Math.Max(left.x, right.x), Math.Max(left.y, right.y), Math.Max(left.z, right.z));
 
         public static implicit operator (long x, long y, long z)(LongVector3D value) =>
             (value.x, value.y, value.z);

@@ -140,6 +140,18 @@ namespace aoc
         private static DoubleVector FromArray(double[] values) =>
             new(values);
 
+        public static DoubleVector operator +(DoubleVector vector) =>
+            vector;
+
+        public readonly DoubleVector Neg() =>
+            new(-x, -y);
+
+        public static DoubleVector Neg(DoubleVector vector) =>
+            vector.Neg();
+
+        public static DoubleVector operator -(DoubleVector vector) =>
+            vector.Neg();
+
         public readonly DoubleVector Add(DoubleVector other) =>
             new(x + other.x, y + other.y);
 
@@ -155,6 +167,21 @@ namespace aoc
         public static DoubleVector Sub(DoubleVector left, DoubleVector right) =>
             left.Sub(right);
 
+        public static DoubleVector operator -(DoubleVector left, DoubleVector right) =>
+            left.Sub(right);
+
+        public readonly DoubleVector Mul(double scalar) =>
+            new(x * scalar, y * scalar);
+
+        public static DoubleVector Mul(DoubleVector vector, double scalar) =>
+            vector.Mul(scalar);
+
+        public static DoubleVector operator *(DoubleVector vector, double scalar) =>
+            vector.Mul(scalar);
+
+        public static DoubleVector operator *(double scalar, DoubleVector vector) =>
+            vector.Mul(scalar);
+
         public readonly DoubleVector Mul(DoubleMatrix m) =>
             new(x * m.m11 + y * m.m21 + m.m31,
                 x * m.m12 + y * m.m22 + m.m32);
@@ -165,8 +192,26 @@ namespace aoc
         public static DoubleVector operator *(DoubleVector vector, DoubleMatrix matrix) =>
             vector.Mul(matrix);
 
-        public static DoubleVector operator -(DoubleVector left, DoubleVector right) =>
-            left.Sub(right);
+        public readonly DoubleVector Div(double scalar) =>
+            new(x / scalar, y / scalar);
+
+        public static DoubleVector Div(DoubleVector vector, double scalar) =>
+            vector.Div(scalar);
+
+        public static DoubleVector operator /(DoubleVector vector, double scalar) =>
+            vector.Div(scalar);
+
+        public readonly double Dot(DoubleVector other) =>
+            x * other.x + y * other.y;
+
+        public static double Dot(DoubleVector left, DoubleVector right) =>
+            left.Dot(right);
+
+        public static DoubleVector Min(DoubleVector left, DoubleVector right) =>
+            new(Math.Min(left.x, right.x), Math.Min(left.y, right.y));
+
+        public static DoubleVector Max(DoubleVector left, DoubleVector right) =>
+            new(Math.Max(left.x, right.x), Math.Max(left.y, right.y));
 
         public static implicit operator (double x, double y)(DoubleVector value) =>
             (value.x, value.y);

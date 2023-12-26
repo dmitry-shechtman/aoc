@@ -20,8 +20,12 @@ namespace aoc
         T Abs();
         TSelf Abs2();
         TSelf Sign();
+        TSelf Neg();
         TSelf Add(TSelf other);
         TSelf Sub(TSelf other);
+        TSelf Mul(T scalar);
+        TSelf Div(T scalar);
+        T Dot(TSelf other);
     }
 
     public interface IVector2D<TSelf, T> : IVector<TSelf, T>

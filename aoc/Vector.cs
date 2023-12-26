@@ -645,6 +645,18 @@ namespace aoc
         internal static int GetFieldHeight(string s, int width) =>
             (s.Length + 1) / (width + 1);
 
+        public static Vector operator +(Vector vector) =>
+            vector;
+
+        public readonly Vector Neg() =>
+            new(-x, -y);
+
+        public static Vector Neg(Vector vector) =>
+            vector.Neg();
+
+        public static Vector operator -(Vector vector) =>
+            vector.Neg();
+
         public readonly Vector Add(Vector other) =>
             new(x + other.x, y + other.y);
 
@@ -663,15 +675,6 @@ namespace aoc
         public static Vector operator -(Vector left, Vector right) =>
             left.Sub(right);
 
-        public readonly Vector Negate() =>
-            new(-x, -y);
-
-        public static Vector Negate(Vector vector) =>
-            vector.Negate();
-
-        public static Vector operator -(Vector vector) =>
-            vector.Negate();
-
         public readonly Vector Mul(int scalar) =>
             new(x * scalar, y * scalar);
 
@@ -685,7 +688,8 @@ namespace aoc
             vector.Mul(scalar);
 
         public readonly Vector Mul(Matrix m) =>
-            new(x * m.m11 + y * m.m21 + m.m31, x * m.m12 + y * m.m22 + m.m32);
+            new(x * m.m11 + y * m.m21 + m.m31,
+                x * m.m12 + y * m.m22 + m.m32);
 
         public static Vector Mul(Vector vector, Matrix matrix) =>
             vector.Mul(matrix);
