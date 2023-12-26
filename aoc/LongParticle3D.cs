@@ -1,5 +1,8 @@
 ﻿using System;
 
+using static aoc.ParseHelper;
+using static aoc.ParticleParseHelper<aoc.LongParticle3D, aoc.LongVector3D, long>;
+
 namespace aoc
 {
     public struct LongParticle3D : IParticle<LongParticle3D, LongVector3D, long>
@@ -65,33 +68,22 @@ namespace aoc
             Parse(s, ';');
 
         public static LongParticle3D Parse(string s, char separator, char separator2 = ',') =>
-            TryParse(s, out LongParticle3D particle, separator, separator2)
-                ? particle
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+            Parse<LongParticle3D>(s, TryParse, separator, separator2);
 
         public static bool TryParse(string s, out LongParticle3D vector, char separator = ';', char separator2 = ',') =>
-            TryParse(s.Trim().Split(separator), out vector, separator2);
+            TryParse<LongParticle3D>(s, TryParse, separator, separator2, out vector);
 
         public static LongParticle3D Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static LongParticle3D Parse(string[] ss, char separator) =>
-            TryParse(ss, out LongParticle3D particle, separator)
-                ? particle
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<LongParticle3D>(ss, TryParse, separator);
 
-        public static bool TryParse(string[] ss, out LongParticle3D particle, char separator = ',')
-        {
-            particle = default;
-            LongVector3D a = default;
-            if (ss.Length < 2 ||
-                !LongVector3D.TryParse(ss[0], out LongVector3D p) ||
-                !LongVector3D.TryParse(ss[1], out LongVector3D v) ||
-                ss.Length > 2 && !LongVector3D.TryParse(ss[2], out a, separator))
-                return false;
-            particle = new(p, v, a);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out LongParticle3D particle, char separator = ',') =>
+            TryParseParticle(ss, LongVector3D.TryParse, FromArray, out particle, separator);
+
+        private static LongParticle3D FromArray(LongVector3D[] values) =>
+            new(values[0], values[1], values[2]);
 
         public static implicit operator (LongVector3D p, LongVector3D v, LongVector3D a)(LongParticle3D value) =>
             (value.p, value.v, value.a);

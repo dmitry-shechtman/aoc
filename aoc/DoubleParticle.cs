@@ -1,5 +1,8 @@
 ﻿using System;
 
+using static aoc.ParseHelper;
+using static aoc.ParticleParseHelper<aoc.DoubleParticle, aoc.DoubleVector, double>;
+
 namespace aoc
 {
     public struct DoubleParticle : IParticle<DoubleParticle, DoubleVector, double>
@@ -65,33 +68,22 @@ namespace aoc
             Parse(s, ';');
 
         public static DoubleParticle Parse(string s, char separator, char separator2 = ',') =>
-            TryParse(s, out DoubleParticle particle, separator, separator2)
-                ? particle
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+            Parse<DoubleParticle>(s, TryParse, separator, separator2);
 
         public static bool TryParse(string s, out DoubleParticle vector, char separator = ';', char separator2 = ',') =>
-            TryParse(s.Trim().Split(separator), out vector, separator2);
+            TryParse<DoubleParticle>(s, TryParse, separator, separator2, out vector);
 
         public static DoubleParticle Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static DoubleParticle Parse(string[] ss, char separator) =>
-            TryParse(ss, out DoubleParticle particle, separator)
-                ? particle
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<DoubleParticle>(ss, TryParse, separator);
 
-        public static bool TryParse(string[] ss, out DoubleParticle particle, char separator = ',')
-        {
-            particle = default;
-            DoubleVector a = default;
-            if (ss.Length < 2 ||
-                !DoubleVector.TryParse(ss[0], out DoubleVector p) ||
-                !DoubleVector.TryParse(ss[1], out DoubleVector v) ||
-                ss.Length > 2 && !DoubleVector.TryParse(ss[2], out a, separator))
-                return false;
-            particle = new(p, v, a);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out DoubleParticle particle, char separator = ',') =>
+            TryParseParticle(ss, DoubleVector.TryParse, FromArray, out particle, separator);
+
+        private static DoubleParticle FromArray(DoubleVector[] values) =>
+            new(values[0], values[1], values[2]);
 
         public static implicit operator (DoubleVector p, DoubleVector v, DoubleVector a)(DoubleParticle value) =>
             (value.p, value.v, value.a);

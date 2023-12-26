@@ -1,5 +1,8 @@
 ﻿using System;
 
+using static aoc.ParseHelper;
+using static aoc.ParticleParseHelper<aoc.Particle, aoc.Vector, int>;
+
 namespace aoc
 {
     public struct Particle : IParticle<Particle, Vector, int>
@@ -55,33 +58,22 @@ namespace aoc
             Parse(s, ';');
 
         public static Particle Parse(string s, char separator, char separator2 = ',') =>
-            TryParse(s, out Particle particle, separator, separator2)
-                ? particle
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+            Parse<Particle>(s, TryParse, separator, separator2);
 
         public static bool TryParse(string s, out Particle vector, char separator = ';', char separator2 = ',') =>
-            TryParse(s.Trim().Split(separator), out vector, separator2);
+            TryParse<Particle>(s, TryParse, separator, separator2, out vector);
 
         public static Particle Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static Particle Parse(string[] ss, char separator) =>
-            TryParse(ss, out Particle particle, separator)
-                ? particle
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<Particle>(ss, TryParse, separator);
 
-        public static bool TryParse(string[] ss, out Particle particle, char separator = ',')
-        {
-            particle = default;
-            Vector a = default;
-            if (ss.Length < 2 ||
-                !Vector.TryParse(ss[0], out Vector p) ||
-                !Vector.TryParse(ss[1], out Vector v) ||
-                ss.Length > 2 && !Vector.TryParse(ss[2], out a, separator))
-                return false;
-            particle = new(p, v, a);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out Particle particle, char separator = ',') =>
+            TryParseParticle(ss, Vector.TryParse, FromArray, out particle, separator);
+
+        private static Particle FromArray(Vector[] values) =>
+            new(values[0], values[1], values[2]);
 
         public static implicit operator (Vector p, Vector v, Vector a)(Particle value) =>
             (value.p, value.v, value.a);

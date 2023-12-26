@@ -1,5 +1,8 @@
 ﻿using System;
 
+using static aoc.ParseHelper;
+using static aoc.ParticleParseHelper<aoc.LongParticle, aoc.LongVector, long>;
+
 namespace aoc
 {
     public struct LongParticle : IParticle<LongParticle, LongVector, long>
@@ -60,33 +63,22 @@ namespace aoc
             Parse(s, ';');
 
         public static LongParticle Parse(string s, char separator, char separator2 = ',') =>
-            TryParse(s, out LongParticle particle, separator, separator2)
-                ? particle
-                : throw new InvalidOperationException($"Incorrect string format: {s}");
+            Parse<LongParticle>(s, TryParse, separator, separator2);
 
         public static bool TryParse(string s, out LongParticle vector, char separator = ';', char separator2 = ',') =>
-            TryParse(s.Trim().Split(separator), out vector, separator2);
+            TryParse<LongParticle>(s, TryParse, separator, separator2, out vector);
 
         public static LongParticle Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static LongParticle Parse(string[] ss, char separator) =>
-            TryParse(ss, out LongParticle particle, separator)
-                ? particle
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+            Parse<LongParticle>(ss, TryParse, separator);
 
-        public static bool TryParse(string[] ss, out LongParticle particle, char separator = ',')
-        {
-            particle = default;
-            LongVector a = default;
-            if (ss.Length < 2 ||
-                !LongVector.TryParse(ss[0], out LongVector p) ||
-                !LongVector.TryParse(ss[1], out LongVector v) ||
-                ss.Length > 2 && !LongVector.TryParse(ss[2], out a, separator))
-                return false;
-            particle = new(p, v, a);
-            return true;
-        }
+        public static bool TryParse(string[] ss, out LongParticle particle, char separator = ',') =>
+            TryParseParticle(ss, LongVector.TryParse, FromArray, out particle, separator);
+
+        private static LongParticle FromArray(LongVector[] values) =>
+            new(values[0], values[1], values[2]);
 
         public static implicit operator (LongVector p, LongVector v, LongVector a)(LongParticle value) =>
             (value.p, value.v, value.a);

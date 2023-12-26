@@ -108,4 +108,13 @@ namespace aoc
         public static bool TryParseRange(string[] ss, TryParseValue2 tryParse, Func<TValue[], TRange> factory, out TRange value, char separator) =>
             TryParse(ss, tryParse, factory, out value, separator, IRange<TValue>.Cardinality, IRange<TValue>.Cardinality);
     }
+
+    internal class ParticleParseHelper<TParticle, TVector, T> : ParseHelper<TParticle, TVector>
+        where TParticle : struct, IParticle<TParticle, TVector, T>
+        where TVector : struct, IVector<T>
+        where T : struct
+    {
+        public static bool TryParseParticle(string[] ss, TryParseValue2 tryParse, Func<TVector[], TParticle> factory, out TParticle value, char separator) =>
+            TryParse(ss, tryParse, factory, out value, separator, IParticle<TVector>.MinCardinality, IParticle<TVector>.MaxCardinality);
+    }
 }
