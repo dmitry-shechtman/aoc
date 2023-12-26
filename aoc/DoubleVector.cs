@@ -119,9 +119,6 @@ namespace aoc
         public readonly double X => x;
         public readonly double Y => y;
 
-        public readonly double Length =>
-            x * y;
-
         public static DoubleVector Parse(string s) =>
             Parse(s, ',');
 

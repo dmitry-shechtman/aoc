@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface IRange<T>
+    public interface IRange<T> : ISize<T>
         where T : struct
     {
         internal const int Cardinality = 2;
@@ -15,10 +15,9 @@ namespace aoc
         void Deconstruct(out T min, out T max);
 
         bool IsMatch(T value);
-        bool Contains(T value);
     }
 
-    public interface IRange<TSelf, T> : IRange<T>, IEquatable<TSelf>
+    public interface IRange<TSelf, T> : IRange<T>, ISize<TSelf, T>
         where TSelf : struct, IRange<TSelf, T>
         where T : struct
     {

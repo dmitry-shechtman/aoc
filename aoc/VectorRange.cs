@@ -6,7 +6,7 @@ using static aoc.RangeParseHelper<aoc.VectorRange, aoc.Vector>;
 
 namespace aoc
 {
-    public struct VectorRange : IIntegerRange<VectorRange, Vector>
+    public struct VectorRange : IIntegerRange<VectorRange, Vector>, ISize2D<VectorRange, Vector, int>
     {
         public VectorRange(Vector min, Vector max)
         {
@@ -62,6 +62,9 @@ namespace aoc
 
         public readonly Vector this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width);
+
+        readonly int ISize2D<VectorRange, Vector, int>.Length =>
+            Count;
 
         public static VectorRange Parse(string s) =>
             Parse(s, '~');
@@ -186,11 +189,28 @@ namespace aoc
         public readonly VectorRange SplitSouth(int height) =>
             new(new(Min.x, Min.y + height), Max);
 
-        public static VectorRange FromField(string s) =>
-            FromField(s, Vector.GetFieldWidth(s));
+        public readonly T GetValue<T>(T[] array, Vector vector) =>
+            array[GetIndex(vector)];
 
-        private static VectorRange FromField(string s, int width) =>
-            new(width - 1, Vector.GetFieldHeight(s, width) - 1);
+        public readonly bool TryGetValue<T>(T[] array, Vector vector, out T value)
+        {
+            if (!IsMatch(vector))
+            {
+                value = default;
+                return false;
+            }
+            value = GetValue(array, vector);
+            return true;
+        }
+
+        public readonly T SetValue<T>(T[] array, Vector vector, T value) =>
+            array[GetIndex(vector)] = value;
+
+        public readonly int GetIndex(Vector vector) =>
+            vector.x + vector.y * Width;
+
+        public static VectorRange FromField(string s) =>
+            new((Vector)Size.FromField(s) - (1, 1));
 
         public static implicit operator (Vector min, Vector max)(VectorRange value) =>
             (value.Min, value.Max);

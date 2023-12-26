@@ -7,8 +7,6 @@ namespace aoc
     public interface IVector<T> : IReadOnlyList<T>, IFormattable
         where T : struct
     {
-        T Length { get; }
-
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
     }

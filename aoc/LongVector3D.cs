@@ -134,9 +134,6 @@ namespace aoc
         public readonly long Y => y;
         public readonly long Z => z;
 
-        public readonly long Length =>
-            x * y * z;
-
         public static LongVector3D Parse(string s) =>
             Parse(s, ',');
 

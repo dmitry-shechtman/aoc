@@ -6,7 +6,7 @@ using static aoc.RangeParseHelper<aoc.LongVectorRange, aoc.LongVector>;
 
 namespace aoc
 {
-    public struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>
+    public struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>, ISize2D<LongVectorRange, LongVector, long>
     {
         public LongVectorRange(LongVector min, LongVector max)
         {
@@ -62,6 +62,9 @@ namespace aoc
 
         readonly int IReadOnlyCollection<LongVector>.Count =>
             (int)Count;
+
+        readonly long ISize2D<LongVectorRange, LongVector, long>.Length =>
+            Count;
 
         public static LongVectorRange Parse(string s) =>
             Parse(s, '~');

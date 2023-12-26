@@ -6,7 +6,7 @@ using static aoc.RangeParseHelper<aoc.Vector3DRange, aoc.Vector3D>;
 
 namespace aoc
 {
-    public struct Vector3DRange : IIntegerRange<Vector3DRange, Vector3D>
+    public struct Vector3DRange : IIntegerRange<Vector3DRange, Vector3D>, ISize3D<Vector3DRange, Vector3D, int>
     {
         public Vector3DRange(Vector3D min, Vector3D max)
         {
@@ -64,6 +64,9 @@ namespace aoc
 
         public readonly Vector3D this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width % Height, Min.z + index / (Width * Height));
+
+        readonly int ISize3D<Vector3DRange, Vector3D, int>.Length =>
+            Count;
 
         public static Vector3DRange Parse(string s) =>
             Parse(s, '~');
@@ -196,6 +199,26 @@ namespace aoc
 
         public readonly Vector3DRange SplitDown(int depth) =>
             new(new(Min.x, Min.y, Min.z + depth), Max);
+
+        public readonly T GetValue<T>(T[] array, Vector3D vector) =>
+            array[GetIndex(vector)];
+
+        public readonly bool TryGetValue<T>(T[] array, Vector3D vector, out T value)
+        {
+            if (!IsMatch(vector))
+            {
+                value = default;
+                return false;
+            }
+            value = GetValue(array, vector);
+            return true;
+        }
+
+        public readonly T SetValue<T>(T[] array, Vector3D vector, T value) =>
+            array[GetIndex(vector)] = value;
+
+        public readonly int GetIndex(Vector3D vector) =>
+            vector.x + Width * (vector.y + Height * vector.z);
 
         public static implicit operator (Vector3D min, Vector3D max)(Vector3DRange value) =>
             (value.Min, value.Max);

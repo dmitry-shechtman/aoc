@@ -149,12 +149,6 @@ namespace aoc
         public readonly int X => x;
         public readonly int Y => y;
 
-        public readonly int Length =>
-            x * y;
-
-        public readonly long LongLength =>
-            (long)x * y;
-
         public static IEnumerable<Vector> Range(Vector toExclusive) =>
             Range(Zero, toExclusive);
 
@@ -533,117 +527,14 @@ namespace aoc
             return count;
         }
 
-        public static Vector FindChar(string s, char c, VectorRange range) =>
-            FindChar(s, c, range.Width);
-
-        public static Vector FindChar(string s, char c, Vector size) =>
-            FindChar(s, c, size.x);
-
         public static Vector FindChar(string s, char c) =>
-            FindChar(s, c, GetFieldWidth(s));
-
-        private static Vector FindChar(string s, char c, int width) =>
-            FromFieldIndex(s.IndexOf(c), width);
-
-        public readonly char GetChar(string s, VectorRange range) =>
-            GetChar(s, range.Width);
-
-        public static char GetChar(Vector p, string s, VectorRange range) =>
-            p.GetChar(s, range);
-
-        public readonly char GetChar(string s, Vector size) =>
-            GetChar(s, size.x);
-
-        public static char GetChar(Vector p, string s, Vector size) =>
-            p.GetChar(s, size);
+            Size.FromField(s).FindChar(s, c);
 
         public readonly char GetChar(string s) =>
-            GetChar(s, GetFieldWidth(s));
+            Size.FromField(s).GetChar(s, this);
 
         public static char GetChar(Vector p, string s) =>
             p.GetChar(s);
-
-        private readonly char GetChar(string s, int width) =>
-            s[GetFieldIndex(width)];
-
-        public readonly T GetValue<T>(T[] array, VectorRange range) =>
-            array[GetIndex(range)];
-
-        public static T GetValue<T>(Vector p, T[] array, VectorRange range) =>
-            p.GetValue(array, range);
-
-        public readonly T GetValue<T>(T[] array, Vector size) =>
-            array[GetIndex(size)];
-
-        public static T GetValue<T>(Vector p, T[] array, Vector size) =>
-            p.GetValue(array, size);
-
-        public readonly bool TryGetValue<T>(T[] array, VectorRange range, out T value)
-        {
-            if (!range.IsMatch(this))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, range);
-            return true;
-        }
-
-        public static bool TryGetValue<T>(Vector p, T[] array, VectorRange range, out T value) =>
-            p.TryGetValue(array, range, out value);
-
-        public readonly bool TryGetValue<T>(T[] array, Vector size, out T value)
-        {
-            if (!size.Contains(this))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, size);
-            return true;
-        }
-
-        public static bool TryGetValue<T>(Vector p, T[] array, Vector size, out T value) =>
-            p.TryGetValue(array, size, out value);
-
-        public readonly T SetValue<T>(T[] array, T value, VectorRange range) =>
-            array[GetIndex(range)] = value;
-
-        public static T SetValue<T>(Vector p, T[] array, T value, VectorRange range) =>
-            p.SetValue(array, value, range);
-
-        public readonly T SetValue<T>(T[] array, T value, Vector size) =>
-            array[GetIndex(size)] = value;
-
-        public static T SetValue<T>(Vector p, T[] array, T value, Vector size) =>
-            p.SetValue(array, value, size);
-
-        public readonly int GetIndex(VectorRange range) =>
-            GetIndex(range.Width);
-
-        public readonly int GetIndex(Vector size) =>
-            GetIndex(size.x);
-
-        private readonly int GetIndex(int width) =>
-            x + y * width;
-
-        private readonly int GetFieldIndex(int width) =>
-            x + y * (width + 1);
-
-        private static Vector FromFieldIndex(int index, int width) =>
-            new(index % (width + 1), index / (width + 1));
-
-        public static Vector FromField(string s) =>
-            FromField(s, GetFieldWidth(s));
-
-        private static Vector FromField(string s, int width) =>
-            new(width, GetFieldHeight(s, width));
-
-        internal static int GetFieldWidth(string s) =>
-            s.IndexOf('\n');
-
-        internal static int GetFieldHeight(string s, int width) =>
-            (s.Length + 1) / (width + 1);
 
         public static Vector operator +(Vector vector) =>
             vector;
@@ -717,13 +608,6 @@ namespace aoc
 
         public static Vector Max(Vector left, Vector right) =>
             new(Math.Max(left.x, right.x), Math.Max(left.y, right.y));
-
-        public readonly bool Contains(Vector other) =>
-            other.x >= 0 && other.x < x &&
-            other.y >= 0 && other.y < y;
-
-        public static bool Contains(Vector size, Vector vector) =>
-            size.Contains(vector);
 
         public static implicit operator (int x, int y)(Vector value) =>
             (value.x, value.y);

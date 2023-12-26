@@ -114,9 +114,6 @@ namespace aoc
         public readonly long X => x;
         public readonly long Y => y;
 
-        public readonly long Length =>
-            x * y;
-
         public static LongVector Parse(string s) =>
             Parse(s, ',');
 
