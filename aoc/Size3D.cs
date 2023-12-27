@@ -4,19 +4,19 @@ namespace aoc
 {
     public struct Size3D : ISize3D<Size3D, Vector3D, int>
     {
-        public readonly int x;
-        public readonly int y;
-        public readonly int z;
+        public readonly int width;
+        public readonly int height;
+        public readonly int depth;
 
-        public Size3D(int x, int y, int z)
+        public Size3D(int width, int height, int depth)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this.width  = width;
+            this.height = height;
+            this.depth  = depth;
         }
 
         public Size3D(Size size)
-            : this(size.x, size.y, 0)
+            : this(size.width, size.height, 0)
         {
         }
 
@@ -34,27 +34,27 @@ namespace aoc
             obj is Size3D other && Equals(other);
 
         public readonly bool Equals(Size3D other) =>
-            x == other.x &&
-            y == other.y &&
-            z == other.z;
+            width  == other.width &&
+            height == other.height &&
+            depth  == other.depth;
 
         public readonly override int GetHashCode() =>
-            HashCode.Combine(x, y, z);
+            HashCode.Combine(width, height, depth);
 
-        public readonly int Width  => x;
-        public readonly int Height => y;
-        public readonly int Depth  => z;
+        public readonly int Width  => width;
+        public readonly int Height => height;
+        public readonly int Depth  => depth;
 
         public readonly int Length =>
-            x * y * z;
+            width * height * depth;
 
         public readonly long LongLength =>
-            (long)x * y * z;
+            (long)width * height * depth;
 
         public readonly bool Contains(Vector3D vector) =>
-            vector.x >= 0 && vector.x < x &&
-            vector.y >= 0 && vector.y < y &&
-            vector.z >= 0 && vector.z < z;
+            vector.x >= 0 && vector.x < width &&
+            vector.y >= 0 && vector.y < height &&
+            vector.z >= 0 && vector.z < depth;
 
         public static bool Contains(Size3D size, Vector3D vector) =>
             size.Contains(vector);
@@ -77,16 +77,16 @@ namespace aoc
             array[GetIndex(vector)] = value;
 
         public readonly int GetIndex(Vector3D vector) =>
-            vector.x + x * (vector.y + y * vector.z);
+            vector.x + width * (vector.y + height * vector.z);
 
         public static explicit operator Size3D(Size size) =>
             new(size);
 
         public static explicit operator Size(Size3D size) =>
-            new(size.x, size.y);
+            new(size.width, size.height);
 
         public static explicit operator Vector3D(Size3D size) =>
-            new(size.x, size.y, size.z);
+            new(size.width, size.height, size.depth);
 
         public static bool operator ==(Size3D left, Size3D right) =>
             left.Equals(right);

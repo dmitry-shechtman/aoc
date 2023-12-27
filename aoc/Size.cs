@@ -4,13 +4,13 @@ namespace aoc
 {
     public struct Size : ISize2D<Size, Vector, int>
     {
-        public readonly int x;
-        public readonly int y;
+        public readonly int width;
+        public readonly int height;
 
-        public Size(int x, int y)
+        public Size(int width, int height)
         {
-            this.x = x;
-            this.y = y;
+            this.width  = width;
+            this.height = height;
         }
 
         public Size(Vector vector)
@@ -24,33 +24,33 @@ namespace aoc
         }
 
         public readonly bool Equals(Size other) =>
-            x == other.x &&
-            y == other.y;
+            width  == other.width &&
+            height == other.height;
 
         public readonly override bool Equals(object obj) =>
             obj is Size other && Equals(other);
 
         public readonly override int GetHashCode() =>
-            HashCode.Combine(x, y);
+            HashCode.Combine(width, height);
 
-        public readonly int Width  => x;
-        public readonly int Height => y;
+        public readonly int Width  => width;
+        public readonly int Height => height;
 
         public readonly int Length =>
-            x * y;
+            width * height;
 
         public readonly long LongLength =>
-            (long)x * y;
+            (long)width * height;
 
         public readonly bool Contains(Vector vector) =>
-            vector.x >= 0 && vector.x < x &&
-            vector.y >= 0 && vector.y < y;
+            vector.x >= 0 && vector.x < width &&
+            vector.y >= 0 && vector.y < height;
 
         public static bool Contains(Size size, Vector vector) =>
             size.Contains(vector);
 
         public readonly Vector FindChar(string s, char c) =>
-            FromFieldIndex(s.IndexOf(c), x);
+            FromFieldIndex(s.IndexOf(c), width);
 
         public readonly char GetChar(string s, Vector vector) =>
             s[GetFieldIndex(vector)];
@@ -73,10 +73,10 @@ namespace aoc
             array[GetIndex(vector)] = value;
 
         public readonly int GetIndex(Vector vector) =>
-            vector.x + vector.y * x;
+            vector.x + vector.y * width;
 
         private readonly int GetFieldIndex(Vector vector) =>
-            vector.x + vector.y * (x + 1);
+            vector.x + vector.y * (width + 1);
 
         public static Size FromField(string s) =>
             FromField(s, GetFieldWidth(s));
@@ -94,7 +94,7 @@ namespace aoc
             (s.Length + 1) / (width + 1);
 
         public static explicit operator Vector(Size size) =>
-            new(size.x, size.y);
+            new(size.width, size.height);
 
         public static bool operator ==(Size left, Size right) =>
             left.Equals(right);
