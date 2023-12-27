@@ -61,7 +61,7 @@ namespace aoc
         public T Parse(string s, char separator) =>
             TryParse(s, out T value, separator)
                 ? value
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+                : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParse(string s, out T value, char separator) =>
             TryParse(s.Trim().Split(separator, StringSplitOptions.TrimEntries), out value);
@@ -69,7 +69,7 @@ namespace aoc
         public T Parse(string[] ss) =>
             TryParse(ss, out T value)
                 ? value
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+                : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParse(string[] ss, out T value)
         {
@@ -110,7 +110,7 @@ namespace aoc
         public T Parse(string s, char separator, char separator2) =>
             TryParse(s, out T value, separator, separator2)
                 ? value
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+                : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParse(string s, out T value, char separator, char separator2) =>
             TryParse(s.Trim().Split(separator, StringSplitOptions.TrimEntries), out value, separator2);
@@ -118,7 +118,7 @@ namespace aoc
         public T Parse(string[] ss, char separator) =>
             TryParse(ss, out T value, separator)
                 ? value
-                : throw new InvalidOperationException($"Input string was not in a correct format.");
+                : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParse(string[] ss, out T value, char separator)
         {
