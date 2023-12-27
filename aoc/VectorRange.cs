@@ -19,8 +19,13 @@ namespace aoc
         {
         }
 
+        public VectorRange(Size size)
+            : this((Vector)size - (1, 1))
+        {
+        }
+
         public VectorRange(int x, int y)
-            : this(new(x, y))
+            : this(new Vector(x, y))
         {
         }
 
@@ -210,7 +215,7 @@ namespace aoc
             vector.x + vector.y * Width;
 
         public static VectorRange FromField(string s) =>
-            new((Vector)Size.FromField(s) - (1, 1));
+            new(Size.FromField(s));
 
         public static implicit operator (Vector min, Vector max)(VectorRange value) =>
             (value.Min, value.Max);

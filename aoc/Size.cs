@@ -13,6 +13,16 @@ namespace aoc
             this.y = y;
         }
 
+        public Size(Vector vector)
+            : this(vector.x, vector.y)
+        {
+        }
+
+        public Size(VectorRange range)
+            : this(range.Max + (1, 1))
+        {
+        }
+
         public readonly bool Equals(Size other) =>
             x == other.x &&
             y == other.y;

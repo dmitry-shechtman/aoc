@@ -15,6 +15,21 @@ namespace aoc
             this.z = z;
         }
 
+        public Size3D(Size size)
+            : this(size.x, size.y, 0)
+        {
+        }
+
+        public Size3D(Vector3D vector)
+            : this(vector.x, vector.y, vector.z)
+        {
+
+        }
+        public Size3D(Vector3DRange range)
+            : this(range.Max + (1, 1, 1))
+        {
+        }
+
         public readonly override bool Equals(object obj) =>
             obj is Size3D other && Equals(other);
 
@@ -63,6 +78,12 @@ namespace aoc
 
         public readonly int GetIndex(Vector3D vector) =>
             vector.x + x * (vector.y + y * vector.z);
+
+        public static explicit operator Size3D(Size size) =>
+            new(size);
+
+        public static explicit operator Size(Size3D size) =>
+            new(size.x, size.y);
 
         public static explicit operator Vector3D(Size3D size) =>
             new(size.x, size.y, size.z);

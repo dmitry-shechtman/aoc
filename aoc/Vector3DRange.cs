@@ -19,8 +19,13 @@ namespace aoc
         {
         }
 
+        public Vector3DRange(Size3D size)
+            : this((Vector3D)size - (1, 1, 1))
+        {
+        }
+
         public Vector3DRange(int x, int y, int z)
-            : this(new(x, y, z))
+            : this(new Vector3D(x, y, z))
         {
         }
 
