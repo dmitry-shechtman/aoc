@@ -14,7 +14,7 @@ namespace aoc
         protected TTryParse TryParseValue { get; }
     }
 
-    public delegate bool TryParseValue1<T>(string s, out T value);
+    internal delegate bool TryParseValue1<T>(string s, out T value);
 
     internal class ParseHelper1<T, TValue> : ParseHelper<T, TValue, TryParseValue1<TValue>>
     {
@@ -59,7 +59,7 @@ namespace aoc
         }
     }
 
-    public delegate bool TryParseValue2<T>(string s, out T value, char separator);
+    internal delegate bool TryParseValue2<T>(string s, out T value, char separator);
 
     internal class ParseHelper2<T, TValue> : ParseHelper<T, TValue, TryParseValue2<TValue>>
     {
