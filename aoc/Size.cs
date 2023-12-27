@@ -5,6 +5,11 @@ namespace aoc
 {
     public struct Size : ISize2D<Size, Vector, int>
     {
+        private static readonly Lazy<Size2DHelper<Size, Vector, int>> _helper =
+            new(() => new(FromArray, int.TryParse));
+
+        private static Size2DHelper<Size, Vector, int> Helper => _helper.Value;
+
         public readonly int width;
         public readonly int height;
 
@@ -34,6 +39,15 @@ namespace aoc
         public readonly override int GetHashCode() =>
             HashCode.Combine(width, height);
 
+        public readonly override string ToString() =>
+            Helper.ToString(this);
+
+        public readonly string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
+
+        public readonly string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
+
         public readonly int Width  => width;
         public readonly int Height => height;
 
@@ -47,6 +61,9 @@ namespace aoc
         {
             throw new NotImplementedException();
         }
+
+        private static Size FromArray(int[] values) =>
+            new(values[0], values[1]);
 
         public readonly bool Contains(Vector vector) =>
             vector.x >= 0 && vector.x < width &&

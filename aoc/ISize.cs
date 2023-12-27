@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface ISize<T>
+    public interface ISize<T> : IFormattable
         where T : struct
     {
         bool Contains(T value);

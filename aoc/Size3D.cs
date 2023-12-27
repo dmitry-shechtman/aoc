@@ -5,6 +5,11 @@ namespace aoc
 {
     public struct Size3D : ISize3D<Size3D, Vector3D, int>
     {
+        private static readonly Lazy<Size3DHelper<Size3D, Vector3D, int>> _helper =
+            new(() => new(FromArray, int.TryParse));
+
+        private static Size3DHelper<Size3D, Vector3D, int> Helper => _helper.Value;
+
         public readonly int width;
         public readonly int height;
         public readonly int depth;
@@ -42,6 +47,15 @@ namespace aoc
         public readonly override int GetHashCode() =>
             HashCode.Combine(width, height, depth);
 
+        public readonly override string ToString() =>
+            Helper.ToString(this);
+
+        public readonly string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
+
+        public readonly string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
+
         public readonly int Width  => width;
         public readonly int Height => height;
         public readonly int Depth  => depth;
@@ -56,6 +70,9 @@ namespace aoc
         {
             throw new NotImplementedException();
         }
+
+        private static Size3D FromArray(int[] values) =>
+            new(values[0], values[1], values[2]);
 
         public readonly bool Contains(Vector3D vector) =>
             vector.x >= 0 && vector.x < width &&
