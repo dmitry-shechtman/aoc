@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct VectorRange : IIntegerRange<VectorRange, Vector>, ISize2D<VectorRange, Vector, int>
+    public struct VectorRange : IIntegerRange<VectorRange, Vector>, IRange2D<VectorRange, Vector, int>
     {
         private static readonly Lazy<VectorRangeHelper<VectorRange, Vector>> _helper =
             new(() => new(FromArray, Vector.TryParse));
@@ -75,9 +75,6 @@ namespace aoc
 
         public readonly Vector this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width);
-
-        readonly int ISize<VectorRange, Vector, int>.Length =>
-            Count;
 
         public static VectorRange Parse(string s) =>
             Parse(s, '~');
@@ -176,7 +173,7 @@ namespace aoc
             range.Shrink(size);
 
         public readonly IEnumerable<Vector> Border(int size = 1) =>
-            System.Linq.Enumerable.Except<Vector>(this, Shrink(size));
+            System.Linq.Enumerable.Except(this, Shrink(size));
 
         public static IEnumerable<Vector> Border(VectorRange range, int size = 1) =>
             range.Border(size);

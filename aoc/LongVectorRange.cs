@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>, ISize2D<LongVectorRange, LongVector, long>
+    public struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>, IRange2D<LongVectorRange, LongVector, long>
     {
         private static readonly Lazy<VectorRangeHelper<LongVectorRange, LongVector>> _helper =
             new(() => new(FromArray, LongVector.TryParse));
@@ -70,9 +70,6 @@ namespace aoc
 
         readonly int IReadOnlyCollection<LongVector>.Count =>
             (int)Count;
-
-        readonly long ISize<LongVectorRange, LongVector, long>.Length =>
-            Count;
 
         public static LongVectorRange Parse(string s) =>
             Parse(s, '~');

@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    public struct DoubleVector3DRange : IRange<DoubleVector3DRange, DoubleVector3D>, ISize3D<DoubleVector3DRange, DoubleVector3D, double>
+    public struct DoubleVector3DRange : IRange3D<DoubleVector3DRange, DoubleVector3D, double>
     {
         private static readonly Lazy<VectorRangeHelper<DoubleVector3DRange, DoubleVector3D>> _helper =
             new(() => new(FromArray, DoubleVector3D.TryParse));
@@ -62,9 +62,6 @@ namespace aoc
             min = Min;
             max = Max;
         }
-
-        readonly double ISize<DoubleVector3DRange, DoubleVector3D, double>.Length =>
-            Count;
 
         public static DoubleVector3DRange Parse(string s) =>
             Parse(s, '~');
