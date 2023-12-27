@@ -77,12 +77,12 @@ namespace aoc
         public readonly DoubleVector3D A => a;
 
         public static DoubleParticle3D Parse(string s) =>
-            Parse(s, ';');
+            Parse(s, '@');
 
         public static DoubleParticle3D Parse(string s, char separator, char separator2 = ',') =>
             Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out DoubleParticle3D particle, char separator = ';', char separator2 = ',') =>
+        public static bool TryParse(string s, out DoubleParticle3D particle, char separator = '@', char separator2 = ',') =>
             Helper.TryParse(s, out particle, separator, separator2);
 
         public static DoubleParticle3D Parse(string[] ss) =>

@@ -67,12 +67,12 @@ namespace aoc
         public readonly Vector A => a;
 
         public static Particle Parse(string s) =>
-            Parse(s, ';');
+            Parse(s, '@');
 
         public static Particle Parse(string s, char separator, char separator2 = ',') =>
             Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out Particle particle, char separator = ';', char separator2 = ',') =>
+        public static bool TryParse(string s, out Particle particle, char separator = '@', char separator2 = ',') =>
             Helper.TryParse(s, out particle, separator, separator2);
 
         public static Particle Parse(string[] ss) =>
