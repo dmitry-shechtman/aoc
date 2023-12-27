@@ -42,7 +42,9 @@ namespace aoc
         public delegate bool TryParseValue1(string s, out TValue value);
         public delegate bool TryParseValue2(string s, out TValue value, char separator);
 
-        protected static bool TryParse(string[] ss, TryParseValue1 tryParse, Func<TValue[], T> factory, out T value, int count)
+        public delegate T FromArray1(params TValue[] values);
+
+        protected static bool TryParse(string[] ss, TryParseValue1 tryParse, FromArray1 factory, out T value, int count)
         {
             value = default;
             if (ss.Length < count ||
@@ -52,7 +54,7 @@ namespace aoc
             return true;
         }
 
-        protected static bool TryParse(string[] ss, TryParseValue2 tryParse, Func<TValue[], T> factory, out T value, char separator, int minCount, int maxCount)
+        protected static bool TryParse(string[] ss, TryParseValue2 tryParse, FromArray1 factory, out T value, char separator, int minCount, int maxCount)
         {
             value = default;
             if (ss.Length < minCount ||
@@ -82,30 +84,14 @@ namespace aoc
         }
     }
 
-    internal class Vector2DParseHelper<TVector, TValue> : ParseHelper<TVector, TValue>
-        where TVector : struct, IVector2D<TVector, TValue>
-        where TValue : struct
-    {
-        public static bool TryParseVector(string[] ss, TryParseValue1 tryParse, Func<TValue[], TVector> factory, out TVector value) =>
-            TryParse(ss, tryParse, factory, out value, IVector2D<TVector, TValue>.Cardinality);
-    }
-
-    internal class Vector3DParseHelper<TVector, TValue> : ParseHelper<TVector, TValue>
-        where TVector : struct, IVector3D<TVector, TValue>
-        where TValue : struct
-    {
-        public static bool TryParseVector(string[] ss, TryParseValue1 tryParse, Func<TValue[], TVector> factory, out TVector value) =>
-            TryParse(ss, tryParse, factory, out value, IVector3D<TVector, TValue>.Cardinality);
-    }
-
     internal class RangeParseHelper<TRange, TValue> : ParseHelper<TRange, TValue>
         where TRange : struct, IRange<TRange, TValue>
         where TValue : struct
     {
-        public static bool TryParseRange(string[] ss, TryParseValue1 tryParse, Func<TValue[], TRange> factory, out TRange value) =>
+        public static bool TryParseRange(string[] ss, TryParseValue1 tryParse, FromArray1 factory, out TRange value) =>
             TryParse(ss, tryParse, factory, out value, IRange<TValue>.Cardinality);
 
-        public static bool TryParseRange(string[] ss, TryParseValue2 tryParse, Func<TValue[], TRange> factory, out TRange value, char separator) =>
+        public static bool TryParseRange(string[] ss, TryParseValue2 tryParse, FromArray1 factory, out TRange value, char separator) =>
             TryParse(ss, tryParse, factory, out value, separator, IRange<TValue>.Cardinality, IRange<TValue>.Cardinality);
     }
 
@@ -114,7 +100,7 @@ namespace aoc
         where TVector : struct, IVector<T>
         where T : struct
     {
-        public static bool TryParseParticle(string[] ss, TryParseValue2 tryParse, Func<TVector[], TParticle> factory, out TParticle value, char separator) =>
+        public static bool TryParseParticle(string[] ss, TryParseValue2 tryParse, FromArray1 factory, out TParticle value, char separator) =>
             TryParse(ss, tryParse, factory, out value, separator, IParticle<TVector>.MinCardinality, IParticle<TVector>.MaxCardinality);
     }
 }

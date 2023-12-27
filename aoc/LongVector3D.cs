@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-
-using static aoc.ParseHelper;
-using static aoc.Vector3DParseHelper<aoc.LongVector3D, long>;
 
 namespace aoc
 {
     public struct LongVector3D : IVector3D<LongVector3D, LongVector, long>
     {
+        private static readonly Lazy<Vector3DHelper<LongVector3D, long>> _helper =
+            new(() => new(FromArray, long.TryParse, -1, 0, 1));
+
+        private static Vector3DHelper<LongVector3D, long> Helper => _helper.Value;
+
         public static readonly LongVector3D Zero  = default;
 
         public static readonly LongVector3D North = ( 0, -1,  0);
@@ -18,7 +19,7 @@ namespace aoc
         public static readonly LongVector3D Up    = ( 0,  0, -1);
         public static readonly LongVector3D Down  = ( 0,  0,  1);
 
-        public static readonly LongVector3D[] Headings = { North, East, South, West, Up, Down };
+        public static LongVector3D[] Headings => Helper.Headings;
 
         public readonly long x;
         public readonly long y;
@@ -57,41 +58,14 @@ namespace aoc
         public readonly override int GetHashCode() =>
             HashCode.Combine(x, y, z);
 
-        private const string DefaultFormat = "x,y,z";
-
-        private static readonly string[] FormatKeys    = { "x", "y", "z" };
-        private static readonly string[] FormatStrings = { "neswud" };
-
         public readonly override string ToString() =>
-            ToStringInner(DefaultFormat, null);
+            Helper.ToString(this);
 
         public readonly string ToString(IFormatProvider provider) =>
-            ToStringInner(DefaultFormat, provider);
+            Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null)
-        {
-            if (string.IsNullOrEmpty(format))
-                format = DefaultFormat;
-            if (FormatKeys.Any(format.Contains) || format.Length > 1)
-                return ToStringInner(format, provider);
-            int index = Headings.IndexOf(this);
-            if (index < 0)
-                return ToStringInner(DefaultFormat, provider);
-            char c = char.ToLowerInvariant(format[0]);
-            string s = FormatStrings.Find(s => s.Contains(c));
-            if (s.Length == 0)
-                return ToStringInner(DefaultFormat, provider);
-            return char.IsUpper(format[0])
-                ? char.ToUpperInvariant(s[index]).ToString()
-                : s[index].ToString();
-        }
-
-        private readonly string ToStringInner(string format, IFormatProvider provider)
-        {
-            for (int i = 0; i < FormatKeys.Length; i++)
-                format = format.Replace(FormatKeys[i], this[i].ToString(provider));
-            return format;
-        }
+        public readonly string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out long x, out long y, out long z)
         {
@@ -138,16 +112,16 @@ namespace aoc
             Parse(s, ',');
 
         public static LongVector3D Parse(string s, char separator) =>
-            Parse<LongVector3D>(s, TryParse, separator);
+            Helper.Parse(s, separator);
 
         public static bool TryParse(string s, out LongVector3D vector, char separator = ',') =>
-            TryParse<LongVector3D>(s, TryParse, separator, out vector);
+            Helper.TryParse(s, out vector, separator);
 
         public static LongVector3D Parse(string[] ss) =>
-            Parse<LongVector3D>(ss, TryParse);
+            Helper.Parse(ss);
 
         public static bool TryParse(string[] ss, out LongVector3D vector) =>
-            TryParseVector(ss, long.TryParse, FromArray, out vector);
+            Helper.TryParse(ss, out vector);
 
         private static LongVector3D FromArray(long[] values) =>
             new(values);

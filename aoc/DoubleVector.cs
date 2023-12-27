@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-
-using static aoc.ParseHelper;
-using static aoc.Vector2DParseHelper<aoc.DoubleVector, double>;
 
 namespace aoc
 {
     public struct DoubleVector : IVector2D<DoubleVector, double>
     {
+        private static readonly Lazy<Vector2DHelper<DoubleVector, double>> _helper =
+            new(() => new(FromArray, double.TryParse, -1, 0, 1));
+
+        private static Vector2DHelper<DoubleVector, double> Helper => _helper.Value;
+
         public static readonly DoubleVector Zero      = default;
 
         public static readonly DoubleVector North     = ( 0, -1);
@@ -16,7 +17,7 @@ namespace aoc
         public static readonly DoubleVector South     = ( 0,  1);
         public static readonly DoubleVector West      = (-1,  0);
 
-        public static readonly DoubleVector[] Headings = { North, East, South, West };
+        public static DoubleVector[] Headings => Helper.Headings;
 
         public readonly double x;
         public readonly double y;
@@ -52,41 +53,14 @@ namespace aoc
         public readonly override int GetHashCode() =>
             HashCode.Combine(x, y);
 
-        private const string DefaultFormat = "x,y";
-
-        private static readonly string[] FormatKeys    = { "x", "y" };
-        private static readonly string[] FormatStrings = { "nesw", "urdl", "^>v<" };
-
         public readonly override string ToString() =>
-            ToStringInner(DefaultFormat, null);
+            Helper.ToString(this);
 
         public readonly string ToString(IFormatProvider provider) =>
-            ToStringInner(DefaultFormat, provider);
+            Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null)
-        {
-            if (string.IsNullOrEmpty(format))
-                format = DefaultFormat;
-            if (FormatKeys.Any(format.Contains) || format.Length > 1)
-                return ToStringInner(format, provider);
-            int index = Headings.IndexOf(this);
-            if (index < 0)
-                return ToStringInner(DefaultFormat, provider);
-            char c = char.ToLowerInvariant(format[0]);
-            string s = FormatStrings.Find(s => s.Contains(c));
-            if (s.Length == 0)
-                return ToStringInner(DefaultFormat, provider);
-            return char.IsUpper(format[0])
-                ? char.ToUpperInvariant(s[index]).ToString()
-                : s[index].ToString();
-        }
-
-        private readonly string ToStringInner(string format, IFormatProvider provider)
-        {
-            for (int i = 0; i < FormatKeys.Length; i++)
-                format = format.Replace(FormatKeys[i], this[i].ToString(provider));
-            return format;
-        }
+        public readonly string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out double x, out double y)
         {
@@ -123,16 +97,16 @@ namespace aoc
             Parse(s, ',');
 
         public static DoubleVector Parse(string s, char separator) =>
-            Parse<DoubleVector>(s, TryParse, separator);
+            Helper.Parse(s, separator);
 
         public static bool TryParse(string s, out DoubleVector vector, char separator = ',') =>
-            TryParse<DoubleVector>(s, TryParse, separator, out vector);
+            Helper.TryParse(s, out vector, separator);
 
         public static DoubleVector Parse(string[] ss) =>
-            Parse<DoubleVector>(ss, TryParse);
+            Helper.Parse(ss);
 
         public static bool TryParse(string[] ss, out DoubleVector vector) =>
-            TryParseVector(ss, double.TryParse, FromArray, out vector);
+            Helper.TryParse(ss, out vector);
 
         private static DoubleVector FromArray(double[] values) =>
             new(values);
