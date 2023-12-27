@@ -117,6 +117,15 @@ namespace aoc
         public readonly int GetIndex(Vector3D vector) =>
             vector.x + width * (vector.y + height * vector.z);
 
+        public static Vector3D operator +(Vector3D vector, Size3D size) =>
+            new(vector.x + size.width, vector.y + size.height, vector.z + size.depth);
+
+        public static Vector3D operator -(Vector3D vector, Size3D size) =>
+            new(vector.x - size.width, vector.y - size.height, vector.z - size.depth);
+
+        public static implicit operator Size3D((int x, int y, int z) value) =>
+            new(value.x, value.y, value.z);
+
         public static explicit operator Size3D(Size size) =>
             new(size);
 

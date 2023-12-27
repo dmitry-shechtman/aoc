@@ -131,6 +131,15 @@ namespace aoc
         private static int GetFieldHeight(string s, int width) =>
             (s.Length + 1) / (width + 1);
 
+        public static Vector operator +(Vector vector, Size size) =>
+            new(vector.x + size.width, vector.y + size.height);
+
+        public static Vector operator -(Vector vector, Size size) =>
+            new(vector.x - size.width, vector.y - size.height);
+
+        public static implicit operator Size((int x, int y) value) =>
+            new(value.x, value.y);
+
         public static explicit operator Vector(Size size) =>
             new(size.width, size.height);
 

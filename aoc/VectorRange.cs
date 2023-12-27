@@ -148,10 +148,13 @@ namespace aoc
         public static VectorRange operator -(VectorRange range, Vector vector) =>
             Sub(range, vector);
 
-        public readonly VectorRange Grow(Vector size) =>
+        public readonly VectorRange Grow(Size size) =>
             new(Min - size, Max + size);
 
-        public static VectorRange Grow(VectorRange range, Vector size) =>
+        public static VectorRange Grow(VectorRange range, Size size) =>
+            range.Grow(size);
+
+        public static VectorRange operator +(VectorRange range, Size size) =>
             range.Grow(size);
 
         public readonly VectorRange Grow(int size) =>
@@ -160,10 +163,13 @@ namespace aoc
         public static VectorRange Grow(VectorRange range, int size) =>
             range.Grow(size);
 
-        public readonly VectorRange Shrink(Vector size) =>
+        public readonly VectorRange Shrink(Size size) =>
             new(Min + size, Max - size);
 
-        public static VectorRange Shrink(VectorRange range, Vector size) =>
+        public static VectorRange Shrink(VectorRange range, Size size) =>
+            range.Shrink(size);
+
+        public static VectorRange operator -(VectorRange range, Size size) =>
             range.Shrink(size);
 
         public readonly VectorRange Shrink(int size) =>
