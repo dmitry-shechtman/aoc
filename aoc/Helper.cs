@@ -1,24 +1,56 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace aoc
 {
-    internal class ParseHelper<T, TValue, TTryParse>
+    internal abstract class Helper<T, TValue, TTryParse>
+        where T : IReadOnlyList<TValue>
+        where TValue : IFormattable
     {
-        protected ParseHelper(Func<TValue[], T> fromArray, TTryParse tryParse)
+        protected Helper(Func<TValue[], T> fromArray, TTryParse tryParse)
         {
             FromArray = fromArray;
             TryParseValue = tryParse;
+            DefaultFormat = GetDefaultFormat();
+            FormatKeys = GetFormatKeys();
         }
 
         protected Func<TValue[], T> FromArray { get; }
         protected TTryParse TryParseValue { get; }
+        protected string    DefaultFormat { get; }
+        private   string[]  FormatKeys    { get; }
+
+        public string ToString(T value, IFormatProvider provider = null) =>
+            ToStringInner(value, DefaultFormat, provider);
+
+        public string ToString(T value, string format, IFormatProvider provider = null)
+        {
+            if (string.IsNullOrEmpty(format))
+                format = DefaultFormat;
+            return ToStringOuter(value, format, provider);
+        }
+
+        protected virtual string ToStringOuter(T value, string format, IFormatProvider provider) =>
+            ToStringInner(value, format, provider);
+
+        protected string ToStringInner(T value, string format, IFormatProvider provider)
+        {
+            for (int i = 0; i < FormatKeys.Length; i++)
+                format = format.Replace(FormatKeys[i], value[i].ToString(null, provider));
+            return format;
+        }
+
+        protected abstract string   GetDefaultFormat();
+        protected abstract string[] GetFormatKeys();
     }
 
     internal delegate bool TryParseValue1<T>(string s, out T value);
 
-    internal class ParseHelper1<T, TValue> : ParseHelper<T, TValue, TryParseValue1<TValue>>
+    internal abstract class Helper1<T, TValue> : Helper<T, TValue, TryParseValue1<TValue>>
+        where T : IReadOnlyList<TValue>
+        where TValue : IFormattable
     {
-        protected ParseHelper1(Func<TValue[], T> fromArray, TryParseValue1<TValue> tryParse, int count)
+        protected Helper1(Func<TValue[], T> fromArray, TryParseValue1<TValue> tryParse, int count)
             : base(fromArray, tryParse)
         {
             Count = count;
@@ -61,9 +93,11 @@ namespace aoc
 
     internal delegate bool TryParseValue2<T>(string s, out T value, char separator);
 
-    internal class ParseHelper2<T, TValue> : ParseHelper<T, TValue, TryParseValue2<TValue>>
+    internal abstract class Helper2<T, TValue> : Helper<T, TValue, TryParseValue2<TValue>>
+        where T : IReadOnlyList<TValue>
+        where TValue : IFormattable
     {
-        protected ParseHelper2(Func<TValue[], T> fromArray, TryParseValue2<TValue> tryParse, int minCount, int maxCount)
+        protected Helper2(Func<TValue[], T> fromArray, TryParseValue2<TValue> tryParse, int minCount, int maxCount)
             : base(fromArray, tryParse)
         {
             MinCount = minCount;
@@ -107,9 +141,9 @@ namespace aoc
         }
     }
 
-    internal sealed class RangeHelper<TRange, TValue> : ParseHelper1<TRange, TValue>
+    internal sealed class RangeHelper<TRange, TValue> : Helper1<TRange, TValue>
         where TRange : struct, IRange<TRange, TValue>
-        where TValue : struct
+        where TValue : struct, IFormattable
     {
         private const int Count = 2;
 
@@ -117,11 +151,14 @@ namespace aoc
             : base(fromArray, tryParse, Count)
         {
         }
+
+        protected override string   GetDefaultFormat() => "min ~ max";
+        protected override string[] GetFormatKeys()    => new[] { "min", "max" };
     }
 
-    internal sealed class VectorRangeHelper<TRange, TVector> : ParseHelper2<TRange, TVector>
+    internal sealed class VectorRangeHelper<TRange, TVector> : Helper2<TRange, TVector>
         where TRange : struct, IRange<TRange, TVector>
-        where TVector : struct
+        where TVector : struct, IFormattable
     {
         private const int Count = 2;
 
@@ -129,11 +166,14 @@ namespace aoc
             : base(fromArray, tryParse, Count, Count)
         {
         }
+
+        protected override string   GetDefaultFormat() => "min ~ max";
+        protected override string[] GetFormatKeys()    => new[] { "min", "max" };
     }
 
-    internal sealed class ParticleHelper<TParticle, TVector> : ParseHelper2<TParticle, TVector>
+    internal sealed class ParticleHelper<TParticle, TVector> : Helper2<TParticle, TVector>
         where TParticle : struct, IParticle<TParticle, TVector>
-        where TVector : struct
+        where TVector : struct, IFormattable
     {
         private const int MinCount = 2;
         private const int MaxCount = 3;
@@ -142,5 +182,8 @@ namespace aoc
             : base(fromArray, tryParse, MinCount, MaxCount)
         {
         }
+
+        protected override string   GetDefaultFormat() => "p @ v @ a";
+        protected override string[] GetFormatKeys()    => new[] { "p", "v", "a" };
     }
 }

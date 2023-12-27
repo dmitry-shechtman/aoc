@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    internal abstract class VectorHelper<TVector, T> : ParseHelper1<TVector, T>
+    internal abstract class VectorHelper<TVector, T> : Helper1<TVector, T>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
     {
@@ -10,24 +10,15 @@ namespace aoc
             : base(fromArray, tryParse, cardinality)
         {
             Headings = GetHeadings(minusOne, zero, one);
-            DefaultFormat = GetDefaultFormat();
-            FormatKeys = GetFormatKeys();
             FormatStrings = GetFormatStrings();
         }
 
         public TVector[] Headings { get; }
 
-        private string   DefaultFormat { get; }
-        private string[] FormatKeys    { get; }
         private string[] FormatStrings { get; }
 
-        public string ToString(TVector vector, IFormatProvider provider = null) =>
-            ToStringInner(vector, DefaultFormat, provider);
-
-        public string ToString(TVector vector, string format, IFormatProvider provider = null)
+        protected override string ToStringOuter(TVector vector, string format, IFormatProvider provider)
         {
-            if (string.IsNullOrEmpty(format))
-                format = DefaultFormat;
             if (format.Length > 1)
                 return ToStringInner(vector, format, provider);
             int index = Headings.IndexOf(vector);
@@ -42,19 +33,10 @@ namespace aoc
                 : s[index].ToString();
         }
 
-        private string ToStringInner(TVector vector, string format, IFormatProvider provider)
-        {
-            for (int i = 0; i < FormatKeys.Length; i++)
-                format = format.Replace(FormatKeys[i], vector[i].ToString(null, provider));
-            return format;
-        }
-
         protected new TVector FromArray(params T[] values) =>
             base.FromArray(values);
 
         protected abstract TVector[] GetHeadings(T minusOne, T zero, T one);
-        protected abstract string    GetDefaultFormat();
-        protected abstract string[]  GetFormatKeys();
         protected abstract string[]  GetFormatStrings();
     }
 

@@ -44,7 +44,13 @@ namespace aoc
             HashCode.Combine(Min, Max);
 
         public readonly override string ToString() =>
-            $"{Min}~{Max}";
+            Helper.ToString(this);
+
+        public readonly string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
+
+        public readonly string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out LongVector min, out LongVector max)
         {

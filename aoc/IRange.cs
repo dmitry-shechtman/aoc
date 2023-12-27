@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface IRange<T> : ISize<T>, IReadOnlyList<T>
+    public interface IRange<T> : ISize<T>, IReadOnlyList<T>, IFormattable
         where T : struct
     {
         private const int Cardinality = 2;
