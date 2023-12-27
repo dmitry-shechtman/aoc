@@ -111,16 +111,6 @@ namespace aoc
         public readonly int X => x;
         public readonly int Y => y;
 
-        public static IEnumerable<Vector> Range(Vector toExclusive) =>
-            Range(Zero, toExclusive);
-
-        public static IEnumerable<Vector> Range(Vector fromInclusive, Vector toExclusive)
-        {
-            for (var y = fromInclusive.y; y < toExclusive.y; y++)
-                for (var x = fromInclusive.x; x < toExclusive.x; x++)
-                    yield return new(x, y);
-        }
-
         public static int CountNeighbors(Vector p, HashSet<Vector> points)
         {
             int count = 0;

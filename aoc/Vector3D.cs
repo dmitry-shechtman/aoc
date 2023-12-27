@@ -89,17 +89,6 @@ namespace aoc
         public readonly int Y => y;
         public readonly int Z => z;
 
-        public static IEnumerable<Vector3D> Range(Vector3D toExclusive) =>
-            Range(Zero, toExclusive);
-
-        public static IEnumerable<Vector3D> Range(Vector3D fromInclusive, Vector3D toExclusive)
-        {
-            for (var z = fromInclusive.z; z < toExclusive.z; z++)
-                for (var y = fromInclusive.y; y < toExclusive.y; y++)
-                    for (var x = fromInclusive.x; x < toExclusive.x; x++)
-                        yield return new(x, y, z);
-        }
-
         public static int CountNeighbors(Vector3D p, IEnumerable<Vector3D> points)
         {
             int count = 0;

@@ -44,13 +44,13 @@ namespace aoc
         public static bool AddRange(this HashSet<Vector3D> pp, IEnumerable<Vector3D> range) =>
             range.All(pp.Add);
 
-        public static bool AddRange(this HashSet<Vector3D> pp, Vector3D range) =>
-            Vector3D.Range(range).All(pp.Add);
+        public static bool AddRange(this HashSet<Vector3D> pp, Size3D size) =>
+            new Vector3DRange(size).All(pp.Add);
 
         public static bool RemoveRange(this HashSet<Vector3D> pp, IEnumerable<Vector3D> range) =>
             range.All(pp.Remove);
 
-        public static bool RemoveRange(this HashSet<Vector3D> pp, Vector3D range) =>
-            Vector3D.Range(range).All(pp.Remove);
+        public static bool RemoveRange(this HashSet<Vector3D> pp, Size3D size) =>
+            new Vector3DRange(size).All(pp.Remove);
     }
 }
