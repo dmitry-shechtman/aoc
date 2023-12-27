@@ -85,19 +85,6 @@ namespace aoc
             y = this.y;
         }
 
-        public readonly IEnumerator<int> GetEnumerator()
-        {
-            yield return x;
-            yield return y;
-        }
-
-        public readonly int this[int i] => i switch
-        {
-            0 => x,
-            1 => y,
-            _ => throw new IndexOutOfRangeException(),
-        };
-
         public readonly int Abs(GridType grid) => grid switch
         {
             GridType.Square => Abs(),

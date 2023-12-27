@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace aoc
 {
@@ -79,21 +78,6 @@ namespace aoc
             vector = new(x, y);
             z = this.z;
         }
-
-        public readonly IEnumerator<long> GetEnumerator()
-        {
-            yield return x;
-            yield return y;
-            yield return z;
-        }
-
-        public readonly long this[int i] => i switch
-        {
-            0 => x,
-            1 => y,
-            2 => z,
-            _ => throw new IndexOutOfRangeException(),
-        };
 
         public readonly long Abs() =>
             Math.Abs(x) + Math.Abs(y) + Math.Abs(z);

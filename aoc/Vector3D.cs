@@ -76,21 +76,6 @@ namespace aoc
             z = this.z;
         }
 
-        public readonly IEnumerator<int> GetEnumerator()
-        {
-            yield return x;
-            yield return y;
-            yield return z;
-        }
-
-        public readonly int this[int i] => i switch
-        {
-            0 => x,
-            1 => y,
-            2 => z,
-            _ => throw new IndexOutOfRangeException(),
-        };
-
         public readonly int Abs() =>
             Math.Abs(x) + Math.Abs(y) + Math.Abs(z);
 

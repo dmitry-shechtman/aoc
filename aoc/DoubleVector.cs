@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace aoc
 {
@@ -67,19 +66,6 @@ namespace aoc
             x = this.x;
             y = this.y;
         }
-
-        public readonly IEnumerator<double> GetEnumerator()
-        {
-            yield return x;
-            yield return y;
-        }
-
-        public readonly double this[int i] => i switch
-        {
-            0 => x,
-            1 => y,
-            _ => throw new IndexOutOfRangeException(),
-        };
 
         public readonly double Abs() =>
             Math.Abs(x) + Math.Abs(y);

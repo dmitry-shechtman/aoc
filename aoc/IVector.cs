@@ -37,6 +37,19 @@ namespace aoc
 
         void Deconstruct(out T x, out T y);
 
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            yield return X;
+            yield return Y;
+        }
+
+        T IReadOnlyList<T>.this[int i] => i switch
+        {
+            0 => X,
+            1 => Y,
+            _ => throw new IndexOutOfRangeException(),
+        };
+
         int IReadOnlyCollection<T>.Count =>
             Cardinality;
     }
@@ -52,6 +65,21 @@ namespace aoc
         T Z { get; }
 
         void Deconstruct(out T x, out T y, out T z);
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            yield return X;
+            yield return Y;
+            yield return Z;
+        }
+
+        T IReadOnlyList<T>.this[int i] => i switch
+        {
+            0 => X,
+            1 => Y,
+            2 => Z,
+            _ => throw new IndexOutOfRangeException(),
+        };
 
         int IReadOnlyCollection<T>.Count =>
             Cardinality;
