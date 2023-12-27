@@ -71,6 +71,21 @@ namespace aoc
             throw new NotImplementedException();
         }
 
+        public static Size3D Parse(string s) =>
+            Parse(s, ':');
+
+        public static Size3D Parse(string s, char separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, out Size3D size, char separator = ':') =>
+            Helper.TryParse(s, out size, separator);
+
+        public static Size3D Parse(string[] ss) =>
+            Helper.Parse(ss);
+
+        public static bool TryParse(string[] ss, out Size3D size) =>
+            Helper.TryParse(ss, out size);
+
         private static Size3D FromArray(int[] values) =>
             new(values[0], values[1], values[2]);
 
