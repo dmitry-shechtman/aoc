@@ -74,6 +74,12 @@ namespace aoc
         public readonly long X => x;
         public readonly long Y => y;
 
+        public static LongVector Parse(char c) =>
+            Helper.Parse(c);
+
+        public static bool TryParse(char c, out LongVector vector) =>
+            Helper.TryParse(c, out vector);
+
         public static LongVector Parse(string s) =>
             Parse(s, ',');
 

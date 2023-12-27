@@ -92,6 +92,12 @@ namespace aoc
         public readonly long Y => y;
         public readonly long Z => z;
 
+        public static LongVector3D Parse(char c) =>
+            Helper.Parse(c);
+
+        public static bool TryParse(char c, out LongVector3D vector) =>
+            Helper.TryParse(c, out vector);
+
         public static LongVector3D Parse(string s) =>
             Parse(s, ',');
 

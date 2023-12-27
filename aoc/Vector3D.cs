@@ -174,6 +174,18 @@ namespace aoc
         public static bool FilterInclusive(Vector3D p, int count, HashSet<Vector3D> pp) =>
             count == 3 || count == 4 && pp.Contains(p);
 
+        public static int GetHeading(char c) =>
+            Helper.GetHeading(c);
+
+        public static bool TryGetHeading(char c, out int heading) =>
+            Helper.TryGetHeading(c, out heading);
+
+        public static Vector3D Parse(char c) =>
+            Helper.Parse(c);
+
+        public static bool TryParse(char c, out Vector3D vector) =>
+            Helper.TryParse(c, out vector);
+
         public static Vector3D Parse(string s) =>
             Parse(s, ',');
 

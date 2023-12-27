@@ -33,6 +33,37 @@ namespace aoc
                 : s[index].ToString();
         }
 
+        public int GetHeading(char c) =>
+            TryGetHeading(c, out int heading)
+                ? heading
+                : throw new InvalidOperationException($"Unexpected character: {c}");
+
+        public bool TryGetHeading(char c, out int heading)
+        {
+            c = char.ToLower(c);
+            foreach (var s in FormatStrings)
+                if ((heading = s.IndexOf(c)) >= 0)
+                    return true;
+            heading = -1;
+            return false;
+        }
+
+        public TVector Parse(char c) =>
+            TryParse(c, out TVector vector)
+                ? vector
+                : throw new InvalidOperationException($"Unexpected character: {c}");
+
+        public bool TryParse(char c, out TVector vector)
+        {
+            if (!TryGetHeading(c, out int heading))
+            {
+                vector = default;
+                return false;
+            }
+            vector = Headings[heading];
+            return true;
+        }
+
         protected new TVector FromArray(params T[] values) =>
             base.FromArray(values);
 

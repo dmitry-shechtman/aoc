@@ -311,19 +311,17 @@ namespace aoc
             return vector != default;
         }
 
-        public static Vector Parse(char c) =>
-            TryParse(c, out Vector vector)
-                ? vector
-                : throw new InvalidOperationException($"Unexpected character: {c}");
+        public static int GetHeading(char c) =>
+            Helper.GetHeading(c);
 
-        public static bool TryParse(char c, out Vector vector) => (vector = char.ToLower(c) switch
-        {
-            'n' or 'u' or '^' => North,
-            'e' or 'r' or '>' => East,
-            's' or 'd' or 'v' => South,
-            'w' or 'l' or '<' => West,
-            _ => default
-        }) != default;
+        public static bool TryGetHeading(char c, out int heading) =>
+            Helper.TryGetHeading(c, out heading);
+
+        public static Vector Parse(char c) =>
+            Helper.Parse(c);
+
+        public static bool TryParse(char c, out Vector vector) =>
+            Helper.TryParse(c, out vector);
 
         private static bool TryParse2(string s, ref int i, out Vector vector)
         {

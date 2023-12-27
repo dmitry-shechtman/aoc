@@ -79,6 +79,12 @@ namespace aoc
         public readonly double X => x;
         public readonly double Y => y;
 
+        public static DoubleVector Parse(char c) =>
+            Helper.Parse(c);
+
+        public static bool TryParse(char c, out DoubleVector vector) =>
+            Helper.TryParse(c, out vector);
+
         public static DoubleVector Parse(string s) =>
             Parse(s, ',');
 
