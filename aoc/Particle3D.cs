@@ -61,6 +61,10 @@ namespace aoc
         public readonly Particle3D GetNextVP() =>
             new(p + v + a, v + a, a);
 
+        public readonly Vector3D P => p;
+        public readonly Vector3D V => v;
+        public readonly Vector3D A => a;
+
         public static Particle3D Parse(string s) =>
             Parse(s, ';');
 

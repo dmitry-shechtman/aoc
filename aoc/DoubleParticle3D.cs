@@ -66,6 +66,10 @@ namespace aoc
         public readonly DoubleParticle3D GetNextVP() =>
             new(p + v + a, v + a, a);
 
+        public readonly DoubleVector3D P => p;
+        public readonly DoubleVector3D V => v;
+        public readonly DoubleVector3D A => a;
+
         public static DoubleParticle3D Parse(string s) =>
             Parse(s, ';');
 

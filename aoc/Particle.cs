@@ -56,6 +56,10 @@ namespace aoc
         public readonly Particle GetNextVP() =>
             new(p + v + a, v + a, a);
 
+        public readonly Vector P => p;
+        public readonly Vector V => v;
+        public readonly Vector A => a;
+
         public static Particle Parse(string s) =>
             Parse(s, ';');
 

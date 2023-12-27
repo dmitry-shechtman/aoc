@@ -6,6 +6,10 @@ namespace aoc
         where TSelf : struct, IParticle<TSelf, TVector>
         where TVector : struct
     {
+        TVector P { get; }
+        TVector V { get; }
+        TVector A { get; }
+
         void Deconstruct(out TVector p, out TVector v);
         void Deconstruct(out TVector p, out TVector v, out TVector a);
     }

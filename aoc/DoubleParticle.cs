@@ -66,6 +66,10 @@ namespace aoc
         public readonly DoubleParticle GetNextVP() =>
             new(p + v + a, v + a, a);
 
+        public readonly DoubleVector P => p;
+        public readonly DoubleVector V => v;
+        public readonly DoubleVector A => a;
+
         public static DoubleParticle Parse(string s) =>
             Parse(s, ';');
 

@@ -66,6 +66,10 @@ namespace aoc
         public readonly LongParticle3D GetNextVP() =>
             new(p + v + a, v + a, a);
 
+        public readonly LongVector3D P => p;
+        public readonly LongVector3D V => v;
+        public readonly LongVector3D A => a;
+
         public static LongParticle3D Parse(string s) =>
             Parse(s, ';');
 
