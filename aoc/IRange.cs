@@ -1,12 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface IRange<T> : ISize<T>
+    public interface IRange<T> : ISize<T>, IReadOnlyList<T>
         where T : struct
     {
-        internal const int Cardinality = 2;
+        private const int Cardinality = 2;
 
         T Min { get; }
         T Max { get; }
@@ -14,6 +15,25 @@ namespace aoc
         void Deconstruct(out T min, out T max);
 
         bool IsMatch(T value);
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            yield return Min;
+            yield return Max;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
+
+        T IReadOnlyList<T>.this[int i] => i switch
+        {
+            0 => Min,
+            1 => Max,
+            _ => throw new IndexOutOfRangeException(),
+        };
+
+        int IReadOnlyCollection<T>.Count =>
+            Cardinality;
     }
 
     public interface IRange<TSelf, T> : IRange<T>, ISize<TSelf, T>
