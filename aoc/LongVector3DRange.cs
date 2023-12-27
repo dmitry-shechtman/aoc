@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using static aoc.ParseHelper;
-using static aoc.RangeParseHelper<aoc.LongVector3DRange, aoc.LongVector3D>;
-
 namespace aoc
 {
     public struct LongVector3DRange : IIntegerRange<LongVector3DRange, LongVector3D>, IRange3D<LongVector3DRange, LongVector3D, long>
     {
+        private static readonly Lazy<VectorRangeHelper<LongVector3DRange, LongVector3D>> _helper =
+            new(() => new(FromArray, LongVector3D.TryParse));
+
+        private static VectorRangeHelper<LongVector3DRange, LongVector3D> Helper => _helper.Value;
+
         public LongVector3DRange(LongVector3D min, LongVector3D max)
         {
             Min = min;
@@ -77,19 +79,19 @@ namespace aoc
             Parse(s, '~');
 
         public static LongVector3DRange Parse(string s, char separator, char separator2 = ',') =>
-            Parse<LongVector3DRange>(s, TryParse, separator, separator2);
+            Helper.Parse(s, separator, separator2);
 
         public static bool TryParse(string s, out LongVector3DRange range, char separator = '~', char separator2 = ',') =>
-            TryParse<LongVector3DRange>(s, TryParse, separator, separator2, out range);
+            Helper.TryParse(s, out range, separator, separator2);
 
         public static LongVector3DRange Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static LongVector3DRange Parse(string[] ss, char separator) =>
-            Parse<LongVector3DRange>(ss, TryParse, separator);
+            Helper.Parse(ss, separator);
 
         public static bool TryParse(string[] ss, out LongVector3DRange range, char separator = ',') =>
-            TryParseRange(ss, LongVector3D.TryParse, FromArray, out range, separator);
+            Helper.TryParse(ss, out range, separator);
 
         private static LongVector3DRange FromArray(LongVector3D[] values) =>
             new(values[0], values[1]);

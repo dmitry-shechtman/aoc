@@ -1,12 +1,14 @@
 ﻿using System;
 
-using static aoc.ParseHelper;
-using static aoc.ParticleParseHelper<aoc.LongParticle, aoc.LongVector, long>;
-
 namespace aoc
 {
     public struct LongParticle : IParticle<LongParticle, LongVector, long>
     {
+        private static readonly Lazy<ParticleHelper<LongParticle, LongVector>> _helper =
+            new(() => new(FromArray, LongVector.TryParse));
+
+        private static ParticleHelper<LongParticle, LongVector> Helper => _helper.Value;
+
         public readonly LongVector p;
         public readonly LongVector v;
         public readonly LongVector a;
@@ -63,19 +65,19 @@ namespace aoc
             Parse(s, ';');
 
         public static LongParticle Parse(string s, char separator, char separator2 = ',') =>
-            Parse<LongParticle>(s, TryParse, separator, separator2);
+            Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out LongParticle vector, char separator = ';', char separator2 = ',') =>
-            TryParse<LongParticle>(s, TryParse, separator, separator2, out vector);
+        public static bool TryParse(string s, out LongParticle particle, char separator = ';', char separator2 = ',') =>
+            Helper.TryParse(s, out particle, separator, separator2);
 
         public static LongParticle Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static LongParticle Parse(string[] ss, char separator) =>
-            Parse<LongParticle>(ss, TryParse, separator);
+            Helper.Parse(ss, separator);
 
         public static bool TryParse(string[] ss, out LongParticle particle, char separator = ',') =>
-            TryParseParticle(ss, LongVector.TryParse, FromArray, out particle, separator);
+            Helper.TryParse(ss, out particle, separator);
 
         private static LongParticle FromArray(LongVector[] values) =>
             new(values[0], values[1], values[2]);

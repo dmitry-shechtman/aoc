@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using static aoc.ParseHelper;
-using static aoc.RangeParseHelper<aoc.VectorRange, aoc.Vector>;
-
 namespace aoc
 {
     public struct VectorRange : IIntegerRange<VectorRange, Vector>, IRange2D<VectorRange, Vector, int>
     {
+        private static readonly Lazy<VectorRangeHelper<VectorRange, Vector>> _helper =
+            new(() => new(FromArray, Vector.TryParse));
+
+        private static VectorRangeHelper<VectorRange, Vector> Helper => _helper.Value;
+
         public VectorRange(Vector min, Vector max)
         {
             Min = min;
@@ -75,19 +77,19 @@ namespace aoc
             Parse(s, '~');
 
         public static VectorRange Parse(string s, char separator, char separator2 = ',') =>
-            Parse<VectorRange>(s, TryParse, separator, separator2);
+            Helper.Parse(s, separator, separator2);
 
         public static bool TryParse(string s, out VectorRange range, char separator = '~', char separator2 = ',') =>
-            TryParse<VectorRange>(s, TryParse, separator, separator2, out range);
+            Helper.TryParse(s, out range, separator, separator2);
 
         public static VectorRange Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static VectorRange Parse(string[] ss, char separator) =>
-            Parse<VectorRange>(ss, TryParse, separator);
+            Helper.Parse(ss, separator);
 
         public static bool TryParse(string[] ss, out VectorRange range, char separator = ',') =>
-            TryParseRange(ss, Vector.TryParse, FromArray, out range, separator);
+            Helper.TryParse(ss, out range, separator);
 
         private static VectorRange FromArray(Vector[] values) =>
             new(values[0], values[1]);

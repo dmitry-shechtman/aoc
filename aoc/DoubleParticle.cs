@@ -1,12 +1,14 @@
 ﻿using System;
 
-using static aoc.ParseHelper;
-using static aoc.ParticleParseHelper<aoc.DoubleParticle, aoc.DoubleVector, double>;
-
 namespace aoc
 {
     public struct DoubleParticle : IParticle<DoubleParticle, DoubleVector, double>
     {
+        private static readonly Lazy<ParticleHelper<DoubleParticle, DoubleVector>> _helper =
+            new(() => new(FromArray, DoubleVector.TryParse));
+
+        private static ParticleHelper<DoubleParticle, DoubleVector> Helper => _helper.Value;
+
         public readonly DoubleVector p;
         public readonly DoubleVector v;
         public readonly DoubleVector a;
@@ -68,19 +70,19 @@ namespace aoc
             Parse(s, ';');
 
         public static DoubleParticle Parse(string s, char separator, char separator2 = ',') =>
-            Parse<DoubleParticle>(s, TryParse, separator, separator2);
+            Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out DoubleParticle vector, char separator = ';', char separator2 = ',') =>
-            TryParse<DoubleParticle>(s, TryParse, separator, separator2, out vector);
+        public static bool TryParse(string s, out DoubleParticle particle, char separator = ';', char separator2 = ',') =>
+            Helper.TryParse(s, out particle, separator, separator2);
 
         public static DoubleParticle Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static DoubleParticle Parse(string[] ss, char separator) =>
-            Parse<DoubleParticle>(ss, TryParse, separator);
+            Helper.Parse(ss, separator);
 
         public static bool TryParse(string[] ss, out DoubleParticle particle, char separator = ',') =>
-            TryParseParticle(ss, DoubleVector.TryParse, FromArray, out particle, separator);
+            Helper.TryParse(ss, out particle, separator);
 
         private static DoubleParticle FromArray(DoubleVector[] values) =>
             new(values[0], values[1], values[2]);

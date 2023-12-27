@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using static aoc.ParseHelper;
-using static aoc.RangeParseHelper<aoc.LongRange, long>;
-
 namespace aoc
 {
     public struct LongRange : IIntegerRange<LongRange, long>
     {
+        private static readonly Lazy<RangeHelper<LongRange, long>> _helper =
+            new(() => new(FromArray, long.TryParse));
+
+        private static RangeHelper<LongRange, long> Helper => _helper.Value;
+
         public LongRange(long min, long max)
         {
             Min = min;
@@ -53,16 +55,16 @@ namespace aoc
             Parse(s, '~');
 
         public static LongRange Parse(string s, char separator) =>
-            Parse<LongRange>(s, TryParse, separator);
+            Helper.Parse(s, separator);
 
         public static bool TryParse(string s, out LongRange range, char separator = '~') =>
-            TryParse<LongRange>(s, TryParse, separator, out range);
+            Helper.TryParse(s, out range, separator);
 
         public static LongRange Parse(string[] ss) =>
-            Parse<LongRange>(ss, TryParse);
+            Helper.Parse(ss);
 
         public static bool TryParse(string[] ss, out LongRange range) =>
-            TryParseRange(ss, long.TryParse, FromArray, out range);
+            Helper.TryParse(ss, out range);
 
         private static LongRange FromArray(long[] values) =>
             new(values[0], values[1]);

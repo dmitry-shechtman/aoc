@@ -2,16 +2,13 @@
 
 namespace aoc
 {
-    internal abstract class VectorHelper<TVector, T> : ParseHelper<TVector, T>
+    internal abstract class VectorHelper<TVector, T> : ParseHelper1<TVector, T>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
     {
-        public VectorHelper(FromArray1 fromArray, TryParseValue1 tryParse, int cardinality, T minusOne, T zero, T one)
+        public VectorHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, int cardinality, T minusOne, T zero, T one)
+            : base(fromArray, tryParse, cardinality)
         {
-            FromArray = fromArray;
-            TryParseValue = tryParse;
-            Cardinality = cardinality;
-
             Headings = GetHeadings(minusOne, zero, one);
             DefaultFormat = GetDefaultFormat();
             FormatKeys = GetFormatKeys();
@@ -20,25 +17,9 @@ namespace aoc
 
         public TVector[] Headings { get; }
 
-        protected FromArray1     FromArray     { get; }
-        private   TryParseValue1 TryParseValue { get; }
-        private   int            Cardinality   { get; }
-
         private string   DefaultFormat { get; }
         private string[] FormatKeys    { get; }
         private string[] FormatStrings { get; }
-
-        public TVector Parse(string s, char separator) =>
-            Parse<TVector>(s, TryParse, separator);
-
-        public bool TryParse(string s, out TVector vector, char separator) =>
-            TryParse(s, TryParse, separator, out vector);
-
-        public TVector Parse(string[] ss) =>
-            Parse<TVector>(ss, TryParse);
-
-        public bool TryParse(string[] ss, out TVector vector) =>
-            TryParse(ss, TryParseValue, FromArray, out vector, Cardinality);
 
         public string ToString(TVector vector, IFormatProvider provider = null) =>
             ToStringInner(vector, DefaultFormat, provider);
@@ -68,6 +49,9 @@ namespace aoc
             return format;
         }
 
+        protected new TVector FromArray(params T[] values) =>
+            base.FromArray(values);
+
         protected abstract TVector[] GetHeadings(T minusOne, T zero, T one);
         protected abstract string    GetDefaultFormat();
         protected abstract string[]  GetFormatKeys();
@@ -80,7 +64,7 @@ namespace aoc
     {
         private const int Cardinality = 2;
 
-        public Vector2DHelper(FromArray1 fromArray, TryParseValue1 tryParse, T minusOne, T zero, T one)
+        public Vector2DHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, Cardinality, minusOne, zero, one)
         {
         }
@@ -110,7 +94,7 @@ namespace aoc
     {
         private const int Cardinality = 3;
 
-        public Vector3DHelper(FromArray1 fromArray, TryParseValue1 tryParse, T minusOne, T zero, T one)
+        public Vector3DHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, Cardinality, minusOne, zero, one)
         {
         }

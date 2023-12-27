@@ -2,17 +2,15 @@
 
 namespace aoc
 {
-    public interface IParticle<T>
-        where T : struct
+    public interface IParticle<TSelf, TVector> : IEquatable<TSelf>
+        where TSelf : struct, IParticle<TSelf, TVector>
+        where TVector : struct
     {
-        internal const int MinCardinality = 2;
-        internal const int MaxCardinality = 3;
-
-        void Deconstruct(out T p, out T v);
-        void Deconstruct(out T p, out T v, out T a);
+        void Deconstruct(out TVector p, out TVector v);
+        void Deconstruct(out TVector p, out TVector v, out TVector a);
     }
 
-    public interface IParticle<TSelf, TVector, T> : IParticle<TVector>, IEquatable<TSelf>
+    public interface IParticle<TSelf, TVector, T> : IParticle<TSelf, TVector>
         where TSelf : struct, IParticle<TSelf, TVector, T>
         where TVector : struct, IVector<T>
         where T : struct

@@ -1,12 +1,14 @@
 ﻿using System;
 
-using static aoc.ParseHelper;
-using static aoc.RangeParseHelper<aoc.DoubleVectorRange, aoc.DoubleVector>;
-
 namespace aoc
 {
     public struct DoubleVectorRange : IRange2D<DoubleVectorRange, DoubleVector, double>
     {
+        private static readonly Lazy<VectorRangeHelper<DoubleVectorRange, DoubleVector>> _helper =
+            new(() => new(FromArray, DoubleVector.TryParse));
+
+        private static VectorRangeHelper<DoubleVectorRange, DoubleVector> Helper => _helper.Value;
+
         public DoubleVectorRange(DoubleVector min, DoubleVector max)
         {
             Min = min;
@@ -56,19 +58,19 @@ namespace aoc
             Parse(s, '~');
 
         public static DoubleVectorRange Parse(string s, char separator, char separator2 = ',') =>
-            Parse<DoubleVectorRange>(s, TryParse, separator, separator2);
+            Helper.Parse(s, separator, separator2);
 
         public static bool TryParse(string s, out DoubleVectorRange range, char separator = '~', char separator2 = ',') =>
-            TryParse<DoubleVectorRange>(s, TryParse, separator, separator2, out range);
+            Helper.TryParse(s, out range, separator, separator2);
 
         public static DoubleVectorRange Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static DoubleVectorRange Parse(string[] ss, char separator) =>
-            Parse<DoubleVectorRange>(ss, TryParse, separator);
+            Helper.Parse(ss, separator);
 
         public static bool TryParse(string[] ss, out DoubleVectorRange range, char separator = ',') =>
-            TryParseRange(ss, DoubleVector.TryParse, FromArray, out range, separator);
+            Helper.TryParse(ss, out range, separator);
 
         private static DoubleVectorRange FromArray(DoubleVector[] values) =>
             new(values[0], values[1]);

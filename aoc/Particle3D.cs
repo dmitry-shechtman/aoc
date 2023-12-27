@@ -1,12 +1,14 @@
 ﻿using System;
 
-using static aoc.ParseHelper;
-using static aoc.ParticleParseHelper<aoc.Particle3D, aoc.Vector3D, int>;
-
 namespace aoc
 {
     public struct Particle3D : IParticle<Particle3D, Vector3D, int>
     {
+        private static readonly Lazy<ParticleHelper<Particle3D, Vector3D>> _helper =
+            new(() => new(FromArray, Vector3D.TryParse));
+
+        private static ParticleHelper<Particle3D, Vector3D> Helper => _helper.Value;
+
         public readonly Vector3D p;
         public readonly Vector3D v;
         public readonly Vector3D a;
@@ -63,19 +65,19 @@ namespace aoc
             Parse(s, ';');
 
         public static Particle3D Parse(string s, char separator, char separator2 = ',') =>
-            Parse<Particle3D>(s, TryParse, separator, separator2);
+            Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out Particle3D vector, char separator = ';', char separator2 = ',') =>
-            TryParse<Particle3D>(s, TryParse, separator, separator2, out vector);
+        public static bool TryParse(string s, out Particle3D particle, char separator = ';', char separator2 = ',') =>
+            Helper.TryParse(s, out particle, separator, separator2);
 
         public static Particle3D Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static Particle3D Parse(string[] ss, char separator) =>
-            Parse<Particle3D>(ss, TryParse, separator);
+            Helper.Parse(ss, separator);
 
         public static bool TryParse(string[] ss, out Particle3D particle, char separator = ',') =>
-            TryParseParticle(ss, Vector3D.TryParse, FromArray, out particle, separator);
+            Helper.TryParse(ss, out particle, separator);
 
         private static Particle3D FromArray(Vector3D[] values) =>
             new(values[0], values[1], values[2]);

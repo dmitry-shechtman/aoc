@@ -1,12 +1,14 @@
 ﻿using System;
 
-using static aoc.ParseHelper;
-using static aoc.ParticleParseHelper<aoc.LongParticle3D, aoc.LongVector3D, long>;
-
 namespace aoc
 {
     public struct LongParticle3D : IParticle<LongParticle3D, LongVector3D, long>
     {
+        private static readonly Lazy<ParticleHelper<LongParticle3D, LongVector3D>> _helper =
+            new(() => new(FromArray, LongVector3D.TryParse));
+
+        private static ParticleHelper<LongParticle3D, LongVector3D> Helper => _helper.Value;
+
         public readonly LongVector3D p;
         public readonly LongVector3D v;
         public readonly LongVector3D a;
@@ -68,19 +70,19 @@ namespace aoc
             Parse(s, ';');
 
         public static LongParticle3D Parse(string s, char separator, char separator2 = ',') =>
-            Parse<LongParticle3D>(s, TryParse, separator, separator2);
+            Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out LongParticle3D vector, char separator = ';', char separator2 = ',') =>
-            TryParse<LongParticle3D>(s, TryParse, separator, separator2, out vector);
+        public static bool TryParse(string s, out LongParticle3D particle, char separator = ';', char separator2 = ',') =>
+            Helper.TryParse(s, out particle, separator, separator2);
 
         public static LongParticle3D Parse(string[] ss) =>
             Parse(ss, ',');
 
         public static LongParticle3D Parse(string[] ss, char separator) =>
-            Parse<LongParticle3D>(ss, TryParse, separator);
+            Helper.Parse(ss, separator);
 
         public static bool TryParse(string[] ss, out LongParticle3D particle, char separator = ',') =>
-            TryParseParticle(ss, LongVector3D.TryParse, FromArray, out particle, separator);
+            Helper.TryParse(ss, out particle, separator);
 
         private static LongParticle3D FromArray(LongVector3D[] values) =>
             new(values[0], values[1], values[2]);
