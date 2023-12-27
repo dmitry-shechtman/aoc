@@ -37,7 +37,13 @@ namespace aoc
             HashCode.Combine(p, v, a);
 
         public readonly override string ToString() =>
-            $"{p};{v};{a}";
+            Helper.ToString(this);
+
+        public readonly string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
+
+        public readonly string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out Vector3D p, out Vector3D v, out Vector3D a)
         {
