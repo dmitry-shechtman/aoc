@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace aoc
 {
@@ -50,6 +51,11 @@ namespace aoc
 
         public readonly long LongLength =>
             (long)width * height * depth;
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
 
         public readonly bool Contains(Vector3D vector) =>
             vector.x >= 0 && vector.x < width &&

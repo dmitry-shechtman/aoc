@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public struct Vector3DRange : IIntegerRange<Vector3DRange, Vector3D>, IRange3D<Vector3DRange, Vector3D, int>
+    public struct Vector3DRange : IIntegerRange<Vector3DRange, Vector3D>, ISize3D<Vector3DRange, Vector3D, int>
     {
         private static readonly Lazy<VectorRangeHelper<Vector3DRange, Vector3D>> _helper =
             new(() => new(FromArray, Vector3D.TryParse));
@@ -78,7 +78,7 @@ namespace aoc
         public readonly Vector3D this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width % Height, Min.z + index / (Width * Height));
 
-        readonly int ISize3D<Vector3DRange, Vector3D, int>.Length =>
+        readonly int ISize<Vector3DRange, Vector3D, int>.Length =>
             Count;
 
         public static Vector3DRange Parse(string s) =>
@@ -181,7 +181,7 @@ namespace aoc
             range.Shrink(size);
 
         public readonly IEnumerable<Vector3D> Border(int size = 1) =>
-            System.Linq.Enumerable.Except(this, Shrink(size));
+            System.Linq.Enumerable.Except<Vector3D>(this, Shrink(size));
 
         public static IEnumerable<Vector3D> Border(Vector3DRange range, int size = 1) =>
             range.Border(size);
