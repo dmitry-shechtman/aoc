@@ -2,46 +2,68 @@
 
 namespace aoc
 {
-    internal abstract class SizeHelper<TSize, TVector, T> : Helper1<TSize, T>
+    abstract class SizeHelperStrategy<TSelf> : Helper1Strategy<TSelf>
+        where TSelf : SizeHelperStrategy<TSelf>
+    {
+        protected SizeHelperStrategy(params string[] formatKeys)
+            : base(formatKeys)
+        {
+        }
+
+        public override char DefaultSeparator => ':';
+    }
+
+    internal abstract class SizeHelper<TSize, TVector, T, TStrategy> : Helper1<TSize, T, TStrategy>
         where TSize : struct, ISize<TSize, TVector, T>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
+        where TStrategy : IHelper1Strategy
     {
-        protected SizeHelper(Func<T[], TSize> fromArray, TryParseValue1<T> tryParse, int cardinality)
-            : base(fromArray, tryParse, cardinality)
+        protected SizeHelper(Func<T[], TSize> fromArray, TryParseValue1<T> tryParse)
+            : base(fromArray, tryParse)
         {
         }
     }
 
-    internal sealed class Size2DHelper<TSize, TVector, T> : SizeHelper<TSize, TVector, T>
+    sealed class Size2DHelperStrategy : SizeHelperStrategy<Size2DHelperStrategy>
+    {
+        private Size2DHelperStrategy()
+            : base("w", "h")
+        {
+        }
+    }
+
+    internal sealed class Size2DHelper<TSize, TVector, T> : SizeHelper<TSize, TVector, T, Size2DHelperStrategy>
         where TSize : struct, ISize2D<TSize, TVector, T>
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        private const int Cardinality = 2;
-
         public Size2DHelper(Func<T[], TSize> fromArray, TryParseValue1<T> tryParse)
-            : base(fromArray, tryParse, Cardinality)
+            : base(fromArray, tryParse)
         {
         }
 
-        protected override string   GetDefaultFormat() => "w:h";
-        protected override string[] GetFormatKeys()    => new[] { "w", "h" };
+        protected override Size2DHelperStrategy Strategy => Size2DHelperStrategy.Instance;
     }
 
-    internal sealed class Size3DHelper<TSize, TVector, T> : SizeHelper<TSize, TVector, T>
+    sealed class Size3DHelperStrategy : SizeHelperStrategy<Size3DHelperStrategy>
+    {
+        private Size3DHelperStrategy()
+            : base("w", "h", "d")
+        {
+        }
+    }
+
+    internal sealed class Size3DHelper<TSize, TVector, T> : SizeHelper<TSize, TVector, T, Size3DHelperStrategy>
         where TSize : struct, ISize3D<TSize, TVector, T>
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        private const int Cardinality = 3;
-
         public Size3DHelper(Func<T[], TSize> fromArray, TryParseValue1<T> tryParse)
-            : base(fromArray, tryParse, Cardinality)
+            : base(fromArray, tryParse)
         {
         }
 
-        protected override string   GetDefaultFormat() => "w:h:d";
-        protected override string[] GetFormatKeys()    => new[] { "w", "h", "d" };
+        protected override Size3DHelperStrategy Strategy => Size3DHelperStrategy.Instance;
     }
 }

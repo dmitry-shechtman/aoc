@@ -3,22 +3,53 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    internal abstract class Helper<T, TValue, TTryParse>
+    interface IHelperStrategy
+    {
+        char      DefaultSeparator { get; }
+        string    DefaultFormat    { get; }
+        string[]  FormatKeys       { get; }
+    }
+
+    abstract class HelperStrategy<TSelf> : IHelperStrategy
+        where TSelf : HelperStrategy<TSelf>
+    {
+        private static readonly Lazy<TSelf> _instance = new(CreateInstance);
+
+        private static TSelf CreateInstance() =>
+            (TSelf)Activator.CreateInstance(typeof(TSelf), true);
+
+        public static TSelf Instance => _instance.Value;
+
+        public HelperStrategy(string[] formatKeys)
+        {
+            FormatKeys = formatKeys;
+        }
+
+        public abstract char DefaultSeparator { get; }
+        public string[] FormatKeys { get; }
+        public string   DefaultFormat =>
+            string.Join(SeparatorString, FormatKeys);
+
+        protected abstract string SeparatorString { get; }
+    }
+
+    internal abstract class Helper<T, TValue, TTryParse, TStrategy>
         where T : IReadOnlyList<TValue>
         where TValue : IFormattable
+        where TStrategy : IHelperStrategy
     {
         protected Helper(Func<TValue[], T> fromArray, TTryParse tryParse)
         {
             FromArray = fromArray;
             TryParseValue = tryParse;
-            DefaultFormat = GetDefaultFormat();
-            FormatKeys = GetFormatKeys();
+            DefaultFormat = Strategy.DefaultFormat;
+            FormatKeys = Strategy.FormatKeys;
         }
 
-        protected Func<TValue[], T> FromArray { get; }
-        protected TTryParse TryParseValue { get; }
-        protected string    DefaultFormat { get; }
-        private   string[]  FormatKeys    { get; }
+        protected Func<TValue[], T> FromArray     { get; }
+        protected TTryParse         TryParseValue { get; }
+        protected string            DefaultFormat { get; }
+        private   string[]          FormatKeys    { get; }
 
         public string ToString(T value, IFormatProvider provider = null) =>
             ToStringInner(value, DefaultFormat, provider);
@@ -40,20 +71,39 @@ namespace aoc
             return format;
         }
 
-        protected abstract string   GetDefaultFormat();
-        protected abstract string[] GetFormatKeys();
+        protected abstract TStrategy Strategy { get; }
+    }
+
+    interface IHelper1Strategy : IHelperStrategy
+    {
+        int Count { get; }
+    }
+
+    abstract class Helper1Strategy<TSelf> : HelperStrategy<TSelf>, IHelper1Strategy
+        where TSelf : Helper1Strategy<TSelf>
+    {
+        protected Helper1Strategy(string[] formatKeys)
+            : base(formatKeys)
+        {
+        }
+
+        public int Count => FormatKeys.Length;
+
+        protected override string SeparatorString =>
+            $"{DefaultSeparator}";
     }
 
     internal delegate bool TryParseValue1<T>(string s, out T value);
 
-    internal abstract class Helper1<T, TValue> : Helper<T, TValue, TryParseValue1<TValue>>
+    internal abstract class Helper1<T, TValue, TStrategy> : Helper<T, TValue, TryParseValue1<TValue>, TStrategy>
         where T : IReadOnlyList<TValue>
         where TValue : IFormattable
+        where TStrategy : IHelper1Strategy
     {
-        protected Helper1(Func<TValue[], T> fromArray, TryParseValue1<TValue> tryParse, int count)
+        protected Helper1(Func<TValue[], T> fromArray, TryParseValue1<TValue> tryParse)
             : base(fromArray, tryParse)
         {
-            Count = count;
+            Count = Strategy.Count;
         }
 
         private int Count { get; }
@@ -76,7 +126,7 @@ namespace aoc
             value = default;
             if (ss.Length < Count ||
                 !TryParse(ss, out TValue[] values))
-                    return false;
+                return false;
             value = FromArray(values);
             return true;
         }
@@ -91,17 +141,39 @@ namespace aoc
         }
     }
 
+    internal interface IHelper2Strategy : IHelperStrategy
+    {
+        int MinCount { get; }
+        int MaxCount { get; }
+    }
+
+    abstract class Helper2Strategy<TSelf> : HelperStrategy<TSelf>, IHelper2Strategy
+        where TSelf : Helper2Strategy<TSelf>
+    {
+        protected Helper2Strategy(params string[] formatKeys)
+            : base(formatKeys)
+        {
+        }
+
+        public abstract int MinCount { get; }
+        public abstract int MaxCount { get; }
+
+        protected override string SeparatorString =>
+            $" {DefaultSeparator} ";
+    }
+
     internal delegate bool TryParseValue2<T>(string s, out T value, char separator);
 
-    internal abstract class Helper2<T, TValue> : Helper<T, TValue, TryParseValue2<TValue>>
+    internal abstract class Helper2<T, TValue, TStrategy> : Helper<T, TValue, TryParseValue2<TValue>, TStrategy>
         where T : IReadOnlyList<TValue>
         where TValue : IFormattable
+        where TStrategy : IHelper2Strategy
     {
-        protected Helper2(Func<TValue[], T> fromArray, TryParseValue2<TValue> tryParse, int minCount, int maxCount)
+        protected Helper2(Func<TValue[], T> fromArray, TryParseValue2<TValue> tryParse)
             : base(fromArray, tryParse)
         {
-            MinCount = minCount;
-            MaxCount = maxCount;
+            MinCount = Strategy.MinCount;
+            MaxCount = Strategy.MaxCount;
         }
 
         private int MinCount { get; }
@@ -125,7 +197,7 @@ namespace aoc
             value = default;
             if (ss.Length < MinCount ||
                 !TryParse(ss, out TValue[] values, separator))
-                    return false;
+                return false;
             value = FromArray(values);
             return true;
         }
@@ -136,54 +208,74 @@ namespace aoc
             for (int i = 0; i < MaxCount; i++)
                 if (i < ss.Length &&
                     !TryParseValue(ss[i], out values[i], separator))
-                        return false;
+                    return false;
             return true;
         }
     }
 
-    internal sealed class RangeHelper<TRange, TValue> : Helper1<TRange, TValue>
+    sealed class RangeHelperStrategy : Helper2Strategy<RangeHelperStrategy>, IHelper1Strategy
+    {
+        private RangeHelperStrategy()
+            : base("min", "max")
+        {
+        }
+
+        public int Count => 2;
+        public override int MinCount => 2;
+        public override int MaxCount => 2;
+
+        public override char DefaultSeparator => '~';
+    }
+
+    internal sealed class RangeHelper<TRange, TValue> : Helper1<TRange, TValue, RangeHelperStrategy>
         where TRange : struct, IRange<TRange, TValue>
         where TValue : struct, IFormattable
     {
-        private const int Count = 2;
-
         public RangeHelper(Func<TValue[], TRange> fromArray, TryParseValue1<TValue> tryParse)
-            : base(fromArray, tryParse, Count)
+            : base(fromArray, tryParse)
         {
         }
 
-        protected override string   GetDefaultFormat() => "min ~ max";
-        protected override string[] GetFormatKeys()    => new[] { "min", "max" };
+        protected override RangeHelperStrategy Strategy =>
+            RangeHelperStrategy.Instance;
     }
 
-    internal sealed class VectorRangeHelper<TRange, TVector> : Helper2<TRange, TVector>
+    internal sealed class VectorRangeHelper<TRange, TVector> : Helper2<TRange, TVector, RangeHelperStrategy>
         where TRange : struct, IRange<TRange, TVector>
         where TVector : struct, IFormattable
     {
-        private const int Count = 2;
-
         public VectorRangeHelper(Func<TVector[], TRange> fromArray, TryParseValue2<TVector> tryParse)
-            : base(fromArray, tryParse, Count, Count)
+            : base(fromArray, tryParse)
         {
         }
 
-        protected override string   GetDefaultFormat() => "min ~ max";
-        protected override string[] GetFormatKeys()    => new[] { "min", "max" };
+        protected override RangeHelperStrategy Strategy =>
+            RangeHelperStrategy.Instance;
     }
 
-    internal sealed class ParticleHelper<TParticle, TVector> : Helper2<TParticle, TVector>
+    sealed class ParticleHelperStrategy : Helper2Strategy<ParticleHelperStrategy>
+    {
+        private ParticleHelperStrategy()
+            : base("p", "v", "a")
+        {
+        }
+
+        public override int MinCount => 2;
+        public override int MaxCount => 3;
+
+        public override char DefaultSeparator => '@';
+    }
+
+    internal sealed class ParticleHelper<TParticle, TVector> : Helper2<TParticle, TVector, ParticleHelperStrategy>
         where TParticle : struct, IParticle<TParticle, TVector>
         where TVector : struct, IFormattable
     {
-        private const int MinCount = 2;
-        private const int MaxCount = 3;
-
         public ParticleHelper(Func<TVector[], TParticle> fromArray, TryParseValue2<TVector> tryParse)
-            : base(fromArray, tryParse, MinCount, MaxCount)
+            : base(fromArray, tryParse)
         {
         }
 
-        protected override string   GetDefaultFormat() => "p @ v @ a";
-        protected override string[] GetFormatKeys()    => new[] { "p", "v", "a" };
+        protected override ParticleHelperStrategy Strategy =>
+            ParticleHelperStrategy.Instance;
     }
 }

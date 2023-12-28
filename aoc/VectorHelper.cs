@@ -2,15 +2,29 @@
 
 namespace aoc
 {
-    internal abstract class VectorHelper<TVector, T> : Helper1<TVector, T>
+    abstract class VectorHelperStrategy<TSelf> : Helper1Strategy<TSelf>
+        where TSelf : VectorHelperStrategy<TSelf>
+    {
+        protected VectorHelperStrategy(params string[] formatKeys)
+            : base(formatKeys)
+        {
+        }
+
+        public override char DefaultSeparator => ',';
+
+        public abstract string[] FormatStrings { get; }
+    }
+
+    internal abstract class VectorHelper<TVector, T, TStrategy> : Helper1<TVector, T, TStrategy>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
+        where TStrategy : VectorHelperStrategy<TStrategy>
     {
-        public VectorHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, int cardinality, T minusOne, T zero, T one)
-            : base(fromArray, tryParse, cardinality)
+        protected VectorHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, T minusOne, T zero, T one)
+            : base(fromArray, tryParse)
         {
             Headings = GetHeadings(minusOne, zero, one);
-            FormatStrings = GetFormatStrings();
+            FormatStrings = Strategy.FormatStrings;
         }
 
         public TVector[] Headings { get; }
@@ -68,17 +82,24 @@ namespace aoc
             base.FromArray(values);
 
         protected abstract TVector[] GetHeadings(T minusOne, T zero, T one);
-        protected abstract string[]  GetFormatStrings();
     }
 
-    internal sealed class Vector2DHelper<TVector, T> : VectorHelper<TVector, T>
+    sealed class Vector2DHelperStrategy : VectorHelperStrategy<Vector2DHelperStrategy>
+    {
+        private Vector2DHelperStrategy()
+            : base("x", "y")
+        {
+        }
+
+        public override string[] FormatStrings => new[] { "nesw", "urdl", "^>v<" };
+    }
+
+    internal sealed class Vector2DHelper<TVector, T> : VectorHelper<TVector, T, Vector2DHelperStrategy>
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        private const int Cardinality = 2;
-
         public Vector2DHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, T minusOne, T zero, T one)
-            : base(fromArray, tryParse, Cardinality, minusOne, zero, one)
+            : base(fromArray, tryParse, minusOne, zero, one)
         {
         }
 
@@ -91,9 +112,7 @@ namespace aoc
             return new[] { North, East, South, West };
         }
 
-        protected override string   GetDefaultFormat() => "x,y";
-        protected override string[] GetFormatKeys()    => new[] { "x", "y" };
-        protected override string[] GetFormatStrings() => new[] { "nesw", "urdl", "^>v<" };
+        protected override Vector2DHelperStrategy Strategy => Vector2DHelperStrategy.Instance;
 
         public TVector North { get; private set; }
         public TVector East  { get; private set; }
@@ -101,14 +120,22 @@ namespace aoc
         public TVector West  { get; private set; }
     }
 
-    internal sealed class Vector3DHelper<TVector, T> : VectorHelper<TVector, T>
+    sealed class Vector3DHelperStrategy : VectorHelperStrategy<Vector3DHelperStrategy>
+    {
+        private Vector3DHelperStrategy()
+            : base("x", "y", "z")
+        {
+        }
+
+        public override string[] FormatStrings => new[] { "neswud" };
+    }
+
+    internal sealed class Vector3DHelper<TVector, T> : VectorHelper<TVector, T, Vector3DHelperStrategy>
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        private const int Cardinality = 3;
-
         public Vector3DHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, T minusOne, T zero, T one)
-            : base(fromArray, tryParse, Cardinality, minusOne, zero, one)
+            : base(fromArray, tryParse, minusOne, zero, one)
         {
         }
 
@@ -123,9 +150,7 @@ namespace aoc
             return new[] { North, East, South, West, Up, Down };
         }
 
-        protected override string   GetDefaultFormat() => "x,y,z";
-        protected override string[] GetFormatKeys()    => new[] { "x", "y", "z" };
-        protected override string[] GetFormatStrings() => new[] { "neswud" };
+        protected override Vector3DHelperStrategy Strategy => Vector3DHelperStrategy.Instance;
 
         public TVector North { get; private set; }
         public TVector East  { get; private set; }
