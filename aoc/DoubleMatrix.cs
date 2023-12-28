@@ -119,7 +119,7 @@ namespace aoc
         public static bool Solve(DoubleMatrix a, DoubleVector b, out DoubleVector x) =>
             a.Solve(b, out x);
 
-        public static DoubleMatrix Translate(int x, int y) =>
+        public static DoubleMatrix Translate(double x, double y) =>
             Translate(new(x, y));
 
         public static DoubleMatrix Translate(DoubleVector v) =>
