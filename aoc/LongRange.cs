@@ -16,6 +16,11 @@ namespace aoc
             Max = max;
         }
 
+        public LongRange(Range range)
+            : this(range.Min, range.Max)
+        {
+        }
+
         public long Min { get; }
         public long Max { get; }
 
@@ -158,6 +163,12 @@ namespace aoc
 
         public static implicit operator LongRange((long min, long max) value) =>
             new(value.min, value.max);
+
+        public static implicit operator LongRange(Range value) =>
+            new(value);
+
+        public static explicit operator Range(LongRange value) =>
+            new((int)value.Min, (int)value.Max);
 
         public static LongRange FromMinLength(params long[] values) =>
             new(values[0], values[0] + values[1] - 1);
