@@ -159,9 +159,6 @@ namespace aoc
         public static Vector3DRange Grow(Vector3DRange range, Size3D size) =>
             range.Grow(size);
 
-        public static Vector3DRange operator +(Vector3DRange range, Size3D size) =>
-            range.Grow(size);
-
         public readonly Vector3DRange Grow(int size) =>
             Grow((size, size, size));
 
@@ -172,9 +169,6 @@ namespace aoc
             new(Min + size, Max - size);
 
         public static Vector3DRange Shrink(Vector3DRange range, Size3D size) =>
-            range.Shrink(size);
-
-        public static Vector3DRange operator -(Vector3DRange range, Size3D size) =>
             range.Shrink(size);
 
         public readonly Vector3DRange Shrink(int size) =>
