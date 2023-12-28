@@ -78,6 +78,9 @@ namespace aoc
         public readonly bool IsMatch(long value) =>
             value >= Min && value <= Max;
 
+        public static bool IsMatch(LongRange range, long value) =>
+            range.IsMatch(value);
+
         public readonly bool IsMatch(LongRange other) =>
             other.Min <= Max && other.Max >= Min;
 
