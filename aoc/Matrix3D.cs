@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    public struct Matrix3D : IEquatable<Matrix3D>
+    public struct Matrix3D : IMatrix<Matrix3D, Vector3D, int>
     {
         public static readonly Matrix3D Zero             = default;
         public static readonly Matrix3D Identity         = new(1, 0, 0, 0, 1, 0, 0, 0, 1);
@@ -110,6 +110,17 @@ namespace aoc
                 0, 1, 0,
                 0, 0, 1,
                 v.x, v.y, v.z);
+
+        public readonly Vector3D Mul(Vector3D v) =>
+            new(m11 * v.x + m12 * v.y + m13 * v.z + m14,
+                m21 * v.x + m22 * v.y + m23 * v.z + m24,
+                m31 * v.x + m32 * v.y + m33 * v.z + m34);
+
+        public static Vector3D Mul(Matrix3D matrix, Vector3D vector) =>
+            matrix.Mul(vector);
+
+        public static Vector3D operator *(Matrix3D matrix, Vector3D vector) =>
+            matrix.Mul(vector);
 
         public static implicit operator Matrix3D((int m11, int m12, int m13, int m21, int m22, int m23, int m31, int m32, int m33) m) =>
             new(m.m11, m.m12, m.m13,

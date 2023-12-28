@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    public struct Matrix : IEquatable<Matrix>
+    public struct Matrix : IMatrix<Matrix, Vector, int>
     {
         public static readonly Matrix Zero             = default;
         public static readonly Matrix Identity         = new( 1,  0,  0,  1);

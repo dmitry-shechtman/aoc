@@ -2,7 +2,7 @@
 
 namespace aoc
 {
-    public struct LongMatrix : IEquatable<LongMatrix>
+    public struct LongMatrix : IMatrix<LongMatrix, LongVector, long>
     {
         public static readonly LongMatrix Zero             = default;
         public static readonly LongMatrix Identity         = new( 1,  0,  0,  1);
