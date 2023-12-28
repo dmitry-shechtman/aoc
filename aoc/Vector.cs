@@ -25,7 +25,7 @@ namespace aoc
         private static readonly Lazy<Vector2DHelper<Vector, int>> _helper =
             new(() => new(FromArray, int.TryParse, -1, 0, 1));
 
-        private static VectorHelper<Vector, int> Helper => _helper.Value;
+        private static Vector2DHelper<Vector, int> Helper => _helper.Value;
 
         public static readonly Vector Zero      = default;
 
