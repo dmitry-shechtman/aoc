@@ -2,12 +2,14 @@
 
 namespace aoc
 {
+    using Helper = Internal.ParticleHelper<DoubleParticle3D, DoubleVector3D>;
+
     public struct DoubleParticle3D : IParticle<DoubleParticle3D, DoubleVector3D>
     {
-        private static readonly Lazy<ParticleHelper<DoubleParticle3D, DoubleVector3D>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, DoubleVector3D.TryParse));
 
-        private static ParticleHelper<DoubleParticle3D, DoubleVector3D> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public readonly DoubleVector3D p;
         public readonly DoubleVector3D v;

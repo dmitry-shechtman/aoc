@@ -2,12 +2,14 @@
 
 namespace aoc
 {
+    using Helper = Internal.VectorRangeHelper<DoubleVectorRange, DoubleVector>;
+
     public struct DoubleVectorRange : IRange2D<DoubleVectorRange, DoubleVector, double>
     {
-        private static readonly Lazy<VectorRangeHelper<DoubleVectorRange, DoubleVector>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, DoubleVector.TryParse));
 
-        private static VectorRangeHelper<DoubleVectorRange, DoubleVector> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public DoubleVectorRange(DoubleVector min, DoubleVector max)
         {

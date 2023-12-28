@@ -2,12 +2,14 @@
 
 namespace aoc
 {
+    using Helper = Internal.ParticleHelper<Particle, Vector>;
+
     public struct Particle : IParticle<Particle, Vector, int>
     {
-        private static readonly Lazy<ParticleHelper<Particle, Vector>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, Vector.TryParse));
 
-        private static ParticleHelper<Particle, Vector> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public readonly Vector p;
         public readonly Vector v;

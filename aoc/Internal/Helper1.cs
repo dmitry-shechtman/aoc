@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace aoc
+namespace aoc.Internal
 {
     interface IHelper1Strategy : IHelperStrategy
     {

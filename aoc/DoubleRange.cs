@@ -2,12 +2,14 @@
 
 namespace aoc
 {
+    using Helper = Internal.RangeHelper<DoubleRange, double>;
+
     public struct DoubleRange : IRange<DoubleRange, double>
     {
-        private static readonly Lazy<RangeHelper<DoubleRange, double>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, double.TryParse));
 
-        private static RangeHelper<DoubleRange, double> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public DoubleRange(double min, double max)
         {

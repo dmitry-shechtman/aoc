@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace aoc
+namespace aoc.Internal
 {
     abstract class SizeHelperStrategy<TSelf> : Helper1Strategy<TSelf>
         where TSelf : SizeHelperStrategy<TSelf>
@@ -13,7 +13,7 @@ namespace aoc
         public override char DefaultSeparator => ':';
     }
 
-    internal abstract class SizeHelper<TSize, TVector, T, TStrategy> : Helper1<TSize, T, TStrategy>
+    abstract class SizeHelper<TSize, TVector, T, TStrategy> : Helper1<TSize, T, TStrategy>
         where TSize : struct, ISize<TSize, TVector, T>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
@@ -33,7 +33,7 @@ namespace aoc
         }
     }
 
-    internal sealed class Size2DHelper<TSize, TVector, T> : SizeHelper<TSize, TVector, T, Size2DHelperStrategy>
+    sealed class Size2DHelper<TSize, TVector, T> : SizeHelper<TSize, TVector, T, Size2DHelperStrategy>
         where TSize : struct, ISize2D<TSize, TVector, T>
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
@@ -54,7 +54,7 @@ namespace aoc
         }
     }
 
-    internal sealed class Size3DHelper<TSize, TVector, T> : SizeHelper<TSize, TVector, T, Size3DHelperStrategy>
+    sealed class Size3DHelper<TSize, TVector, T> : SizeHelper<TSize, TVector, T, Size3DHelperStrategy>
         where TSize : struct, ISize3D<TSize, TVector, T>
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable

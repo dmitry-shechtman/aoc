@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace aoc
+namespace aoc.Internal
 {
     abstract class VectorHelperStrategy<TSelf> : Helper1Strategy<TSelf>
         where TSelf : VectorHelperStrategy<TSelf>
@@ -15,7 +15,7 @@ namespace aoc
         public abstract string[] FormatStrings { get; }
     }
 
-    internal abstract class VectorHelper<TVector, T, TStrategy> : Helper1<TVector, T, TStrategy>
+    abstract class VectorHelper<TVector, T, TStrategy> : Helper1<TVector, T, TStrategy>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy>
@@ -94,7 +94,7 @@ namespace aoc
         public override string[] FormatStrings => new[] { "nesw", "urdl", "^>v<" };
     }
 
-    internal sealed class Vector2DHelper<TVector, T> : VectorHelper<TVector, T, Vector2DHelperStrategy>
+    sealed class Vector2DHelper<TVector, T> : VectorHelper<TVector, T, Vector2DHelperStrategy>
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
@@ -130,7 +130,7 @@ namespace aoc
         public override string[] FormatStrings => new[] { "neswud" };
     }
 
-    internal sealed class Vector3DHelper<TVector, T> : VectorHelper<TVector, T, Vector3DHelperStrategy>
+    sealed class Vector3DHelper<TVector, T> : VectorHelper<TVector, T, Vector3DHelperStrategy>
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable
     {

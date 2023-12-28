@@ -3,12 +3,14 @@ using System.Collections;
 
 namespace aoc
 {
+    using Helper = Internal.Size3DHelper<Size3D, Vector3D, int>;
+
     public struct Size3D : ISize3D<Size3D, Vector3D, int>
     {
-        private static readonly Lazy<Size3DHelper<Size3D, Vector3D, int>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse));
 
-        private static Size3DHelper<Size3D, Vector3D, int> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public readonly int width;
         public readonly int height;

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 
 namespace aoc
 {
+    using Helper = Internal.RangeHelper<LongRange, long>;
+
     public struct LongRange : IIntegerRange<LongRange, long>
     {
-        private static readonly Lazy<RangeHelper<LongRange, long>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, long.TryParse));
 
-        private static RangeHelper<LongRange, long> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public LongRange(long min, long max)
         {

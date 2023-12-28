@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace aoc
 {
+    using Helper = Internal.Vector2DHelper<Vector, int>;
+
     public enum GridType
     {
         Square = 0,
@@ -22,10 +24,10 @@ namespace aoc
 
     public struct Vector : IVector2D<Vector, int>
     {
-        private static readonly Lazy<Vector2DHelper<Vector, int>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse, -1, 0, 1));
 
-        private static Vector2DHelper<Vector, int> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public static readonly Vector Zero      = default;
 

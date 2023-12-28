@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace aoc
+namespace aoc.Internal
 {
     sealed class RangeHelperStrategy : Helper2Strategy<RangeHelperStrategy>, IHelper1Strategy
     {

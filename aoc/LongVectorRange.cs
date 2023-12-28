@@ -3,12 +3,14 @@ using System.Collections.Generic;
 
 namespace aoc
 {
+    using Helper = Internal.VectorRangeHelper<LongVectorRange, LongVector>;
+
     public struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>, IRange2D<LongVectorRange, LongVector, long>
     {
-        private static readonly Lazy<VectorRangeHelper<LongVectorRange, LongVector>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, LongVector.TryParse));
 
-        private static VectorRangeHelper<LongVectorRange, LongVector> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public LongVectorRange(LongVector min, LongVector max)
         {

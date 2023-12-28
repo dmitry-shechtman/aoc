@@ -4,12 +4,14 @@ using System.Linq;
 
 namespace aoc
 {
+    using Helper = Internal.Vector3DHelper<Vector3D, int>;
+
     public struct Vector3D : IVector3D<Vector3D, Vector, int>
     {
-        private static readonly Lazy<Vector3DHelper<Vector3D, int>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse, -1, 0, 1));
 
-        private static Vector3DHelper<Vector3D, int> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public static readonly Vector3D Zero = default;
 

@@ -2,12 +2,14 @@
 
 namespace aoc
 {
+    using Helper = Internal.Vector3DHelper<DoubleVector3D, double>;
+
     public struct DoubleVector3D : IVector3D<DoubleVector3D, DoubleVector, double>
     {
-        private static readonly Lazy<Vector3DHelper<DoubleVector3D, double>> _helper =
+        private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, double.TryParse, -1, 0, 1));
 
-        private static Vector3DHelper<DoubleVector3D, double> Helper => _helper.Value;
+        private static Helper Helper => _helper.Value;
 
         public static readonly DoubleVector3D Zero  = default;
 
