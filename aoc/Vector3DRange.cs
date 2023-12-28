@@ -39,9 +39,9 @@ namespace aoc
         public readonly int Width  => Max.x - Min.x + 1;
         public readonly int Height => Max.y - Min.y + 1;
         public readonly int Depth  => Max.z - Min.z + 1;
-        public readonly int Count  => Width * Height * Depth;
+        public readonly int Length => Width * Height * Depth;
 
-        public readonly long LongCount =>
+        public readonly long LongLength =>
             (long)Width * Height * Depth;
 
         public readonly override bool Equals(object obj) =>
@@ -76,6 +76,9 @@ namespace aoc
                     for (var x = Min.x; x <= Max.x; x++)
                         yield return new(x, y, z);
         }
+
+        readonly int IReadOnlyCollection<Vector3D>.Count =>
+            Length;
 
         public readonly Vector3D this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width % Height, Min.z + index / (Width * Height));

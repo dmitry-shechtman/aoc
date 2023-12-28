@@ -38,9 +38,9 @@ namespace aoc
 
         public readonly int Width  => Max.x - Min.x + 1;
         public readonly int Height => Max.y - Min.y + 1;
-        public readonly int Count  => Width * Height;
+        public readonly int Length  => Width * Height;
 
-        public readonly long LongCount =>
+        public readonly long LongLength =>
             (long)Width * Height;
 
         public readonly override bool Equals(object obj) =>
@@ -74,6 +74,9 @@ namespace aoc
                 for (var x = Min.x; x <= Max.x; x++)
                     yield return new(x, y);
         }
+
+        readonly int IReadOnlyCollection<Vector>.Count =>
+            Length;
 
         public readonly Vector this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width);

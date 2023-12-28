@@ -39,7 +39,7 @@ namespace aoc
         public readonly long Width  => Max.x - Min.x + 1;
         public readonly long Height => Max.y - Min.y + 1;
         public readonly long Depth  => Max.z - Min.z + 1;
-        public readonly long Count  => Width * Height * Depth;
+        public readonly long Length => Width * Height * Depth;
 
         public readonly override bool Equals(object obj) =>
             obj is LongVector3DRange other && Equals(other);
@@ -78,7 +78,7 @@ namespace aoc
             new(Min.x + index % Width, Min.y + index / Width % Height, Min.z + index / (Width * Height));
 
         readonly int IReadOnlyCollection<LongVector3D>.Count =>
-            (int)Count;
+            (int)Length;
 
         public static LongVector3DRange Parse(string s) =>
             Helper.Parse(s);

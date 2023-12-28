@@ -38,7 +38,7 @@ namespace aoc
         public readonly double Width  => Max.x - Min.x;
         public readonly double Height => Max.y - Min.y;
         public readonly double Depth  => Max.z - Min.z;
-        public readonly double Count  => Width * Height * Depth;
+        public readonly double Length => Width * Height * Depth;
 
         public readonly override bool Equals(object obj) =>
             obj is DoubleVector3DRange other && Equals(other);

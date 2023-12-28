@@ -44,6 +44,14 @@ namespace aoc
         bool Contains(TSelf other);
     }
 
+    public interface IRange<TSelf, TVector, T> : IRange<TSelf, TVector>
+        where TSelf : struct, IRange<TSelf, TVector, T>
+        where TVector : struct, IVector<TVector, T>
+        where T : struct
+    {
+        T Length { get; }
+    }
+
     public interface IIntegerRange<TSelf, T> : IRange<TSelf, T>, IReadOnlyList<T>
         where TSelf : struct, IIntegerRange<TSelf, T>
         where T : struct
@@ -52,14 +60,14 @@ namespace aoc
             GetEnumerator();
     }
 
-    public interface IRange2D<TSelf, TVector, T> : IRange<TSelf, TVector>, ISize2D<TSelf, T>
+    public interface IRange2D<TSelf, TVector, T> : IRange<TSelf, TVector, T>, ISize2D<TSelf, T>
         where TSelf : struct, IRange2D<TSelf, TVector, T>
         where TVector : struct, IVector2D<TVector, T>
         where T : struct
     {
     }
 
-    public interface IRange3D<TSelf, TVector, T> : IRange<TSelf, TVector>, ISize3D<TSelf, T>
+    public interface IRange3D<TSelf, TVector, T> : IRange<TSelf, TVector, T>, ISize3D<TSelf, T>
         where TSelf : struct, IRange3D<TSelf, TVector, T>
         where TVector : struct, IVector3D<TVector, T>
         where T : struct

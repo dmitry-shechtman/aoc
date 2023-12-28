@@ -32,7 +32,7 @@ namespace aoc
 
         public readonly double Width  => Max.x - Min.x;
         public readonly double Height => Max.y - Min.y;
-        public readonly double Count  => Width * Height;
+        public readonly double Length => Width * Height;
 
         public readonly override bool Equals(object obj) =>
             obj is DoubleVectorRange other && Equals(other);

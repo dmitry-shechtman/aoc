@@ -33,7 +33,7 @@ namespace aoc
 
         public readonly long Width  => Max.x - Min.x + 1;
         public readonly long Height => Max.y - Min.y + 1;
-        public readonly long Count  => Width * Height;
+        public readonly long Length => Width * Height;
 
         public readonly override bool Equals(object obj) =>
             obj is LongVectorRange other && Equals(other);
@@ -71,7 +71,7 @@ namespace aoc
             new(Min.x + index % Width, Min.y + index / Width);
 
         readonly int IReadOnlyCollection<LongVector>.Count =>
-            (int)Count;
+            (int)Length;
 
         public static LongVectorRange Parse(string s) =>
             Helper.Parse(s);
