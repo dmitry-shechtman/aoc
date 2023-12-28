@@ -3,16 +3,11 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface ISize<T> : IFormattable
-        where T : struct
-    {
-        bool Contains(T value);
-    }
-
-    public interface ISize<TSelf, T> : ISize<T>, IEquatable<TSelf>
+    public interface ISize<TSelf, T> : IEquatable<TSelf>, IFormattable
         where TSelf : struct, ISize<TSelf, T>
         where T : struct
     {
+        bool Contains(T value);
     }
 
     public interface ISize<TSelf, TVector, T> : ISize<TSelf, TVector>, IReadOnlyList<T>

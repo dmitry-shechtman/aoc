@@ -41,7 +41,7 @@ namespace aoc
 
     public interface IParticle<TSelf, TVector, T> : IParticle<TSelf, TVector>
         where TSelf : struct, IParticle<TSelf, TVector, T>
-        where TVector : struct, IVector<T>
+        where TVector : struct, IVector<TVector, T>
         where T : struct
     {
         TSelf GetNext();

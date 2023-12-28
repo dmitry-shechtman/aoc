@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface IRange<T> : ISize<T>, IReadOnlyList<T>, IFormattable
+    public interface IRange<TSelf, T> : ISize<TSelf, T>, IReadOnlyList<T>
+        where TSelf : struct, IRange<TSelf, T>
         where T : struct
     {
         private const int Cardinality = 2;
@@ -15,6 +16,8 @@ namespace aoc
         void Deconstruct(out T min, out T max);
 
         bool IsMatch(T value);
+        bool IsMatch(TSelf other);
+        bool Contains(TSelf other);
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
@@ -34,14 +37,6 @@ namespace aoc
 
         int IReadOnlyCollection<T>.Count =>
             Cardinality;
-    }
-
-    public interface IRange<TSelf, T> : IRange<T>, ISize<TSelf, T>
-        where TSelf : struct, IRange<TSelf, T>
-        where T : struct
-    {
-        bool IsMatch(TSelf other);
-        bool Contains(TSelf other);
     }
 
     public interface IRange<TSelf, TVector, T> : IRange<TSelf, TVector>
