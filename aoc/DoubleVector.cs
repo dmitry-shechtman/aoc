@@ -4,7 +4,7 @@ namespace aoc
 {
     using Helper = Internal.Vector2DHelper<DoubleVector, double>;
 
-    public struct DoubleVector : IVector2D<DoubleVector, double>
+    public struct DoubleVector : IVector<DoubleVector, DoubleMatrix, double>, IVector2D<DoubleVector, double>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, double.TryParse, -1, 0, 1));

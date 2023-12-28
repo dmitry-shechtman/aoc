@@ -24,6 +24,14 @@ namespace aoc
             GetEnumerator();
     }
 
+    public interface IVector<TSelf, TMatrix, T> : IVector<TSelf, T>
+        where TSelf : struct, IVector<TSelf, TMatrix, T>
+        where TMatrix : struct, IMatrix<TMatrix, TSelf, T>
+        where T : struct
+    {
+        TSelf Mul(TMatrix matrix);
+    }
+
     public interface IVector2D<TSelf, T> : IVector<TSelf, T>
         where TSelf : struct, IVector2D<TSelf, T>
         where T : struct

@@ -22,7 +22,7 @@ namespace aoc
         Self  = 4
     }
 
-    public struct Vector : IVector2D<Vector, int>
+    public struct Vector : IVector<Vector, Matrix, int>, IVector2D<Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse, -1, 0, 1));

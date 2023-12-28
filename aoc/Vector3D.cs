@@ -6,7 +6,7 @@ namespace aoc
 {
     using Helper = Internal.Vector3DHelper<Vector3D, int>;
 
-    public struct Vector3D : IVector3D<Vector3D, Vector, int>
+    public struct Vector3D : IVector<Vector3D, Matrix3D, int>, IVector3D<Vector3D, Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse, -1, 0, 1));

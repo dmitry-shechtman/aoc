@@ -4,7 +4,7 @@ namespace aoc
 {
     using Helper = Internal.Vector2DHelper<LongVector, long>;
 
-    public struct LongVector : IVector2D<LongVector, long>
+    public struct LongVector : IVector<LongVector, LongMatrix, long>, IVector2D<LongVector, long>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, long.TryParse, -1, 0, 1));
@@ -144,6 +144,16 @@ namespace aoc
 
         public static LongVector operator *(long scalar, LongVector vector) =>
             vector.Mul(scalar);
+
+        public readonly LongVector Mul(LongMatrix m) =>
+            new(x * m.m11 + y * m.m21 + m.m31,
+                x * m.m12 + y * m.m22 + m.m32);
+
+        public static LongVector Mul(LongVector vector, LongMatrix matrix) =>
+            vector.Mul(matrix);
+
+        public static LongVector operator *(LongVector vector, LongMatrix matrix) =>
+            vector.Mul(matrix);
 
         public readonly LongVector Div(long scalar) =>
             new(x / scalar, y / scalar);
