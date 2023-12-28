@@ -20,7 +20,7 @@ namespace aoc.Internal
         where T : struct, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy>
     {
-        protected VectorHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, T minusOne, T zero, T one)
+        protected VectorHelper(Func<T[], TVector> fromArray, TryParse1<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse)
         {
             Headings = GetHeadings(minusOne, zero, one);
@@ -98,7 +98,7 @@ namespace aoc.Internal
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector2DHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, T minusOne, T zero, T one)
+        public Vector2DHelper(Func<T[], TVector> fromArray, TryParse1<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, minusOne, zero, one)
         {
         }
@@ -134,7 +134,7 @@ namespace aoc.Internal
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector3DHelper(Func<T[], TVector> fromArray, TryParseValue1<T> tryParse, T minusOne, T zero, T one)
+        public Vector3DHelper(Func<T[], TVector> fromArray, TryParse1<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, minusOne, zero, one)
         {
         }

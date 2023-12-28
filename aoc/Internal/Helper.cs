@@ -34,25 +34,25 @@ namespace aoc.Internal
         protected abstract string SeparatorString { get; }
     }
 
-    abstract class Helper<T, TValue, TTryParse, TStrategy>
-        where T : IReadOnlyList<TValue>
-        where TValue : IFormattable
+    abstract class Helper<T, TItem, TTryParse, TStrategy>
+        where T : IReadOnlyList<TItem>
+        where TItem : IFormattable
         where TStrategy : IHelperStrategy
     {
-        protected Helper(Func<TValue[], T> fromArray, TTryParse tryParse)
+        protected Helper(Func<TItem[], T> fromArray, TTryParse tryParse)
         {
             FromArray = fromArray;
-            TryParseValue = tryParse;
+            TryParseItem = tryParse;
             DefaultFormat = Strategy.DefaultFormat;
             FormatKeys = Strategy.FormatKeys;
             DefaultSeparatorChar = Strategy.DefaultSeparator;
         }
 
-        protected Func<TValue[], T> FromArray            { get; }
-        protected TTryParse         TryParseValue        { get; }
-        protected string            DefaultFormat        { get; }
-        private   string[]          FormatKeys           { get; }
-        private   char              DefaultSeparatorChar { get; }
+        protected Func<TItem[], T> FromArray            { get; }
+        protected TTryParse        TryParseItem         { get; }
+        protected string           DefaultFormat        { get; }
+        private   string[]         FormatKeys           { get; }
+        private   char             DefaultSeparatorChar { get; }
 
         public string ToString(T value, IFormatProvider provider = null) =>
             ToStringInner(value, DefaultFormat, provider);

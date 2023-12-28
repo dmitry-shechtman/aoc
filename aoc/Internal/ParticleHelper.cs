@@ -19,7 +19,7 @@ namespace aoc.Internal
         where TParticle : struct, IParticle<TParticle, TVector>
         where TVector : struct, IFormattable
     {
-        public ParticleHelper(Func<TVector[], TParticle> fromArray, TryParseValue2<TVector> tryParse)
+        public ParticleHelper(Func<TVector[], TParticle> fromArray, TryParse2<TVector> tryParse)
             : base(fromArray, tryParse)
         {
         }

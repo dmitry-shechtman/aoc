@@ -27,14 +27,14 @@ namespace aoc.Internal
             $" {DefaultSeparator} ";
     }
 
-    delegate bool TryParseValue2<T>(string s, char separator, out T value);
+    delegate bool TryParse2<T>(string s, char separator, out T value);
 
-    abstract class Helper2<T, TValue, TStrategy> : Helper<T, TValue, TryParseValue2<TValue>, TStrategy>
-        where T : IReadOnlyList<TValue>
-        where TValue : IFormattable
+    abstract class Helper2<T, TItem, TStrategy> : Helper<T, TItem, TryParse2<TItem>, TStrategy>
+        where T : IReadOnlyList<TItem>
+        where TItem : IFormattable
         where TStrategy : IHelper2Strategy
     {
-        protected Helper2(Func<TValue[], T> fromArray, TryParseValue2<TValue> tryParse)
+        protected Helper2(Func<TItem[], T> fromArray, TryParse2<TItem> tryParse)
             : base(fromArray, tryParse)
         {
             MinCount = Strategy.MinCount;
@@ -75,18 +75,18 @@ namespace aoc.Internal
         {
             value = default;
             if (ss.Length < MinCount ||
-                !TryParse(ss, separator, out TValue[] values))
+                !TryParse(ss, separator, out TItem[] values))
                     return false;
             value = FromArray(values);
             return true;
         }
 
-        private bool TryParse(string[] ss, char separator, out TValue[] values)
+        private bool TryParse(string[] ss, char separator, out TItem[] values)
         {
-            values = new TValue[MaxCount];
+            values = new TItem[MaxCount];
             for (int i = 0; i < MaxCount; i++)
                 if (i < ss.Length &&
-                    !TryParseValue(ss[i], separator, out values[i]))
+                    !TryParseItem(ss[i], separator, out values[i]))
                         return false;
             return true;
         }

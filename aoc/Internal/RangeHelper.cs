@@ -16,11 +16,11 @@ namespace aoc.Internal
         public override char DefaultSeparator => '~';
     }
 
-    sealed class RangeHelper<TRange, TValue> : Helper1<TRange, TValue, RangeHelperStrategy>
-        where TRange : struct, IRange<TRange, TValue>
-        where TValue : struct, IFormattable
+    sealed class RangeHelper<TRange, T> : Helper1<TRange, T, RangeHelperStrategy>
+        where TRange : struct, IRange<TRange, T>
+        where T : struct, IFormattable
     {
-        public RangeHelper(Func<TValue[], TRange> fromArray, TryParseValue1<TValue> tryParse)
+        public RangeHelper(Func<T[], TRange> fromArray, TryParse1<T> tryParse)
             : base(fromArray, tryParse)
         {
         }
@@ -33,7 +33,7 @@ namespace aoc.Internal
         where TRange : struct, IRange<TRange, TVector>
         where TVector : struct, IFormattable
     {
-        public VectorRangeHelper(Func<TVector[], TRange> fromArray, TryParseValue2<TVector> tryParse)
+        public VectorRangeHelper(Func<TVector[], TRange> fromArray, TryParse2<TVector> tryParse)
             : base(fromArray, tryParse)
         {
         }
