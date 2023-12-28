@@ -176,13 +176,16 @@ namespace aoc
             Helper.TryParse(c, out vector);
 
         public static Vector3D Parse(string s) =>
-            Parse(s, ',');
+            Helper.Parse(s);
+
+        public static bool TryParse(string s, out Vector3D vector) =>
+            Helper.TryParse(s, out vector);
 
         public static Vector3D Parse(string s, char separator) =>
             Helper.Parse(s, separator);
 
-        public static bool TryParse(string s, out Vector3D vector, char separator = ',') =>
-            Helper.TryParse(s, out vector, separator);
+        public static bool TryParse(string s, char separator, out Vector3D vector) =>
+            Helper.TryParse(s, separator, out vector);
 
         public static Vector3D Parse(string[] ss) =>
             Helper.Parse(ss);

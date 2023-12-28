@@ -64,22 +64,34 @@ namespace aoc
         }
 
         public static DoubleVector3DRange Parse(string s) =>
-            Parse(s, '~');
+            Helper.Parse(s);
 
-        public static DoubleVector3DRange Parse(string s, char separator, char separator2 = ',') =>
+        public static bool TryParse(string s, out DoubleVector3DRange range) =>
+            Helper.TryParse(s, out range);
+
+        public static DoubleVector3DRange Parse(string s, char separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, char separator, out DoubleVector3DRange range) =>
+            Helper.TryParse(s, separator, out range);
+
+        public static DoubleVector3DRange Parse(string s, char separator, char separator2) =>
             Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out DoubleVector3DRange range, char separator = '~', char separator2 = ',') =>
-            Helper.TryParse(s, out range, separator, separator2);
+        public static bool TryParse(string s, char separator, char separator2, out DoubleVector3DRange range) =>
+            Helper.TryParse(s, separator, separator2, out range);
 
         public static DoubleVector3DRange Parse(string[] ss) =>
-            Parse(ss, ',');
+            Helper.Parse(ss);
+
+        public static bool TryParse(string[] ss, out DoubleVector3DRange range) =>
+            Helper.TryParse(ss, out range);
 
         public static DoubleVector3DRange Parse(string[] ss, char separator) =>
             Helper.Parse(ss, separator);
 
-        public static bool TryParse(string[] ss, out DoubleVector3DRange range, char separator = ',') =>
-            Helper.TryParse(ss, out range, separator);
+        public static bool TryParse(string[] ss, char separator, out DoubleVector3DRange range) =>
+            Helper.TryParse(ss, separator, out range);
 
         private static DoubleVector3DRange FromArray(DoubleVector3D[] values) =>
             new(values[0], values[1]);

@@ -72,22 +72,34 @@ namespace aoc
         public readonly Vector3D A => a;
 
         public static Particle3D Parse(string s) =>
-            Parse(s, '@');
+            Helper.Parse(s);
 
-        public static Particle3D Parse(string s, char separator, char separator2 = ',') =>
+        public static bool TryParse(string s, out Particle3D particle) =>
+            Helper.TryParse(s, out particle);
+
+        public static Particle3D Parse(string s, char separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, char separator, out Particle3D particle) =>
+            Helper.TryParse(s, separator, out particle);
+
+        public static Particle3D Parse(string s, char separator, char separator2) =>
             Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out Particle3D particle, char separator = '@', char separator2 = ',') =>
-            Helper.TryParse(s, out particle, separator, separator2);
+        public static bool TryParse(string s, char separator, char separator2, out Particle3D particle) =>
+            Helper.TryParse(s, separator, separator2, out particle);
 
         public static Particle3D Parse(string[] ss) =>
-            Parse(ss, ',');
+            Helper.Parse(ss);
+
+        public static bool TryParse(string[] ss, out Particle3D particle) =>
+            Helper.TryParse(ss, out particle);
 
         public static Particle3D Parse(string[] ss, char separator) =>
             Helper.Parse(ss, separator);
 
-        public static bool TryParse(string[] ss, out Particle3D particle, char separator = ',') =>
-            Helper.TryParse(ss, out particle, separator);
+        public static bool TryParse(string[] ss, char separator, out Particle3D particle) =>
+            Helper.TryParse(ss, separator, out particle);
 
         private static Particle3D FromArray(Vector3D[] values) =>
             new(values[0], values[1], values[2]);

@@ -63,13 +63,16 @@ namespace aoc
             (int)Count;
 
         public static LongRange Parse(string s) =>
-            Parse(s, '~');
+            Helper.Parse(s);
+
+        public static bool TryParse(string s, out LongRange range) =>
+            Helper.TryParse(s, out range);
 
         public static LongRange Parse(string s, char separator) =>
             Helper.Parse(s, separator);
 
-        public static bool TryParse(string s, out LongRange range, char separator = '~') =>
-            Helper.TryParse(s, out range, separator);
+        public static bool TryParse(string s, char separator, out LongRange range) =>
+            Helper.TryParse(s, separator, out range);
 
         public static LongRange Parse(string[] ss) =>
             Helper.Parse(ss);

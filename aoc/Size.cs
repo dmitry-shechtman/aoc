@@ -63,13 +63,16 @@ namespace aoc
         }
 
         public static Size Parse(string s) =>
-            Parse(s, ':');
+            Helper.Parse(s);
+
+        public static bool TryParse(string s, out Size size) =>
+            Helper.TryParse(s, out size);
 
         public static Size Parse(string s, char separator) =>
             Helper.Parse(s, separator);
 
-        public static bool TryParse(string s, out Size size, char separator = ':') =>
-            Helper.TryParse(s, out size, separator);
+        public static bool TryParse(string s, char separator, out Size size) =>
+            Helper.TryParse(s, separator, out size);
 
         public static Size Parse(string[] ss) =>
             Helper.Parse(ss);

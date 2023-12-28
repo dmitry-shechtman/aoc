@@ -72,13 +72,16 @@ namespace aoc
         }
 
         public static Size3D Parse(string s) =>
-            Parse(s, ':');
+            Helper.Parse(s);
+
+        public static bool TryParse(string s, out Size3D size) =>
+            Helper.TryParse(s, out size);
 
         public static Size3D Parse(string s, char separator) =>
             Helper.Parse(s, separator);
 
-        public static bool TryParse(string s, out Size3D size, char separator = ':') =>
-            Helper.TryParse(s, out size, separator);
+        public static bool TryParse(string s, char separator, out Size3D size) =>
+            Helper.TryParse(s, separator, out size);
 
         public static Size3D Parse(string[] ss) =>
             Helper.Parse(ss);

@@ -92,4 +92,48 @@ namespace aoc
     {
         void Deconstruct(out TVector2D vector, out T z);
     }
+
+    public interface IVector4D<TSelf, T> : IVector<TSelf, T>
+        where TSelf : struct, IVector4D<TSelf, T>
+        where T : struct
+    {
+        internal const int Cardinality = 4;
+
+        T X { get; }
+        T Y { get; }
+        T Z { get; }
+        T W { get; }
+
+        void Deconstruct(out T x, out T y, out T z, out T w);
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            yield return X;
+            yield return Y;
+            yield return Z;
+            yield return W;
+        }
+
+        T IReadOnlyList<T>.this[int i] => i switch
+        {
+            0 => X,
+            1 => Y,
+            2 => Z,
+            3 => W,
+            _ => throw new IndexOutOfRangeException(),
+        };
+
+        int IReadOnlyCollection<T>.Count =>
+            Cardinality;
+    }
+
+    public interface IVector4D<TSelf, TVector3D, TVector2D, T> : IVector4D<TSelf, T>
+        where TSelf : struct, IVector4D<TSelf, TVector3D, TVector2D, T>
+        where TVector3D : struct, IVector3D<TVector3D, T>
+        where TVector2D : struct, IVector2D<TVector2D, T>
+        where T : struct
+    {
+        void Deconstruct(out TVector3D vector, out T w);
+        void Deconstruct(out TVector2D vector, out T z, out T w);
+    }
 }

@@ -77,22 +77,34 @@ namespace aoc
             new(Min.x + index % Width, Min.y + index / Width);
 
         public static VectorRange Parse(string s) =>
-            Parse(s, '~');
+            Helper.Parse(s);
 
-        public static VectorRange Parse(string s, char separator, char separator2 = ',') =>
+        public static bool TryParse(string s, out VectorRange range) =>
+            Helper.TryParse(s, out range);
+
+        public static VectorRange Parse(string s, char separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, char separator, out VectorRange range) =>
+            Helper.TryParse(s, separator, out range);
+
+        public static VectorRange Parse(string s, char separator, char separator2) =>
             Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out VectorRange range, char separator = '~', char separator2 = ',') =>
-            Helper.TryParse(s, out range, separator, separator2);
+        public static bool TryParse(string s, char separator, char separator2, out VectorRange range) =>
+            Helper.TryParse(s, separator, separator2, out range);
 
         public static VectorRange Parse(string[] ss) =>
-            Parse(ss, ',');
+            Helper.Parse(ss);
+
+        public static bool TryParse(string[] ss, out VectorRange range) =>
+            Helper.TryParse(ss, out range);
 
         public static VectorRange Parse(string[] ss, char separator) =>
             Helper.Parse(ss, separator);
 
-        public static bool TryParse(string[] ss, out VectorRange range, char separator = ',') =>
-            Helper.TryParse(ss, out range, separator);
+        public static bool TryParse(string[] ss, char separator, out VectorRange range) =>
+            Helper.TryParse(ss, separator, out range);
 
         private static VectorRange FromArray(Vector[] values) =>
             new(values[0], values[1]);

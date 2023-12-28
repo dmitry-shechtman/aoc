@@ -55,13 +55,16 @@ namespace aoc
         }
 
         public static DoubleRange Parse(string s) =>
-            Parse(s, '~');
+            Helper.Parse(s);
+
+        public static bool TryParse(string s, out DoubleRange range) =>
+            Helper.TryParse(s, out range);
 
         public static DoubleRange Parse(string s, char separator) =>
             Helper.Parse(s, separator);
 
-        public static bool TryParse(string s, out DoubleRange range, char separator = '~') =>
-            Helper.TryParse(s, out range, separator);
+        public static bool TryParse(string s, char separator, out DoubleRange range) =>
+            Helper.TryParse(s, separator, out range);
 
         public static DoubleRange Parse(string[] ss) =>
             Helper.Parse(ss);

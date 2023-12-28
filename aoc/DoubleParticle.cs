@@ -77,22 +77,34 @@ namespace aoc
         public readonly DoubleVector A => a;
 
         public static DoubleParticle Parse(string s) =>
-            Parse(s, '@');
+            Helper.Parse(s);
 
-        public static DoubleParticle Parse(string s, char separator, char separator2 = ',') =>
+        public static bool TryParse(string s, out DoubleParticle particle) =>
+            Helper.TryParse(s, out particle);
+
+        public static DoubleParticle Parse(string s, char separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, char separator, out DoubleParticle particle) =>
+            Helper.TryParse(s, separator, out particle);
+
+        public static DoubleParticle Parse(string s, char separator, char separator2) =>
             Helper.Parse(s, separator, separator2);
 
-        public static bool TryParse(string s, out DoubleParticle particle, char separator = '@', char separator2 = ',') =>
-            Helper.TryParse(s, out particle, separator, separator2);
+        public static bool TryParse(string s, char separator, char separator2, out DoubleParticle particle) =>
+            Helper.TryParse(s, separator, separator2, out particle);
 
         public static DoubleParticle Parse(string[] ss) =>
-            Parse(ss, ',');
+            Helper.Parse(ss);
+
+        public static bool TryParse(string[] ss, out DoubleParticle particle) =>
+            Helper.TryParse(ss, out particle);
 
         public static DoubleParticle Parse(string[] ss, char separator) =>
             Helper.Parse(ss, separator);
 
-        public static bool TryParse(string[] ss, out DoubleParticle particle, char separator = ',') =>
-            Helper.TryParse(ss, out particle, separator);
+        public static bool TryParse(string[] ss, char separator, out DoubleParticle particle) =>
+            Helper.TryParse(ss, separator, out particle);
 
         private static DoubleParticle FromArray(DoubleVector[] values) =>
             new(values[0], values[1], values[2]);

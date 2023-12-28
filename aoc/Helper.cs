@@ -44,12 +44,14 @@ namespace aoc
             TryParseValue = tryParse;
             DefaultFormat = Strategy.DefaultFormat;
             FormatKeys = Strategy.FormatKeys;
+            DefaultSeparatorChar = Strategy.DefaultSeparator;
         }
 
-        protected Func<TValue[], T> FromArray     { get; }
-        protected TTryParse         TryParseValue { get; }
-        protected string            DefaultFormat { get; }
-        private   string[]          FormatKeys    { get; }
+        protected Func<TValue[], T> FromArray            { get; }
+        protected TTryParse         TryParseValue        { get; }
+        protected string            DefaultFormat        { get; }
+        private   string[]          FormatKeys           { get; }
+        private   char              DefaultSeparatorChar { get; }
 
         public string ToString(T value, IFormatProvider provider = null) =>
             ToStringInner(value, DefaultFormat, provider);
@@ -70,6 +72,17 @@ namespace aoc
                 format = format.Replace(FormatKeys[i], value[i].ToString(null, provider));
             return format;
         }
+
+        public T Parse(string s) =>
+            Parse(s, DefaultSeparatorChar);
+
+        public bool TryParse(string s, out T value) =>
+            TryParse(s, DefaultSeparatorChar, out value);
+
+        public abstract T    Parse(string s, char separator);
+        public abstract bool TryParse(string s, char separator, out T value);
+        public abstract T    Parse(string[] ss);
+        public abstract bool TryParse(string[] ss, out T value);
 
         protected abstract TStrategy Strategy { get; }
     }
@@ -108,20 +121,20 @@ namespace aoc
 
         private int Count { get; }
 
-        public T Parse(string s, char separator) =>
-            TryParse(s, out T value, separator)
+        public override T Parse(string s, char separator) =>
+            TryParse(s, separator, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(string s, out T value, char separator) =>
+        public override bool TryParse(string s, char separator, out T value) =>
             TryParse(s.Trim().Split(separator, StringSplitOptions.TrimEntries), out value);
 
-        public T Parse(string[] ss) =>
+        public override T Parse(string[] ss) =>
             TryParse(ss, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(string[] ss, out T value)
+        public override bool TryParse(string[] ss, out T value)
         {
             value = default;
             if (ss.Length < Count ||
@@ -143,8 +156,9 @@ namespace aoc
 
     internal interface IHelper2Strategy : IHelperStrategy
     {
-        int MinCount { get; }
-        int MaxCount { get; }
+        int  MinCount          { get; }
+        int  MaxCount          { get; }
+        char DefaultSeparator2 { get; }
     }
 
     abstract class Helper2Strategy<TSelf> : HelperStrategy<TSelf>, IHelper2Strategy
@@ -158,11 +172,13 @@ namespace aoc
         public abstract int MinCount { get; }
         public abstract int MaxCount { get; }
 
+        public char DefaultSeparator2 => ',';
+
         protected override string SeparatorString =>
             $" {DefaultSeparator} ";
     }
 
-    internal delegate bool TryParseValue2<T>(string s, out T value, char separator);
+    internal delegate bool TryParseValue2<T>(string s, char separator, out T value);
 
     internal abstract class Helper2<T, TValue, TStrategy> : Helper<T, TValue, TryParseValue2<TValue>, TStrategy>
         where T : IReadOnlyList<TValue>
@@ -174,40 +190,54 @@ namespace aoc
         {
             MinCount = Strategy.MinCount;
             MaxCount = Strategy.MaxCount;
+            DefaultSeparator2 = Strategy.DefaultSeparator2;
         }
 
-        private int MinCount { get; }
-        private int MaxCount { get; }
+        private int  MinCount          { get; }
+        private int  MaxCount          { get; }
+        private char DefaultSeparator2 { get; }
+
+        public override T Parse(string s, char separator) =>
+            Parse(s, separator, DefaultSeparator2);
+
+        public override bool TryParse(string s, char separator, out T value) =>
+            TryParse(s, separator, DefaultSeparator2, out value);
+
+        public override T Parse(string[] ss) =>
+            Parse(ss, DefaultSeparator2);
+
+        public override bool TryParse(string[] ss, out T value) =>
+            TryParse(ss, DefaultSeparator2, out value);
 
         public T Parse(string s, char separator, char separator2) =>
-            TryParse(s, out T value, separator, separator2)
+            TryParse(s, separator, separator2, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(string s, out T value, char separator, char separator2) =>
-            TryParse(s.Trim().Split(separator, StringSplitOptions.TrimEntries), out value, separator2);
+        public bool TryParse(string s, char separator, char separator2, out T value) =>
+            TryParse(s.Trim().Split(separator, StringSplitOptions.TrimEntries), separator2, out value);
 
         public T Parse(string[] ss, char separator) =>
-            TryParse(ss, out T value, separator)
+            TryParse(ss, separator, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(string[] ss, out T value, char separator)
+        public bool TryParse(string[] ss, char separator, out T value)
         {
             value = default;
             if (ss.Length < MinCount ||
-                !TryParse(ss, out TValue[] values, separator))
+                !TryParse(ss, separator, out TValue[] values))
                 return false;
             value = FromArray(values);
             return true;
         }
 
-        private bool TryParse(string[] ss, out TValue[] values, char separator)
+        private bool TryParse(string[] ss, char separator, out TValue[] values)
         {
             values = new TValue[MaxCount];
             for (int i = 0; i < MaxCount; i++)
                 if (i < ss.Length &&
-                    !TryParseValue(ss[i], out values[i], separator))
+                    !TryParseValue(ss[i], separator, out values[i]))
                     return false;
             return true;
         }
