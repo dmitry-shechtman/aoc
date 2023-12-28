@@ -50,6 +50,11 @@ namespace aoc
         {
         }
 
+        public DoubleMatrix(LongMatrix m)
+            : this(m.m11, m.m12, m.m13, m.m21, m.m22, m.m23, m.m31, m.m32, m.m33)
+        {
+        }
+
         public readonly override bool Equals(object obj) =>
             obj is DoubleMatrix other && Equals(other);
 
@@ -158,10 +163,18 @@ namespace aoc
         public static implicit operator DoubleMatrix(Matrix matrix) =>
             new(matrix);
 
+        public static explicit operator DoubleMatrix(LongMatrix matrix) =>
+            new(matrix);
+
         public static explicit operator Matrix(DoubleMatrix m) =>
             new((int)m.m11, (int)m.m12, (int)m.m13,
                 (int)m.m21, (int)m.m22, (int)m.m23,
                 (int)m.m31, (int)m.m32, (int)m.m33);
+
+        public static explicit operator LongMatrix(DoubleMatrix m) =>
+            new((long)m.m11, (long)m.m12, (long)m.m13,
+                (long)m.m21, (long)m.m22, (long)m.m23,
+                (long)m.m31, (long)m.m32, (long)m.m33);
 
         public static explicit operator DoubleMatrix(DoubleVector vector) =>
             Translate(vector);
