@@ -178,11 +178,17 @@ namespace aoc
         public static long Dot(LongVector3D left, LongVector3D right) =>
             left.Dot(right);
 
+        public readonly LongVector3D Min(LongVector3D other) =>
+            new(Math.Min(x, other.x), Math.Min(y, other.y), Math.Min(z, other.z));
+
         public static LongVector3D Min(LongVector3D left, LongVector3D right) =>
-            new(Math.Min(left.x, right.x), Math.Min(left.y, right.y), Math.Min(left.z, right.z));
+            left.Min(right);
+
+        public readonly LongVector3D Max(LongVector3D other) =>
+            new(Math.Max(x, other.x), Math.Max(y, other.y), Math.Max(z, other.z));
 
         public static LongVector3D Max(LongVector3D left, LongVector3D right) =>
-            new(Math.Max(left.x, right.x), Math.Max(left.y, right.y), Math.Max(left.z, right.z));
+            left.Max(right);
 
         public static implicit operator (long x, long y, long z)(LongVector3D value) =>
             (value.x, value.y, value.z);

@@ -183,11 +183,17 @@ namespace aoc
         public static double Dot(DoubleVector3D left, DoubleVector3D right) =>
             left.Dot(right);
 
+        public readonly DoubleVector3D Min(DoubleVector3D other) =>
+            new(Math.Min(x, other.x), Math.Min(y, other.y), Math.Min(z, other.z));
+
         public static DoubleVector3D Min(DoubleVector3D left, DoubleVector3D right) =>
-            new(Math.Min(left.x, right.x), Math.Min(left.y, right.y), Math.Min(left.z, right.z));
+            left.Min(right);
+
+        public readonly DoubleVector3D Max(DoubleVector3D other) =>
+            new(Math.Max(x, other.x), Math.Max(y, other.y), Math.Max(z, other.z));
 
         public static DoubleVector3D Max(DoubleVector3D left, DoubleVector3D right) =>
-            new(Math.Max(left.x, right.x), Math.Max(left.y, right.y), Math.Max(left.z, right.z));
+            left.Max(right);
 
         public static implicit operator (double x, double y, double z)(DoubleVector3D value) =>
             (value.x, value.y, value.z);

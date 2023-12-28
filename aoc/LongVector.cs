@@ -160,11 +160,17 @@ namespace aoc
         public static long Dot(LongVector left, LongVector right) =>
             left.Dot(right);
 
+        public readonly LongVector Min(LongVector other) =>
+            new(Math.Min(x, other.x), Math.Min(y, other.y));
+
         public static LongVector Min(LongVector left, LongVector right) =>
-            new(Math.Min(left.x, right.x), Math.Min(left.y, right.y));
+            left.Min(right);
+
+        public readonly LongVector Max(LongVector other) =>
+            new(Math.Max(x, other.x), Math.Max(y, other.y));
 
         public static LongVector Max(LongVector left, LongVector right) =>
-            new(Math.Max(left.x, right.x), Math.Max(left.y, right.y));
+            left.Max(right);
 
         public static implicit operator (long x, long y)(LongVector value) =>
             (value.x, value.y);

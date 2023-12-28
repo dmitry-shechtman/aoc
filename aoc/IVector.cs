@@ -24,13 +24,15 @@ namespace aoc
         TSelf Mul(T scalar);
         TSelf Div(T scalar);
         T Dot(TSelf other);
+        TSelf Min(TSelf other);
+        TSelf Max(TSelf other);
     }
 
     public interface IVector2D<TSelf, T> : IVector<TSelf, T>
         where TSelf : struct, IVector2D<TSelf, T>
         where T : struct
     {
-        internal const int Cardinality = 2;
+        private const int Cardinality = 2;
 
         T X { get; }
         T Y { get; }
@@ -58,7 +60,7 @@ namespace aoc
         where TSelf : struct, IVector3D<TSelf, T>
         where T : struct
     {
-        internal const int Cardinality = 3;
+        private const int Cardinality = 3;
 
         T X { get; }
         T Y { get; }
