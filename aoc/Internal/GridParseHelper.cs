@@ -7,6 +7,7 @@ namespace aoc.Internal
 {
     abstract class GridParseHelper<TSelf, TGrid, TVector> : Singleton<TSelf>
         where TSelf : GridParseHelper<TSelf, TGrid, TVector>
+        where TGrid : IReadOnlyCollection<TVector>
         where TVector : struct
     {
         public IEnumerable<TVector> ParseVectors(string s)
@@ -105,6 +106,7 @@ namespace aoc.Internal
 
     abstract class GridParseHelper<TSelf, TGrid> : GridParseHelper<TSelf, TGrid, Vector>
         where TSelf : GridParseHelper<TSelf, TGrid>
+        where TGrid : Grid<TGrid>
     {
         protected override bool TryParse(char c, out Vector vector) =>
             Vector.TryParse(c, out vector);
@@ -164,6 +166,7 @@ namespace aoc.Internal
 
     abstract class GridParseHelper2<TSelf, TGrid> : GridParseHelper<TSelf, TGrid>
         where TSelf : GridParseHelper2<TSelf, TGrid>
+        where TGrid : Grid<TGrid>
     {
         public sealed override bool TryParse(string s, ref int i, out Vector vector) =>
             TryParse2(s, ref i, out vector) || TryParseInner(s, ref i, out vector);
