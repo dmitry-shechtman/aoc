@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace aoc
 {
@@ -112,6 +113,44 @@ namespace aoc
             other.Min.x <= Max.x && other.Max.x >= Min.x &&
             other.Min.y <= Max.y && other.Max.y >= Min.y &&
             other.Min.z <= Max.z && other.Max.z >= Min.z;
+
+        public readonly DoubleVector3DRange Unify(DoubleVector3DRange other) =>
+            new(min: DoubleVector3D.Min(Min, other.Min), max: DoubleVector3D.Max(Max, other.Max));
+
+        public readonly IEnumerable<DoubleVector3DRange> Union(DoubleVector3DRange other)
+        {
+            if (Overlaps(other))
+                throw new NotImplementedException();
+            else
+            {
+                yield return (DoubleVector3D.Min(Min, other.Min), DoubleVector3D.Min(Max, other.Max));
+                yield return (DoubleVector3D.Max(Min, other.Min), DoubleVector3D.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<DoubleVector3DRange> Union(DoubleVector3DRange left, DoubleVector3DRange right) =>
+            left.Union(right);
+
+        public static IEnumerable<DoubleVector3DRange> operator |(DoubleVector3DRange left, DoubleVector3DRange right) =>
+            left.Union(right);
+
+        public readonly bool Intersect(DoubleVector3DRange other, out DoubleVector3DRange result)
+        {
+            result = new(DoubleVector3D.Max(Min, other.Min), DoubleVector3D.Min(Max, other.Max));
+            return Overlaps(other);
+        }
+
+        public readonly IEnumerable<DoubleVector3DRange> Intersect(DoubleVector3DRange other)
+        {
+            if (Intersect(other, out DoubleVector3DRange result))
+                yield return result;
+        }
+
+        public static IEnumerable<DoubleVector3DRange> Intersect(DoubleVector3DRange left, DoubleVector3DRange right) =>
+            left.Intersect(right);
+
+        public static IEnumerable<DoubleVector3DRange> operator &(DoubleVector3DRange left, DoubleVector3DRange right) =>
+            left.Intersect(right);
 
         public static implicit operator (DoubleVector3D min, DoubleVector3D max)(DoubleVector3DRange value) =>
             (value.Min, value.Max);

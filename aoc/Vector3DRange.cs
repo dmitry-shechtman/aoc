@@ -39,7 +39,9 @@ namespace aoc
         public readonly int Width  => Max.x - Min.x + 1;
         public readonly int Height => Max.y - Min.y + 1;
         public readonly int Depth  => Max.z - Min.z + 1;
-        public readonly int Length => Width * Height * Depth;
+
+        public readonly int Length =>
+            Width * Height * Depth;
 
         public readonly long LongLength =>
             (long)Width * Height * Depth;
@@ -131,22 +133,47 @@ namespace aoc
             other.Min.y <= Max.y && other.Max.y >= Min.y &&
             other.Min.z <= Max.z && other.Max.z >= Min.z;
 
-        public readonly Vector3DRange Union(Vector3DRange other) =>
+        public readonly bool OverlapsOrAdjacentTo(Vector3DRange other) =>
+            other.Min.x - 1 <= Max.x && other.Max.x + 1 >= Min.x &&
+            other.Min.y - 1 <= Max.y && other.Max.y + 1 >= Min.y &&
+            other.Min.z - 1 <= Max.z && other.Max.z + 1 >= Min.z;
+
+        public readonly Vector3DRange Unify(Vector3DRange other) =>
             new(min: Vector3D.Min(Min, other.Min), max: Vector3D.Max(Max, other.Max));
 
-        public static Vector3DRange Union(Vector3DRange left, Vector3DRange right) =>
+        public readonly IEnumerable<Vector3DRange> Union(Vector3DRange other)
+        {
+            if (OverlapsOrAdjacentTo(other))
+                throw new NotImplementedException();
+            else
+            {
+                yield return (Vector3D.Min(Min, other.Min), Vector3D.Min(Max, other.Max));
+                yield return (Vector3D.Max(Min, other.Min), Vector3D.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<Vector3DRange> Union(Vector3DRange left, Vector3DRange right) =>
             left.Union(right);
 
-        public static Vector3DRange operator |(Vector3DRange left, Vector3DRange right) =>
+        public static IEnumerable<Vector3DRange> operator |(Vector3DRange left, Vector3DRange right) =>
             left.Union(right);
 
-        public readonly Vector3DRange Intersect(Vector3DRange other) =>
-            new(min: Vector3D.Max(Min, other.Min), max: Vector3D.Min(Max, other.Max));
+        public readonly bool Intersect(Vector3DRange other, out Vector3DRange result)
+        {
+            result = new(Vector3D.Max(Min, other.Min), Vector3D.Min(Max, other.Max));
+            return Overlaps(other);
+        }
 
-        public static Vector3DRange Intersect(Vector3DRange left, Vector3DRange right) =>
+        public readonly IEnumerable<Vector3DRange> Intersect(Vector3DRange other)
+        {
+            if (Intersect(other, out Vector3DRange result))
+                yield return result;
+        }
+
+        public static IEnumerable<Vector3DRange> Intersect(Vector3DRange left, Vector3DRange right) =>
             left.Intersect(right);
 
-        public static Vector3DRange operator &(Vector3DRange left, Vector3DRange right) =>
+        public static IEnumerable<Vector3DRange> operator &(Vector3DRange left, Vector3DRange right) =>
             left.Intersect(right);
 
         public readonly Vector3DRange Add(Vector3D vector) =>

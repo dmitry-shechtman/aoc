@@ -118,6 +118,48 @@ namespace aoc
             other.Min.x <= Max.x && other.Max.x >= Min.x &&
             other.Min.y <= Max.y && other.Max.y >= Min.y;
 
+        public readonly bool OverlapsOrAdjacentTo(LongVectorRange other) =>
+            other.Min.x - 1 <= Max.x && other.Max.x + 1 >= Min.x &&
+            other.Min.y - 1 <= Max.y && other.Max.y + 1 >= Min.y;
+
+        public readonly LongVectorRange Unify(LongVectorRange other) =>
+            new(min: LongVector.Min(Min, other.Min), max: LongVector.Max(Max, other.Max));
+
+        public readonly IEnumerable<LongVectorRange> Union(LongVectorRange other)
+        {
+            if (OverlapsOrAdjacentTo(other))
+                throw new NotImplementedException();
+            else
+            {
+                yield return (LongVector.Min(Min, other.Min), LongVector.Min(Max, other.Max));
+                yield return (LongVector.Max(Min, other.Min), LongVector.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<LongVectorRange> Union(LongVectorRange left, LongVectorRange right) =>
+            left.Union(right);
+
+        public static IEnumerable<LongVectorRange> operator |(LongVectorRange left, LongVectorRange right) =>
+            left.Union(right);
+
+        public readonly bool Intersect(LongVectorRange other, out LongVectorRange result)
+        {
+            result = new(LongVector.Max(Min, other.Min), LongVector.Min(Max, other.Max));
+            return Overlaps(other);
+        }
+
+        public readonly IEnumerable<LongVectorRange> Intersect(LongVectorRange other)
+        {
+            if (Intersect(other, out LongVectorRange result))
+                yield return result;
+        }
+
+        public static IEnumerable<LongVectorRange> Intersect(LongVectorRange left, LongVectorRange right) =>
+            left.Intersect(right);
+
+        public static IEnumerable<LongVectorRange> operator &(LongVectorRange left, LongVectorRange right) =>
+            left.Intersect(right);
+
         public static implicit operator (LongVector min, LongVector max)(LongVectorRange value) =>
             (value.Min, value.Max);
 

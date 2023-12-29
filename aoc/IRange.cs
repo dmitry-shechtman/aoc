@@ -18,6 +18,11 @@ namespace aoc
         bool Contains(TSelf other);
         bool Overlaps(TSelf other);
 
+        TSelf Unify(TSelf other);
+        bool Intersect(TSelf other, out TSelf result);
+        IEnumerable<TSelf> Union(TSelf other);
+        IEnumerable<TSelf> Intersect(TSelf other);
+
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             yield return Min;
@@ -50,6 +55,8 @@ namespace aoc
         where TSelf : struct, IIntegerRange<TSelf, T>
         where T : struct
     {
+        bool OverlapsOrAdjacentTo(TSelf other);
+
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
     }

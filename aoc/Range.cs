@@ -95,22 +95,45 @@ namespace aoc
         public static bool Overlaps(Range left, Range right) =>
             left.Overlaps(right);
 
-        public readonly Range Union(Range other) =>
+        public readonly bool OverlapsOrAdjacentTo(Range other) =>
+            other.Min - 1 <= Max && other.Max + 1 >= Min;
+
+        public readonly Range Unify(Range other) =>
             new(Math.Min(Min, other.Min), Math.Max(Max, other.Max));
 
-        public static Range Union(Range left, Range right) =>
+        public readonly IEnumerable<Range> Union(Range other)
+        {
+            if (OverlapsOrAdjacentTo(other))
+                yield return Unify(other);
+            else
+            {
+                yield return (Math.Min(Min, other.Min), Math.Min(Max, other.Max));
+                yield return (Math.Max(Min, other.Min), Math.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<Range> Union(Range left, Range right) =>
             left.Union(right);
 
-        public static Range operator |(Range left, Range right) =>
+        public static IEnumerable<Range> operator |(Range left, Range right) =>
             left.Union(right);
 
-        public readonly Range Intersect(Range other) =>
-            new(Math.Max(Min, other.Min), Math.Min(Max, other.Max));
+        public readonly bool Intersect(Range other, out Range result)
+        {
+            result = new(Math.Max(Min, other.Min), Math.Min(Max, other.Max));
+            return Overlaps(other);
+        }
 
-        public static Range Intersect(Range left, Range right) =>
+        public readonly IEnumerable<Range> Intersect(Range other)
+        {
+            if (Intersect(other, out Range result))
+                yield return result;
+        }
+
+        public static IEnumerable<Range> Intersect(Range left, Range right) =>
             left.Intersect(right);
 
-        public static Range operator &(Range left, Range right) =>
+        public static IEnumerable<Range> operator &(Range left, Range right) =>
             left.Intersect(right);
 
         public readonly Range Add(int value) =>

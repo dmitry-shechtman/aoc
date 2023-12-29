@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace aoc
 {
@@ -103,6 +104,44 @@ namespace aoc
         public readonly bool Overlaps(DoubleVectorRange other) =>
             other.Min.x <= Max.x && other.Max.x >= Min.x &&
             other.Min.y <= Max.y && other.Max.y >= Min.y;
+
+        public readonly DoubleVectorRange Unify(DoubleVectorRange other) =>
+            new(min: DoubleVector.Min(Min, other.Min), max: DoubleVector.Max(Max, other.Max));
+
+        public readonly IEnumerable<DoubleVectorRange> Union(DoubleVectorRange other)
+        {
+            if (Overlaps(other))
+                throw new NotImplementedException();
+            else
+            {
+                yield return (DoubleVector.Min(Min, other.Min), DoubleVector.Min(Max, other.Max));
+                yield return (DoubleVector.Max(Min, other.Min), DoubleVector.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<DoubleVectorRange> Union(DoubleVectorRange left, DoubleVectorRange right) =>
+            left.Union(right);
+
+        public static IEnumerable<DoubleVectorRange> operator |(DoubleVectorRange left, DoubleVectorRange right) =>
+            left.Union(right);
+
+        public readonly bool Intersect(DoubleVectorRange other, out DoubleVectorRange result)
+        {
+            result = new(DoubleVector.Max(Min, other.Min), DoubleVector.Min(Max, other.Max));
+            return Overlaps(other);
+        }
+
+        public readonly IEnumerable<DoubleVectorRange> Intersect(DoubleVectorRange other)
+        {
+            if (Intersect(other, out DoubleVectorRange result))
+                yield return result;
+        }
+
+        public static IEnumerable<DoubleVectorRange> Intersect(DoubleVectorRange left, DoubleVectorRange right) =>
+            left.Intersect(right);
+
+        public static IEnumerable<DoubleVectorRange> operator &(DoubleVectorRange left, DoubleVectorRange right) =>
+            left.Intersect(right);
 
         public static implicit operator (DoubleVector min, DoubleVector max)(DoubleVectorRange value) =>
             (value.Min, value.Max);

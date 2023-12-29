@@ -141,22 +141,48 @@ namespace aoc
             other.Min.z <= Max.z && other.Max.z >= Min.z &&
             other.Min.w <= Max.w && other.Max.w >= Min.w;
 
-        public readonly Vector4DRange Union(Vector4DRange other) =>
+        public readonly bool OverlapsOrAdjacentTo(Vector4DRange other) =>
+            other.Min.x - 1 <= Max.x && other.Max.x + 1 >= Min.x &&
+            other.Min.y - 1 <= Max.y && other.Max.y + 1 >= Min.y &&
+            other.Min.z - 1 <= Max.z && other.Max.z + 1 >= Min.z &&
+            other.Min.w - 1 <= Max.w && other.Max.w + 1 >= Min.w;
+
+        public readonly Vector4DRange Unify(Vector4DRange other) =>
             new(min: Vector4D.Min(Min, other.Min), max: Vector4D.Max(Max, other.Max));
 
-        public static Vector4DRange Union(Vector4DRange left, Vector4DRange right) =>
+        public readonly IEnumerable<Vector4DRange> Union(Vector4DRange other)
+        {
+            if (OverlapsOrAdjacentTo(other))
+                throw new NotImplementedException();
+            else
+            {
+                yield return (Vector4D.Min(Min, other.Min), Vector4D.Min(Max, other.Max));
+                yield return (Vector4D.Max(Min, other.Min), Vector4D.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<Vector4DRange> Union(Vector4DRange left, Vector4DRange right) =>
             left.Union(right);
 
-        public static Vector4DRange operator |(Vector4DRange left, Vector4DRange right) =>
+        public static IEnumerable<Vector4DRange> operator |(Vector4DRange left, Vector4DRange right) =>
             left.Union(right);
 
-        public readonly Vector4DRange Intersect(Vector4DRange other) =>
-            new(min: Vector4D.Max(Min, other.Min), max: Vector4D.Min(Max, other.Max));
+        public readonly bool Intersect(Vector4DRange other, out Vector4DRange result)
+        {
+            result = new(Vector4D.Max(Min, other.Min), Vector4D.Min(Max, other.Max));
+            return Overlaps(other);
+        }
 
-        public static Vector4DRange Intersect(Vector4DRange left, Vector4DRange right) =>
+        public readonly IEnumerable<Vector4DRange> Intersect(Vector4DRange other)
+        {
+            if (Intersect(other, out Vector4DRange result))
+                yield return result;
+        }
+
+        public static IEnumerable<Vector4DRange> Intersect(Vector4DRange left, Vector4DRange right) =>
             left.Intersect(right);
 
-        public static Vector4DRange operator &(Vector4DRange left, Vector4DRange right) =>
+        public static IEnumerable<Vector4DRange> operator &(Vector4DRange left, Vector4DRange right) =>
             left.Intersect(right);
 
         public readonly Vector4DRange Add(Vector4D vector) =>

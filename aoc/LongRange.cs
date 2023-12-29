@@ -103,22 +103,45 @@ namespace aoc
         public static bool Overlaps(LongRange left, LongRange right) =>
             left.Overlaps(right);
 
-        public readonly LongRange Union(LongRange other) =>
+        public readonly bool OverlapsOrAdjacentTo(LongRange other) =>
+            other.Min - 1 <= Max && other.Max + 1 >= Min;
+
+        public readonly LongRange Unify(LongRange other) =>
             new(Math.Min(Min, other.Min), Math.Max(Max, other.Max));
 
-        public static LongRange Union(LongRange left, LongRange right) =>
+        public readonly IEnumerable<LongRange> Union(LongRange other)
+        {
+            if (OverlapsOrAdjacentTo(other))
+                yield return Unify(other);
+            else
+            {
+                yield return (Math.Min(Min, other.Min), Math.Min(Max, other.Max));
+                yield return (Math.Max(Min, other.Min), Math.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<LongRange> Union(LongRange left, LongRange right) =>
             left.Union(right);
 
-        public static LongRange operator |(LongRange left, LongRange right) =>
+        public static IEnumerable<LongRange> operator |(LongRange left, LongRange right) =>
             left.Union(right);
 
-        public readonly LongRange Intersect(LongRange other) =>
-            new(Math.Max(Min, other.Min), Math.Min(Max, other.Max));
+        public readonly bool Intersect(LongRange other, out LongRange result)
+        {
+            result = new(Math.Max(Min, other.Min), Math.Min(Max, other.Max));
+            return Overlaps(other);
+        }
 
-        public static LongRange Intersect(LongRange left, LongRange right) =>
+        public readonly IEnumerable<LongRange> Intersect(LongRange other)
+        {
+            if (Intersect(other, out LongRange result))
+                yield return result;
+        }
+
+        public static IEnumerable<LongRange> Intersect(LongRange left, LongRange right) =>
             left.Intersect(right);
 
-        public static LongRange operator &(LongRange left, LongRange right) =>
+        public static IEnumerable<LongRange> operator &(LongRange left, LongRange right) =>
             left.Intersect(right);
 
         public readonly LongRange Add(long value) =>

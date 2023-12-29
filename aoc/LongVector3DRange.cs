@@ -128,6 +128,49 @@ namespace aoc
             other.Min.y <= Max.y && other.Max.y >= Min.y &&
             other.Min.z <= Max.z && other.Max.z >= Min.z;
 
+        public readonly bool OverlapsOrAdjacentTo(LongVector3DRange other) =>
+            other.Min.x - 1 <= Max.x && other.Max.x + 1 >= Min.x &&
+            other.Min.y - 1 <= Max.y && other.Max.y + 1 >= Min.y &&
+            other.Min.z - 1 <= Max.z && other.Max.z + 1 >= Min.z;
+
+        public readonly LongVector3DRange Unify(LongVector3DRange other) =>
+            new(min: LongVector3D.Min(Min, other.Min), max: LongVector3D.Max(Max, other.Max));
+
+        public readonly IEnumerable<LongVector3DRange> Union(LongVector3DRange other)
+        {
+            if (OverlapsOrAdjacentTo(other))
+                throw new NotImplementedException();
+            else
+            {
+                yield return (LongVector3D.Min(Min, other.Min), LongVector3D.Min(Max, other.Max));
+                yield return (LongVector3D.Max(Min, other.Min), LongVector3D.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<LongVector3DRange> Union(LongVector3DRange left, LongVector3DRange right) =>
+            left.Union(right);
+
+        public static IEnumerable<LongVector3DRange> operator |(LongVector3DRange left, LongVector3DRange right) =>
+            left.Union(right);
+
+        public readonly bool Intersect(LongVector3DRange other, out LongVector3DRange result)
+        {
+            result = new(LongVector3D.Max(Min, other.Min), LongVector3D.Min(Max, other.Max));
+            return Overlaps(other);
+        }
+
+        public readonly IEnumerable<LongVector3DRange> Intersect(LongVector3DRange other)
+        {
+            if (Intersect(other, out LongVector3DRange result))
+                yield return result;
+        }
+
+        public static IEnumerable<LongVector3DRange> Intersect(LongVector3DRange left, LongVector3DRange right) =>
+            left.Intersect(right);
+
+        public static IEnumerable<LongVector3DRange> operator &(LongVector3DRange left, LongVector3DRange right) =>
+            left.Intersect(right);
+
         public static implicit operator (LongVector3D min, LongVector3D max)(LongVector3DRange value) =>
             (value.Min, value.Max);
 

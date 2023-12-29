@@ -126,22 +126,46 @@ namespace aoc
             other.Min.x <= Max.x && other.Max.x >= Min.x &&
             other.Min.y <= Max.y && other.Max.y >= Min.y;
 
-        public readonly VectorRange Union(VectorRange other) =>
+        public readonly bool OverlapsOrAdjacentTo(VectorRange other) =>
+            other.Min.x - 1 <= Max.x && other.Max.x + 1 >= Min.x &&
+            other.Min.y - 1 <= Max.y && other.Max.y + 1 >= Min.y;
+
+        public readonly VectorRange Unify(VectorRange other) =>
             new(min: Vector.Min(Min, other.Min), max: Vector.Max(Max, other.Max));
 
-        public static VectorRange Union(VectorRange left, VectorRange right) =>
+        public readonly IEnumerable<VectorRange> Union(VectorRange other)
+        {
+            if (OverlapsOrAdjacentTo(other))
+                throw new NotImplementedException();
+            else
+            {
+                yield return (Vector.Min(Min, other.Min), Vector.Min(Max, other.Max));
+                yield return (Vector.Max(Min, other.Min), Vector.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<VectorRange> Union(VectorRange left, VectorRange right) =>
             left.Union(right);
 
-        public static VectorRange operator |(VectorRange left, VectorRange right) =>
+        public static IEnumerable<VectorRange> operator |(VectorRange left, VectorRange right) =>
             left.Union(right);
 
-        public readonly VectorRange Intersect(VectorRange other) =>
-            new(min: Vector.Max(Min, other.Min), max: Vector.Min(Max, other.Max));
+        public readonly bool Intersect(VectorRange other, out VectorRange result)
+        {
+            result = new(Vector.Max(Min, other.Min), Vector.Min(Max, other.Max));
+            return Overlaps(other);
+        }
 
-        public static VectorRange Intersect(VectorRange left, VectorRange right) =>
+        public readonly IEnumerable<VectorRange> Intersect(VectorRange other)
+        {
+            if (Intersect(other, out VectorRange result))
+                yield return result;
+        }
+
+        public static IEnumerable<VectorRange> Intersect(VectorRange left, VectorRange right) =>
             left.Intersect(right);
 
-        public static VectorRange operator &(VectorRange left, VectorRange right) =>
+        public static IEnumerable<VectorRange> operator &(VectorRange left, VectorRange right) =>
             left.Intersect(right);
 
         public readonly VectorRange Add(Vector vector) =>

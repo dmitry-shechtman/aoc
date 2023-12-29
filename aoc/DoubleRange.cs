@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace aoc
 {
@@ -95,22 +96,42 @@ namespace aoc
         public static bool Overlaps(DoubleRange left, DoubleRange right) =>
             left.Overlaps(right);
 
-        public readonly DoubleRange Union(DoubleRange other) =>
+        public readonly DoubleRange Unify(DoubleRange other) =>
             new(Math.Min(Min, other.Min), Math.Max(Max, other.Max));
 
-        public static DoubleRange Union(DoubleRange left, DoubleRange right) =>
+        public readonly IEnumerable<DoubleRange> Union(DoubleRange other)
+        {
+            if (Overlaps(other))
+                yield return Unify(other);
+            else
+            {
+                yield return (Math.Min(Min, other.Min), Math.Min(Max, other.Max));
+                yield return (Math.Max(Min, other.Min), Math.Max(Max, other.Max));
+            }
+        }
+
+        public static IEnumerable<DoubleRange> Union(DoubleRange left, DoubleRange right) =>
             left.Union(right);
 
-        public static DoubleRange operator |(DoubleRange left, DoubleRange right) =>
+        public static IEnumerable<DoubleRange> operator |(DoubleRange left, DoubleRange right) =>
             left.Union(right);
 
-        public readonly DoubleRange Intersect(DoubleRange other) =>
-            new(Math.Max(Min, other.Min), Math.Min(Max, other.Max));
+        public readonly bool Intersect(DoubleRange other, out DoubleRange result)
+        {
+            result = new(Math.Max(Min, other.Min), Math.Min(Max, other.Max));
+            return Overlaps(other);
+        }
 
-        public static DoubleRange Intersect(DoubleRange left, DoubleRange right) =>
+        public readonly IEnumerable<DoubleRange> Intersect(DoubleRange other)
+        {
+            if (Intersect(other, out DoubleRange result))
+                yield return result;
+        }
+
+        public static IEnumerable<DoubleRange> Intersect(DoubleRange left, DoubleRange right) =>
             left.Intersect(right);
 
-        public static DoubleRange operator &(DoubleRange left, DoubleRange right) =>
+        public static IEnumerable<DoubleRange> operator &(DoubleRange left, DoubleRange right) =>
             left.Intersect(right);
 
         public readonly DoubleRange Add(double value) =>
