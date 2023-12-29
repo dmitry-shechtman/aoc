@@ -248,4 +248,14 @@ namespace aoc.Internal
         protected override bool TryParse(char c, out Vector3D vector) =>
             Vector3D.TryParse(c, out vector);
     }
+
+    sealed class Grid4DParseHelper : GridParseHelper<Grid4DParseHelper, Grid4D, Vector4D>
+    {
+        private Grid4DParseHelper()
+        {
+        }
+
+        protected override bool TryParse(char c, out Vector4D vector) =>
+            Vector4D.TryParse(c, out vector);
+    }
 }
