@@ -1,8 +1,11 @@
-﻿namespace aoc.Grids
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace aoc.Grids
 {
     using Helper = Internal.MultiGridParseHelper;
 
-    public abstract class MultiGrid<TSelf, TGrid>
+    public abstract class MultiGrid<TSelf, TGrid> : IReadOnlyList<TGrid>
         where TSelf : MultiGrid<TSelf, TGrid>
         where TGrid : Grid<TGrid>
     {
@@ -11,7 +14,18 @@
             Grids = grids;
         }
 
-        public TGrid[] Grids { get; }
+        private TGrid[] Grids { get; }
+
+        public TGrid this[int index] =>
+            Grids[index];
+
+        public IEnumerator<TGrid> GetEnumerator() =>
+            ((IEnumerable<TGrid>)Grids).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
+
+        public int Count => Grids.Length;
     }
 
     public sealed class MultiGrid : MultiGrid<MultiGrid, Grid>

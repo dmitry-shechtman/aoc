@@ -51,8 +51,8 @@ namespace aoc.Grids
         {
         }
 
-        public Grid3D(Grid grid)
-            : this(grid.Points.Select(p => new Vector3D(p)))
+        public Grid3D(IEnumerable<Vector> points)
+            : this(points.Select(p => new Vector3D(p)))
         {
         }
 

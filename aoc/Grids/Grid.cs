@@ -20,7 +20,7 @@ namespace aoc.Grids
         protected Grid(IEnumerable<TVector> points) =>
             Points = new(points);
 
-        public HashSet<TVector> Points { get; private set; }
+        protected HashSet<TVector> Points { get; set; }
 
         public IEnumerator<TVector> GetEnumerator() =>
             Points.GetEnumerator();
