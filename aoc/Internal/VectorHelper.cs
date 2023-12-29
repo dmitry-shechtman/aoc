@@ -159,4 +159,48 @@ namespace aoc.Internal
         public TVector Up    { get; private set; }
         public TVector Down  { get; private set; }
     }
+
+    sealed class Vector4DHelperStrategy : VectorHelperStrategy<Vector4DHelperStrategy>
+    {
+        private Vector4DHelperStrategy()
+            : base("x", "y", "z", "w")
+        {
+        }
+
+        public override string[] FormatStrings => new[] { "neswudak" };
+    }
+
+    sealed class Vector4DHelper<TVector, T> : VectorHelper<TVector, T, Vector4DHelperStrategy>
+        where TVector : struct, IVector4D<TVector, T>
+        where T : struct, IFormattable
+    {
+        public Vector4DHelper(Func<T[], TVector> fromArray, TryParse1<T> tryParse, T minusOne, T zero, T one)
+            : base(fromArray, tryParse, minusOne, zero, one)
+        {
+        }
+
+        protected override TVector[] GetHeadings(T minusOne, T zero, T one)
+        {
+            North = FromArray(zero,     minusOne, zero,     zero);
+            East  = FromArray(one,      zero,     zero,     zero);
+            South = FromArray(zero,     one,      zero,     zero);
+            West  = FromArray(minusOne, zero,     zero,     zero);
+            Up    = FromArray(zero,     zero,     minusOne, zero);
+            Down  = FromArray(zero,     zero,     one,      zero);
+            Ana   = FromArray(zero,     zero,     zero,     minusOne);
+            Kata  = FromArray(zero,     zero,     zero,     one);
+            return new[] { North, East, South, West, Up, Down, Ana, Kata };
+        }
+
+        protected override Vector4DHelperStrategy Strategy => Vector4DHelperStrategy.Instance;
+
+        public TVector North { get; private set; }
+        public TVector East  { get; private set; }
+        public TVector South { get; private set; }
+        public TVector West  { get; private set; }
+        public TVector Up    { get; private set; }
+        public TVector Down  { get; private set; }
+        public TVector Ana   { get; private set; }
+        public TVector Kata  { get; private set; }
+    }
 }
