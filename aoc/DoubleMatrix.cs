@@ -36,7 +36,7 @@ namespace aoc
         }
 
         public DoubleMatrix(double m11, double m12, double m21, double m22, double m31, double m32)
-            : this(m11, m12, 0, m21, m22, 0, m31, m32, 0)
+            : this(m11, m12, 0, m21, m22, 0, m31, m32, 1)
         {
         }
 

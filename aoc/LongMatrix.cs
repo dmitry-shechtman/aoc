@@ -36,7 +36,7 @@ namespace aoc
         }
 
         public LongMatrix(long m11, long m12, long m21, long m22, long m31, long m32)
-            : this(m11, m12, 0, m21, m22, 0, m31, m32, 0)
+            : this(m11, m12, 0, m21, m22, 0, m31, m32, 1)
         {
         }
 

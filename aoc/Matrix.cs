@@ -36,7 +36,7 @@ namespace aoc
         }
 
         public Matrix(int m11, int m12, int m21, int m22, int m31, int m32)
-            : this(m11, m12, 0, m21, m22, 0, m31, m32, 0)
+            : this(m11, m12, 0, m21, m22, 0, m31, m32, 1)
         {
         }
 
