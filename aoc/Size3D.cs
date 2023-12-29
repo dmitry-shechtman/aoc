@@ -31,8 +31,8 @@ namespace aoc
         public Size3D(Vector3D vector)
             : this(vector.x, vector.y, vector.z)
         {
-
         }
+
         public Size3D(Vector3DRange range)
             : this(range.Max + (1, 1, 1))
         {
