@@ -82,4 +82,41 @@ namespace aoc
 
         int IReadOnlyCollection<T>.Count => Cardinality;
     }
+
+    public interface ISize4D<TSelf, T>
+        where TSelf : struct, ISize4D<TSelf, T>
+        where T : struct
+    {
+        protected const int Cardinality = 4;
+
+        T Width   { get; }
+        T Height  { get; }
+        T Depth   { get; }
+        T Anakata { get; }
+    }
+
+    public interface ISize4D<TSelf, TVector, T> : ISize<TSelf, TVector, T>, ISize4D<TSelf, T>
+        where TSelf : struct, ISize4D<TSelf, TVector, T>
+        where TVector : struct, IVector4D<TVector, T>
+        where T : struct
+    {
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            yield return Width;
+            yield return Height;
+            yield return Depth;
+            yield return Anakata;
+        }
+
+        T IReadOnlyList<T>.this[int i] => i switch
+        {
+            0 => Width,
+            1 => Height,
+            2 => Depth,
+            3 => Anakata,
+            _ => throw new IndexOutOfRangeException()
+        };
+
+        int IReadOnlyCollection<T>.Count => Cardinality;
+    }
 }

@@ -68,4 +68,11 @@ namespace aoc
         where T : struct
     {
     }
+
+    public interface IRange4D<TSelf, TVector, T> : IRange<TSelf, TVector, T>, ISize4D<TSelf, T>
+        where TSelf : struct, IRange4D<TSelf, TVector, T>
+        where TVector : struct, IVector4D<TVector, T>
+        where T : struct
+    {
+    }
 }

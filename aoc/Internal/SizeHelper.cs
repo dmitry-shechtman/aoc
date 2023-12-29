@@ -66,4 +66,25 @@ namespace aoc.Internal
 
         protected override Size3DHelperStrategy Strategy => Size3DHelperStrategy.Instance;
     }
+
+    sealed class Size4DHelperStrategy : SizeHelperStrategy<Size4DHelperStrategy>
+    {
+        private Size4DHelperStrategy()
+            : base("w", "h", "d", "a")
+        {
+        }
+    }
+
+    sealed class Size4DHelper<TSize, TVector, T> : SizeHelper<TSize, TVector, T, Size4DHelperStrategy>
+        where TSize : struct, ISize4D<TSize, TVector, T>
+        where TVector : struct, IVector4D<TVector, T>
+        where T : struct, IFormattable
+    {
+        public Size4DHelper(Func<T[], TSize> fromArray, TryParse1<T> tryParse)
+            : base(fromArray, tryParse)
+        {
+        }
+
+        protected override Size4DHelperStrategy Strategy => Size4DHelperStrategy.Instance;
+    }
 }
