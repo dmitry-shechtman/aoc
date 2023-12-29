@@ -98,23 +98,20 @@ namespace aoc
         private static DoubleVector3DRange FromArray(DoubleVector3D[] values) =>
             new(values[0], values[1]);
 
-        public readonly bool IsMatch(DoubleVector3D vector) =>
+        public readonly bool Contains(DoubleVector3D vector) =>
             vector.x >= Min.x && vector.x <= Max.x &&
             vector.y >= Min.y && vector.y <= Max.y &&
             vector.z >= Min.z && vector.z <= Max.z;
-
-        public readonly bool IsMatch(DoubleVector3DRange other) =>
-            other.Min.x <= Max.x && other.Max.x >= Min.x &&
-            other.Min.y <= Max.y && other.Max.y >= Min.y &&
-            other.Min.z <= Max.z && other.Max.z >= Min.z;
-
-        public readonly bool Contains(DoubleVector3D vector) =>
-            IsMatch(vector);
 
         public readonly bool Contains(DoubleVector3DRange other) =>
             other.Min.x >= Min.x && other.Max.x <= Max.x &&
             other.Min.y >= Min.y && other.Max.y <= Max.y &&
             other.Min.z >= Min.z && other.Max.z <= Max.z;
+
+        public readonly bool Overlaps(DoubleVector3DRange other) =>
+            other.Min.x <= Max.x && other.Max.x >= Min.x &&
+            other.Min.y <= Max.y && other.Max.y >= Min.y &&
+            other.Min.z <= Max.z && other.Max.z >= Min.z;
 
         public static implicit operator (DoubleVector3D min, DoubleVector3D max)(DoubleVector3DRange value) =>
             (value.Min, value.Max);

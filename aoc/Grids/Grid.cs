@@ -74,7 +74,7 @@ namespace aoc.Grids
             GetAllNeighborsAndSelf().Where(size.Contains);
 
         private ParallelQuery<TVector> GetAllNeighborsAndSelf(TRange range) =>
-            GetAllNeighborsAndSelf().Where(range.IsMatch);
+            GetAllNeighborsAndSelf().Where(range.Contains);
 
         private ParallelQuery<TVector> GetAllNeighborsAndSelf() =>
             Points.SelectMany(GetNeighborsAndSelf).Distinct().AsParallel();

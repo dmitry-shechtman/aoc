@@ -15,9 +15,8 @@ namespace aoc
 
         void Deconstruct(out T min, out T max);
 
-        bool IsMatch(T value);
-        bool IsMatch(TSelf other);
         bool Contains(TSelf other);
+        bool Overlaps(TSelf other);
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {

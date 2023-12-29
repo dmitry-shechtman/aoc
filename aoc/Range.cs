@@ -77,20 +77,8 @@ namespace aoc
         private static Range FromArray(int[] values) =>
             new(values[0], values[1]);
 
-        public readonly bool IsMatch(int value) =>
-            value >= Min && value <= Max;
-
-        public static bool IsMatch(Range range, int value) =>
-            range.IsMatch(value);
-
-        public readonly bool IsMatch(Range other) =>
-            other.Min <= Max && other.Max >= Min;
-
-        public static bool IsMatch(Range left, Range right) =>
-            left.IsMatch(right);
-
         public readonly bool Contains(int value) =>
-            IsMatch(value);
+            value >= Min && value <= Max;
 
         public static bool Contains(Range range, int value) =>
             range.Contains(value);
@@ -100,6 +88,12 @@ namespace aoc
 
         public static bool Contains(Range left, Range right) =>
             left.Contains(right);
+
+        public readonly bool Overlaps(Range other) =>
+            other.Min <= Max && other.Max >= Min;
+
+        public static bool Overlaps(Range left, Range right) =>
+            left.Overlaps(right);
 
         public readonly Range Union(Range other) =>
             new(Math.Min(Min, other.Min), Math.Max(Max, other.Max));

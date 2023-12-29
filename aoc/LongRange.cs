@@ -85,20 +85,8 @@ namespace aoc
         private static LongRange FromArray(long[] values) =>
             new(values[0], values[1]);
 
-        public readonly bool IsMatch(long value) =>
-            value >= Min && value <= Max;
-
-        public static bool IsMatch(LongRange range, long value) =>
-            range.IsMatch(value);
-
-        public readonly bool IsMatch(LongRange other) =>
-            other.Min <= Max && other.Max >= Min;
-
-        public static bool IsMatch(LongRange left, LongRange right) =>
-            left.IsMatch(right);
-
         public readonly bool Contains(long value) =>
-            IsMatch(value);
+            value >= Min && value <= Max;
 
         public static bool Contains(LongRange range, long value) =>
             range.Contains(value);
@@ -108,6 +96,12 @@ namespace aoc
 
         public static bool Contains(LongRange left, LongRange right) =>
             left.Contains(right);
+
+        public readonly bool Overlaps(LongRange other) =>
+            other.Min <= Max && other.Max >= Min;
+
+        public static bool Overlaps(LongRange left, LongRange right) =>
+            left.Overlaps(right);
 
         public readonly LongRange Union(LongRange other) =>
             new(Math.Min(Min, other.Min), Math.Max(Max, other.Max));

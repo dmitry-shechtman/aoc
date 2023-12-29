@@ -114,20 +114,17 @@ namespace aoc
         private static VectorRange FromArray(Vector[] values) =>
             new(values[0], values[1]);
 
-        public readonly bool IsMatch(Vector vector) =>
+        public readonly bool Contains(Vector vector) =>
             vector.x >= Min.x && vector.x <= Max.x &&
             vector.y >= Min.y && vector.y <= Max.y;
-
-        public readonly bool IsMatch(VectorRange other) =>
-            other.Min.x <= Max.x && other.Max.x >= Min.x &&
-            other.Min.y <= Max.y && other.Max.y >= Min.y;
-
-        public readonly bool Contains(Vector vector) =>
-            IsMatch(vector);
 
         public readonly bool Contains(VectorRange other) =>
             other.Min.x >= Min.x && other.Max.x <= Max.x &&
             other.Min.y >= Min.y && other.Max.y <= Max.y;
+
+        public readonly bool Overlaps(VectorRange other) =>
+            other.Min.x <= Max.x && other.Max.x >= Min.x &&
+            other.Min.y <= Max.y && other.Max.y >= Min.y;
 
         public readonly VectorRange Union(VectorRange other) =>
             new(min: Vector.Min(Min, other.Min), max: Vector.Max(Max, other.Max));
@@ -221,7 +218,7 @@ namespace aoc
 
         public readonly bool TryGetValue<T>(T[] array, Vector vector, out T value)
         {
-            if (!IsMatch(vector))
+            if (!Contains(vector))
             {
                 value = default;
                 return false;

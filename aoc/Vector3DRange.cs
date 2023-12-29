@@ -116,23 +116,20 @@ namespace aoc
         private static Vector3DRange FromArray(Vector3D[] values) =>
             new(values[0], values[1]);
 
-        public readonly bool IsMatch(Vector3D vector) =>
+        public readonly bool Contains(Vector3D vector) =>
             vector.x >= Min.x && vector.x <= Max.x &&
             vector.y >= Min.y && vector.y <= Max.y &&
             vector.z >= Min.z && vector.z <= Max.z;
-
-        public readonly bool IsMatch(Vector3DRange other) =>
-            other.Min.x <= Max.x && other.Max.x >= Min.x &&
-            other.Min.y <= Max.y && other.Max.y >= Min.y &&
-            other.Min.z <= Max.z && other.Max.z >= Min.z;
-
-        public readonly bool Contains(Vector3D vector) =>
-            IsMatch(vector);
 
         public readonly bool Contains(Vector3DRange other) =>
             other.Min.x >= Min.x && other.Max.x <= Max.x &&
             other.Min.y >= Min.y && other.Max.y <= Max.y &&
             other.Min.z >= Min.z && other.Max.z <= Max.z;
+
+        public readonly bool Overlaps(Vector3DRange other) =>
+            other.Min.x <= Max.x && other.Max.x >= Min.x &&
+            other.Min.y <= Max.y && other.Max.y >= Min.y &&
+            other.Min.z <= Max.z && other.Max.z >= Min.z;
 
         public readonly Vector3DRange Union(Vector3DRange other) =>
             new(min: Vector3D.Min(Min, other.Min), max: Vector3D.Max(Max, other.Max));
@@ -232,7 +229,7 @@ namespace aoc
 
         public readonly bool TryGetValue<T>(T[] array, Vector3D vector, out T value)
         {
-            if (!IsMatch(vector))
+            if (!Contains(vector))
             {
                 value = default;
                 return false;

@@ -77,20 +77,8 @@ namespace aoc
         private static DoubleRange FromArray(double[] values) =>
             new(values[0], values[1]);
 
-        public readonly bool IsMatch(double value) =>
-            value >= Min && value <= Max;
-
-        public static bool IsMatch(DoubleRange range, double value) =>
-            range.IsMatch(value);
-
-        public readonly bool IsMatch(DoubleRange other) =>
-            other.Min <= Max && other.Max >= Min;
-
-        public static bool IsMatch(DoubleRange left, DoubleRange right) =>
-            left.IsMatch(right);
-
         public readonly bool Contains(double value) =>
-            IsMatch(value);
+            value >= Min && value <= Max;
 
         public static bool Contains(DoubleRange range, double value) =>
             range.Contains(value);
@@ -100,6 +88,12 @@ namespace aoc
 
         public static bool Contains(DoubleRange left, DoubleRange right) =>
             left.Contains(right);
+
+        public readonly bool Overlaps(DoubleRange other) =>
+            other.Min <= Max && other.Max >= Min;
+
+        public static bool Overlaps(DoubleRange left, DoubleRange right) =>
+            left.Overlaps(right);
 
         public readonly DoubleRange Union(DoubleRange other) =>
             new(Math.Min(Min, other.Min), Math.Max(Max, other.Max));

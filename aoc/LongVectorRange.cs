@@ -106,20 +106,17 @@ namespace aoc
         private static LongVectorRange FromArray(LongVector[] values) =>
             new(values[0], values[1]);
 
-        public readonly bool IsMatch(LongVector vector) =>
+        public readonly bool Contains(LongVector vector) =>
             vector.x >= Min.x && vector.x <= Max.x &&
             vector.y >= Min.y && vector.y <= Max.y;
-
-        public readonly bool IsMatch(LongVectorRange other) =>
-            other.Min.x <= Max.x && other.Max.x >= Min.x &&
-            other.Min.y <= Max.y && other.Max.y >= Min.y;
-
-        public readonly bool Contains(LongVector vector) =>
-            IsMatch(vector);
 
         public readonly bool Contains(LongVectorRange other) =>
             other.Min.x >= Min.x && other.Max.x <= Max.x &&
             other.Min.y >= Min.y && other.Max.y <= Max.y;
+
+        public readonly bool Overlaps(LongVectorRange other) =>
+            other.Min.x <= Max.x && other.Max.x >= Min.x &&
+            other.Min.y <= Max.y && other.Max.y >= Min.y;
 
         public static implicit operator (LongVector min, LongVector max)(LongVectorRange value) =>
             (value.Min, value.Max);

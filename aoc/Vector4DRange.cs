@@ -123,26 +123,23 @@ namespace aoc
         private static Vector4DRange FromArray(Vector4D[] values) =>
             new(values[0], values[1]);
 
-        public readonly bool IsMatch(Vector4D vector) =>
+        public readonly bool Contains(Vector4D vector) =>
             vector.x >= Min.x && vector.x <= Max.x &&
             vector.y >= Min.y && vector.y <= Max.y &&
             vector.z >= Min.z && vector.z <= Max.z &&
             vector.w >= Min.w && vector.w <= Max.w;
-
-        public readonly bool IsMatch(Vector4DRange other) =>
-            other.Min.x <= Max.x && other.Max.x >= Min.x &&
-            other.Min.y <= Max.y && other.Max.y >= Min.y &&
-            other.Min.z <= Max.z && other.Max.z >= Min.z &&
-            other.Min.w <= Max.w && other.Max.w >= Min.w;
-
-        public readonly bool Contains(Vector4D vector) =>
-            IsMatch(vector);
 
         public readonly bool Contains(Vector4DRange other) =>
             other.Min.x >= Min.x && other.Max.x <= Max.x &&
             other.Min.y >= Min.y && other.Max.y <= Max.y &&
             other.Min.z >= Min.z && other.Max.z <= Max.z &&
             other.Min.w >= Min.w && other.Max.w <= Max.w;
+
+        public readonly bool Overlaps(Vector4DRange other) =>
+            other.Min.x <= Max.x && other.Max.x >= Min.x &&
+            other.Min.y <= Max.y && other.Max.y >= Min.y &&
+            other.Min.z <= Max.z && other.Max.z >= Min.z &&
+            other.Min.w <= Max.w && other.Max.w >= Min.w;
 
         public readonly Vector4DRange Union(Vector4DRange other) =>
             new(min: Vector4D.Min(Min, other.Min), max: Vector4D.Max(Max, other.Max));
@@ -239,7 +236,7 @@ namespace aoc
 
         public readonly bool TryGetValue<T>(T[] array, Vector4D vector, out T value)
         {
-            if (!IsMatch(vector))
+            if (!Contains(vector))
             {
                 value = default;
                 return false;
