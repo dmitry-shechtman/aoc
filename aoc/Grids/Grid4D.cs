@@ -51,6 +51,16 @@ namespace aoc.Grids
         {
         }
 
+        public Grid4D(IEnumerable<Vector3D> points)
+            : this(points.Select(p => new Vector4D(p)))
+        {
+        }
+
+        public Grid4D(IEnumerable<Vector> points)
+            : this(points.Select(p => new Vector4D(p)))
+        {
+        }
+
         public override IEnumerable<Vector4D> GetNeighbors(Vector4D p) => new Vector4D[]
         {
             new(p.x, p.y, p.z, p.w - 1),
