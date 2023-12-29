@@ -10,16 +10,9 @@ namespace aoc.Internal
         string[]  FormatKeys       { get; }
     }
 
-    abstract class HelperStrategy<TSelf> : IHelperStrategy
+    abstract class HelperStrategy<TSelf> : Singleton<TSelf>, IHelperStrategy
         where TSelf : HelperStrategy<TSelf>
     {
-        private static readonly Lazy<TSelf> _instance = new(CreateInstance);
-
-        private static TSelf CreateInstance() =>
-            (TSelf)Activator.CreateInstance(typeof(TSelf), true);
-
-        public static TSelf Instance => _instance.Value;
-
         public HelperStrategy(string[] formatKeys)
         {
             FormatKeys = formatKeys;

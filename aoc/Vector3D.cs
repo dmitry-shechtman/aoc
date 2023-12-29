@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace aoc
 {
@@ -90,80 +88,6 @@ namespace aoc
         public readonly int X => x;
         public readonly int Y => y;
         public readonly int Z => z;
-
-        public static int CountNeighbors(Vector3D p, IEnumerable<Vector3D> points)
-        {
-            int count = 0;
-            for (var z = p.z - 1; z <= p.z + 1; z++)
-                for (var y = p.y - 1; y <= p.y + 1; y++)
-                    for (var x = p.x - 1; x <= p.x + 1; x++)
-                        count += p != (x, y, z) && points.Contains((x, y, z)) ? 1 : 0;
-            return count;
-        }
-
-        public static int CountNeighborsAndSelf(Vector3D p, IEnumerable<Vector3D> points)
-        {
-            int count = 0;
-            for (var z = p.z - 1; z <= p.z + 1; z++)
-                for (var y = p.y - 1; y <= p.y + 1; y++)
-                    for (var x = p.x - 1; x <= p.x + 1; x++)
-                        count += points.Contains((x, y, z)) ? 1 : 0;
-            return count;
-        }
-
-        public static IEnumerable<Vector3D> GetNeighbors(Vector3D p)
-        {
-            for (var z = p.z - 1; z <= p.z + 1; z++)
-                for (var y = p.y - 1; y <= p.y + 1; y++)
-                    for (var x = p.x - 1; x <= p.x + 1; x++)
-                        if (p != (x, y, z))
-                            yield return new(x, y, z);
-        }
-
-        public static IEnumerable<Vector3D> GetNeighborsAndSelf(Vector3D p)
-        {
-            for (var z = p.z - 1; z <= p.z + 1; z++)
-                for (var y = p.y - 1; y <= p.y + 1; y++)
-                    for (var x = p.x - 1; x <= p.x + 1; x++)
-                        yield return new(x, y, z);
-        }
-
-        public static Vector3D[] GetNeighborsJVN(Vector3D p) => new Vector3D[]
-        {
-            new(p.x, p.y, p.z - 1),
-            new(p.x, p.y - 1, p.z),
-            new(p.x + 1, p.y, p.z),
-            new(p.x, p.y + 1, p.z),
-            new(p.x - 1, p.y, p.z),
-            new(p.x, p.y, p.z + 1)
-        };
-
-        public static Vector3D[] GetNeighborsJVNAndSelf(Vector3D p) => new Vector3D[]
-        {
-            new(p.x, p.y, p.z),
-            new(p.x, p.y, p.z - 1),
-            new(p.x, p.y - 1, p.z),
-            new(p.x + 1, p.y, p.z),
-            new(p.x, p.y + 1, p.z),
-            new(p.x - 1, p.y, p.z),
-            new(p.x, p.y, p.z + 1)
-        };
-
-        public static HashSet<Vector3D> GetNext(HashSet<Vector3D> pp) =>
-            GetNext(pp, GetNeighborsAndSelf, FilterInclusive);
-
-        public static HashSet<Vector3D> GetNext(HashSet<Vector3D> pp, Func<Vector3D, IEnumerable<Vector3D>> getNeighbors, Func<Vector3D, int, HashSet<Vector3D>, bool> filter) =>
-            pp.SelectMany(getNeighbors).Distinct().AsParallel()
-                .Select(p => (p, c: getNeighbors(p).Count(pp.Contains)))
-                .Where(t => filter(t.p, t.c, pp))
-                .Select(t => t.p)
-                .ToHashSet();
-
-        public static bool Filter(Vector3D p, int count, HashSet<Vector3D> pp) =>
-            count == 3 || count == 2 && pp.Contains(p);
-
-        public static bool FilterInclusive(Vector3D p, int count, HashSet<Vector3D> pp) =>
-            count == 3 || count == 4 && pp.Contains(p);
 
         public static int GetHeading(char c) =>
             Helper.GetHeading(c);

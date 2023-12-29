@@ -34,23 +34,5 @@ namespace aoc
 
         public static void Remove(this ICollection<Vector3D> pp, int x, int y, int z) =>
             pp.Remove(new(x, y, z));
-
-        public static bool Add(this HashSet<Vector3D> pp, int x, int y, int z) =>
-            pp.Add(new(x, y, z));
-
-        public static bool Remove(this HashSet<Vector3D> pp, int x, int y, int z) =>
-            pp.Remove(new(x, y, z));
-
-        public static bool AddRange(this HashSet<Vector3D> pp, IEnumerable<Vector3D> range) =>
-            range.All(pp.Add);
-
-        public static bool AddRange(this HashSet<Vector3D> pp, Size3D size) =>
-            new Vector3DRange(size).All(pp.Add);
-
-        public static bool RemoveRange(this HashSet<Vector3D> pp, IEnumerable<Vector3D> range) =>
-            range.All(pp.Remove);
-
-        public static bool RemoveRange(this HashSet<Vector3D> pp, Size3D size) =>
-            new Vector3DRange(size).All(pp.Remove);
     }
 }
