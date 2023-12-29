@@ -76,6 +76,12 @@ namespace aoc
         public readonly long X => x;
         public readonly long Y => y;
 
+        public static int GetHeading(char c) =>
+            Helper.GetHeading(c);
+
+        public static bool TryGetHeading(char c, out int heading) =>
+            Helper.TryGetHeading(c, out heading);
+
         public static LongVector Parse(char c) =>
             Helper.Parse(c);
 
