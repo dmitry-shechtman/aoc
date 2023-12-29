@@ -14,6 +14,16 @@ namespace aoc.Grids
         {
         }
 
+        public MooreGrid4D(IEnumerable<Vector3D> points)
+            : base(points)
+        {
+        }
+
+        public MooreGrid4D(IEnumerable<Vector> points)
+            : base(points)
+        {
+        }
+
         public override IEnumerable<Vector4D> GetNeighbors(Vector4D p)
         {
             for (var w = p.w - 1; w <= p.w + 1; ++w)

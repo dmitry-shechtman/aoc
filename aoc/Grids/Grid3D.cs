@@ -18,6 +18,11 @@ namespace aoc.Grids
         {
         }
 
+        protected Grid3D(IEnumerable<Vector> points)
+            : base(points.Select(p => new Vector3D(p)))
+        {
+        }
+
         public bool Add(int x, int y, int z) =>
             Points.Add(new(x, y, z));
 
@@ -52,7 +57,7 @@ namespace aoc.Grids
         }
 
         public Grid3D(IEnumerable<Vector> points)
-            : this(points.Select(p => new Vector3D(p)))
+            : base(points)
         {
         }
 

@@ -18,6 +18,16 @@ namespace aoc.Grids
         {
         }
 
+        protected Grid4D(IEnumerable<Vector3D> points)
+            : base(points.Select(p => new Vector4D(p)))
+        {
+        }
+
+        protected Grid4D(IEnumerable<Vector> points)
+            : base(points.Select(p => new Vector4D(p)))
+        {
+        }
+
         public bool Add(int x, int y, int z, int w) =>
             Points.Add(new(x, y, z, w));
 
@@ -52,12 +62,12 @@ namespace aoc.Grids
         }
 
         public Grid4D(IEnumerable<Vector3D> points)
-            : this(points.Select(p => new Vector4D(p)))
+            : base(points)
         {
         }
 
         public Grid4D(IEnumerable<Vector> points)
-            : this(points.Select(p => new Vector4D(p)))
+            : base(points)
         {
         }
 
