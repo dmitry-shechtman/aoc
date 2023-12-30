@@ -16,6 +16,7 @@ namespace aoc
 
         TVector GetRow(int index);
         TVector GetColumn(int index);
+        T GetElement(int row, int column);
 
         IEnumerator<TVector> EnumerateRows();
         IEnumerator<TVector> EnumerateColumns();
@@ -65,6 +66,9 @@ namespace aoc
             2 => C3,
             _ => throw new IndexOutOfRangeException()
         };
+
+        T IMatrix<TSelf, TVector, T>.GetElement(int row, int column) =>
+            this[row][column];
 
         IEnumerator<TVector> IMatrix<TSelf, TVector, T>.EnumerateRows()
         {
@@ -117,6 +121,9 @@ namespace aoc
             3 => C4,
             _ => throw new IndexOutOfRangeException()
         };
+
+        T IMatrix<TSelf, TVector, T>.GetElement(int row, int column) =>
+            this[row][column];
 
         IEnumerator<TVector> IMatrix<TSelf, TVector, T>.EnumerateRows()
         {
