@@ -2,7 +2,7 @@
 
 namespace aoc.Internal
 {
-    abstract class SizeHelperStrategy<TSelf> : Helper1Strategy<TSelf>
+    abstract class SizeHelperStrategy<TSelf> : HelperStrategy<TSelf>
         where TSelf : SizeHelperStrategy<TSelf>
     {
         protected SizeHelperStrategy(params string[] formatKeys)
@@ -13,13 +13,13 @@ namespace aoc.Internal
         public override char DefaultSeparator => ':';
     }
 
-    abstract class SizeHelper<TSize, TVector, T, TStrategy> : Helper1<TSize, T, TStrategy>
+    abstract class SizeHelper<TSize, TVector, T, TStrategy> : Helper<TSize, T, TStrategy>
         where TSize : struct, ISize<TSize, TVector, T>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
-        where TStrategy : IHelper1Strategy
+        where TStrategy : IHelperStrategy
     {
-        protected SizeHelper(Func<T[], TSize> fromArray, TryParse1<T> tryParse)
+        protected SizeHelper(Func<T[], TSize> fromArray, TryParse<T> tryParse)
             : base(fromArray, tryParse)
         {
         }
@@ -38,7 +38,7 @@ namespace aoc.Internal
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Size2DHelper(Func<T[], TSize> fromArray, TryParse1<T> tryParse)
+        public Size2DHelper(Func<T[], TSize> fromArray, TryParse<T> tryParse)
             : base(fromArray, tryParse)
         {
         }
@@ -59,7 +59,7 @@ namespace aoc.Internal
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Size3DHelper(Func<T[], TSize> fromArray, TryParse1<T> tryParse)
+        public Size3DHelper(Func<T[], TSize> fromArray, TryParse<T> tryParse)
             : base(fromArray, tryParse)
         {
         }
@@ -80,7 +80,7 @@ namespace aoc.Internal
         where TVector : struct, IVector4D<TVector, T>
         where T : struct, IFormattable
     {
-        public Size4DHelper(Func<T[], TSize> fromArray, TryParse1<T> tryParse)
+        public Size4DHelper(Func<T[], TSize> fromArray, TryParse<T> tryParse)
             : base(fromArray, tryParse)
         {
         }

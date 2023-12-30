@@ -2,7 +2,7 @@
 
 namespace aoc.Internal
 {
-    abstract class VectorHelperStrategy<TSelf> : Helper1Strategy<TSelf>
+    abstract class VectorHelperStrategy<TSelf> : HelperStrategy<TSelf>
         where TSelf : VectorHelperStrategy<TSelf>
     {
         protected VectorHelperStrategy(params string[] formatKeys)
@@ -15,12 +15,19 @@ namespace aoc.Internal
         public abstract string[] FormatStrings { get; }
     }
 
-    abstract class VectorHelper<TVector, T, TStrategy> : Helper1<TVector, T, TStrategy>
+    interface IVectorHelper<TVector>
+        where TVector : struct
+    {
+        bool TryParse(string s, out TVector vector);
+        bool TryParse(string s, char c, out TVector vector);
+    }
+
+    abstract class VectorHelper<TVector, T, TStrategy> : Helper<TVector, T, TStrategy>, IVectorHelper<TVector>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy>
     {
-        protected VectorHelper(Func<T[], TVector> fromArray, TryParse1<T> tryParse, T minusOne, T zero, T one)
+        protected VectorHelper(Func<T[], TVector> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse)
         {
             Headings = GetHeadings(minusOne, zero, one);
@@ -98,7 +105,7 @@ namespace aoc.Internal
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector2DHelper(Func<T[], TVector> fromArray, TryParse1<T> tryParse, T minusOne, T zero, T one)
+        public Vector2DHelper(Func<T[], TVector> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, minusOne, zero, one)
         {
         }
@@ -134,7 +141,7 @@ namespace aoc.Internal
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector3DHelper(Func<T[], TVector> fromArray, TryParse1<T> tryParse, T minusOne, T zero, T one)
+        public Vector3DHelper(Func<T[], TVector> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, minusOne, zero, one)
         {
         }
@@ -174,7 +181,7 @@ namespace aoc.Internal
         where TVector : struct, IVector4D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector4DHelper(Func<T[], TVector> fromArray, TryParse1<T> tryParse, T minusOne, T zero, T one)
+        public Vector4DHelper(Func<T[], TVector> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, minusOne, zero, one)
         {
         }

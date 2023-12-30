@@ -8,7 +8,7 @@ namespace aoc
     public struct LongVector3DRange : IIntegerRange<LongVector3DRange, LongVector3D>, IRange3D<LongVector3DRange, LongVector3D, long>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, LongVector3D.TryParse));
+            new(() => new(FromArray, LongVector3D.Helper));
 
         private static Helper Helper => _helper.Value;
 

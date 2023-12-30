@@ -8,7 +8,7 @@ namespace aoc
     public struct VectorRange : IIntegerRange<VectorRange, Vector>, IRange2D<VectorRange, Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, Vector.TryParse));
+            new(() => new(FromArray, Vector.Helper));
 
         private static Helper Helper => _helper.Value;
 

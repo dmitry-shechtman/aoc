@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace aoc.Internal
 {
-    abstract class MatrixHelperStrategy<TSelf> : Helper2Strategy<TSelf>
+    abstract class MatrixHelperStrategy<TSelf> : HelperStrategy<TSelf>
         where TSelf : MatrixHelperStrategy<TSelf>
     {
         protected MatrixHelperStrategy(int cardinality)
@@ -21,16 +21,15 @@ namespace aoc.Internal
             $"{DefaultSeparator} ";
     }
 
-    abstract class MatrixHelper<TMatrix, TVector, T, TStrategy, TVectorHelper, TVectorHelperStrategy> : Helper2<TMatrix, TVector, TStrategy>
+    abstract class MatrixHelper<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, TStrategy, TVectorHelper>
         where TMatrix : struct, IMatrix<TMatrix, TVector, T>
         where TVector : struct, IVector<TVector, TMatrix, T>
         where T : struct, IFormattable
         where TStrategy : MatrixHelperStrategy<TStrategy>
-        where TVectorHelper : VectorHelper<TVector, T, TVectorHelperStrategy>
-        where TVectorHelperStrategy : VectorHelperStrategy<TVectorHelperStrategy>
+        where TVectorHelper : IVectorHelper<TVector>
     {
         protected MatrixHelper(Func<TVector[], TMatrix> fromRowArray, TVectorHelper vector)
-            : base(fromRowArray, vector.TryParse)
+            : base(fromRowArray, vector)
         {
             Vector = vector;
         }
@@ -57,7 +56,7 @@ namespace aoc.Internal
     }
 
     sealed class Matrix2DHelper<TMatrix, TVector, T> :
-            MatrixHelper<TMatrix, TVector, T, Matrix2DHelperStrategy, Vector2DHelper<TVector, T>, Vector2DHelperStrategy>
+            MatrixHelper<TMatrix, TVector, T, Matrix2DHelperStrategy, Vector2DHelper<TVector, T>>
         where TMatrix : struct, IMatrix2D<TMatrix, TVector, T>
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
         where T : struct, IFormattable
@@ -108,7 +107,7 @@ namespace aoc.Internal
     }
 
     sealed class Matrix3DHelper<TMatrix, TVector, T> :
-            MatrixHelper<TMatrix, TVector, T, Matrix3DHelperStrategy, Vector3DHelper<TVector, T>, Vector3DHelperStrategy>
+            MatrixHelper<TMatrix, TVector, T, Matrix3DHelperStrategy, Vector3DHelper<TVector, T>>
         where TMatrix : struct, IMatrix3D<TMatrix, TVector, T>
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
         where T : struct, IFormattable
