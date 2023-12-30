@@ -34,12 +34,13 @@ namespace aoc.Internal
             Vector = vector;
         }
 
-        protected override string ToString(TMatrix matrix, string format, IFormatProvider provider, ref int i) => format[i] switch
+        protected override bool TryGetItem(TMatrix matrix, string format, IFormatProvider provider, ref int i, out IFormattable item) => (item = format[i] switch
         {
-            'r' => matrix.GetRow(format[++i] - '1').ToString(null, provider),
-            'c' => matrix.GetColumn(format[++i] - '1').ToString(null, provider),
-            _ => format[i].ToString(provider),
-        };
+            'r' => matrix.GetRow(format[++i] - '1'),
+            'c' => matrix.GetColumn(format[++i] - '1'),
+            'm' => matrix[format[++i] - '1'][format[++i] - '1'],
+            _ => null,
+        }) is not null;
 
         protected TMatrix FromRowArray(params TVector[] vectors) =>
             FromArray(vectors);

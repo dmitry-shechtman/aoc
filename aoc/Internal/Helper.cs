@@ -77,22 +77,27 @@ namespace aoc.Internal
         {
             StringBuilder sb = new();
             for (int i = 0; i < format.Length; i++)
-                sb.Append(ToString(value, format, provider, ref i));
+                if (TryGetItem(value, format, provider, ref i, out var item))
+                    sb.Append(item.ToString(null, provider));
+                else
+                    sb.Append(format[i]);
             return sb.ToString();
         }
 
-        protected virtual string ToString(T value, string format, IFormatProvider provider, ref int i)
+        protected virtual bool TryGetItem(T value, string format, IFormatProvider provider, ref int i, out IFormattable item)
         {
             for (int j = 0; j < FormatKeys.Length; j++)
             {
                 string key = FormatKeys[j];
                 if (i + key.Length <= format.Length && format[i..(i + key.Length)] == key)
                 {
+                    item = value[j];
                     i += key.Length - 1;
-                    return value[j].ToString(null, provider);
+                    return true;
                 }
             }
-            return format[i].ToString(provider);
+            item = null;
+            return false;
         }
 
         public T Parse(string s) =>
