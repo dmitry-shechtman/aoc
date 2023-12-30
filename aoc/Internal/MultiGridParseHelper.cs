@@ -1,4 +1,5 @@
 ﻿using aoc.Grids;
+using System;
 
 namespace aoc.Internal
 {
@@ -9,13 +10,13 @@ namespace aoc.Internal
     {
         private const char DefaultSeparatorChar = '\n';
 
-        public TMulti Parse(string s, string cc) =>
+        public TMulti Parse(string s, ReadOnlySpan<char> cc) =>
             Parse(s, DefaultSeparatorChar, cc);
 
-        public TMulti Parse(string s, char separator, string cc) =>
+        public TMulti Parse(string s, char separator, ReadOnlySpan<char> cc) =>
             Parse(s.Split(separator), cc);
 
-        public TMulti Parse(string[] ss, string cc)
+        public TMulti Parse(string[] ss, ReadOnlySpan<char> cc)
         {
             var grids = new TGrid[cc.Length + 1];
             int i;

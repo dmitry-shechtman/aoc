@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc.Grids
@@ -37,13 +38,13 @@ namespace aoc.Grids
         {
         }
 
-        public static MultiGrid Parse(string s, string cc) =>
+        public static MultiGrid Parse(string s, ReadOnlySpan<char> cc) =>
             Helper.Parse(s, cc);
 
-        public static MultiGrid Parse(string s, char separator, string cc) =>
+        public static MultiGrid Parse(string s, char separator, ReadOnlySpan<char> cc) =>
             Helper.Parse(s, separator, cc);
 
-        public static MultiGrid Parse(string[] ss, string cc) =>
+        public static MultiGrid Parse(string[] ss, ReadOnlySpan<char> cc) =>
             Helper.Parse(ss, cc);
     }
 }
