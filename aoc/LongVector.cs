@@ -13,12 +13,12 @@ namespace aoc
 
         public static readonly LongVector Zero      = default;
 
-        public static readonly LongVector North     = ( 0, -1);
-        public static readonly LongVector East      = ( 1,  0);
-        public static readonly LongVector South     = ( 0,  1);
-        public static readonly LongVector West      = (-1,  0);
+        public static readonly LongVector North     = Helper.North;
+        public static readonly LongVector East      = Helper.East;
+        public static readonly LongVector South     = Helper.South;
+        public static readonly LongVector West      = Helper.West;
 
-        public static LongVector[] Headings => Helper.Headings;
+        public static readonly LongVector[] Headings = Helper.Headings;
 
         public readonly long x;
         public readonly long y;

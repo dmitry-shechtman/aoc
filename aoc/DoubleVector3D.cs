@@ -13,14 +13,14 @@ namespace aoc
 
         public static readonly DoubleVector3D Zero  = default;
 
-        public static readonly DoubleVector3D North = ( 0, -1,  0);
-        public static readonly DoubleVector3D East  = ( 1,  0,  0);
-        public static readonly DoubleVector3D South = ( 0,  1,  0);
-        public static readonly DoubleVector3D West  = (-1,  0,  0);
-        public static readonly DoubleVector3D Up    = ( 0,  0, -1);
-        public static readonly DoubleVector3D Down  = ( 0,  0,  1);
+        public static readonly DoubleVector3D North = Helper.North;
+        public static readonly DoubleVector3D East  = Helper.East;
+        public static readonly DoubleVector3D South = Helper.South;
+        public static readonly DoubleVector3D West  = Helper.West;
+        public static readonly DoubleVector3D Up    = Helper.Up;
+        public static readonly DoubleVector3D Down  = Helper.Down;
 
-        public static DoubleVector3D[] Headings => Helper.Headings;
+        public static readonly DoubleVector3D[] Headings = Helper.Headings;
 
         public readonly double x;
         public readonly double y;

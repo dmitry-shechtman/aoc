@@ -13,12 +13,12 @@ namespace aoc
 
         public static readonly DoubleVector Zero      = default;
 
-        public static readonly DoubleVector North     = ( 0, -1);
-        public static readonly DoubleVector East      = ( 1,  0);
-        public static readonly DoubleVector South     = ( 0,  1);
-        public static readonly DoubleVector West      = (-1,  0);
+        public static readonly DoubleVector North     = Helper.North;
+        public static readonly DoubleVector East      = Helper.East;
+        public static readonly DoubleVector South     = Helper.South;
+        public static readonly DoubleVector West      = Helper.West;
 
-        public static DoubleVector[] Headings => Helper.Headings;
+        public static readonly DoubleVector[] Headings = Helper.Headings;
 
         public readonly double x;
         public readonly double y;

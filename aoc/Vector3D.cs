@@ -13,14 +13,14 @@ namespace aoc
 
         public static readonly Vector3D Zero = default;
 
-        public static readonly Vector3D North = ( 0, -1,  0);
-        public static readonly Vector3D East  = ( 1,  0,  0);
-        public static readonly Vector3D South = ( 0,  1,  0);
-        public static readonly Vector3D West  = (-1,  0,  0);
-        public static readonly Vector3D Up    = ( 0,  0, -1);
-        public static readonly Vector3D Down  = ( 0,  0,  1);
+        public static readonly Vector3D North = Helper.North;
+        public static readonly Vector3D East  = Helper.East;
+        public static readonly Vector3D South = Helper.South;
+        public static readonly Vector3D West  = Helper.West;
+        public static readonly Vector3D Up    = Helper.Up;
+        public static readonly Vector3D Down  = Helper.Down;
 
-        public static Vector3D[] Headings => Helper.Headings;
+        public static readonly Vector3D[] Headings = Helper.Headings;
 
         public readonly int x;
         public readonly int y;

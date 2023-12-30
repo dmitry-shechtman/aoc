@@ -13,16 +13,16 @@ namespace aoc
 
         public static readonly Vector4D Zero = default;
 
-        public static readonly Vector4D North = ( 0, -1,  0,  0);
-        public static readonly Vector4D East  = ( 1,  0,  0,  0);
-        public static readonly Vector4D South = ( 0,  1,  0,  0);
-        public static readonly Vector4D West  = (-1,  0,  0,  0);
-        public static readonly Vector4D Up    = ( 0,  0, -1,  0);
-        public static readonly Vector4D Down  = ( 0,  0,  1,  0);
-        public static readonly Vector4D Ana   = ( 0,  0,  0, -1);
-        public static readonly Vector4D Kata  = ( 0,  0,  0,  1);
+        public static readonly Vector4D North = Helper.North;
+        public static readonly Vector4D East  = Helper.East;
+        public static readonly Vector4D South = Helper.South;
+        public static readonly Vector4D West  = Helper.West;
+        public static readonly Vector4D Up    = Helper.Up;
+        public static readonly Vector4D Down  = Helper.Down;
+        public static readonly Vector4D Ana   = Helper.Ana;
+        public static readonly Vector4D Kata  = Helper.Kata;
 
-        public static Vector4D[] Headings => Helper.Headings;
+        public static readonly Vector4D[] Headings = Helper.Headings;
 
         public readonly int x;
         public readonly int y;

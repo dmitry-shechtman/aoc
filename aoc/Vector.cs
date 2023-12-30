@@ -13,10 +13,10 @@ namespace aoc
 
         public static readonly Vector Zero      = default;
 
-        public static readonly Vector North     = ( 0, -1);
-        public static readonly Vector East      = ( 1,  0);
-        public static readonly Vector South     = ( 0,  1);
-        public static readonly Vector West      = (-1,  0);
+        public static readonly Vector North     = Helper.North;
+        public static readonly Vector East      = Helper.East;
+        public static readonly Vector South     = Helper.South;
+        public static readonly Vector West      = Helper.West;
 
         public static readonly Vector North2    = ( 0, -2);
         public static readonly Vector East2     = ( 2,  0);
@@ -28,7 +28,7 @@ namespace aoc
         public static readonly Vector SouthWest = (-1,  1);
         public static readonly Vector SouthEast = ( 1,  1);
 
-        public static Vector[] Headings => Helper.Headings;
+        public static readonly Vector[] Headings = Helper.Headings;
 
         public readonly int x;
         public readonly int y;
