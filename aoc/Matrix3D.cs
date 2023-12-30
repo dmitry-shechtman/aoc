@@ -2,10 +2,17 @@
 
 namespace aoc
 {
-    public struct Matrix3D : IMatrix<Matrix3D, Vector3D, int>
+    using Helper = Internal.Matrix3DHelper<Matrix3D, Vector3D, int>;
+
+    public struct Matrix3D : IMatrix3D<Matrix3D, Vector3D, int>
     {
+        private static readonly Lazy<Helper> _helper =
+            new(() => new(FromRowArray, Vector3D.Helper));
+
+        private static Helper Helper => _helper.Value;
+
         public static readonly Matrix3D Zero             = default;
-        public static readonly Matrix3D Identity         = new(1, 0, 0, 0, 1, 0, 0, 0, 1);
+        public static readonly Matrix3D Identity         = Helper.Identity;
 
         public readonly int m11;
         public readonly int m12;
@@ -102,14 +109,99 @@ namespace aoc
             return hash.ToHashCode();
         }
 
+        public readonly override string ToString() =>
+            Helper.ToString(this);
+
+        public readonly string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
+
+        public readonly string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
+
+        public readonly void Deconstruct(out Vector3D r1, out Vector3D r2)
+        {
+            r1 = R1;
+            r2 = R2;
+        }
+
+        public readonly void Deconstruct(out Vector3D r1, out Vector3D r2, out Vector3D r3)
+        {
+            r1 = R1;
+            r2 = R2;
+            r3 = R3;
+        }
+
+        public readonly void Deconstruct(out Vector3D r1, out Vector3D r2, out Vector3D r3, out Vector3D r4)
+        {
+            r1 = R1;
+            r2 = R2;
+            r3 = R3;
+            r4 = R4;
+        }
+
+        public readonly Vector3D R1 => new(m11, m12, m13);
+        public readonly Vector3D R2 => new(m21, m22, m23);
+        public readonly Vector3D R3 => new(m31, m32, m33);
+        public readonly Vector3D R4 => new(m41, m42, m43);
+
+        public readonly Vector3D C1 => new(m11, m21, m31);
+        public readonly Vector3D C2 => new(m12, m22, m32);
+        public readonly Vector3D C3 => new(m13, m23, m33);
+        public readonly Vector3D C4 => new(m14, m24, m34);
+
+        public static Matrix3D Parse(string s) =>
+            Helper.Parse(s);
+
+        public static bool TryParse(string s, out Matrix3D matrix) =>
+            Helper.TryParse(s, out matrix);
+
+        public static Matrix3D Parse(string s, char separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, char separator, out Matrix3D matrix) =>
+            Helper.TryParse(s, separator, out matrix);
+
+        public static Matrix3D Parse(string s, char separator, char separator2) =>
+            Helper.Parse(s, separator, separator2);
+
+        public static bool TryParse(string s, char separator, char separator2, out Matrix3D matrix) =>
+            Helper.TryParse(s, separator, separator2, out matrix);
+
+        public static Matrix3D Parse(string[] ss) =>
+            Helper.Parse(ss);
+
+        public static bool TryParse(string[] ss, out Matrix3D matrix) =>
+            Helper.TryParse(ss, out matrix);
+
+        public static Matrix3D Parse(string[] ss, char separator) =>
+            Helper.Parse(ss, separator);
+
+        public static bool TryParse(string[] ss, char separator, out Matrix3D matrix) =>
+            Helper.TryParse(ss, separator, out matrix);
+
+        public static Matrix3D FromRowArray(Vector3D[] rows) =>
+            FromRows(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
+
+        public static Matrix3D FromColumnArray(Vector3D[] columns) =>
+            FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
+
+        public static Matrix3D FromRows(Vector3D r1, Vector3D r2, Vector3D r3 = default, Vector3D r4 = default) =>
+            new(r1.x, r1.y, r1.z,
+                r2.x, r2.y, r2.z,
+                r3.x, r3.y, r3.z,
+                r4.x, r4.y, r4.z);
+
+        public static Matrix3D FromColumns(Vector3D c1, Vector3D c2, Vector3D c3, Vector3D c4 = default) =>
+            new(c1.x, c2.x, c3.x, c4.x,
+                c1.y, c2.y, c3.y, c4.y,
+                c1.z, c2.z, c3.z, c4.z,
+                0,    0,    0,    1);
+
         public static Matrix3D Translate(int x, int y, int z) =>
-            Translate(new(x, y, z));
+            Helper.Translate(x, y, z);
 
         public static Matrix3D Translate(Vector3D v) =>
-            new(1, 0, 0,
-                0, 1, 0,
-                0, 0, 1,
-                v.x, v.y, v.z);
+            Helper.Translate(v);
 
         public readonly Vector3D Mul(Vector3D v) =>
             new(m11 * v.x + m12 * v.y + m13 * v.z + m14,
@@ -138,6 +230,15 @@ namespace aoc
                 m.m21, m.m22, m.m23, m.m24,
                 m.m31, m.m32, m.m33, m.m34,
                 m.m41, m.m42, m.m43, m.m44);
+
+        public static implicit operator Matrix3D((Vector3D r1, Vector3D r2, Vector3D r3, Vector3D r4) r) =>
+            FromRows(r.r1, r.r2, r.r3, r.r4);
+
+        public static implicit operator Matrix3D((Vector3D r1, Vector3D r2, Vector3D r3) r) =>
+            FromRows(r.r1, r.r2, r.r3);
+
+        public static implicit operator Matrix3D((Vector3D r1, Vector3D r2) r) =>
+            FromRows(r.r1, r.r2);
 
         public static explicit operator Matrix3D(Matrix matrix) =>
             new(matrix);

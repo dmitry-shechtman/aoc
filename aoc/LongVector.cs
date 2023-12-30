@@ -9,7 +9,7 @@ namespace aoc
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, long.TryParse, -1, 0, 1));
 
-        private static Helper Helper => _helper.Value;
+        internal static Helper Helper => _helper.Value;
 
         public static readonly LongVector Zero      = default;
 

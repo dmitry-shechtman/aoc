@@ -78,7 +78,7 @@ namespace aoc.Internal
             return true;
         }
 
-        protected new TVector FromArray(params T[] values) =>
+        public new TVector FromArray(params T[] values) =>
             base.FromArray(values);
 
         protected abstract TVector[] GetHeadings(T minusOne, T zero, T one);

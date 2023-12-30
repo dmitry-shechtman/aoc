@@ -2,15 +2,22 @@
 
 namespace aoc
 {
-    public struct DoubleMatrix : IMatrix<DoubleMatrix, DoubleVector, double>
+    using Helper = Internal.Matrix2DHelper<DoubleMatrix, DoubleVector, double>;
+
+    public struct DoubleMatrix : IMatrix2D<DoubleMatrix, DoubleVector, double>
     {
+        private static readonly Lazy<Helper> _helper =
+            new(() => new(FromRowArray, DoubleVector.Helper));
+
+        private static Helper Helper => _helper.Value;
+
         public static readonly DoubleMatrix Zero             = default;
-        public static readonly DoubleMatrix Identity         = new( 1,  0,  0,  1);
-        public static readonly DoubleMatrix RotateRight      = new( 0,  1, -1,  0);
-        public static readonly DoubleMatrix RotateLeft       = new( 0, -1,  1,  0);
-        public static readonly DoubleMatrix MirrorHorizontal = new( 1,  0,  0, -1);
-        public static readonly DoubleMatrix MirrorVertical   = new(-1,  0,  0,  1);
-        public static readonly DoubleMatrix Flip             = new(-1,  0,  0, -1);
+        public static readonly DoubleMatrix Identity         = Helper.Identity;
+        public static readonly DoubleMatrix RotateRight      = Helper.RotateRight;
+        public static readonly DoubleMatrix RotateLeft       = Helper.RotateLeft;
+        public static readonly DoubleMatrix MirrorHorizontal = Helper.MirrorHorizontal;
+        public static readonly DoubleMatrix MirrorVertical   = Helper.MirrorVertical;
+        public static readonly DoubleMatrix Flip             = Helper.Flip;
 
         public readonly double m11;
         public readonly double m12;
@@ -84,6 +91,82 @@ namespace aoc
             return hash.ToHashCode();
         }
 
+        public readonly override string ToString() =>
+            Helper.ToString(this);
+
+        public readonly string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
+
+        public readonly string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
+
+        public readonly void Deconstruct(out DoubleVector r1, out DoubleVector r2)
+        {
+            r1 = R1;
+            r2 = R2;
+        }
+
+        public readonly void Deconstruct(out DoubleVector r1, out DoubleVector r2, out DoubleVector r3)
+        {
+            r1 = R1;
+            r2 = R2;
+            r3 = R3;
+        }
+
+        public readonly DoubleVector R1 => new(m11, m12);
+        public readonly DoubleVector R2 => new(m21, m22);
+        public readonly DoubleVector R3 => new(m31, m32);
+
+        public readonly DoubleVector C1 => new(m11, m21);
+        public readonly DoubleVector C2 => new(m12, m22);
+        public readonly DoubleVector C3 => new(m13, m23);
+
+        public static DoubleMatrix Parse(string s) =>
+            Helper.Parse(s);
+
+        public static bool TryParse(string s, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, out matrix);
+
+        public static DoubleMatrix Parse(string s, char separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, char separator, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, separator, out matrix);
+
+        public static DoubleMatrix Parse(string s, char separator, char separator2) =>
+            Helper.Parse(s, separator, separator2);
+
+        public static bool TryParse(string s, char separator, char separator2, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, separator, separator2, out matrix);
+
+        public static DoubleMatrix Parse(string[] ss) =>
+            Helper.Parse(ss);
+
+        public static bool TryParse(string[] ss, out DoubleMatrix matrix) =>
+            Helper.TryParse(ss, out matrix);
+
+        public static DoubleMatrix Parse(string[] ss, char separator) =>
+            Helper.Parse(ss, separator);
+
+        public static bool TryParse(string[] ss, char separator, out DoubleMatrix matrix) =>
+            Helper.TryParse(ss, separator, out matrix);
+
+        public static DoubleMatrix FromRowArray(DoubleVector[] rows) =>
+            FromRows(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
+
+        public static DoubleMatrix FromColumnArray(DoubleVector[] columns) =>
+            FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
+
+        public static DoubleMatrix FromRows(DoubleVector r1, DoubleVector r2, DoubleVector r3 = default) =>
+            new(r1.x, r1.y,
+                r2.x, r2.y,
+                r3.x, r3.y);
+
+        public static DoubleMatrix FromColumns(DoubleVector c1, DoubleVector c2, DoubleVector c3 = default) =>
+            new(c1.x, c2.x, c3.x,
+                c1.y, c2.y, c3.y,
+                0,    0,    1);
+
         public readonly double GetDeterminant() =>
             m11 * m22 - m12 * m21;
 
@@ -120,21 +203,13 @@ namespace aoc
             a.Solve(b, out x);
 
         public static DoubleMatrix Translate(double x, double y) =>
-            Translate(new(x, y));
+            Helper.Translate(x, y);
 
         public static DoubleMatrix Translate(DoubleVector v) =>
-            new(1, 0,
-                0, 1,
-                v.x, v.y);
+            Helper.Translate(v);
 
-        public static DoubleMatrix Rotate(int degrees) => degrees switch
-        {
-            0           => Identity,
-            90  or -270 => RotateRight,
-            180 or -180 => Flip,
-            270 or  -90 => RotateLeft,
-            _ => throw new(),
-        };
+        public static DoubleMatrix Rotate(int degrees) =>
+            Helper.Rotate(degrees);
 
         public readonly DoubleVector Mul(DoubleVector v) =>
             new(m11 * v.x + m12 * v.y + m13,
@@ -175,6 +250,12 @@ namespace aoc
             new((long)m.m11, (long)m.m12, (long)m.m13,
                 (long)m.m21, (long)m.m22, (long)m.m23,
                 (long)m.m31, (long)m.m32, (long)m.m33);
+
+        public static implicit operator DoubleMatrix((DoubleVector r1, DoubleVector r2, DoubleVector r3) r) =>
+            FromRows(r.r1, r.r2, r.r3);
+
+        public static implicit operator DoubleMatrix((DoubleVector r1, DoubleVector r2) r) =>
+            FromRows(r.r1, r.r2);
 
         public static explicit operator DoubleMatrix(DoubleVector vector) =>
             Translate(vector);

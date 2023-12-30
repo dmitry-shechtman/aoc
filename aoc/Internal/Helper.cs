@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace aoc.Internal
 {
@@ -62,9 +63,24 @@ namespace aoc.Internal
 
         protected string ToStringInner(T value, string format, IFormatProvider provider)
         {
-            for (int i = 0; i < FormatKeys.Length; i++)
-                format = format.Replace(FormatKeys[i], value[i].ToString(null, provider));
-            return format;
+            StringBuilder sb = new();
+            for (int i = 0; i < format.Length; i++)
+                sb.Append(ToString(value, format, provider, ref i));
+            return sb.ToString();
+        }
+
+        protected virtual string ToString(T value, string format, IFormatProvider provider, ref int i)
+        {
+            for (int j = 0; j < FormatKeys.Length; j++)
+            {
+                string key = FormatKeys[j];
+                if (i + key.Length <= format.Length && format[i..(i + key.Length)] == key)
+                {
+                    i += key.Length - 1;
+                    return value[j].ToString(null, provider);
+                }
+            }
+            return format[i].ToString(provider);
         }
 
         public T Parse(string s) =>

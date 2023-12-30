@@ -2,15 +2,22 @@
 
 namespace aoc
 {
-    public struct LongMatrix : IMatrix<LongMatrix, LongVector, long>
+    using Helper = Internal.Matrix2DHelper<LongMatrix, LongVector, long>;
+
+    public struct LongMatrix : IMatrix2D<LongMatrix, LongVector, long>
     {
+        private static readonly Lazy<Helper> _helper =
+            new(() => new(FromRowArray, LongVector.Helper));
+
+        private static Helper Helper => _helper.Value;
+
         public static readonly LongMatrix Zero             = default;
-        public static readonly LongMatrix Identity         = new( 1,  0,  0,  1);
-        public static readonly LongMatrix RotateRight      = new( 0,  1, -1,  0);
-        public static readonly LongMatrix RotateLeft       = new( 0, -1,  1,  0);
-        public static readonly LongMatrix MirrorHorizontal = new( 1,  0,  0, -1);
-        public static readonly LongMatrix MirrorVertical   = new(-1,  0,  0,  1);
-        public static readonly LongMatrix Flip             = new(-1,  0,  0, -1);
+        public static readonly LongMatrix Identity         = Helper.Identity;
+        public static readonly LongMatrix RotateRight      = Helper.RotateRight;
+        public static readonly LongMatrix RotateLeft       = Helper.RotateLeft;
+        public static readonly LongMatrix MirrorHorizontal = Helper.MirrorHorizontal;
+        public static readonly LongMatrix MirrorVertical   = Helper.MirrorVertical;
+        public static readonly LongMatrix Flip             = Helper.Flip;
 
         public readonly long m11;
         public readonly long m12;
@@ -45,6 +52,11 @@ namespace aoc
         {
         }
 
+        public LongMatrix(Matrix m)
+            : this(m.m11, m.m12, m.m13, m.m21, m.m22, m.m23, m.m31, m.m32, m.m33)
+        {
+        }
+
         public readonly override bool Equals(object obj) =>
             obj is LongMatrix other && Equals(other);
 
@@ -74,22 +86,90 @@ namespace aoc
             return hash.ToHashCode();
         }
 
+        public readonly override string ToString() =>
+            Helper.ToString(this);
+
+        public readonly string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
+
+        public readonly string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
+
+        public readonly void Deconstruct(out LongVector r1, out LongVector r2)
+        {
+            r1 = R1;
+            r2 = R2;
+        }
+
+        public readonly void Deconstruct(out LongVector r1, out LongVector r2, out LongVector r3)
+        {
+            r1 = R1;
+            r2 = R2;
+            r3 = R3;
+        }
+
+        public readonly LongVector R1 => new(m11, m12);
+        public readonly LongVector R2 => new(m21, m22);
+        public readonly LongVector R3 => new(m31, m32);
+
+        public readonly LongVector C1 => new(m11, m21);
+        public readonly LongVector C2 => new(m12, m22);
+        public readonly LongVector C3 => new(m13, m23);
+
+        public static LongMatrix Parse(string s) =>
+            Helper.Parse(s);
+
+        public static bool TryParse(string s, out LongMatrix matrix) =>
+            Helper.TryParse(s, out matrix);
+
+        public static LongMatrix Parse(string s, char separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, char separator, out LongMatrix matrix) =>
+            Helper.TryParse(s, separator, out matrix);
+
+        public static LongMatrix Parse(string s, char separator, char separator2) =>
+            Helper.Parse(s, separator, separator2);
+
+        public static bool TryParse(string s, char separator, char separator2, out LongMatrix matrix) =>
+            Helper.TryParse(s, separator, separator2, out matrix);
+
+        public static LongMatrix Parse(string[] ss) =>
+            Helper.Parse(ss);
+
+        public static bool TryParse(string[] ss, out LongMatrix matrix) =>
+            Helper.TryParse(ss, out matrix);
+
+        public static LongMatrix Parse(string[] ss, char separator) =>
+            Helper.Parse(ss, separator);
+
+        public static bool TryParse(string[] ss, char separator, out LongMatrix matrix) =>
+            Helper.TryParse(ss, separator, out matrix);
+
+        public static LongMatrix FromRowArray(LongVector[] rows) =>
+            FromRows(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
+
+        public static LongMatrix FromColumnArray(LongVector[] columns) =>
+            FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
+
+        public static LongMatrix FromRows(LongVector r1, LongVector r2, LongVector r3 = default) =>
+            new(r1.x, r1.y,
+                r2.x, r2.y,
+                r3.x, r3.y);
+
+        public static LongMatrix FromColumns(LongVector c1, LongVector c2, LongVector c3 = default) =>
+            new(c1.x, c2.x, c3.x,
+                c1.y, c2.y, c3.y,
+                0,    0,    1);
+
         public static LongMatrix Translate(long x, long y) =>
-            Translate(new(x, y));
+            Helper.Translate(x, y);
 
         public static LongMatrix Translate(LongVector v) =>
-            new(1, 0,
-                0, 1,
-                v.x, v.y);
+            Helper.Translate(v);
 
-        public static LongMatrix Rotate(int degrees) => degrees switch
-        {
-            0           => Identity,
-            90  or -270 => RotateRight,
-            180 or -180 => Flip,
-            270 or  -90 => RotateLeft,
-            _ => throw new(),
-        };
+        public static LongMatrix Rotate(int degrees) =>
+            Helper.Rotate(degrees);
 
         public readonly LongVector Mul(LongVector v) =>
             new(m11 * v.x + m12 * v.y + m13,
@@ -114,6 +194,12 @@ namespace aoc
             new(m.m11, m.m12, m.m13,
                 m.m21, m.m22, m.m23,
                 m.m31, m.m32, m.m33);
+
+        public static implicit operator LongMatrix((LongVector r1, LongVector r2, LongVector r3) r) =>
+            FromRows(r.r1, r.r2, r.r3);
+
+        public static implicit operator LongMatrix((LongVector r1, LongVector r2) r) =>
+            FromRows(r.r1, r.r2);
 
         public static explicit operator LongMatrix(LongVector vector) =>
             Translate(vector);
