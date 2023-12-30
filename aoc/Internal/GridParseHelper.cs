@@ -62,11 +62,11 @@ namespace aoc.Internal
         public IEnumerable<(TVector v, int d)> ParsePath(string[] ss) =>
             ss.Select(s => ParsePathSegment(s));
 
-        public IEnumerable<(TVector v, int d)> ParsePath(string[] ss, string separator) =>
+        public IEnumerable<(TVector v, int d)> ParsePath(string[] ss, char separator) =>
             ss.Select(s => s.Split(separator))
                 .Select(tt => ParsePathSegment(tt));
 
-        public IEnumerable<(TVector v, int d)> ParsePath(string[] ss, char separator) =>
+        public IEnumerable<(TVector v, int d)> ParsePath(string[] ss, string separator) =>
             ss.Select(s => s.Split(separator))
                 .Select(tt => ParsePathSegment(tt));
 

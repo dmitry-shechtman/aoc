@@ -120,10 +120,10 @@ namespace aoc.Grids
         public static IEnumerable<(Vector4D v, int d)> ParsePath(string[] ss) =>
             Helper.ParsePath(ss);
 
-        public static IEnumerable<(Vector4D v, int d)> ParsePath(string[] ss, string separator) =>
+        public static IEnumerable<(Vector4D v, int d)> ParsePath(string[] ss, char separator) =>
             Helper.ParsePath(ss, separator);
 
-        public static IEnumerable<(Vector4D v, int d)> ParsePath(string[] ss, char separator) =>
+        public static IEnumerable<(Vector4D v, int d)> ParsePath(string[] ss, string separator) =>
             Helper.ParsePath(ss, separator);
     }
 }
