@@ -4,12 +4,12 @@ namespace aoc
 {
     using Helper = Internal.Vector3DHelper<DoubleVector3D, double>;
 
-    public struct DoubleVector3D : IVector3D<DoubleVector3D, DoubleVector, double>
+    public struct DoubleVector3D : IVector<DoubleVector3D, DoubleMatrix3D, double>, IVector3D<DoubleVector3D, DoubleVector, double>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, double.TryParse, -1, 0, 1));
 
-        private static Helper Helper => _helper.Value;
+        internal static Helper Helper => _helper.Value;
 
         public static readonly DoubleVector3D Zero  = default;
 
@@ -167,6 +167,17 @@ namespace aoc
 
         public static DoubleVector3D operator *(double scalar, DoubleVector3D vector) =>
             vector.Mul(scalar);
+
+        public readonly DoubleVector3D Mul(DoubleMatrix3D m) =>
+            new(x * m.m11 + y * m.m21 + z * m.m31 + m.m41,
+                x * m.m12 + y * m.m22 + z * m.m32 + m.m42,
+                x * m.m13 + y * m.m23 + z * m.m33 + m.m43);
+
+        public static DoubleVector3D Mul(DoubleVector3D vector, DoubleMatrix3D matrix) =>
+            vector.Mul(matrix);
+
+        public static DoubleVector3D operator *(DoubleVector3D vector, DoubleMatrix3D matrix) =>
+            vector.Mul(matrix);
 
         public readonly DoubleVector3D Div(double scalar) =>
             new(x / scalar, y / scalar, z / scalar);
