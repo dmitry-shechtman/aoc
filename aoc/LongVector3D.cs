@@ -4,12 +4,12 @@ namespace aoc
 {
     using Helper = Internal.Vector3DHelper<LongVector3D, long>;
 
-    public struct LongVector3D : IVector3D<LongVector3D, LongVector, long>
+    public struct LongVector3D : IVector<LongVector3D, LongMatrix3D, long>, IVector3D<LongVector3D, LongVector, long>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, long.TryParse, -1, 0, 1));
 
-        private static Helper Helper => _helper.Value;
+        internal static Helper Helper => _helper.Value;
 
         public static readonly LongVector3D Zero  = default;
 
@@ -168,6 +168,17 @@ namespace aoc
 
         public static LongVector3D operator *(long scalar, LongVector3D vector) =>
             vector.Mul(scalar);
+
+        public readonly LongVector3D Mul(LongMatrix3D m) =>
+            new(x * m.m11 + y * m.m21 + z * m.m31 + m.m41,
+                x * m.m12 + y * m.m22 + z * m.m32 + m.m42,
+                x * m.m13 + y * m.m23 + z * m.m33 + m.m43);
+
+        public static LongVector3D Mul(LongVector3D vector, LongMatrix3D matrix) =>
+            vector.Mul(matrix);
+
+        public static LongVector3D operator *(LongVector3D vector, LongMatrix3D matrix) =>
+            vector.Mul(matrix);
 
         public readonly LongVector3D Div(long scalar) =>
             new(x / scalar, y / scalar, z / scalar);
