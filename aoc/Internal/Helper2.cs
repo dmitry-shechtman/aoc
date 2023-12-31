@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 namespace aoc.Internal
 {
-    delegate bool TryParse2<T>(string s, char separator, out T value);
+    delegate bool TryParse<T, TSeparator>(string s, TSeparator separator, out T value);
 
     abstract class Helper2<T, TItem, TStrategy> : Helper<T, TItem, TStrategy>
         where T : IReadOnlyList<TItem>
         where TItem : IFormattable
         where TStrategy : IHelperStrategy
     {
-        protected Helper2(Func<TItem[], T> fromArray, TryParse<TItem> tryParse, TryParse2<TItem> tryParse2)
+        protected Helper2(Func<TItem[], T> fromArray, TryParse<TItem> tryParse, TryParse<TItem, char> tryParseChar)
             : base(fromArray, tryParse)
         {
-            TryParseItem2 = tryParse2;
+            TryParseItemChar = tryParseChar;
         }
 
-        private TryParse2<TItem> TryParseItem2 { get; }
+        private TryParse<TItem, char> TryParseItemChar { get; }
 
         public T Parse(string s, char separator, char separator2) =>
             TryParse(s, separator, separator2, out T value)
@@ -46,7 +46,7 @@ namespace aoc.Internal
             values = new TItem[MaxCount];
             for (int i = 0; i < MaxCount; i++)
                 if (i < ss.Length &&
-                    !TryParseItem2(ss[i], separator, out values[i]))
+                    !TryParseItemChar(ss[i], separator, out values[i]))
                         return false;
             return true;
         }
