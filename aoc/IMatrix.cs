@@ -18,8 +18,8 @@ namespace aoc
         TVector GetColumn(int index);
         T GetElement(int row, int column);
 
-        IEnumerator<TVector> EnumerateRows();
-        IEnumerator<TVector> EnumerateColumns();
+        IEnumerable<TVector> EnumerateRows();
+        IEnumerable<TVector> EnumerateColumns();
 
         TVector Mul(TVector vector);
 
@@ -29,11 +29,17 @@ namespace aoc
         int IReadOnlyCollection<TVector>.Count =>
             Cardinality + 1;
 
+        IEnumerator<TVector> GetRowEnumerator() =>
+            EnumerateRows().GetEnumerator();
+
+        IEnumerator<TVector> GetColumnEnumerator() =>
+            EnumerateColumns().GetEnumerator();
+
         IEnumerator<TVector> IEnumerable<TVector>.GetEnumerator() =>
-            EnumerateRows();
+            GetRowEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() =>
-            EnumerateRows();
+            GetRowEnumerator();
     }
 
     public interface IMatrix2D<TSelf, TVector, T> : IMatrix<TSelf, TVector, T>
@@ -70,14 +76,14 @@ namespace aoc
         T IMatrix<TSelf, TVector, T>.GetElement(int row, int column) =>
             this[row][column];
 
-        IEnumerator<TVector> IMatrix<TSelf, TVector, T>.EnumerateRows()
+        IEnumerable<TVector> IMatrix<TSelf, TVector, T>.EnumerateRows()
         {
             yield return R1;
             yield return R2;
             yield return R3;
         }
 
-        IEnumerator<TVector> IMatrix<TSelf, TVector, T>.EnumerateColumns()
+        IEnumerable<TVector> IMatrix<TSelf, TVector, T>.EnumerateColumns()
         {
             yield return C1;
             yield return C2;
@@ -125,7 +131,7 @@ namespace aoc
         T IMatrix<TSelf, TVector, T>.GetElement(int row, int column) =>
             this[row][column];
 
-        IEnumerator<TVector> IMatrix<TSelf, TVector, T>.EnumerateRows()
+        IEnumerable<TVector> IMatrix<TSelf, TVector, T>.EnumerateRows()
         {
             yield return R1;
             yield return R2;
@@ -133,7 +139,7 @@ namespace aoc
             yield return R4;
         }
 
-        IEnumerator<TVector> IMatrix<TSelf, TVector, T>.EnumerateColumns()
+        IEnumerable<TVector> IMatrix<TSelf, TVector, T>.EnumerateColumns()
         {
             yield return C1;
             yield return C2;
