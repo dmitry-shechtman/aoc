@@ -8,6 +8,8 @@ namespace aoc
         where TSelf : struct, IVector<TSelf, T>
         where T : struct
     {
+        int Cardinality { get; }
+
         T Abs();
         TSelf Abs2();
         TSelf Sign();
@@ -19,6 +21,9 @@ namespace aoc
         T Dot(TSelf other);
         TSelf Min(TSelf other);
         TSelf Max(TSelf other);
+
+        int IReadOnlyCollection<T>.Count =>
+            Cardinality;
 
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
@@ -36,7 +41,7 @@ namespace aoc
         where TSelf : struct, IVector2D<TSelf, T>
         where T : struct
     {
-        private const int Cardinality = 2;
+        int IVector<TSelf, T>.Cardinality => 2;
 
         T X { get; }
         T Y { get; }
@@ -55,16 +60,13 @@ namespace aoc
             1 => Y,
             _ => throw new IndexOutOfRangeException(),
         };
-
-        int IReadOnlyCollection<T>.Count =>
-            Cardinality;
     }
 
     public interface IVector3D<TSelf, T> : IVector<TSelf, T>
         where TSelf : struct, IVector3D<TSelf, T>
         where T : struct
     {
-        private const int Cardinality = 3;
+        int IVector<TSelf, T>.Cardinality => 3;
 
         T X { get; }
         T Y { get; }
@@ -103,7 +105,7 @@ namespace aoc
         where TSelf : struct, IVector4D<TSelf, T>
         where T : struct
     {
-        private const int Cardinality = 4;
+        int IVector<TSelf, T>.Cardinality => 4;
 
         T X { get; }
         T Y { get; }

@@ -15,6 +15,8 @@ namespace aoc
         where TVector : struct, IVector<TVector, T>
         where T : struct
     {
+        int Cardinality { get; }
+
         T Length { get; }
     }
 
@@ -22,8 +24,6 @@ namespace aoc
         where TSelf : struct, ISize2D<TSelf, T>
         where T : struct
     {
-        protected const int Cardinality = 2;
-
         T Width   { get; }
         T Height  { get; }
     }
@@ -33,6 +33,8 @@ namespace aoc
         where TVector : struct, IVector2D<TVector, T>
         where T : struct
     {
+        int ISize<TSelf, TVector, T>.Cardinality => 2;
+
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             yield return Width;
@@ -53,8 +55,6 @@ namespace aoc
         where TSelf : struct, ISize3D<TSelf, T>
         where T : struct
     {
-        protected const int Cardinality = 3;
-
         T Width   { get; }
         T Height  { get; }
         T Depth   { get; }
@@ -65,6 +65,8 @@ namespace aoc
         where TVector : struct, IVector3D<TVector, T>
         where T : struct
     {
+        int ISize<TSelf, TVector, T>.Cardinality => 3;
+
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             yield return Width;
@@ -87,8 +89,6 @@ namespace aoc
         where TSelf : struct, ISize4D<TSelf, T>
         where T : struct
     {
-        protected const int Cardinality = 4;
-
         T Width   { get; }
         T Height  { get; }
         T Depth   { get; }
@@ -100,6 +100,8 @@ namespace aoc
         where TVector : struct, IVector4D<TVector, T>
         where T : struct
     {
+        int ISize<TSelf, TVector, T>.Cardinality => 4;
+
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             yield return Width;
