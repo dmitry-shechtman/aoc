@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc
@@ -10,6 +11,20 @@ namespace aoc
         bool Contains(T value);
     }
 
+    public interface IIntegerSize<TSelf, T> : ISize<TSelf, T>, IComparer<T>
+        where TSelf : struct, IIntegerSize<TSelf, T>
+        where T : struct
+    {
+        TValue GetValue<TValue>(TValue[] array, T key);
+        bool TryGetValue<TValue>(TValue[] array, T key, out TValue value);
+        TValue SetValue<TValue>(TValue[] array, T key, TValue value);
+        int GetIndex(T key);
+        long GetLongIndex(T key);
+
+        int IComparer<T>.Compare(T x, T y) =>
+            (int)(GetLongIndex(x) - GetLongIndex(y));
+    }
+
     public interface ISize<TSelf, TVector, T> : ISize<TSelf, TVector>, IReadOnlyList<T>
         where TSelf : struct, ISize<TSelf, TVector, T>
         where TVector : struct, IVector<TVector, T>
@@ -18,6 +33,9 @@ namespace aoc
         int Cardinality { get; }
 
         T Length { get; }
+
+        IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
     }
 
     public interface ISize2D<TSelf, T>

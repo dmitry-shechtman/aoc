@@ -185,6 +185,32 @@ namespace aoc
         public static IEnumerable<int> Border(Range range, int size = 1) =>
             range.Border(size);
 
+        public readonly T GetValue<T>(T[] array, int key) =>
+            array[GetIndex(key)];
+
+        public readonly bool TryGetValue<T>(T[] array, int key, out T value)
+        {
+            if (!Contains(key))
+            {
+                value = default;
+                return false;
+            }
+            value = GetValue(array, key);
+            return true;
+        }
+
+        public readonly T SetValue<T>(T[] array, int key, T value) =>
+            array[GetIndex(key)] = value;
+
+        public readonly int GetIndex(int value) =>
+            value - Min;
+
+        public readonly long GetLongIndex(int value) =>
+            GetIndex(value);
+
+        readonly int IComparer<int>.Compare(int x, int y) =>
+            x - y;
+
         public static implicit operator (int min, int max)(Range value) =>
             (value.Min, value.Max);
 

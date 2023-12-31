@@ -51,7 +51,7 @@ namespace aoc
         T Length { get; }
     }
 
-    public interface IIntegerRange<TSelf, T> : IRange<TSelf, T>, IReadOnlyList<T>
+    public interface IIntegerRange<TSelf, T> : IRange<TSelf, T>, IIntegerSize<TSelf, T>, IReadOnlyList<T>
         where TSelf : struct, IIntegerRange<TSelf, T>
         where T : struct
     {

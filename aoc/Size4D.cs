@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc
 {
     using Helper = Internal.Size4DHelper<Size4D, Vector4D, int>;
 
-    public struct Size4D : ISize4D<Size4D, Vector4D, int>
+    public struct Size4D : ISize4D<Size4D, Vector4D, int>, IIntegerSize<Size4D, Vector4D>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse));
@@ -78,11 +78,6 @@ namespace aoc
         public readonly long LongLength =>
             (long)width * height * depth * anakata;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            yield break;
-        }
-
         public static Size4D Parse(string s) =>
             Helper.Parse(s);
 
@@ -126,7 +121,7 @@ namespace aoc
             size.Contains(vector);
 
         public readonly T GetValue<T>(T[] array, Vector4D vector) =>
-            array[GetIndex(vector)];
+            array[GetLongIndex(vector)];
 
         public readonly bool TryGetValue<T>(T[] array, Vector4D vector, out T value)
         {
@@ -140,10 +135,13 @@ namespace aoc
         }
 
         public readonly T SetValue<T>(T[] array, Vector4D vector, T value) =>
-            array[GetIndex(vector)] = value;
+            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector4D vector) =>
             vector.x + width * (vector.y + height * (vector.z + depth * vector.w));
+
+        public readonly long GetLongIndex(Vector4D vector) =>
+            vector.x + (long)width * (vector.y + height * (vector.z + depth * vector.w));
 
         public static Vector4D operator +(Vector4D vector, Size4D size) =>
             new(vector.x + size.width, vector.y + size.height, vector.z + size.depth, vector.w + size.anakata);

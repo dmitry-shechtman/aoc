@@ -265,7 +265,7 @@ namespace aoc
             new(new(Min.x, Min.y, Min.z + depth), Max);
 
         public readonly T GetValue<T>(T[] array, Vector3D vector) =>
-            array[GetIndex(vector)];
+            array[GetLongIndex(vector)];
 
         public readonly bool TryGetValue<T>(T[] array, Vector3D vector, out T value)
         {
@@ -279,10 +279,13 @@ namespace aoc
         }
 
         public readonly T SetValue<T>(T[] array, Vector3D vector, T value) =>
-            array[GetIndex(vector)] = value;
+            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector3D vector) =>
-            vector.x + Width * (vector.y + Height * vector.z);
+            vector.x - Min.x + Width * (vector.y - Min.y + Height * (vector.z - Min.z));
+
+        public readonly long GetLongIndex(Vector3D vector) =>
+            vector.x - Min.x + (long)Width * (vector.y - Min.y + Height * (vector.z - Min.z));
 
         public static implicit operator (Vector3D min, Vector3D max)(Vector3DRange value) =>
             (value.Min, value.Max);

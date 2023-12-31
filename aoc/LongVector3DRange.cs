@@ -184,6 +184,32 @@ namespace aoc
         public static IEnumerable<LongVector3DRange> operator &(LongVector3DRange left, LongVector3DRange right) =>
             left.Intersect(right);
 
+        public readonly T GetValue<T>(T[] array, LongVector3D vector) =>
+            array[GetIndex(vector)];
+
+        public readonly bool TryGetValue<T>(T[] array, LongVector3D vector, out T value)
+        {
+            if (!Contains(vector))
+            {
+                value = default;
+                return false;
+            }
+            value = GetValue(array, vector);
+            return true;
+        }
+
+        public readonly T SetValue<T>(T[] array, LongVector3D vector, T value) =>
+            array[GetIndex(vector)] = value;
+
+        public readonly long GetIndex(LongVector3D vector) =>
+            vector.x - Min.x + Width * (vector.y - Min.y + Height * (vector.z - Min.z));
+
+        readonly int IIntegerSize<LongVector3DRange, LongVector3D>.GetIndex(LongVector3D vector) =>
+            (int)GetIndex(vector);
+
+        readonly long IIntegerSize<LongVector3DRange, LongVector3D>.GetLongIndex(LongVector3D vector) =>
+            GetIndex(vector);
+
         public static implicit operator (LongVector3D min, LongVector3D max)(LongVector3DRange value) =>
             (value.Min, value.Max);
 

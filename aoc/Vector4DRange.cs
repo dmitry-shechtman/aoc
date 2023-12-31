@@ -271,7 +271,7 @@ namespace aoc
             new(new(Min.x, Min.y, Min.z, Min.w + anakata), Max);
 
         public readonly T GetValue<T>(T[] array, Vector4D vector) =>
-            array[GetIndex(vector)];
+            array[GetLongIndex(vector)];
 
         public readonly bool TryGetValue<T>(T[] array, Vector4D vector, out T value)
         {
@@ -285,10 +285,13 @@ namespace aoc
         }
 
         public readonly T SetValue<T>(T[] array, Vector4D vector, T value) =>
-            array[GetIndex(vector)] = value;
+            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector4D vector) =>
-            vector.x + Width * (vector.y + Height * (vector.z + Depth * vector.w));
+            vector.x - Min.x + Width * (vector.y - Min.y + Height * (vector.z - Min.z + Depth * (vector.w - Min.w)));
+
+        public readonly long GetLongIndex(Vector4D vector) =>
+            vector.x - Min.x + (long)Width * (vector.y - Min.y + Height * (vector.z - Min.z + Depth * (vector.w - Min.w)));
 
         public static implicit operator (Vector4D min, Vector4D max)(Vector4DRange value) =>
             (value.Min, value.Max);

@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc
 {
     using Helper = Internal.Size2DHelper<Size, Vector, int>;
 
-    public struct Size : ISize2D<Size, Vector, int>
+    public struct Size : ISize2D<Size, Vector, int>, IIntegerSize<Size, Vector>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse));
@@ -60,11 +60,6 @@ namespace aoc
         public readonly long LongLength =>
             (long)width * height;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
         public static Size Parse(string s) =>
             Helper.Parse(s);
 
@@ -112,7 +107,7 @@ namespace aoc
             s[GetFieldIndex(vector)];
 
         public readonly T GetValue<T>(T[] array, Vector vector) =>
-            array[GetIndex(vector)];
+            array[GetLongIndex(vector)];
 
         public readonly bool TryGetValue<T>(T[] array, Vector vector, out T value)
         {
@@ -126,13 +121,16 @@ namespace aoc
         }
 
         public readonly T SetValue<T>(T[] array, Vector vector, T value) =>
-            array[GetIndex(vector)] = value;
+            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector vector) =>
-            vector.x + vector.y * width;
+            vector.x + width * vector.y;
+
+        public readonly long GetLongIndex(Vector vector) =>
+            vector.x + (long)width * vector.y;
 
         private readonly int GetFieldIndex(Vector vector) =>
-            vector.x + vector.y * (width + 1);
+            vector.x + (width + 1) * vector.y;
 
         public static Size FromField(string s) =>
             FromField(s, GetFieldWidth(s));

@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc
 {
     using Helper = Internal.Size3DHelper<Size3D, Vector3D, int>;
 
-    public struct Size3D : ISize3D<Size3D, Vector3D, int>
+    public struct Size3D : ISize3D<Size3D, Vector3D, int>, IIntegerSize<Size3D, Vector3D>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse));
@@ -69,11 +69,6 @@ namespace aoc
         public readonly long LongLength =>
             (long)width * height * depth;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
         public static Size3D Parse(string s) =>
             Helper.Parse(s);
 
@@ -116,7 +111,7 @@ namespace aoc
             size.Contains(vector);
 
         public readonly T GetValue<T>(T[] array, Vector3D vector) =>
-            array[GetIndex(vector)];
+            array[GetLongIndex(vector)];
 
         public readonly bool TryGetValue<T>(T[] array, Vector3D vector, out T value)
         {
@@ -130,10 +125,13 @@ namespace aoc
         }
 
         public readonly T SetValue<T>(T[] array, Vector3D vector, T value) =>
-            array[GetIndex(vector)] = value;
+            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector3D vector) =>
             vector.x + width * (vector.y + height * vector.z);
+
+        public readonly long GetLongIndex(Vector3D vector) =>
+            vector.x + (long)width * (vector.y + height * vector.z);
 
         public static Vector3D operator +(Vector3D vector, Size3D size) =>
             new(vector.x + size.width, vector.y + size.height, vector.z + size.depth);

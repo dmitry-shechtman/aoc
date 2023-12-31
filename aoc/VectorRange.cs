@@ -251,7 +251,7 @@ namespace aoc
             new(new(Min.x, Min.y + height), Max);
 
         public readonly T GetValue<T>(T[] array, Vector vector) =>
-            array[GetIndex(vector)];
+            array[GetLongIndex(vector)];
 
         public readonly bool TryGetValue<T>(T[] array, Vector vector, out T value)
         {
@@ -265,10 +265,13 @@ namespace aoc
         }
 
         public readonly T SetValue<T>(T[] array, Vector vector, T value) =>
-            array[GetIndex(vector)] = value;
+            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector vector) =>
-            vector.x + vector.y * Width;
+            vector.x - Min.x + Width * (vector.y - Min.y);
+
+        public readonly long GetLongIndex(Vector vector) =>
+            vector.x - Min.x + (long)Width * (vector.y - Min.y);
 
         public static VectorRange FromField(string s) =>
             new(Size.FromField(s));
