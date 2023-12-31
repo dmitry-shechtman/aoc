@@ -24,13 +24,13 @@ namespace aoc
         {
         }
 
-        public LongVector3DRange(long x, long y, long z)
-            : this(new LongVector3D(x, y, z))
+        public LongVector3DRange(long min, long max)
+            : this((min, min, min), (max, max, max))
         {
         }
 
         public LongVector3DRange(LongVectorRange range)
-            : this(new(range.Min), new(range.Max))
+            : this(new LongVector3D(range.Min), new LongVector3D(range.Max))
         {
         }
 
@@ -188,6 +188,9 @@ namespace aoc
             (value.Min, value.Max);
 
         public static implicit operator LongVector3DRange((LongVector3D min, LongVector3D max) value) =>
+            new(value.min, value.max);
+
+        public static implicit operator LongVector3DRange((long min, long max) value) =>
             new(value.min, value.max);
 
         public static explicit operator LongVectorRange(LongVector3DRange range) =>

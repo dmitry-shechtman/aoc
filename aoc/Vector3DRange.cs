@@ -29,8 +29,8 @@ namespace aoc
         {
         }
 
-        public Vector3DRange(int x, int y, int z)
-            : this(new Vector3D(x, y, z))
+        public Vector3DRange(int min, int max)
+            : this((min, min, min), (max, max, max))
         {
         }
 
@@ -288,6 +288,9 @@ namespace aoc
             (value.Min, value.Max);
 
         public static implicit operator Vector3DRange((Vector3D min, Vector3D max) value) =>
+            new(value.min, value.max);
+
+        public static implicit operator Vector3DRange((int min, int max) value) =>
             new(value.min, value.max);
 
         public static explicit operator VectorRange(Vector3DRange range) =>

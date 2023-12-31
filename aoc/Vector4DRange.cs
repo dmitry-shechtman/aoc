@@ -29,8 +29,8 @@ namespace aoc
         {
         }
 
-        public Vector4DRange(int x, int y, int z, int w)
-            : this(new Vector4D(x, y, z, w))
+        public Vector4DRange(int min, int max)
+            : this((min, min, min, min), (max, max, max, max))
         {
         }
 
@@ -294,6 +294,9 @@ namespace aoc
             (value.Min, value.Max);
 
         public static implicit operator Vector4DRange((Vector4D min, Vector4D max) value) =>
+            new(value.min, value.max);
+
+        public static implicit operator Vector4DRange((int min, int max) value) =>
             new(value.min, value.max);
 
         public static explicit operator VectorRange(Vector4DRange range) =>

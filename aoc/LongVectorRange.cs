@@ -179,6 +179,9 @@ namespace aoc
         public static implicit operator LongVectorRange((LongVector min, LongVector max) value) =>
             new(value.min, value.max);
 
+        public static implicit operator LongVectorRange((long min, long max) value) =>
+            new(value.min, value.max);
+
         public static bool operator ==(LongVectorRange left, LongVectorRange right) =>
             left.Equals(right);
 

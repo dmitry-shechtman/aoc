@@ -171,6 +171,9 @@ namespace aoc
         public static implicit operator DoubleVector3DRange((DoubleVector3D min, DoubleVector3D max) value) =>
             new(value.min, value.max);
 
+        public static implicit operator DoubleVector3DRange((double min, double max) value) =>
+            new(value.min, value.max);
+
         public static explicit operator DoubleVectorRange(DoubleVector3DRange range) =>
             new((DoubleVector)range.Min, (DoubleVector)range.Max);
 

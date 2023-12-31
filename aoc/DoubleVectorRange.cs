@@ -162,6 +162,9 @@ namespace aoc
         public static implicit operator DoubleVectorRange((DoubleVector min, DoubleVector max) value) =>
             new(value.min, value.max);
 
+        public static implicit operator DoubleVectorRange((double min, double max) value) =>
+            new(value.min, value.max);
+
         public static bool operator ==(DoubleVectorRange left, DoubleVectorRange right) =>
             left.Equals(right);
 

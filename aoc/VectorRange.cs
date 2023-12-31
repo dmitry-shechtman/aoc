@@ -29,8 +29,8 @@ namespace aoc
         {
         }
 
-        public VectorRange(int x, int y)
-            : this(new Vector(x, y))
+        public VectorRange(int min, int max)
+            : this((min, min), (max, max))
         {
         }
 
@@ -277,6 +277,9 @@ namespace aoc
             (value.Min, value.Max);
 
         public static implicit operator VectorRange((Vector min, Vector max) value) =>
+            new(value.min, value.max);
+
+        public static implicit operator VectorRange((int min, int max) value) =>
             new(value.min, value.max);
 
         public static bool operator ==(VectorRange left, VectorRange right) =>
