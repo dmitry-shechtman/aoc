@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
@@ -19,7 +20,9 @@ namespace aoc.Internal
         where TVector : struct
     {
         bool TryParse(string s, out TVector vector);
-        bool TryParse(string s, char c, out TVector vector);
+        bool TryParse(string s, char separator, out TVector vector);
+        bool TryParse(string s, string separator, out TVector vector);
+        bool TryParse(string s, Regex separator, out TVector vector);
     }
 
     abstract class VectorHelper<TVector, T, TStrategy> : Helper<TVector, T, TStrategy>, IVectorHelper<TVector>

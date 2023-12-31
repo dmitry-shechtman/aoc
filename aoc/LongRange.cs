@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace aoc
 {
@@ -74,6 +75,18 @@ namespace aoc
             Helper.Parse(s, separator);
 
         public static bool TryParse(string s, char separator, out LongRange range) =>
+            Helper.TryParse(s, separator, out range);
+
+        public static LongRange Parse(string s, string separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, string separator, out LongRange range) =>
+            Helper.TryParse(s, separator, out range);
+
+        public static LongRange Parse(string s, Regex separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, Regex separator, out LongRange range) =>
             Helper.TryParse(s, separator, out range);
 
         public static LongRange Parse(string[] ss) =>

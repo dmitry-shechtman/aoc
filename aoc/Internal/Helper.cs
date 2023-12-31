@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
@@ -113,6 +114,22 @@ namespace aoc.Internal
 
         public bool TryParse(string s, char separator, out T value) =>
             TryParse(s.Trim().Split(separator, StringSplitOptions.TrimEntries), out value);
+
+        public T Parse(string s, string separator) =>
+            TryParse(s, separator, out T value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParse(string s, string separator, out T value) =>
+            TryParse(s.Trim().Split(separator), out value);
+
+        public T Parse(string s, Regex separator) =>
+            TryParse(s, separator, out T value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParse(string s, Regex separator, out T value) =>
+            TryParse(separator.Split(s)[1..], out value);
 
         public T Parse(string[] ss) =>
             TryParse(ss, out T value)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace aoc
 {
@@ -97,6 +98,18 @@ namespace aoc
             Helper.Parse(s, separator);
 
         public static bool TryParse(string s, char separator, out DoubleVector vector) =>
+            Helper.TryParse(s, separator, out vector);
+
+        public static DoubleVector Parse(string s, string separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, string separator, out DoubleVector vector) =>
+            Helper.TryParse(s, separator, out vector);
+
+        public static DoubleVector Parse(string s, Regex separator) =>
+            Helper.Parse(s, separator);
+
+        public static bool TryParse(string s, Regex separator, out DoubleVector vector) =>
             Helper.TryParse(s, separator, out vector);
 
         public static DoubleVector Parse(string[] ss) =>
