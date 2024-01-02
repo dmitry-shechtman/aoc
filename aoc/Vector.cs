@@ -29,8 +29,6 @@ namespace aoc
         public static readonly Vector SouthWest = (-1,  1);
         public static readonly Vector SouthEast = ( 1,  1);
 
-        public static readonly Vector[] Headings = Helper.Headings;
-
         public readonly int x;
         public readonly int y;
 
@@ -81,18 +79,6 @@ namespace aoc
 
         public readonly int X => x;
         public readonly int Y => y;
-
-        public static int GetHeading(char c) =>
-            Helper.GetHeading(c);
-
-        public static bool TryGetHeading(char c, out int heading) =>
-            Helper.TryGetHeading(c, out heading);
-
-        public static Vector Parse(char c) =>
-            Helper.Parse(c);
-
-        public static bool TryParse(char c, out Vector vector) =>
-            Helper.TryParse(c, out vector);
 
         public static Vector Parse(string s) =>
             Helper.Parse(s);

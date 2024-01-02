@@ -23,8 +23,6 @@ namespace aoc
         public static readonly Vector4D Ana   = Helper.Ana;
         public static readonly Vector4D Kata  = Helper.Kata;
 
-        public static readonly Vector4D[] Headings = Helper.Headings;
-
         public readonly int x;
         public readonly int y;
         public readonly int z;
@@ -108,18 +106,6 @@ namespace aoc
         public readonly int Y => y;
         public readonly int Z => z;
         public readonly int W => w;
-
-        public static int GetHeading(char c) =>
-            Helper.GetHeading(c);
-
-        public static bool TryGetHeading(char c, out int heading) =>
-            Helper.TryGetHeading(c, out heading);
-
-        public static Vector4D Parse(char c) =>
-            Helper.Parse(c);
-
-        public static bool TryParse(char c, out Vector4D vector) =>
-            Helper.TryParse(c, out vector);
 
         public static Vector4D Parse(string s) =>
             Helper.Parse(s);

@@ -21,8 +21,6 @@ namespace aoc
         public static readonly DoubleVector3D Up    = Helper.Up;
         public static readonly DoubleVector3D Down  = Helper.Down;
 
-        public static readonly DoubleVector3D[] Headings = Helper.Headings;
-
         public readonly double x;
         public readonly double y;
         public readonly double z;
@@ -99,12 +97,6 @@ namespace aoc
         public readonly double X => x;
         public readonly double Y => y;
         public readonly double Z => z;
-
-        public static DoubleVector3D Parse(char c) =>
-            Helper.Parse(c);
-
-        public static bool TryParse(char c, out DoubleVector3D vector) =>
-            Helper.TryParse(c, out vector);
 
         public static DoubleVector3D Parse(string s) =>
             Helper.Parse(s);

@@ -13,7 +13,6 @@ namespace aoc.Internal
 
         public override char DefaultSeparator => ',';
 
-        public abstract string[] FormatStrings { get; }
     }
 
     interface IVectorHelper<TVector>
@@ -33,65 +32,13 @@ namespace aoc.Internal
         protected VectorHelper(Func<T[], TVector> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse)
         {
-            Headings = GetHeadings(minusOne, zero, one);
-            FormatStrings = Strategy.FormatStrings;
-        }
-
-        public TVector[] Headings { get; }
-
-        private string[] FormatStrings { get; }
-
-        protected override string ToStringOuter(TVector vector, string format, IFormatProvider provider)
-        {
-            if (format.Length > 1)
-                return ToStringInner(vector, format, provider);
-            int index = Headings.IndexOf(vector);
-            if (index < 0)
-                return ToStringInner(vector, DefaultFormat, provider);
-            char c = char.ToLowerInvariant(format[0]);
-            string s = FormatStrings.Find(s => s.Contains(c));
-            if (s.Length == 0)
-                return ToStringInner(vector, DefaultFormat, provider);
-            return char.IsUpper(format[0])
-                ? char.ToUpperInvariant(s[index]).ToString()
-                : s[index].ToString();
-        }
-
-        public int GetHeading(char c) =>
-            TryGetHeading(c, out int heading)
-                ? heading
-                : throw new InvalidOperationException($"Unexpected character: {c}");
-
-        public bool TryGetHeading(char c, out int heading)
-        {
-            c = char.ToLower(c);
-            foreach (var s in FormatStrings)
-                if ((heading = s.IndexOf(c)) >= 0)
-                    return true;
-            heading = -1;
-            return false;
-        }
-
-        public TVector Parse(char c) =>
-            TryParse(c, out TVector vector)
-                ? vector
-                : throw new InvalidOperationException($"Unexpected character: {c}");
-
-        public bool TryParse(char c, out TVector vector)
-        {
-            if (!TryGetHeading(c, out int heading))
-            {
-                vector = default;
-                return false;
-            }
-            vector = Headings[heading];
-            return true;
+            InitHeadings(minusOne, zero, one);
         }
 
         public new TVector FromArray(params T[] values) =>
             base.FromArray(values);
 
-        protected abstract TVector[] GetHeadings(T minusOne, T zero, T one);
+        protected abstract void InitHeadings(T minusOne, T zero, T one);
     }
 
     sealed class Vector2DHelperStrategy : VectorHelperStrategy<Vector2DHelperStrategy>
@@ -100,8 +47,6 @@ namespace aoc.Internal
             : base("x", "y")
         {
         }
-
-        public override string[] FormatStrings => new[] { "nesw", "urdl", "^>v<" };
     }
 
     sealed class Vector2DHelper<TVector, T> : VectorHelper<TVector, T, Vector2DHelperStrategy>
@@ -113,13 +58,12 @@ namespace aoc.Internal
         {
         }
 
-        protected override TVector[] GetHeadings(T minusOne, T zero, T one)
+        protected override void InitHeadings(T minusOne, T zero, T one)
         {
             North = FromArray(zero,     minusOne, zero);
             East  = FromArray(one,      zero,     zero);
             South = FromArray(zero,     one,      zero);
             West  = FromArray(minusOne, zero,     zero);
-            return new[] { North, East, South, West };
         }
 
         protected override Vector2DHelperStrategy Strategy => Vector2DHelperStrategy.Instance;
@@ -136,8 +80,6 @@ namespace aoc.Internal
             : base("x", "y", "z")
         {
         }
-
-        public override string[] FormatStrings => new[] { "neswud" };
     }
 
     sealed class Vector3DHelper<TVector, T> : VectorHelper<TVector, T, Vector3DHelperStrategy>
@@ -149,7 +91,7 @@ namespace aoc.Internal
         {
         }
 
-        protected override TVector[] GetHeadings(T minusOne, T zero, T one)
+        protected override void InitHeadings(T minusOne, T zero, T one)
         {
             North = FromArray(zero,     minusOne, zero);
             East  = FromArray(one,      zero,     zero);
@@ -157,7 +99,6 @@ namespace aoc.Internal
             West  = FromArray(minusOne, zero,     zero);
             Up    = FromArray(zero,     zero,     minusOne);
             Down  = FromArray(zero,     zero,     one);
-            return new[] { North, East, South, West, Up, Down };
         }
 
         protected override Vector3DHelperStrategy Strategy => Vector3DHelperStrategy.Instance;
@@ -176,8 +117,6 @@ namespace aoc.Internal
             : base("x", "y", "z", "w")
         {
         }
-
-        public override string[] FormatStrings => new[] { "neswudak" };
     }
 
     sealed class Vector4DHelper<TVector, T> : VectorHelper<TVector, T, Vector4DHelperStrategy>
@@ -189,7 +128,7 @@ namespace aoc.Internal
         {
         }
 
-        protected override TVector[] GetHeadings(T minusOne, T zero, T one)
+        protected override void InitHeadings(T minusOne, T zero, T one)
         {
             North = FromArray(zero,     minusOne, zero,     zero);
             East  = FromArray(one,      zero,     zero,     zero);
@@ -199,7 +138,6 @@ namespace aoc.Internal
             Down  = FromArray(zero,     zero,     one,      zero);
             Ana   = FromArray(zero,     zero,     zero,     minusOne);
             Kata  = FromArray(zero,     zero,     zero,     one);
-            return new[] { North, East, South, West, Up, Down, Ana, Kata };
         }
 
         protected override Vector4DHelperStrategy Strategy => Vector4DHelperStrategy.Instance;

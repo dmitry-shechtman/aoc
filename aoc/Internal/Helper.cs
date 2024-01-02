@@ -68,11 +68,9 @@ namespace aoc.Internal
         {
             if (string.IsNullOrEmpty(format))
                 format = DefaultFormat;
-            return ToStringOuter(value, format, provider);
+            return ToStringInner(value, format, provider);
         }
 
-        protected virtual string ToStringOuter(T value, string format, IFormatProvider provider) =>
-            ToStringInner(value, format, provider);
 
         protected string ToStringInner(T value, string format, IFormatProvider provider)
         {

@@ -21,8 +21,6 @@ namespace aoc
         public static readonly LongVector3D Up    = Helper.Up;
         public static readonly LongVector3D Down  = Helper.Down;
 
-        public static readonly LongVector3D[] Headings = Helper.Headings;
-
         public readonly long x;
         public readonly long y;
         public readonly long z;
@@ -94,18 +92,6 @@ namespace aoc
         public readonly long X => x;
         public readonly long Y => y;
         public readonly long Z => z;
-
-        public static int GetHeading(char c) =>
-            Helper.GetHeading(c);
-
-        public static bool TryGetHeading(char c, out int heading) =>
-            Helper.TryGetHeading(c, out heading);
-
-        public static LongVector3D Parse(char c) =>
-            Helper.Parse(c);
-
-        public static bool TryParse(char c, out LongVector3D vector) =>
-            Helper.TryParse(c, out vector);
 
         public static LongVector3D Parse(string s) =>
             Helper.Parse(s);

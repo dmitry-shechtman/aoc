@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.HexNSGridParseHelper;
+    using Helper = Internal.HexNSGridHelper;
 
     public sealed class HexNSGrid : Grid<HexNSGrid>
     {
@@ -42,6 +42,18 @@ namespace aoc.Grids
             new(p.x - 1, p.y - 1),
             new(p.x + 1, p.y - 1)
         };
+
+        public static Vector[] Headings =>
+            Helper.Headings;
+
+        public static int GetHeading(string s) =>
+            Helper.GetHeading(s);
+
+        public static bool TryGetHeading(string s, out int heading) =>
+            Helper.TryGetHeading(s, out heading);
+
+        public static string ToString(Vector vector, char format) =>
+            Helper.ToString(vector, format);
 
         public static Vector ParseVector(string s) =>
             Helper.ParseVector(s);

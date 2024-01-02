@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.Grid3DParseHelper;
+    using Helper = Internal.Grid3DHelper;
 
     public abstract class Grid3D<TSelf> : Grid<TSelf, Vector3D, Size3D, Vector3DRange, int>
         where TSelf : Grid3D<TSelf>
@@ -81,6 +81,18 @@ namespace aoc.Grids
             new(p.x - 1, p.y, p.z),
             new(p.x, p.y, p.z + 1)
         };
+
+        public static Vector3D[] Headings =>
+            Helper.Headings;
+
+        public static int GetHeading(string s) =>
+            Helper.GetHeading(s);
+
+        public static bool TryGetHeading(string s, out int heading) =>
+            Helper.TryGetHeading(s, out heading);
+
+        public static string ToString(Vector3D vector, char format) =>
+            Helper.ToString(vector, format);
 
         public static Vector3D ParseVector(string s) =>
             Helper.ParseVector(s);

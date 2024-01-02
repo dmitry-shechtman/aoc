@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.GridParseHelper;
+    using Helper = Internal.GridHelper;
 
     public abstract class Grid<TSelf, TVector, TSize, TRange, T> : IReadOnlyCollection<TVector>
         where TSelf : Grid<TSelf, TVector, TSize, TRange, T>
@@ -154,6 +154,18 @@ namespace aoc.Grids
             new(p.x, p.y + 1),
             new(p.x - 1, p.y)
         };
+
+        public static Vector[] Headings =>
+            Helper.Headings;
+
+        public static int GetHeading(string s) =>
+            Helper.GetHeading(s);
+
+        public static bool TryGetHeading(string s, out int heading) =>
+            Helper.TryGetHeading(s, out heading);
+
+        public static string ToString(Vector vector, char format) =>
+            Helper.ToString(vector, format);
 
         public static Grid Parse(string s) =>
             Helper.Parse(s);

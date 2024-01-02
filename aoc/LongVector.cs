@@ -19,8 +19,6 @@ namespace aoc
         public static readonly LongVector South     = Helper.South;
         public static readonly LongVector West      = Helper.West;
 
-        public static readonly LongVector[] Headings = Helper.Headings;
-
         public readonly long x;
         public readonly long y;
 
@@ -76,18 +74,6 @@ namespace aoc
 
         public readonly long X => x;
         public readonly long Y => y;
-
-        public static int GetHeading(char c) =>
-            Helper.GetHeading(c);
-
-        public static bool TryGetHeading(char c, out int heading) =>
-            Helper.TryGetHeading(c, out heading);
-
-        public static LongVector Parse(char c) =>
-            Helper.Parse(c);
-
-        public static bool TryParse(char c, out LongVector vector) =>
-            Helper.TryParse(c, out vector);
 
         public static LongVector Parse(string s) =>
             Helper.Parse(s);

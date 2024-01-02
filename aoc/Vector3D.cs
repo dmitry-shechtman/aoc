@@ -21,8 +21,6 @@ namespace aoc
         public static readonly Vector3D Up    = Helper.Up;
         public static readonly Vector3D Down  = Helper.Down;
 
-        public static readonly Vector3D[] Headings = Helper.Headings;
-
         public readonly int x;
         public readonly int y;
         public readonly int z;
@@ -89,18 +87,6 @@ namespace aoc
         public readonly int X => x;
         public readonly int Y => y;
         public readonly int Z => z;
-
-        public static int GetHeading(char c) =>
-            Helper.GetHeading(c);
-
-        public static bool TryGetHeading(char c, out int heading) =>
-            Helper.TryGetHeading(c, out heading);
-
-        public static Vector3D Parse(char c) =>
-            Helper.Parse(c);
-
-        public static bool TryParse(char c, out Vector3D vector) =>
-            Helper.TryParse(c, out vector);
 
         public static Vector3D Parse(string s) =>
             Helper.Parse(s);
