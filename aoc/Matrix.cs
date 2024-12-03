@@ -5,7 +5,7 @@ namespace aoc
 {
     using Helper = Internal.Matrix2DHelper<Matrix, Vector, int>;
 
-    public struct Matrix : IMatrix2D<Matrix, Vector, int>
+    public readonly struct Matrix : IMatrix2D<Matrix, Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromRowArray, Vector.Helper));

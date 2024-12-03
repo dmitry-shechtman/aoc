@@ -6,7 +6,7 @@ namespace aoc
 {
     using Helper = Internal.Size3DHelper<Size3D, Vector3D, int>;
 
-    public struct Size3D : ISize3D<Size3D, Vector3D, int>, IIntegerSize<Size3D, Vector3D>
+    public readonly struct Size3D : ISize3D<Size3D, Vector3D, int>, IIntegerSize<Size3D, Vector3D>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse));

@@ -6,7 +6,7 @@ namespace aoc
 {
     using Helper = Internal.RangeHelper<LongRange, long>;
 
-    public struct LongRange : IIntegerRange<LongRange, long>
+    public readonly struct LongRange : IIntegerRange<LongRange, long>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, long.TryParse));

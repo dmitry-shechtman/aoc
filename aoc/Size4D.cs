@@ -6,7 +6,7 @@ namespace aoc
 {
     using Helper = Internal.Size4DHelper<Size4D, Vector4D, int>;
 
-    public struct Size4D : ISize4D<Size4D, Vector4D, int>, IIntegerSize<Size4D, Vector4D>
+    public readonly struct Size4D : ISize4D<Size4D, Vector4D, int>, IIntegerSize<Size4D, Vector4D>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse));

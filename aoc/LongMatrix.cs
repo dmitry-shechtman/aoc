@@ -5,7 +5,7 @@ namespace aoc
 {
     using Helper = Internal.Matrix2DHelper<LongMatrix, LongVector, long>;
 
-    public struct LongMatrix : IMatrix2D<LongMatrix, LongVector, long>
+    public readonly struct LongMatrix : IMatrix2D<LongMatrix, LongVector, long>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromRowArray, LongVector.Helper));

@@ -5,7 +5,7 @@ namespace aoc
 {
     using Helper = Internal.Vector4DHelper<Vector4D, int>;
 
-    public struct Vector4D : IVector4D<Vector4D, Vector3D, Vector, int>
+    public readonly struct Vector4D : IVector4D<Vector4D, Vector3D, Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, int.TryParse, -1, 0, 1));

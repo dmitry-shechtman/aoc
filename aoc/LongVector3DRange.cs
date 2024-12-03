@@ -6,7 +6,7 @@ namespace aoc
 {
     using Helper = Internal.VectorRangeHelper<LongVector3DRange, LongVector3D>;
 
-    public struct LongVector3DRange : IIntegerRange<LongVector3DRange, LongVector3D>, IRange3D<LongVector3DRange, LongVector3D, long>
+    public readonly struct LongVector3DRange : IIntegerRange<LongVector3DRange, LongVector3D>, IRange3D<LongVector3DRange, LongVector3D, long>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, LongVector3D.Helper));

@@ -6,7 +6,7 @@ namespace aoc
 {
     using Helper = Internal.VectorRangeHelper<Vector4DRange, Vector4D>;
 
-    public struct Vector4DRange : IIntegerRange<Vector4DRange, Vector4D>, IRange4D<Vector4DRange, Vector4D, int>
+    public readonly struct Vector4DRange : IIntegerRange<Vector4DRange, Vector4D>, IRange4D<Vector4DRange, Vector4D, int>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, Vector4D.Helper));

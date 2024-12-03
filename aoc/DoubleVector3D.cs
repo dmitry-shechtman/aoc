@@ -5,7 +5,7 @@ namespace aoc
 {
     using Helper = Internal.Vector3DHelper<DoubleVector3D, double>;
 
-    public struct DoubleVector3D : IVector<DoubleVector3D, DoubleMatrix3D, double>, IVector3D<DoubleVector3D, DoubleVector, double>
+    public readonly struct DoubleVector3D : IVector<DoubleVector3D, DoubleMatrix3D, double>, IVector3D<DoubleVector3D, DoubleVector, double>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromArray, double.TryParse, -1, 0, 1));

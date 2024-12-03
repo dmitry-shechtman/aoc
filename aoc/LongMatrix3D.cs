@@ -5,7 +5,7 @@ namespace aoc
 {
     using Helper = Internal.Matrix3DHelper<LongMatrix3D, LongVector3D, long>;
 
-    public struct LongMatrix3D : IMatrix3D<LongMatrix3D, LongVector3D, long>
+    public readonly struct LongMatrix3D : IMatrix3D<LongMatrix3D, LongVector3D, long>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromRowArray, LongVector3D.Helper));
