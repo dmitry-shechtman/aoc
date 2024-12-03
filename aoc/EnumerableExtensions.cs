@@ -34,7 +34,7 @@ namespace aoc
         public static IEnumerable<IGrouping<T, T>> Group<T>(this IEnumerable<T> source) =>
             source.GroupBy(v => v);
 
-#if !NET_6_0_OR_GREATER
+#if !NET6_0_OR_GREATER
         public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int size) =>
             source.Select()
                 .GroupBy(t => t.Index / size)
