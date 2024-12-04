@@ -222,6 +222,19 @@ namespace aoc.Internal
             base.TryGetHeading(s, ref i, out heading);
     }
 
+    sealed class DiagGridHelper : GridHelper<DiagGridHelper, DiagGrid>
+    {
+        public override Vector[] Headings => new[]
+        {
+            Vector.NorthEast, Vector.SouthEast, Vector.SouthWest, Vector.NorthWest
+        };
+
+        protected override string[][] FormatStrings => new[]
+        {
+            new[] { "ne", "se", "sw", "nw" }
+        };
+    }
+
     sealed class MooreGridHelper : GridHelper2<MooreGridHelper, MooreGrid>
     {
         private MooreGridHelper()
