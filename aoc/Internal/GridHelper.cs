@@ -222,7 +222,7 @@ namespace aoc.Internal
             base.TryGetHeading(s, ref i, out heading);
     }
 
-    sealed class DiagGridHelper : GridHelper<DiagGridHelper, DiagGrid>
+    sealed class DiagGridHelper : GridHelper2<DiagGridHelper, DiagGrid>
     {
         public override Vector[] Headings => new[]
         {
