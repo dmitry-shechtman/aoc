@@ -37,6 +37,9 @@ namespace aoc.Grids
         public bool Remove(TVector point) =>
             Points.Remove(point);
 
+        public bool Contains(TVector point) =>
+            Points.Contains(point);
+
         public int FloodFill(TVector from)
         {
             Queue<TVector> queue = new();
