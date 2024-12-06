@@ -2,7 +2,9 @@
 
 namespace aoc.Internal
 {
-    sealed class RangeHelperStrategy : HelperStrategy<RangeHelperStrategy>
+    sealed class RangeHelperStrategy<TRange, T> : HelperStrategy<RangeHelperStrategy<TRange, T>, TRange, T>
+        where TRange : struct, IRange<TRange, T>
+        where T : struct, IFormattable
     {
         private RangeHelperStrategy()
             : base("min", "max")
@@ -17,17 +19,15 @@ namespace aoc.Internal
         protected override string SeparatorString =>
             $" {DefaultSeparator} ";
 
-        public static T GetItem<TRange, T>(IRange<TRange, T> range, int i)
-            where TRange : struct, IRange<TRange, T>
-            where T : struct, IFormattable => i switch
-            {
-                0 => range.Min,
-                1 => range.Max,
-                _ => throw new IndexOutOfRangeException(),
-            };
+        public static T GetItem(IRange<TRange, T> range, int i) => i switch
+        {
+            0 => range.Min,
+            1 => range.Max,
+            _ => throw new IndexOutOfRangeException(),
+        };
     }
 
-    sealed class RangeHelper<TRange, T> : Helper<TRange, T, RangeHelperStrategy>
+    sealed class RangeHelper<TRange, T> : Helper<TRange, T, RangeHelperStrategy<TRange, T>>
         where TRange : struct, IRange<TRange, T>
         where T : struct, IFormattable
     {
@@ -36,14 +36,14 @@ namespace aoc.Internal
         {
         }
 
-        protected override T GetItem(TRange range, int i) =>
-            RangeHelperStrategy.GetItem(range, i);
+        protected override T GetItem(TRange value, int i) =>
+            RangeHelperStrategy<TRange, T>.GetItem(value, i);
 
-        protected override RangeHelperStrategy Strategy =>
-            RangeHelperStrategy.Instance;
+        protected override RangeHelperStrategy<TRange, T> Strategy =>
+            RangeHelperStrategy<TRange, T>.Instance;
     }
 
-    sealed class VectorRangeHelper<TRange, TVector> : Helper2<TRange, TVector, RangeHelperStrategy, IVectorHelper<TVector>>
+    sealed class VectorRangeHelper<TRange, TVector> : Helper2<TRange, TVector, RangeHelperStrategy<TRange, TVector>, IVectorHelper<TVector>>
         where TRange : struct, IRange<TRange, TVector>
         where TVector : struct, IFormattable
     {
@@ -52,10 +52,10 @@ namespace aoc.Internal
         {
         }
 
-        protected override TVector GetItem(TRange range, int i) =>
-            RangeHelperStrategy.GetItem(range, i);
+        protected override TVector GetItem(TRange value, int i) =>
+            RangeHelperStrategy<TRange, TVector>.GetItem(value, i);
 
-        protected override RangeHelperStrategy Strategy =>
-            RangeHelperStrategy.Instance;
+        protected override RangeHelperStrategy<TRange, TVector> Strategy =>
+            RangeHelperStrategy<TRange, TVector>.Instance;
     }
 }

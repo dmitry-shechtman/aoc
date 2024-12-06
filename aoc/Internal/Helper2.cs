@@ -8,7 +8,7 @@ namespace aoc.Internal
     abstract class Helper2<T, TItem, TStrategy> : Helper<T, TItem, TStrategy>
         where T : IReadOnlyCollection<TItem>
         where TItem : IFormattable
-        where TStrategy : IHelperStrategy
+        where TStrategy : IHelperStrategy<T, TItem>
     {
         protected Helper2(Func<TItem[], T> fromArray, TryParse<TItem> tryParse, TryParse<TItem, char> tryParseChar)
             : base(fromArray, tryParse)
@@ -56,7 +56,7 @@ namespace aoc.Internal
         where T : IReadOnlyCollection<TItem>
         where TVectorHelper : IVectorHelper<TItem>
         where TItem : struct, IFormattable
-        where TStrategy : IHelperStrategy
+        where TStrategy : IHelperStrategy<T, TItem>
     {
         protected Helper2(Func<TItem[], T> fromArray, TVectorHelper vector)
             : base(fromArray, vector.TryParse, vector.TryParse)

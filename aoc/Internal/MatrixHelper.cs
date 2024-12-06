@@ -3,8 +3,11 @@ using System.Linq;
 
 namespace aoc.Internal
 {
-    abstract class MatrixHelperStrategy<TSelf> : HelperStrategy<TSelf>
-        where TSelf : MatrixHelperStrategy<TSelf>
+    abstract class MatrixHelperStrategy<TSelf, TMatrix, TVector, T> : HelperStrategy<TSelf, TMatrix, TVector>
+        where TSelf : MatrixHelperStrategy<TSelf, TMatrix, TVector, T>
+        where TMatrix : struct, IMatrix<TMatrix, TVector, T>
+        where TVector : struct, IVector<TVector, TMatrix, T>
+        where T : struct, IFormattable
     {
         protected MatrixHelperStrategy(int cardinality)
             : base(Enumerable.Range(1, cardinality + 1).Select(i => $"r{i}").ToArray())
@@ -25,7 +28,7 @@ namespace aoc.Internal
         where TMatrix : struct, IMatrix<TMatrix, TVector, T>
         where TVector : struct, IVector<TVector, TMatrix, T>
         where T : struct, IFormattable
-        where TStrategy : MatrixHelperStrategy<TStrategy>
+        where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
         where TVectorHelper : IVectorHelper<TVector>
     {
         protected MatrixHelper(Func<TVector[], TMatrix> fromRowArray, TVectorHelper vector)
@@ -51,7 +54,10 @@ namespace aoc.Internal
         protected TVectorHelper Vector { get; }
     }
 
-    sealed class Matrix2DHelperStrategy : MatrixHelperStrategy<Matrix2DHelperStrategy>
+    sealed class Matrix2DHelperStrategy<TMatrix, TVector, T> : MatrixHelperStrategy<Matrix2DHelperStrategy<TMatrix, TVector, T>, TMatrix, TVector, T>
+        where TMatrix : struct, IMatrix2D<TMatrix, TVector, T>
+        where TVector : struct, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
+        where T : struct, IFormattable
     {
         private Matrix2DHelperStrategy()
             : base(2)
@@ -60,7 +66,7 @@ namespace aoc.Internal
     }
 
     sealed class Matrix2DHelper<TMatrix, TVector, T> :
-            MatrixHelper<TMatrix, TVector, T, Matrix2DHelperStrategy, Vector2DHelper<TVector, T>>
+            MatrixHelper<TMatrix, TVector, T, Matrix2DHelperStrategy<TMatrix, TVector, T>, Vector2DHelper<TVector, T>>
         where TMatrix : struct, IMatrix2D<TMatrix, TVector, T>
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
         where T : struct, IFormattable
@@ -98,11 +104,14 @@ namespace aoc.Internal
             _ => throw new(),
         };
 
-        protected override Matrix2DHelperStrategy Strategy =>
-            Matrix2DHelperStrategy.Instance;
+        protected override Matrix2DHelperStrategy<TMatrix, TVector, T> Strategy =>
+            Matrix2DHelperStrategy<TMatrix, TVector, T>.Instance;
     }
 
-    sealed class Matrix3DHelperStrategy : MatrixHelperStrategy<Matrix3DHelperStrategy>
+    sealed class Matrix3DHelperStrategy<TMatrix, TVector, T> : MatrixHelperStrategy<Matrix3DHelperStrategy<TMatrix, TVector, T>, TMatrix, TVector, T>
+        where TMatrix : struct, IMatrix3D<TMatrix, TVector, T>
+        where TVector : struct, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
+        where T : struct, IFormattable
     {
         private Matrix3DHelperStrategy()
             : base(3)
@@ -111,7 +120,7 @@ namespace aoc.Internal
     }
 
     sealed class Matrix3DHelper<TMatrix, TVector, T> :
-            MatrixHelper<TMatrix, TVector, T, Matrix3DHelperStrategy, Vector3DHelper<TVector, T>>
+            MatrixHelper<TMatrix, TVector, T, Matrix3DHelperStrategy<TMatrix, TVector, T>, Vector3DHelper<TVector, T>>
         where TMatrix : struct, IMatrix3D<TMatrix, TVector, T>
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
         where T : struct, IFormattable
@@ -130,7 +139,7 @@ namespace aoc.Internal
         public TMatrix Translate(TVector v) =>
             FromRowArray(Vector.East, Vector.South, Vector.Down, v);
 
-        protected override Matrix3DHelperStrategy Strategy =>
-            Matrix3DHelperStrategy.Instance;
+        protected override Matrix3DHelperStrategy<TMatrix, TVector, T> Strategy =>
+            Matrix3DHelperStrategy<TMatrix, TVector, T>.Instance;
     }
 }

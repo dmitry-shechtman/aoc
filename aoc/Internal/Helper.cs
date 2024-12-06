@@ -5,7 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
-    interface IHelperStrategy
+    interface IHelperStrategy<T, TItem>
+        where T : IReadOnlyCollection<TItem>
+        where TItem : IFormattable
     {
         char      DefaultSeparator { get; }
         string    DefaultFormat    { get; }
@@ -14,8 +16,10 @@ namespace aoc.Internal
         int       MaxCount         { get; }
     }
 
-    abstract class HelperStrategy<TSelf> : Singleton<TSelf>, IHelperStrategy
-        where TSelf : HelperStrategy<TSelf>
+    abstract class HelperStrategy<TSelf, T, TItem> : Singleton<TSelf>, IHelperStrategy<T, TItem>
+        where TSelf : HelperStrategy<TSelf, T, TItem>
+        where T : IReadOnlyCollection<TItem>
+        where TItem : IFormattable
     {
         protected HelperStrategy(params string[] formatKeys)
         {
@@ -40,7 +44,7 @@ namespace aoc.Internal
     abstract class Helper<T, TItem, TStrategy>
         where T : IReadOnlyCollection<TItem>
         where TItem : IFormattable
-        where TStrategy : IHelperStrategy
+        where TStrategy : IHelperStrategy<T, TItem>
     {
         protected Helper(Func<TItem[], T> fromArray, TryParse<TItem> tryParse)
         {
