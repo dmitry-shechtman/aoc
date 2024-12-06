@@ -2,7 +2,7 @@
 
 namespace aoc.Internal
 {
-    sealed class RangeHelperStrategy<TRange, T> : HelperStrategy<RangeHelperStrategy<TRange, T>, TRange, T>
+    sealed class RangeHelperStrategy<TRange, T> : ItemHelperStrategy<RangeHelperStrategy<TRange, T>, TRange, T>
         where TRange : struct, IRange<TRange, T>
         where T : struct, IFormattable
     {
@@ -19,7 +19,7 @@ namespace aoc.Internal
         protected override string SeparatorString =>
             $" {DefaultSeparator} ";
 
-        public static T GetItem(IRange<TRange, T> range, int i) => i switch
+        protected override T GetItem(TRange range, int i) => i switch
         {
             0 => range.Min,
             1 => range.Max,
@@ -36,9 +36,6 @@ namespace aoc.Internal
         {
         }
 
-        protected override T GetItem(TRange value, int i) =>
-            RangeHelperStrategy<TRange, T>.GetItem(value, i);
-
         protected override RangeHelperStrategy<TRange, T> Strategy =>
             RangeHelperStrategy<TRange, T>.Instance;
     }
@@ -51,9 +48,6 @@ namespace aoc.Internal
             : base(fromArray, vector)
         {
         }
-
-        protected override TVector GetItem(TRange value, int i) =>
-            RangeHelperStrategy<TRange, TVector>.GetItem(value, i);
 
         protected override RangeHelperStrategy<TRange, TVector> Strategy =>
             RangeHelperStrategy<TRange, TVector>.Instance;

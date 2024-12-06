@@ -2,7 +2,7 @@
 
 namespace aoc.Internal
 {
-    abstract class SizeHelperStrategy<TSelf, TSize, TVector, T> : HelperStrategy<TSelf, TSize, T>
+    abstract class SizeHelperStrategy<TSelf, TSize, TVector, T> : ListHelperStrategy<TSelf, TSize, T>
         where TSelf : SizeHelperStrategy<TSelf, TSize, TVector, T>
         where TSize : struct, ISize<TSize, TVector, T>
         where TVector : struct, IVector<TVector, T>
@@ -26,9 +26,6 @@ namespace aoc.Internal
             : base(fromArray, tryParse)
         {
         }
-
-        protected override T GetItem(TSize size, int i) =>
-            size[i];
     }
 
     sealed class Size2DHelperStrategy<TSize, TVector, T> : SizeHelperStrategy<Size2DHelperStrategy<TSize, TVector, T>, TSize, TVector, T>

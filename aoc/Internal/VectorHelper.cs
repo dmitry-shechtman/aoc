@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
-    abstract class VectorHelperStrategy<TSelf, TVector, T> : HelperStrategy<TSelf, TVector, T>
+    abstract class VectorHelperStrategy<TSelf, TVector, T> : ListHelperStrategy<TSelf, TVector, T>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
         where TSelf : VectorHelperStrategy<TSelf, TVector, T>
@@ -39,9 +39,6 @@ namespace aoc.Internal
 
         public new TVector FromArray(params T[] values) =>
             base.FromArray(values);
-
-        protected override T GetItem(TVector vector, int i) =>
-            vector[i];
 
         protected abstract void InitHeadings(T minusOne, T zero, T one);
     }

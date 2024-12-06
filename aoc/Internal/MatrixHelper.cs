@@ -22,6 +22,14 @@ namespace aoc.Internal
 
         protected override string SeparatorString =>
             $"{DefaultSeparator} ";
+
+        public sealed override bool TryGetItem(TMatrix matrix, string format, IFormatProvider provider, ref int i, out IFormattable item) => (item = format[i] switch
+        {
+            'r' => matrix.GetRow(format[++i] - '1'),
+            'c' => matrix.GetColumn(format[++i] - '1'),
+            'm' => matrix[format[++i] - '1'][format[++i] - '1'],
+            _ => null,
+        }) is not null;
     }
 
     abstract class MatrixHelper<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, TStrategy, TVectorHelper>
@@ -36,17 +44,6 @@ namespace aoc.Internal
         {
             Vector = vector;
         }
-
-        protected override bool TryGetItem(TMatrix matrix, string format, IFormatProvider provider, ref int i, out IFormattable item) => (item = format[i] switch
-        {
-            'r' => matrix.GetRow(format[++i] - '1'),
-            'c' => matrix.GetColumn(format[++i] - '1'),
-            'm' => matrix[format[++i] - '1'][format[++i] - '1'],
-            _ => null,
-        }) is not null;
-
-        protected override TVector GetItem(TMatrix value, int i) =>
-            throw new NotImplementedException();
 
         protected TMatrix FromRowArray(params TVector[] vectors) =>
             FromArray(vectors);

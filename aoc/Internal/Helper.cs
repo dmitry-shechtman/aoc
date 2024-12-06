@@ -14,6 +14,8 @@ namespace aoc.Internal
         string[]  FormatKeys       { get; }
         int       MinCount         { get; }
         int       MaxCount         { get; }
+
+        bool TryGetItem(T value, string format, IFormatProvider provider, ref int i, out IFormattable item);
     }
 
     abstract class HelperStrategy<TSelf, T, TItem> : Singleton<TSelf>, IHelperStrategy<T, TItem>
@@ -37,6 +39,51 @@ namespace aoc.Internal
 
         protected virtual string SeparatorString =>
             $"{DefaultSeparator}";
+
+        public abstract bool TryGetItem(T value, string format, IFormatProvider provider, ref int i, out IFormattable item);
+    }
+
+    abstract class ItemHelperStrategy<TSelf, T, TItem> : HelperStrategy<TSelf, T, TItem>
+        where TSelf : ItemHelperStrategy<TSelf, T, TItem>
+        where T : IReadOnlyCollection<TItem>
+        where TItem : IFormattable
+    {
+        protected ItemHelperStrategy(params string[] formatKeys)
+            : base(formatKeys)
+        {
+        }
+
+        public sealed override bool TryGetItem(T value, string format, IFormatProvider provider, ref int i, out IFormattable item)
+        {
+            for (int j = 0; j < FormatKeys.Length; j++)
+            {
+                string key = FormatKeys[j];
+                if (i + key.Length <= format.Length && format[i..(i + key.Length)] == key)
+                {
+                    item = GetItem(value, j);
+                    i += key.Length - 1;
+                    return true;
+                }
+            }
+            item = null;
+            return false;
+        }
+
+        protected abstract TItem GetItem(T value, int i);
+    }
+
+    abstract class ListHelperStrategy<TSelf, T, TItem> : ItemHelperStrategy<TSelf, T, TItem>
+        where TSelf : ListHelperStrategy<TSelf, T, TItem>
+        where T : IReadOnlyList<TItem>
+        where TItem : IFormattable
+    {
+        public ListHelperStrategy(params string[] formatKeys)
+            : base(formatKeys)
+        {
+        }
+
+        protected sealed override TItem GetItem(T value, int i) =>
+            value[i];
     }
 
     delegate bool TryParse<T>(string s, out T value);
@@ -51,7 +98,6 @@ namespace aoc.Internal
             FromArray = fromArray;
             TryParseItem = tryParse;
             DefaultFormat = Strategy.DefaultFormat;
-            FormatKeys = Strategy.FormatKeys;
             DefaultSeparator = Strategy.DefaultSeparator;
             MinCount = Strategy.MinCount;
             MaxCount = Strategy.MaxCount;
@@ -60,7 +106,6 @@ namespace aoc.Internal
         protected Func<TItem[], T> FromArray        { get; }
         protected TryParse<TItem>  TryParseItem     { get; }
         protected string           DefaultFormat    { get; }
-        private   string[]         FormatKeys       { get; }
         public    char             DefaultSeparator { get; }
         protected int              MinCount         { get; }
         protected int              MaxCount         { get; }
@@ -79,30 +124,12 @@ namespace aoc.Internal
         {
             StringBuilder sb = new();
             for (int i = 0; i < format.Length; i++)
-                if (TryGetItem(value, format, provider, ref i, out var item))
+                if (Strategy.TryGetItem(value, format, provider, ref i, out var item))
                     sb.Append(item.ToString(null, provider));
                 else
                     sb.Append(format[i]);
             return sb.ToString();
         }
-
-        protected virtual bool TryGetItem(T value, string format, IFormatProvider provider, ref int i, out IFormattable item)
-        {
-            for (int j = 0; j < FormatKeys.Length; j++)
-            {
-                string key = FormatKeys[j];
-                if (i + key.Length <= format.Length && format[i..(i + key.Length)] == key)
-                {
-                    item = GetItem(value, j);
-                    i += key.Length - 1;
-                    return true;
-                }
-            }
-            item = null;
-            return false;
-        }
-
-        protected abstract TItem GetItem(T value, int i);
 
         public T Parse(string s) =>
             Parse(s, DefaultSeparator);
