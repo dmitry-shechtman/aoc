@@ -23,6 +23,9 @@ namespace aoc.Internal
             : base(fromArray, tryParse)
         {
         }
+
+        protected override T GetItem(TSize size, int i) =>
+            size[i];
     }
 
     sealed class Size2DHelperStrategy : SizeHelperStrategy<Size2DHelperStrategy>

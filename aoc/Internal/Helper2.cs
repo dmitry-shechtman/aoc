@@ -6,7 +6,7 @@ namespace aoc.Internal
     delegate bool TryParse<T, TSeparator>(string s, TSeparator separator, out T value);
 
     abstract class Helper2<T, TItem, TStrategy> : Helper<T, TItem, TStrategy>
-        where T : IReadOnlyList<TItem>
+        where T : IReadOnlyCollection<TItem>
         where TItem : IFormattable
         where TStrategy : IHelperStrategy
     {
@@ -53,7 +53,7 @@ namespace aoc.Internal
     }
 
     abstract class Helper2<T, TItem, TStrategy, TVectorHelper> : Helper2<T, TItem, TStrategy>
-        where T : IReadOnlyList<TItem>
+        where T : IReadOnlyCollection<TItem>
         where TVectorHelper : IVectorHelper<TItem>
         where TItem : struct, IFormattable
         where TStrategy : IHelperStrategy

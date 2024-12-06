@@ -38,7 +38,7 @@ namespace aoc.Internal
     delegate bool TryParse<T>(string s, out T value);
 
     abstract class Helper<T, TItem, TStrategy>
-        where T : IReadOnlyList<TItem>
+        where T : IReadOnlyCollection<TItem>
         where TItem : IFormattable
         where TStrategy : IHelperStrategy
     {
@@ -71,7 +71,6 @@ namespace aoc.Internal
             return ToStringInner(value, format, provider);
         }
 
-
         protected string ToStringInner(T value, string format, IFormatProvider provider)
         {
             StringBuilder sb = new();
@@ -90,7 +89,7 @@ namespace aoc.Internal
                 string key = FormatKeys[j];
                 if (i + key.Length <= format.Length && format[i..(i + key.Length)] == key)
                 {
-                    item = value[j];
+                    item = GetItem(value, j);
                     i += key.Length - 1;
                     return true;
                 }
@@ -98,6 +97,8 @@ namespace aoc.Internal
             item = null;
             return false;
         }
+
+        protected abstract TItem GetItem(T value, int i);
 
         public T Parse(string s) =>
             Parse(s, DefaultSeparator);

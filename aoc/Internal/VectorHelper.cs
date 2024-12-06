@@ -38,6 +38,9 @@ namespace aoc.Internal
         public new TVector FromArray(params T[] values) =>
             base.FromArray(values);
 
+        protected override T GetItem(TVector vector, int i) =>
+            vector[i];
+
         protected abstract void InitHeadings(T minusOne, T zero, T one);
     }
 

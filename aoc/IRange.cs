@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface IRange<TSelf, T> : ISize<TSelf, T>, IReadOnlyList<T>
+    public interface IRange<TSelf, T> : ISize<TSelf, T>, IReadOnlyCollection<T>
         where TSelf : struct, IRange<TSelf, T>
         where T : struct
     {
@@ -31,13 +30,6 @@ namespace aoc
 
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
-
-        T IReadOnlyList<T>.this[int i] => i switch
-        {
-            0 => Min,
-            1 => Max,
-            _ => throw new IndexOutOfRangeException(),
-        };
 
         int IReadOnlyCollection<T>.Count =>
             Cardinality;

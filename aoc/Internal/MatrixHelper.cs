@@ -42,6 +42,9 @@ namespace aoc.Internal
             _ => null,
         }) is not null;
 
+        protected override TVector GetItem(TMatrix value, int i) =>
+            throw new NotImplementedException();
+
         protected TMatrix FromRowArray(params TVector[] vectors) =>
             FromArray(vectors);
 
