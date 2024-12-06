@@ -93,6 +93,9 @@ namespace aoc.Grids
 
         public abstract IEnumerable<TVector> GetNeighbors(TVector p);
         public abstract IEnumerable<TVector> GetNeighborsAndSelf(TVector p);
+
+        public static implicit operator HashSet<TVector>(Grid<TSelf, TVector, TSize, TRange, T> grid) =>
+            grid.Points;
     }
 
     public abstract class Grid<TSelf> : Grid<TSelf, Vector, Size, VectorRange, int>
