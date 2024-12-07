@@ -27,6 +27,9 @@ namespace aoc.Grids
             GetEnumerator();
 
         public int Count => Grids.Length;
+
+        public TGrid[] Slice(int start, int length) =>
+            Grids[start..(length - start + 1)];
     }
 
     public sealed class MultiGrid : MultiGrid<MultiGrid, Grid>
