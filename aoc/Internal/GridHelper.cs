@@ -30,7 +30,7 @@ namespace aoc.Internal
         public string ToString(TVector vector, char format)
         {
             int index = Headings.IndexOf(vector);
-            if (index <= 0)
+            if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(vector));
             string[] ss = GetFormatStrings(format);
             if (ss is null)
@@ -126,7 +126,7 @@ namespace aoc.Internal
         {
             string s = $"{format}";
             foreach (var ss in FormatStrings)
-                if (ss.Contains(s))
+                if (ss.Contains(s, StringComparer.OrdinalIgnoreCase))
                     return ss;
             return null;
         }
