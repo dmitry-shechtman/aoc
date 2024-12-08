@@ -1,5 +1,6 @@
 ﻿using aoc.Grids;
 using System;
+using System.Collections.Generic;
 
 namespace aoc.Internal
 {
@@ -11,32 +12,47 @@ namespace aoc.Internal
         private const char DefaultSeparatorChar = '\n';
 
         public TMulti Parse(string s, ReadOnlySpan<char> cc) =>
-            Parse(s, DefaultSeparatorChar, cc);
+            Parse(s, cc, out _);
+
+        public TMulti Parse(string s, ReadOnlySpan<char> cc, out Size size) =>
+            Parse(s, DefaultSeparatorChar, cc, out size);
 
         public TMulti Parse(string s, char separator, ReadOnlySpan<char> cc) =>
-            Parse(s.Split(separator), cc);
+            Parse(s, separator, cc, out _);
 
-        public TMulti Parse(string[] ss, ReadOnlySpan<char> cc)
+        public TMulti Parse(string s, char separator, ReadOnlySpan<char> cc, out Size size) =>
+            Parse(s.Split(separator), cc, out size);
+
+        public TMulti Parse(string[] ss, ReadOnlySpan<char> cc) =>
+            Parse(ss, cc, out _);
+
+        public TMulti Parse(string[] ss, ReadOnlySpan<char> cc, out Size size)
         {
-            var grids = new TGrid[cc.Length + 1];
-            int i;
-            for (i = 0; i <= cc.Length; i++)
-                grids[i] = CreateGrid();
+            int height = 0, i;
+            var points = new HashSet<Vector>[cc.Length + 1];
+            for (i = 0; i < points.Length; i++)
+                points[i] = new();
             for (int y = 0; y < ss.Length; y++)
             {
+                if (ss[y].Length > 0)
+                    ++height;
                 for (int x = 0; x < ss[y].Length; x++)
                 {
                     if ((i = cc.IndexOf(ss[y][x])) >= 0)
                     {
-                        grids[i].Add(x, y);
-                        grids[^1].Add(x, y);
+                        points[i].Add((x, y));
+                        points[^1].Add((x, y));
                     }
                 }
             }
+            size = new(ss[0].Length, height);
+            var grids = new TGrid[points.Length];
+            for (i = 0; i < points.Length; i++)
+                grids[i] = CreateGrid(points[i]);
             return CreateMulti(grids);
         }
 
-        protected abstract TGrid CreateGrid();
+        protected abstract TGrid CreateGrid(HashSet<Vector> points);
         protected abstract TMulti CreateMulti(TGrid[] grids);
     }
 
@@ -46,8 +62,8 @@ namespace aoc.Internal
         {
         }
 
-        protected override Grid CreateGrid() =>
-            new();
+        protected override Grid CreateGrid(HashSet<Vector> points) =>
+            new(points);
 
         protected override MultiGrid CreateMulti(Grid[] grids) =>
             new(grids);

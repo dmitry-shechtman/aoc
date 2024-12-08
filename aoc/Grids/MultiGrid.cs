@@ -44,10 +44,19 @@ namespace aoc.Grids
         public static MultiGrid Parse(string s, ReadOnlySpan<char> cc) =>
             Helper.Parse(s, cc);
 
+        public static MultiGrid Parse(string s, ReadOnlySpan<char> cc, out Size size) =>
+            Helper.Parse(s, cc, out size);
+
         public static MultiGrid Parse(string s, char separator, ReadOnlySpan<char> cc) =>
             Helper.Parse(s, separator, cc);
 
+        public static MultiGrid Parse(string s, char separator, ReadOnlySpan<char> cc, out Size size) =>
+            Helper.Parse(s, separator, cc, out size);
+
         public static MultiGrid Parse(string[] ss, ReadOnlySpan<char> cc) =>
             Helper.Parse(ss, cc);
+
+        public static MultiGrid Parse(string[] ss, ReadOnlySpan<char> cc, out Size size) =>
+            Helper.Parse(ss, cc, out size);
     }
 }

@@ -171,26 +171,46 @@ namespace aoc.Internal
         };
 
         public static Grid Parse(string s) =>
-            Parse(s, DefaultSeparatorChar);
+            Parse(s, out _);
+
+        public static Grid Parse(string s, out Size size) =>
+            Parse(s, DefaultSeparatorChar, out size);
 
         public static Grid Parse(string s, char separator) =>
-            Parse(s, separator, DefaultPointChar);
+            Parse(s, separator, out _);
+
+        public static Grid Parse(string s, char separator, out Size size) =>
+            Parse(s, separator, DefaultPointChar, out size);
 
         public static Grid Parse(string s, char separator, char c) =>
-            Parse(s.Split(separator), c);
+            Parse(s, separator, c, out _);
+
+        public static Grid Parse(string s, char separator, char c, out Size size) =>
+            Parse(s.Split(separator), c, out size);
 
         public static Grid Parse(string[] ss) =>
-            Parse(ss, DefaultPointChar);
+            Parse(ss, out _);
+
+        public static Grid Parse(string[] ss, out Size size) =>
+            Parse(ss, DefaultPointChar, out size);
 
         public static Grid Parse(string[] ss, char c) =>
-            new(ParsePoints(ss, c));
+            Parse(ss, c, out _);
 
-        private static IEnumerable<Vector> ParsePoints(string[] ss, char c)
+        public static Grid Parse(string[] ss, char c, out Size size)
         {
+            HashSet<Vector> points = new();
+            int height = 0;
             for (int y = 0; y < ss.Length; y++)
+            {
+                if (ss[y].Length > 0)
+                    ++height;
                 for (int x = 0; x < ss[y].Length; x++)
                     if (ss[y][x] == c)
-                        yield return (x, y);
+                        points.Add((x, y));
+            }
+            size = new(ss[0].Length, height);
+            return new(points);
         }
 
         public static IEnumerable<(Matrix, int)> ParseTurns(string s)

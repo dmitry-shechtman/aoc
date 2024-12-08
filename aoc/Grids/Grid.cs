@@ -20,6 +20,9 @@ namespace aoc.Grids
         protected Grid(IEnumerable<TVector> points) =>
             Points = new(points);
 
+        protected Grid(HashSet<TVector> points) =>
+            Points = points;
+
         protected HashSet<TVector> Points { get; private set; }
 
         public IEnumerator<TVector> GetEnumerator() =>
@@ -111,6 +114,11 @@ namespace aoc.Grids
         {
         }
 
+        protected Grid(HashSet<Vector> points)
+            : base(points)
+        {
+        }
+
         public bool Add(int x, int y) =>
             Points.Add(new(x, y));
 
@@ -140,6 +148,11 @@ namespace aoc.Grids
         }
 
         public Grid(IEnumerable<Vector> points)
+            : base(points)
+        {
+        }
+
+        internal Grid(HashSet<Vector> points)
             : base(points)
         {
         }
@@ -176,17 +189,32 @@ namespace aoc.Grids
         public static Grid Parse(string s) =>
             Helper.Parse(s);
 
+        public static Grid Parse(string s, out Size size) =>
+            Helper.Parse(s, out size);
+
         public static Grid Parse(string s, char separator) =>
             Helper.Parse(s, separator);
+
+        public static Grid Parse(string s, char separator, out Size size) =>
+            Helper.Parse(s, separator, out size);
 
         public static Grid Parse(string s, char separator, char c) =>
             Helper.Parse(s, separator, c);
 
+        public static Grid Parse(string s, char separator, char c, out Size size) =>
+            Helper.Parse(s, separator, c, out size);
+
         public static Grid Parse(string[] ss) =>
             Helper.Parse(ss);
 
+        public static Grid Parse(string[] ss, out Size size) =>
+            Helper.Parse(ss, out size);
+
         public static Grid Parse(string[] ss, char c) =>
             Helper.Parse(ss, c);
+
+        public static Grid Parse(string[] ss, char c, out Size size) =>
+            Helper.Parse(ss, c, out size);
 
         public static Vector ParseVector(string s) =>
             Helper.ParseVector(s);
