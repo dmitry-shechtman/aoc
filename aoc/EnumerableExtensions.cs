@@ -13,12 +13,16 @@ namespace aoc
         public static IEnumerable<T> SelectMany<T>(this IEnumerable<IEnumerable<T>> source) =>
             source.SelectMany(v => v);
 
+        public static IEnumerable<IGrouping<T, T>> Group<T>(this IEnumerable<T> source) =>
+            source.GroupBy(v => v);
+
         public static bool All<T>(this IEnumerable<T> source, Func<T, int, bool> predicate) =>
             source.Select().All(t => predicate(t.Value, t.Index));
 
         public static bool Any<T>(this IEnumerable<T> source, Func<T, int, bool> predicate) =>
             source.Select().Any(t => predicate(t.Value, t.Index));
 
+#if !NET7_0_OR_GREATER
         public static IOrderedEnumerable<T> Order<T>(this IEnumerable<T> source) =>
             source.OrderBy(v => v);
 
@@ -30,9 +34,7 @@ namespace aoc
 
         public static IOrderedEnumerable<T> OrderDescending<T>(this IEnumerable<T> source, IComparer<T> comparer) =>
             source.OrderByDescending(v => v, comparer);
-
-        public static IEnumerable<IGrouping<T, T>> Group<T>(this IEnumerable<T> source) =>
-            source.GroupBy(v => v);
+#endif
 
 #if !NET6_0_OR_GREATER
         public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int size) =>
