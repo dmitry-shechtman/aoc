@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace aoc
 {
     using Helper = Internal.Vector2DHelper<DoubleVector, double>;
 
+    [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
     public readonly struct DoubleVector : IVector<DoubleVector, DoubleMatrix, double>, IVector2D<DoubleVector, double>
     {
         private static readonly Lazy<Helper> _helper =
@@ -61,6 +63,9 @@ namespace aoc
 
         public readonly string ToString(string format, IFormatProvider provider = null) =>
             Helper.ToString(this, format, provider);
+
+        private string GetDebuggerDisplay() =>
+            ToString("(x,y)");
 
         public readonly void Deconstruct(out double x, out double y)
         {
