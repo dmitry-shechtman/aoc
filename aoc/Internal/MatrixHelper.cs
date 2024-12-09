@@ -39,7 +39,7 @@ namespace aoc.Internal
         where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
         where TVectorHelper : IVectorHelper<TVector>
     {
-        protected MatrixHelper(Func<TVector[], TMatrix> fromRowArray, TVectorHelper vector)
+        protected MatrixHelper(FromArray<TMatrix, TVector> fromRowArray, TVectorHelper vector)
             : base(fromRowArray, vector)
         {
             Vector = vector;
@@ -68,7 +68,7 @@ namespace aoc.Internal
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Matrix2DHelper(Func<TVector[], TMatrix> fromRowArray, Vector2DHelper<TVector, T> vector)
+        public Matrix2DHelper(FromArray<TMatrix, TVector> fromRowArray, Vector2DHelper<TVector, T> vector)
             : base(fromRowArray, vector)
         {
             Identity         = FromRowArray(Vector.East,  Vector.South);
@@ -122,7 +122,7 @@ namespace aoc.Internal
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Matrix3DHelper(Func<TVector[], TMatrix> fromRowArray, Vector3DHelper<TVector, T> vector)
+        public Matrix3DHelper(FromArray<TMatrix, TVector> fromRowArray, Vector3DHelper<TVector, T> vector)
             : base(fromRowArray, vector)
         {
             Identity = FromRowArray(Vector.East, Vector.South, Vector.Down);

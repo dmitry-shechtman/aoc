@@ -31,7 +31,7 @@ namespace aoc.Internal
         where TRange : struct, IRange<TRange, T>
         where T : struct, IFormattable
     {
-        public RangeHelper(Func<T[], TRange> fromArray, TryParse<T> tryParse)
+        public RangeHelper(FromArray<TRange, T> fromArray, TryParse<T> tryParse)
             : base(fromArray, tryParse)
         {
         }
@@ -44,7 +44,7 @@ namespace aoc.Internal
         where TRange : struct, IRange<TRange, TVector>
         where TVector : struct, IFormattable
     {
-        public VectorRangeHelper(Func<TVector[], TRange> fromArray, IVectorHelper<TVector> vector)
+        public VectorRangeHelper(FromArray<TRange, TVector> fromArray, IVectorHelper<TVector> vector)
             : base(fromArray, vector)
         {
         }

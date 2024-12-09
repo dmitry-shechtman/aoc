@@ -31,14 +31,11 @@ namespace aoc.Internal
         where T : struct, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy, TVector, T>
     {
-        protected VectorHelper(Func<T[], TVector> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
+        protected VectorHelper(FromArray<TVector, T> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse)
         {
             InitHeadings(minusOne, zero, one);
         }
-
-        public new TVector FromArray(params T[] values) =>
-            base.FromArray(values);
 
         protected abstract void InitHeadings(T minusOne, T zero, T one);
     }
@@ -57,7 +54,7 @@ namespace aoc.Internal
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector2DHelper(Func<T[], TVector> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
+        public Vector2DHelper(FromArray<TVector, T> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, minusOne, zero, one)
         {
         }
@@ -93,7 +90,7 @@ namespace aoc.Internal
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector3DHelper(Func<T[], TVector> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
+        public Vector3DHelper(FromArray<TVector, T> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, minusOne, zero, one)
         {
         }
@@ -133,7 +130,7 @@ namespace aoc.Internal
         where TVector : struct, IVector4D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector4DHelper(Func<T[], TVector> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
+        public Vector4DHelper(FromArray<TVector, T> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromArray, tryParse, minusOne, zero, one)
         {
         }

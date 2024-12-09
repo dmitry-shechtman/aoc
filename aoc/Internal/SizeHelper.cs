@@ -22,7 +22,7 @@ namespace aoc.Internal
         where T : struct, IFormattable
         where TStrategy: SizeHelperStrategy<TStrategy, TSize, TVector, T>
     {
-        protected SizeHelper(Func<T[], TSize> fromArray, TryParse<T> tryParse)
+        protected SizeHelper(FromArray<TSize, T> fromArray, TryParse<T> tryParse)
             : base(fromArray, tryParse)
         {
         }
@@ -44,7 +44,7 @@ namespace aoc.Internal
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Size2DHelper(Func<T[], TSize> fromArray, TryParse<T> tryParse)
+        public Size2DHelper(FromArray<TSize, T> fromArray, TryParse<T> tryParse)
             : base(fromArray, tryParse)
         {
         }
@@ -69,7 +69,7 @@ namespace aoc.Internal
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Size3DHelper(Func<T[], TSize> fromArray, TryParse<T> tryParse)
+        public Size3DHelper(FromArray<TSize, T> fromArray, TryParse<T> tryParse)
             : base(fromArray, tryParse)
         {
         }
@@ -94,7 +94,7 @@ namespace aoc.Internal
         where TVector : struct, IVector4D<TVector, T>
         where T : struct, IFormattable
     {
-        public Size4DHelper(Func<T[], TSize> fromArray, TryParse<T> tryParse)
+        public Size4DHelper(FromArray<TSize, T> fromArray, TryParse<T> tryParse)
             : base(fromArray, tryParse)
         {
         }
