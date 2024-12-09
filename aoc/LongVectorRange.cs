@@ -32,9 +32,11 @@ namespace aoc
         public LongVector Min { get; }
         public LongVector Max { get; }
 
-        public readonly long Width  => Max.x - Min.x + 1;
-        public readonly long Height => Max.y - Min.y + 1;
-        public readonly long Length => Width * Height;
+        public readonly long Width   => Max.x - Min.x + 1;
+        public readonly long Height  => Max.y - Min.y + 1;
+
+        public readonly long Length =>
+            Width * Height;
 
         public readonly override bool Equals(object obj) =>
             obj is LongVectorRange other && Equals(other);
@@ -142,11 +144,8 @@ namespace aoc
         {
             if (OverlapsOrAdjacentTo(other))
                 throw new NotImplementedException();
-            else
-            {
-                yield return (LongVector.Min(Min, other.Min), LongVector.Min(Max, other.Max));
-                yield return (LongVector.Max(Min, other.Min), LongVector.Max(Max, other.Max));
-            }
+            yield return (LongVector.Min(Min, other.Min), LongVector.Min(Max, other.Max));
+            yield return (LongVector.Max(Min, other.Min), LongVector.Max(Max, other.Max));
         }
 
         public static IEnumerable<LongVectorRange> Union(LongVectorRange left, LongVectorRange right) =>
@@ -173,25 +172,8 @@ namespace aoc
         public static IEnumerable<LongVectorRange> operator &(LongVectorRange left, LongVectorRange right) =>
             left.Intersect(right);
 
-        public readonly T GetValue<T>(T[] array, LongVector vector) =>
-            array[GetIndex(vector)];
-
-        public readonly bool TryGetValue<T>(T[] array, LongVector vector, out T value)
-        {
-            if (!Contains(vector))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, vector);
-            return true;
-        }
-
-        public readonly T SetValue<T>(T[] array, LongVector vector, T value) =>
-            array[GetIndex(vector)] = value;
-
         public readonly long GetIndex(LongVector vector) =>
-            vector.x - Min.x +  Width * (vector.y - Min.y);
+            vector.x - Min.x + Width * (vector.y - Min.y);
 
         readonly int IIntegerSize<LongVectorRange, LongVector>.GetIndex(LongVector vector) =>
             (int)GetIndex(vector);

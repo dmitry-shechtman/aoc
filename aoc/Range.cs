@@ -118,11 +118,8 @@ namespace aoc
         {
             if (OverlapsOrAdjacentTo(other))
                 yield return Unify(other);
-            else
-            {
-                yield return (Math.Min(Min, other.Min), Math.Min(Max, other.Max));
-                yield return (Math.Max(Min, other.Min), Math.Max(Max, other.Max));
-            }
+            yield return (Math.Min(Min, other.Min), Math.Min(Max, other.Max));
+            yield return (Math.Max(Min, other.Min), Math.Max(Max, other.Max));
         }
 
         public static IEnumerable<Range> Union(Range left, Range right) =>
@@ -184,23 +181,6 @@ namespace aoc
 
         public static IEnumerable<int> Border(Range range, int size = 1) =>
             range.Border(size);
-
-        public readonly T GetValue<T>(T[] array, int key) =>
-            array[GetIndex(key)];
-
-        public readonly bool TryGetValue<T>(T[] array, int key, out T value)
-        {
-            if (!Contains(key))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, key);
-            return true;
-        }
-
-        public readonly T SetValue<T>(T[] array, int key, T value) =>
-            array[GetIndex(key)] = value;
 
         public readonly int GetIndex(int value) =>
             value - Min;

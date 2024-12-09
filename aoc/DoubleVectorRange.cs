@@ -32,9 +32,11 @@ namespace aoc
         public DoubleVector Min { get; }
         public DoubleVector Max { get; }
 
-        public readonly double Width  => Max.x - Min.x;
-        public readonly double Height => Max.y - Min.y;
-        public readonly double Length => Width * Height;
+        public readonly double Width   => Max.x - Min.x;
+        public readonly double Height  => Max.y - Min.y;
+
+        public readonly double Length =>
+            Width * Height;
 
         public readonly override bool Equals(object obj) =>
             obj is DoubleVectorRange other && Equals(other);
@@ -125,11 +127,8 @@ namespace aoc
         {
             if (Overlaps(other))
                 throw new NotImplementedException();
-            else
-            {
-                yield return (DoubleVector.Min(Min, other.Min), DoubleVector.Min(Max, other.Max));
-                yield return (DoubleVector.Max(Min, other.Min), DoubleVector.Max(Max, other.Max));
-            }
+            yield return (DoubleVector.Min(Min, other.Min), DoubleVector.Min(Max, other.Max));
+            yield return (DoubleVector.Max(Min, other.Min), DoubleVector.Max(Max, other.Max));
         }
 
         public static IEnumerable<DoubleVectorRange> Union(DoubleVectorRange left, DoubleVectorRange right) =>

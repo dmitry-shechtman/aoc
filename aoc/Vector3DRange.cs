@@ -37,9 +37,9 @@ namespace aoc
         public Vector3D Min { get; }
         public Vector3D Max { get; }
 
-        public readonly int Width  => Max.x - Min.x + 1;
-        public readonly int Height => Max.y - Min.y + 1;
-        public readonly int Depth  => Max.z - Min.z + 1;
+        public readonly int Width   => Max.x - Min.x + 1;
+        public readonly int Height  => Max.y - Min.y + 1;
+        public readonly int Depth   => Max.z - Min.z + 1;
 
         public readonly int Length =>
             Width * Height * Depth;
@@ -158,11 +158,8 @@ namespace aoc
         {
             if (OverlapsOrAdjacentTo(other))
                 throw new NotImplementedException();
-            else
-            {
-                yield return (Vector3D.Min(Min, other.Min), Vector3D.Min(Max, other.Max));
-                yield return (Vector3D.Max(Min, other.Min), Vector3D.Max(Max, other.Max));
-            }
+            yield return (Vector3D.Min(Min, other.Min), Vector3D.Min(Max, other.Max));
+            yield return (Vector3D.Max(Min, other.Min), Vector3D.Max(Max, other.Max));
         }
 
         public static IEnumerable<Vector3DRange> Union(Vector3DRange left, Vector3DRange right) =>
@@ -263,23 +260,6 @@ namespace aoc
 
         public readonly Vector3DRange SplitDown(int depth) =>
             new(new(Min.x, Min.y, Min.z + depth), Max);
-
-        public readonly T GetValue<T>(T[] array, Vector3D vector) =>
-            array[GetLongIndex(vector)];
-
-        public readonly bool TryGetValue<T>(T[] array, Vector3D vector, out T value)
-        {
-            if (!Contains(vector))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, vector);
-            return true;
-        }
-
-        public readonly T SetValue<T>(T[] array, Vector3D vector, T value) =>
-            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector3D vector) =>
             vector.x - Min.x + Width * (vector.y - Min.y + Height * (vector.z - Min.z));

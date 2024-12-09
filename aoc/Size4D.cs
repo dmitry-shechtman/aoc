@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc
@@ -119,23 +118,6 @@ namespace aoc
 
         public static bool Contains(Size4D size, Vector4D vector) =>
             size.Contains(vector);
-
-        public readonly T GetValue<T>(T[] array, Vector4D vector) =>
-            array[GetLongIndex(vector)];
-
-        public readonly bool TryGetValue<T>(T[] array, Vector4D vector, out T value)
-        {
-            if (!Contains(vector))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, vector);
-            return true;
-        }
-
-        public readonly T SetValue<T>(T[] array, Vector4D vector, T value) =>
-            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector4D vector) =>
             vector.x + width * (vector.y + height * (vector.z + depth * vector.w));

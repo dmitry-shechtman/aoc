@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc
@@ -19,9 +18,9 @@ namespace aoc
 
         public Size3D(int width, int height, int depth)
         {
-            this.width  = width;
-            this.height = height;
-            this.depth  = depth;
+            this.width   = width;
+            this.height  = height;
+            this.depth   = depth;
         }
 
         public Size3D(Size size)
@@ -43,9 +42,9 @@ namespace aoc
             obj is Size3D other && Equals(other);
 
         public readonly bool Equals(Size3D other) =>
-            width  == other.width &&
-            height == other.height &&
-            depth  == other.depth;
+            width   == other.width &&
+            height  == other.height &&
+            depth   == other.depth;
 
         public readonly override int GetHashCode() =>
             HashCode.Combine(width, height, depth);
@@ -59,9 +58,9 @@ namespace aoc
         public readonly string ToString(string format, IFormatProvider provider = null) =>
             Helper.ToString(this, format, provider);
 
-        public readonly int Width  => width;
-        public readonly int Height => height;
-        public readonly int Depth  => depth;
+        public readonly int Width   => width;
+        public readonly int Height  => height;
+        public readonly int Depth   => depth;
 
         public readonly int Length =>
             width * height * depth;
@@ -109,23 +108,6 @@ namespace aoc
 
         public static bool Contains(Size3D size, Vector3D vector) =>
             size.Contains(vector);
-
-        public readonly T GetValue<T>(T[] array, Vector3D vector) =>
-            array[GetLongIndex(vector)];
-
-        public readonly bool TryGetValue<T>(T[] array, Vector3D vector, out T value)
-        {
-            if (!Contains(vector))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, vector);
-            return true;
-        }
-
-        public readonly T SetValue<T>(T[] array, Vector3D vector, T value) =>
-            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector3D vector) =>
             vector.x + width * (vector.y + height * vector.z);

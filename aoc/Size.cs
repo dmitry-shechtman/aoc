@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc
@@ -18,8 +17,8 @@ namespace aoc
 
         public Size(int width, int height)
         {
-            this.width  = width;
-            this.height = height;
+            this.width   = width;
+            this.height  = height;
         }
 
         public Size(Vector vector)
@@ -33,8 +32,8 @@ namespace aoc
         }
 
         public readonly bool Equals(Size other) =>
-            width  == other.width &&
-            height == other.height;
+            width   == other.width &&
+            height  == other.height;
 
         public readonly override bool Equals(object obj) =>
             obj is Size other && Equals(other);
@@ -51,8 +50,8 @@ namespace aoc
         public readonly string ToString(string format, IFormatProvider provider = null) =>
             Helper.ToString(this, format, provider);
 
-        public readonly int Width  => width;
-        public readonly int Height => height;
+        public readonly int Width   => width;
+        public readonly int Height  => height;
 
         public readonly int Length =>
             width * height;
@@ -105,23 +104,6 @@ namespace aoc
 
         public readonly char GetChar(string s, Vector vector) =>
             s[GetFieldIndex(vector)];
-
-        public readonly T GetValue<T>(T[] array, Vector vector) =>
-            array[GetLongIndex(vector)];
-
-        public readonly bool TryGetValue<T>(T[] array, Vector vector, out T value)
-        {
-            if (!Contains(vector))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, vector);
-            return true;
-        }
-
-        public readonly T SetValue<T>(T[] array, Vector vector, T value) =>
-            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector vector) =>
             vector.x + width * vector.y;

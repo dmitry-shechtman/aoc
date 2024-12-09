@@ -42,7 +42,7 @@ namespace aoc
         public readonly int Depth   => Max.z - Min.z + 1;
         public readonly int Anakata => Max.w - Min.w + 1;
 
-        public readonly int Length   =>
+        public readonly int Length =>
             Width * Height * Depth * Anakata;
 
         public readonly long LongLength =>
@@ -167,11 +167,8 @@ namespace aoc
         {
             if (OverlapsOrAdjacentTo(other))
                 throw new NotImplementedException();
-            else
-            {
-                yield return (Vector4D.Min(Min, other.Min), Vector4D.Min(Max, other.Max));
-                yield return (Vector4D.Max(Min, other.Min), Vector4D.Max(Max, other.Max));
-            }
+            yield return (Vector4D.Min(Min, other.Min), Vector4D.Min(Max, other.Max));
+            yield return (Vector4D.Max(Min, other.Min), Vector4D.Max(Max, other.Max));
         }
 
         public static IEnumerable<Vector4DRange> Union(Vector4DRange left, Vector4DRange right) =>
@@ -269,23 +266,6 @@ namespace aoc
 
         public readonly Vector4DRange SplitKata(int anakata) =>
             new(new(Min.x, Min.y, Min.z, Min.w + anakata), Max);
-
-        public readonly T GetValue<T>(T[] array, Vector4D vector) =>
-            array[GetLongIndex(vector)];
-
-        public readonly bool TryGetValue<T>(T[] array, Vector4D vector, out T value)
-        {
-            if (!Contains(vector))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, vector);
-            return true;
-        }
-
-        public readonly T SetValue<T>(T[] array, Vector4D vector, T value) =>
-            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector4D vector) =>
             vector.x - Min.x + Width * (vector.y - Min.y + Height * (vector.z - Min.z + Depth * (vector.w - Min.w)));

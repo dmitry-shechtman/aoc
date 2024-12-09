@@ -37,10 +37,12 @@ namespace aoc
         public LongVector3D Min { get; }
         public LongVector3D Max { get; }
 
-        public readonly long Width  => Max.x - Min.x + 1;
-        public readonly long Height => Max.y - Min.y + 1;
-        public readonly long Depth  => Max.z - Min.z + 1;
-        public readonly long Length => Width * Height * Depth;
+        public readonly long Width   => Max.x - Min.x + 1;
+        public readonly long Height  => Max.y - Min.y + 1;
+        public readonly long Depth   => Max.z - Min.z + 1;
+
+        public readonly long Length =>
+            Width * Height * Depth;
 
         public readonly override bool Equals(object obj) =>
             obj is LongVector3DRange other && Equals(other);
@@ -153,11 +155,8 @@ namespace aoc
         {
             if (OverlapsOrAdjacentTo(other))
                 throw new NotImplementedException();
-            else
-            {
-                yield return (LongVector3D.Min(Min, other.Min), LongVector3D.Min(Max, other.Max));
-                yield return (LongVector3D.Max(Min, other.Min), LongVector3D.Max(Max, other.Max));
-            }
+            yield return (LongVector3D.Min(Min, other.Min), LongVector3D.Min(Max, other.Max));
+            yield return (LongVector3D.Max(Min, other.Min), LongVector3D.Max(Max, other.Max));
         }
 
         public static IEnumerable<LongVector3DRange> Union(LongVector3DRange left, LongVector3DRange right) =>
@@ -183,23 +182,6 @@ namespace aoc
 
         public static IEnumerable<LongVector3DRange> operator &(LongVector3DRange left, LongVector3DRange right) =>
             left.Intersect(right);
-
-        public readonly T GetValue<T>(T[] array, LongVector3D vector) =>
-            array[GetIndex(vector)];
-
-        public readonly bool TryGetValue<T>(T[] array, LongVector3D vector, out T value)
-        {
-            if (!Contains(vector))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, vector);
-            return true;
-        }
-
-        public readonly T SetValue<T>(T[] array, LongVector3D vector, T value) =>
-            array[GetIndex(vector)] = value;
 
         public readonly long GetIndex(LongVector3D vector) =>
             vector.x - Min.x + Width * (vector.y - Min.y + Height * (vector.z - Min.z));

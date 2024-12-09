@@ -37,9 +37,11 @@ namespace aoc
         public Vector Min { get; }
         public Vector Max { get; }
 
-        public readonly int Width  => Max.x - Min.x + 1;
-        public readonly int Height => Max.y - Min.y + 1;
-        public readonly int Length  => Width * Height;
+        public readonly int Width   => Max.x - Min.x + 1;
+        public readonly int Height  => Max.y - Min.y + 1;
+
+        public readonly int Length =>
+            Width * Height;
 
         public readonly long LongLength =>
             (long)Width * Height;
@@ -150,11 +152,8 @@ namespace aoc
         {
             if (OverlapsOrAdjacentTo(other))
                 throw new NotImplementedException();
-            else
-            {
-                yield return (Vector.Min(Min, other.Min), Vector.Min(Max, other.Max));
-                yield return (Vector.Max(Min, other.Min), Vector.Max(Max, other.Max));
-            }
+            yield return (Vector.Min(Min, other.Min), Vector.Min(Max, other.Max));
+            yield return (Vector.Max(Min, other.Min), Vector.Max(Max, other.Max));
         }
 
         public static IEnumerable<VectorRange> Union(VectorRange left, VectorRange right) =>
@@ -249,23 +248,6 @@ namespace aoc
 
         public readonly VectorRange SplitSouth(int height) =>
             new(new(Min.x, Min.y + height), Max);
-
-        public readonly T GetValue<T>(T[] array, Vector vector) =>
-            array[GetLongIndex(vector)];
-
-        public readonly bool TryGetValue<T>(T[] array, Vector vector, out T value)
-        {
-            if (!Contains(vector))
-            {
-                value = default;
-                return false;
-            }
-            value = GetValue(array, vector);
-            return true;
-        }
-
-        public readonly T SetValue<T>(T[] array, Vector vector, T value) =>
-            array[GetLongIndex(vector)] = value;
 
         public readonly int GetIndex(Vector vector) =>
             vector.x - Min.x + Width * (vector.y - Min.y);

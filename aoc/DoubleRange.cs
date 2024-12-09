@@ -116,11 +116,8 @@ namespace aoc
         {
             if (Overlaps(other))
                 yield return Unify(other);
-            else
-            {
-                yield return (Math.Min(Min, other.Min), Math.Min(Max, other.Max));
-                yield return (Math.Max(Min, other.Min), Math.Max(Max, other.Max));
-            }
+            yield return (Math.Min(Min, other.Min), Math.Min(Max, other.Max));
+            yield return (Math.Max(Min, other.Min), Math.Max(Max, other.Max));
         }
 
         public static IEnumerable<DoubleRange> Union(DoubleRange left, DoubleRange right) =>

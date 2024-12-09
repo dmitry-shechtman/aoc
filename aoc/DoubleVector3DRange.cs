@@ -37,10 +37,12 @@ namespace aoc
         public DoubleVector3D Min { get; }
         public DoubleVector3D Max { get; }
 
-        public readonly double Width  => Max.x - Min.x;
-        public readonly double Height => Max.y - Min.y;
-        public readonly double Depth  => Max.z - Min.z;
-        public readonly double Length => Width * Height * Depth;
+        public readonly double Width   => Max.x - Min.x;
+        public readonly double Height  => Max.y - Min.y;
+        public readonly double Depth   => Max.z - Min.z;
+
+        public readonly double Length =>
+            Width * Height * Depth;
 
         public readonly override bool Equals(object obj) =>
             obj is DoubleVector3DRange other && Equals(other);
@@ -134,11 +136,8 @@ namespace aoc
         {
             if (Overlaps(other))
                 throw new NotImplementedException();
-            else
-            {
-                yield return (DoubleVector3D.Min(Min, other.Min), DoubleVector3D.Min(Max, other.Max));
-                yield return (DoubleVector3D.Max(Min, other.Min), DoubleVector3D.Max(Max, other.Max));
-            }
+            yield return (DoubleVector3D.Min(Min, other.Min), DoubleVector3D.Min(Max, other.Max));
+            yield return (DoubleVector3D.Max(Min, other.Min), DoubleVector3D.Max(Max, other.Max));
         }
 
         public static IEnumerable<DoubleVector3DRange> Union(DoubleVector3DRange left, DoubleVector3DRange right) =>

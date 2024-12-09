@@ -15,9 +15,6 @@ namespace aoc
         where TSelf : struct, IIntegerSize<TSelf, T>
         where T : struct
     {
-        TValue GetValue<TValue>(TValue[] array, T key);
-        bool TryGetValue<TValue>(TValue[] array, T key, out TValue value);
-        TValue SetValue<TValue>(TValue[] array, T key, TValue value);
         int GetIndex(T key);
         long GetLongIndex(T key);
 
