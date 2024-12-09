@@ -14,8 +14,9 @@ namespace System.Text.RegularExpressions
         public static long[] GetLongs(this Regex regex, string input) =>
             GetValues(regex, input, long.Parse);
 
-        public static T[] GetValues<T>(this Regex regex, string input, Func<string, T> selector) =>
-            regex.Match(input).Groups.GetValues(selector);
+        public static T[] GetValues<T>(this Regex regex, string input,
+            Func<string, T> selector) =>
+                regex.Match(input).Groups.GetValues(selector);
 
         public static IEnumerable<string[]> SelectStringsMany(this Regex regex, string input) =>
             regex.Matches(input).Select(MatchExtensions.GetStrings);
