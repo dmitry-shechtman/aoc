@@ -64,14 +64,14 @@ namespace aoc.Grids
         public TSelf MoveNext(TRange range) =>
             MoveNext(GetAllNeighborsAndSelf(range), DefaultFilterInclusive);
 
-        public TSelf MoveNext(Func<TVector, bool> predicate) =>
-            MoveNext(GetAllNeighborsAndSelf(), predicate);
+        public TSelf MoveNext(Func<TVector, bool> predicate, bool inclusive = false) =>
+            MoveNext(GetAllNeighbors(inclusive), predicate);
 
-        public TSelf MoveNext(Func<TVector, bool> predicate, TSize size) =>
-            MoveNext(GetAllNeighborsAndSelf(size), predicate);
+        public TSelf MoveNext(Func<TVector, bool> predicate, TSize size, bool inclusive = false) =>
+            MoveNext(GetAllNeighbors(size, inclusive), predicate);
 
-        public TSelf MoveNext(Func<TVector, bool> predicate, TRange range) =>
-            MoveNext(GetAllNeighborsAndSelf(range), predicate);
+        public TSelf MoveNext(Func<TVector, bool> predicate, TRange range, bool inclusive = false) =>
+            MoveNext(GetAllNeighbors(range, inclusive), predicate);
 
         public TSelf MoveNext(Func<TVector, int, bool> filterInclusive) =>
             MoveNext(GetAllNeighborsAndSelf(), filterInclusive);
@@ -95,13 +95,27 @@ namespace aoc.Grids
         }
 
         private ParallelQuery<TVector> GetAllNeighborsAndSelf(TSize size) =>
-            GetAllNeighborsAndSelf().Where(size.Contains);
+            GetAllNeighbors(size, true);
 
         private ParallelQuery<TVector> GetAllNeighborsAndSelf(TRange range) =>
-            GetAllNeighborsAndSelf().Where(range.Contains);
+            GetAllNeighbors(range, true);
 
         private ParallelQuery<TVector> GetAllNeighborsAndSelf() =>
-            Points.SelectMany(GetNeighborsAndSelf).Distinct().AsParallel();
+            GetAllNeighbors(true);
+
+        private ParallelQuery<TVector> GetAllNeighbors(TSize size, bool inclusive) =>
+            GetAllNeighbors(inclusive).Where(size.Contains);
+
+        private ParallelQuery<TVector> GetAllNeighbors(TRange range, bool inclusive) =>
+            GetAllNeighbors(inclusive).Where(range.Contains);
+
+        private ParallelQuery<TVector> GetAllNeighbors(bool inclusive)
+        {
+            var query = inclusive
+                ? Points.SelectMany(GetNeighborsAndSelf)
+                : Points.SelectMany(GetNeighbors);
+            return query.Distinct().AsParallel();
+        }
 
         private bool DefaultFilterInclusive(TVector p, int count) =>
             count == 3 || count == 4 && Points.Contains(p);
