@@ -55,26 +55,44 @@ namespace aoc.Grids
             return count;
         }
 
-        public void MoveNext() =>
+        public TSelf MoveNext() =>
             MoveNext(DefaultFilterInclusive);
 
-        public void MoveNext(TSize size) =>
+        public TSelf MoveNext(TSize size) =>
             MoveNext(GetAllNeighborsAndSelf(size), DefaultFilterInclusive);
 
-        public void MoveNext(TRange range) =>
+        public TSelf MoveNext(TRange range) =>
             MoveNext(GetAllNeighborsAndSelf(range), DefaultFilterInclusive);
 
-        public void MoveNext(Func<TVector, int, bool> filterInclusive) =>
+        public TSelf MoveNext(Func<TVector, bool> predicate) =>
+            MoveNext(GetAllNeighborsAndSelf(), predicate);
+
+        public TSelf MoveNext(Func<TVector, bool> predicate, TSize size) =>
+            MoveNext(GetAllNeighborsAndSelf(size), predicate);
+
+        public TSelf MoveNext(Func<TVector, bool> predicate, TRange range) =>
+            MoveNext(GetAllNeighborsAndSelf(range), predicate);
+
+        public TSelf MoveNext(Func<TVector, int, bool> filterInclusive) =>
             MoveNext(GetAllNeighborsAndSelf(), filterInclusive);
 
-        public void MoveNext(Func<TVector, int, bool> filterInclusive, TSize size) =>
+        public TSelf MoveNext(Func<TVector, int, bool> filterInclusive, TSize size) =>
             MoveNext(GetAllNeighborsAndSelf(size), filterInclusive);
 
-        public void MoveNext(Func<TVector, int, bool> filterInclusive, TRange range) =>
+        public TSelf MoveNext(Func<TVector, int, bool> filterInclusive, TRange range) =>
             MoveNext(GetAllNeighborsAndSelf(range), filterInclusive);
 
-        private void MoveNext(ParallelQuery<TVector> pp, Func<TVector, int, bool> filterInclusive) =>
+        private TSelf MoveNext(ParallelQuery<TVector> pp, Func<TVector, bool> predicate)
+        {
+            Points = pp.Where(predicate).ToHashSet();
+            return (TSelf)this;
+        }
+
+        private TSelf MoveNext(ParallelQuery<TVector> pp, Func<TVector, int, bool> filterInclusive)
+        {
             Points = pp.Where(p => filterInclusive(p, CountNeighborsAndSelf(p))).ToHashSet();
+            return (TSelf)this;
+        }
 
         private ParallelQuery<TVector> GetAllNeighborsAndSelf(TSize size) =>
             GetAllNeighborsAndSelf().Where(size.Contains);
