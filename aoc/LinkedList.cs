@@ -46,6 +46,8 @@ namespace aoc
         public T RemoveFirst()
         {
             var node = First;
+            if (node is null)
+                throw new InvalidOperationException();
             node.Remove();
             if ((First = node.Next) is null)
                 Last = null;
@@ -63,6 +65,8 @@ namespace aoc
         public T RemoveLast()
         {
             var node = Last;
+            if (node is null)
+                throw new InvalidOperationException();
             node.Remove();
             if ((Last = node.Previous) is null)
                 First = null;
