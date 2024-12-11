@@ -9,6 +9,19 @@ namespace aoc
         public LinkedListNode<T> First { get; private set; }
         public LinkedListNode<T> Last  { get; private set; }
 
+        public LinkedList(IEnumerable<T> values)
+        {
+            LinkedListNode<T> last = null, node;
+            foreach (var value in values)
+            {
+                node = new(value, last, null);
+                if (last is null)
+                    First = node;
+                last = node;
+            }
+            Last = last;
+        }
+
         public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value)
         {
             if (node is null)
