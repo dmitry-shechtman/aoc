@@ -29,7 +29,7 @@ namespace aoc.Grids
         public int Count => Grids.Length;
 
         public TGrid[] Slice(int start, int length) =>
-            Grids[start..(length - start)];
+            Grids[start..(start + length)];
     }
 
     public sealed class MultiGrid : MultiGrid<MultiGrid, Grid>
