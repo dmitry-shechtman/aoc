@@ -28,12 +28,8 @@ namespace aoc.Grids
 
         public int Count => Grids.Length;
 
-        public TGrid[] Slice(int start, int length)
-        {
-            var slice = new TGrid[length];
-            Array.Copy(Grids, start, slice, 0, length);
-            return slice;
-        }
+        public TGrid[] Slice(int start, int length) =>
+            Grids[start..(length - start)];
     }
 
     public sealed class MultiGrid : MultiGrid<MultiGrid, Grid>
