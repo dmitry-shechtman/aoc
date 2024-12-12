@@ -209,58 +209,49 @@ namespace aoc.Grids
         public static Vector[] Headings =>
             Helper.Headings;
 
-        public static int GetHeading(string s) =>
+        public static int GetHeading(ReadOnlySpan<char> s) =>
             Helper.GetHeading(s);
 
-        public static bool TryGetHeading(string s, out int heading) =>
+        public static bool TryGetHeading(ReadOnlySpan<char> s, out int heading) =>
             Helper.TryGetHeading(s, out heading);
 
         public static string ToString(Vector vector, char format) =>
             Helper.ToString(vector, format);
 
+        public static Grid Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
+
         public static Grid Parse(string s) =>
             Helper.Parse(s);
 
-        public static Grid Parse(string s, out Size size) =>
+        public static Grid Parse(ReadOnlySpan<char> s, out Size size) =>
             Helper.Parse(s, out size);
 
-        public static Grid Parse(string s, char separator) =>
+        public static Grid Parse(ReadOnlySpan<char> s, char separator) =>
             Helper.Parse(s, separator);
 
-        public static Grid Parse(string s, char separator, out Size size) =>
+        public static Grid Parse(ReadOnlySpan<char> s, char separator, out Size size) =>
             Helper.Parse(s, separator, out size);
 
-        public static Grid Parse(string s, char separator, char c) =>
+        public static Grid Parse(ReadOnlySpan<char> s, char separator, char c) =>
             Helper.Parse(s, separator, c);
 
-        public static Grid Parse(string s, char separator, char c, out Size size) =>
+        public static Grid Parse(ReadOnlySpan<char> s, char separator, char c, out Size size) =>
             Helper.Parse(s, separator, c, out size);
 
-        public static Grid Parse(string[] ss) =>
-            Helper.Parse(ss);
-
-        public static Grid Parse(string[] ss, out Size size) =>
-            Helper.Parse(ss, out size);
-
-        public static Grid Parse(string[] ss, char c) =>
-            Helper.Parse(ss, c);
-
-        public static Grid Parse(string[] ss, char c, out Size size) =>
-            Helper.Parse(ss, c, out size);
-
-        public static Vector ParseVector(string s) =>
+        public static Vector ParseVector(ReadOnlySpan<char> s) =>
             Helper.ParseVector(s);
 
-        public static bool TryParseVector(string s, out Vector vector) =>
+        public static bool TryParseVector(ReadOnlySpan<char> s, out Vector vector) =>
             Helper.TryParseVector(s, out vector);
 
-        public static IEnumerable<Vector> ParseVectors(string s) =>
+        public static IEnumerable<Vector> ParseVectors(ReadOnlySpan<char> s) =>
             Helper.ParseVectors(s);
 
-        public static bool TryParseVectors(string s, out IEnumerable<Vector> vectors) =>
+        public static bool TryParseVectors(ReadOnlySpan<char> s, out IEnumerable<Vector> vectors) =>
             Helper.TryParseVectors(s, out vectors);
 
-        public static IEnumerable<(Vector v, int d)> ParsePath(string s) =>
+        public static IEnumerable<(Vector v, int d)> ParsePath(ReadOnlySpan<char> s) =>
             Helper.ParsePath(s);
 
         public static IEnumerable<(Vector v, int d)> ParsePath(string s, char separator) =>

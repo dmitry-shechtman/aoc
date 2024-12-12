@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace aoc.Grids
@@ -99,28 +100,28 @@ namespace aoc.Grids
         public static Vector4D[] Headings =>
             Helper.Headings;
 
-        public static int GetHeading(string s) =>
+        public static int GetHeading(ReadOnlySpan<char> s) =>
             Helper.GetHeading(s);
 
-        public static bool TryGetHeading(string s, out int heading) =>
+        public static bool TryGetHeading(ReadOnlySpan<char> s, out int heading) =>
             Helper.TryGetHeading(s, out heading);
 
         public static string ToString(Vector4D vector, char format) =>
             Helper.ToString(vector, format);
 
-        public static Vector4D ParseVector(string s) =>
+        public static Vector4D ParseVector(ReadOnlySpan<char> s) =>
             Helper.ParseVector(s);
 
-        public static bool TryParseVector(string s, out Vector4D vector) =>
+        public static bool TryParseVector(ReadOnlySpan<char> s, out Vector4D vector) =>
             Helper.TryParseVector(s, out vector);
 
-        public static IEnumerable<Vector4D> ParseVectors(string s) =>
+        public static IEnumerable<Vector4D> ParseVectors(ReadOnlySpan<char> s) =>
             Helper.ParseVectors(s);
 
-        public static bool TryParseVectors(string s, out IEnumerable<Vector4D> vectors) =>
+        public static bool TryParseVectors(ReadOnlySpan<char> s, out IEnumerable<Vector4D> vectors) =>
             Helper.TryParseVectors(s, out vectors);
 
-        public static IEnumerable<(Vector4D v, int d)> ParsePath(string s) =>
+        public static IEnumerable<(Vector4D v, int d)> ParsePath(ReadOnlySpan<char> s) =>
             Helper.ParsePath(s);
 
         public static IEnumerable<(Vector4D v, int d)> ParsePath(string s, char separator) =>

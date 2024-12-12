@@ -41,34 +41,40 @@ namespace aoc.Grids
         {
         }
 
+        public static MultiGrid Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
+
         public static MultiGrid Parse(string s) =>
             Helper.Parse(s);
+
+        public static MultiGrid Parse(ReadOnlySpan<char> s, out Size size) =>
+            Helper.Parse(s, out size);
 
         public static MultiGrid Parse(string s, out Size size) =>
             Helper.Parse(s, out size);
 
+        public static MultiGrid Parse(ReadOnlySpan<char> s, Func<char, bool> predicate) =>
+            Helper.Parse(s, predicate);
+
         public static MultiGrid Parse(string s, Func<char, bool> predicate) =>
             Helper.Parse(s, predicate);
+
+        public static MultiGrid Parse(ReadOnlySpan<char> s, Func<char, bool> predicate, out Size size) =>
+            Helper.Parse(s, predicate, out size);
 
         public static MultiGrid Parse(string s, Func<char, bool> predicate, out Size size) =>
             Helper.Parse(s, predicate, out size);
 
-        public static MultiGrid Parse(string s, ReadOnlySpan<char> cc) =>
+        public static MultiGrid Parse(ReadOnlySpan<char> s, ReadOnlySpan<char> cc) =>
             Helper.Parse(s, cc);
 
-        public static MultiGrid Parse(string s, ReadOnlySpan<char> cc, out Size size) =>
+        public static MultiGrid Parse(ReadOnlySpan<char> s, ReadOnlySpan<char> cc, out Size size) =>
             Helper.Parse(s, cc, out size);
 
-        public static MultiGrid Parse(string s, char separator, ReadOnlySpan<char> cc) =>
+        public static MultiGrid Parse(ReadOnlySpan<char> s, char separator, ReadOnlySpan<char> cc) =>
             Helper.Parse(s, separator, cc);
 
-        public static MultiGrid Parse(string s, char separator, ReadOnlySpan<char> cc, out Size size) =>
+        public static MultiGrid Parse(ReadOnlySpan<char> s, char separator, ReadOnlySpan<char> cc, out Size size) =>
             Helper.Parse(s, separator, cc, out size);
-
-        public static MultiGrid Parse(string[] ss, ReadOnlySpan<char> cc) =>
-            Helper.Parse(ss, cc);
-
-        public static MultiGrid Parse(string[] ss, ReadOnlySpan<char> cc, out Size size) =>
-            Helper.Parse(ss, cc, out size);
     }
 }

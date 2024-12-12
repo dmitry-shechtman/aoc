@@ -12,16 +12,16 @@ namespace aoc.Internal
     {
         public abstract TVector[] Headings { get; }
 
-        public int GetHeading(string s) =>
+        public int GetHeading(ReadOnlySpan<char> s) =>
             TryGetHeading(s, out int heading)
                 ? heading
                 : throw new ArgumentOutOfRangeException(nameof(s));
 
-        public bool TryGetHeading(string s, out int heading)
+        public bool TryGetHeading(ReadOnlySpan<char> s, out int heading)
         {
-            s = s.ToLowerInvariant();
+            var t = s.ToString().ToLowerInvariant();
             foreach (var ss in FormatStrings)
-                if ((heading = ss.IndexOf(s)) >= 0)
+                if ((heading = ss.IndexOf(t)) >= 0)
                     return true;
             heading = -1;
             return false;
@@ -40,13 +40,15 @@ namespace aoc.Internal
                 : ss[index].ToString();
         }
 
-        public IEnumerable<TVector> ParseVectors(string s)
+        public IEnumerable<TVector> ParseVectors(ReadOnlySpan<char> s)
         {
+            var vectors = Enumerable.Empty<TVector>();
             for (int i = 0; i < s.Length;)
-                yield return ParseVector(s, ref i);
+                vectors = vectors.Append(ParseVector(s, ref i));
+            return vectors;
         }
 
-        public bool TryParseVectors(string s, out IEnumerable<TVector> value)
+        public bool TryParseVectors(ReadOnlySpan<char> s, out IEnumerable<TVector> value)
         {
             value = Enumerable.Empty<TVector>();
             for (int i = 0; i < s.Length;)
@@ -57,27 +59,29 @@ namespace aoc.Internal
             return true;
         }
 
-        public TVector ParseVector(string s)
+        public TVector ParseVector(ReadOnlySpan<char> s)
         {
             int i = 0;
             return ParseVector(s, ref i);
         }
 
-        public bool TryParseVector(string s, out TVector vector)
+        public bool TryParseVector(ReadOnlySpan<char> s, out TVector vector)
         {
             int i = 0;
             return TryParse(s, ref i, out vector);
         }
 
-        private TVector ParseVector(string s, ref int i) =>
+        private TVector ParseVector(ReadOnlySpan<char> s, ref int i) =>
             TryParse(s, ref i, out TVector vector)
                 ? vector
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public IEnumerable<(TVector v, int d)> ParsePath(string s)
+        public IEnumerable<(TVector v, int d)> ParsePath(ReadOnlySpan<char> s)
         {
+            var path = Enumerable.Empty<(TVector, int)>();
             for (int i = 0; i < s.Length;)
-                yield return (ParseVector(s, ref i), ParseInt32(s, ref i));
+                path = path.Append((ParseVector(s, ref i), ParseInt32(s, ref i)));
+            return path;
         }
 
         public IEnumerable<(TVector v, int d)> ParsePath(string s, char separator) =>
@@ -87,15 +91,15 @@ namespace aoc.Internal
             ParsePath(s.Split(separator));
 
         public IEnumerable<(TVector v, int d)> ParsePath(string[] ss) =>
-            ss.Select(s => ParsePathSegment(s));
+            ss.Select(ParsePathSegment);
 
         public IEnumerable<(TVector v, int d)> ParsePath(string[] ss, char separator) =>
             ss.Select(s => s.Split(separator))
-                .Select(tt => ParsePathSegment(tt));
+                .Select(ParsePathSegment);
 
         public IEnumerable<(TVector v, int d)> ParsePath(string[] ss, string separator) =>
             ss.Select(s => s.Split(separator))
-                .Select(tt => ParsePathSegment(tt));
+                .Select(ParsePathSegment);
 
         private (TVector, int) ParsePathSegment(string s)
         {
@@ -106,7 +110,7 @@ namespace aoc.Internal
         private (TVector, int) ParsePathSegment(string[] tt) =>
             (ParseVector(tt[0]), int.Parse(tt[1]));
 
-        public virtual bool TryParse(string s, ref int i, out TVector vector)
+        public virtual bool TryParse(ReadOnlySpan<char> s, ref int i, out TVector vector)
         {
             if (!TryGetHeading(s, ref i, out int heading))
             {
@@ -119,7 +123,7 @@ namespace aoc.Internal
 
         protected abstract string[][] FormatStrings { get; }
 
-        protected virtual bool TryGetHeading(string s, ref int i, out int heading) =>
+        protected virtual bool TryGetHeading(ReadOnlySpan<char> s, ref int i, out int heading) =>
             TryGetHeading(s[i..(i + 1)], out heading);
 
         private string[] GetFormatStrings(char format)
@@ -131,7 +135,7 @@ namespace aoc.Internal
             return null;
         }
 
-        protected static int ParseInt32(string s, ref int i)
+        protected static int ParseInt32(ReadOnlySpan<char> s, ref int i)
         {
             int j;
             for (j = i + 1; j < s.Length; j++)
@@ -170,59 +174,56 @@ namespace aoc.Internal
             new[] { "^", ">", "v", "<" }
         };
 
-        public static Grid Parse(string s) =>
+        public static Grid Parse(ReadOnlySpan<char> s) =>
             Parse(s, out _);
 
-        public static Grid Parse(string s, out Size size) =>
+        public static Grid Parse(ReadOnlySpan<char> s, out Size size) =>
             Parse(s, DefaultSeparatorChar, out size);
 
-        public static Grid Parse(string s, char separator) =>
+        public static Grid Parse(ReadOnlySpan<char> s, char separator) =>
             Parse(s, separator, out _);
 
-        public static Grid Parse(string s, char separator, out Size size) =>
+        public static Grid Parse(ReadOnlySpan<char> s, char separator, out Size size) =>
             Parse(s, separator, DefaultPointChar, out size);
 
-        public static Grid Parse(string s, char separator, char c) =>
+        public static Grid Parse(ReadOnlySpan<char> s, char separator, char c) =>
             Parse(s, separator, c, out _);
 
-        public static Grid Parse(string s, char separator, char c, out Size size) =>
-            Parse(s.Split(separator), c, out size);
-
-        public static Grid Parse(string[] ss) =>
-            Parse(ss, out _);
-
-        public static Grid Parse(string[] ss, out Size size) =>
-            Parse(ss, DefaultPointChar, out size);
-
-        public static Grid Parse(string[] ss, char c) =>
-            Parse(ss, c, out _);
-
-        public static Grid Parse(string[] ss, char c, out Size size)
+        public static Grid Parse(ReadOnlySpan<char> s, char separator, char c, out Size size)
         {
+            int width = 0, height = 0, x = 0, y = 0;
             HashSet<Vector> points = new();
-            int height = 0;
-            for (int y = 0; y < ss.Length; y++)
+            for (int i = 0; i < s.Length; ++i, ++x)
             {
-                if (ss[y].Length > 0)
-                    ++height;
-                for (int x = 0; x < ss[y].Length; x++)
-                    if (ss[y][x] == c)
-                        points.Add((x, y));
+                if (s[i] == separator)
+                {
+                    width = x > width ? x : width;
+                    if (x > 0)
+                        ++height;
+                    (x, y) = (-1, ++y);
+                }
+                else if (s[i] == c)
+                {
+                    points.Add((x, y));
+                }
             }
-            size = new(ss[0].Length, height);
+            width = x > width ? x : width;
+            size = new(width, height);
             return new(points);
         }
 
-        public static IEnumerable<(Matrix, int)> ParseTurns(string s)
+        public static IEnumerable<(Matrix, int)> ParseTurns(ReadOnlySpan<char> s)
         {
             Matrix t = Matrix.Identity;
+            var turns = Enumerable.Empty<(Matrix, int)>();
             for (int i = 0; i < s.Length; i++)
             {
-                yield return (t, ParseInt32(s, ref i));
+                turns = turns.Append((t, ParseInt32(s, ref i)));
                 if (i == s.Length)
                     break;
                 t = ParseTurn(s[i]);
             }
+            return turns;
         }
 
         private static Matrix ParseTurn(char c) => char.ToLower(c) switch
@@ -237,7 +238,7 @@ namespace aoc.Internal
         where TSelf : GridHelper2<TSelf, TGrid>
         where TGrid : Grid<TGrid>
     {
-        protected override bool TryGetHeading(string s, ref int i, out int heading) =>
+        protected override bool TryGetHeading(ReadOnlySpan<char> s, ref int i, out int heading) =>
             i < s.Length + 2 && TryGetHeading(s[i..(i + 2)], out heading) ||
             base.TryGetHeading(s, ref i, out heading);
     }

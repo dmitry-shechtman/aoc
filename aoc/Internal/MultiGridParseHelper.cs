@@ -12,53 +12,62 @@ namespace aoc.Internal
     {
         private const char DefaultSeparatorChar = '\n';
 
+        public TMulti Parse(ReadOnlySpan<char> s) =>
+            Parse(s, out _);
+
         public TMulti Parse(string s) =>
             Parse(s, out _);
+
+        public TMulti Parse(ReadOnlySpan<char> s, out Size size) =>
+            Parse(s.ToString(), out size);
 
         public TMulti Parse(string s, out Size size) =>
             Parse(s, s.Distinct().ToArray(), out size);
 
+        public TMulti Parse(ReadOnlySpan<char> s, Func<char, bool> predicate) =>
+            Parse(s, predicate, out _);
+
         public TMulti Parse(string s, Func<char, bool> predicate) =>
             Parse(s, predicate, out _);
+
+        public TMulti Parse(ReadOnlySpan<char> s, Func<char, bool> predicate, out Size size) =>
+            Parse(s.ToString(), predicate, out size);
 
         public TMulti Parse(string s, Func<char, bool> predicate, out Size size) =>
             Parse(s, s.Where(predicate).Distinct().ToArray(), out size);
 
-        public TMulti Parse(string s, ReadOnlySpan<char> cc) =>
+        public TMulti Parse(ReadOnlySpan<char> s, ReadOnlySpan<char> cc) =>
             Parse(s, cc, out _);
 
-        public TMulti Parse(string s, ReadOnlySpan<char> cc, out Size size) =>
+        public TMulti Parse(ReadOnlySpan<char> s, ReadOnlySpan<char> cc, out Size size) =>
             Parse(s, DefaultSeparatorChar, cc, out size);
 
-        public TMulti Parse(string s, char separator, ReadOnlySpan<char> cc) =>
+        public TMulti Parse(ReadOnlySpan<char> s, char separator, ReadOnlySpan<char> cc) =>
             Parse(s, separator, cc, out _);
 
-        public TMulti Parse(string s, char separator, ReadOnlySpan<char> cc, out Size size) =>
-            Parse(s.Split(separator), cc, out size);
-
-        public TMulti Parse(string[] ss, ReadOnlySpan<char> cc) =>
-            Parse(ss, cc, out _);
-
-        public TMulti Parse(string[] ss, ReadOnlySpan<char> cc, out Size size)
+        public TMulti Parse(ReadOnlySpan<char> s, char separator, ReadOnlySpan<char> cc, out Size size)
         {
-            int height = 0, i;
+            int width = 0, height = 0, x = 0, y = 0, i;
             var points = new HashSet<Vector>[cc.Length + 1];
             for (i = 0; i < points.Length; i++)
                 points[i] = new();
-            for (int y = 0; y < ss.Length; y++)
+            for (int j = 0; j < s.Length; ++j, ++x)
             {
-                if (ss[y].Length > 0)
-                    ++height;
-                for (int x = 0; x < ss[y].Length; x++)
+                if (s[j] == separator)
                 {
-                    if ((i = cc.IndexOf(ss[y][x])) >= 0)
-                    {
-                        points[i].Add((x, y));
-                        points[^1].Add((x, y));
-                    }
+                    width = x > width ? x : width;
+                    if (x > 0)
+                        ++height;
+                    (x, y) = (-1, ++y);
+                }
+                else if ((i = cc.IndexOf(s[j])) >= 0)
+                {
+                    points[i].Add((x, y));
+                    points[^1].Add((x, y));
                 }
             }
-            size = new(ss[0].Length, height);
+            width = x > width ? x : width;
+            size = new(width, height);
             var grids = new TGrid[points.Length];
             for (i = 0; i < points.Length; i++)
                 grids[i] = CreateGrid(points[i]);
