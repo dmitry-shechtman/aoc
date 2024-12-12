@@ -76,22 +76,22 @@ namespace aoc.Grids
         public static bool TryParseVectors(ReadOnlySpan<char> s, out IEnumerable<Vector> vectors) =>
             Helper.TryParseVectors(s, out vectors);
 
-        public static IEnumerable<(Vector v, int d)> ParsePath(ReadOnlySpan<char> s) =>
+        public static IEnumerable<PathSegment<Vector>> ParsePath(ReadOnlySpan<char> s) =>
             Helper.ParsePath(s);
 
-        public static IEnumerable<(Vector v, int d)> ParsePath(string s, char separator) =>
+        public static IEnumerable<PathSegment<Vector>> ParsePath(string s, char separator) =>
             Helper.ParsePath(s, separator);
 
-        public static IEnumerable<(Vector v, int d)> ParsePath(string s, string separator) =>
+        public static IEnumerable<PathSegment<Vector>> ParsePath(string s, string separator) =>
             Helper.ParsePath(s, separator);
 
-        public static IEnumerable<(Vector v, int d)> ParsePath(string[] ss) =>
+        public static IEnumerable<PathSegment<Vector>> ParsePath(string[] ss) =>
             Helper.ParsePath(ss);
 
-        public static IEnumerable<(Vector v, int d)> ParsePath(string[] ss, char separator) =>
+        public static IEnumerable<PathSegment<Vector>> ParsePath(string[] ss, char separator) =>
             Helper.ParsePath(ss, separator);
 
-        public static IEnumerable<(Vector v, int d)> ParsePath(string[] ss, string separator) =>
+        public static IEnumerable<PathSegment<Vector>> ParsePath(string[] ss, string separator) =>
             Helper.ParsePath(ss, separator);
     }
 }

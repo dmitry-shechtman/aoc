@@ -8,7 +8,7 @@ namespace aoc.Internal
     abstract class GridHelper<TSelf, TGrid, TVector> : Singleton<TSelf>
         where TSelf : GridHelper<TSelf, TGrid, TVector>
         where TGrid : IReadOnlyCollection<TVector>
-        where TVector : struct
+        where TVector : struct, IEquatable<TVector>
     {
         public abstract TVector[] Headings { get; }
 
@@ -76,39 +76,39 @@ namespace aoc.Internal
                 ? vector
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public IEnumerable<(TVector v, int d)> ParsePath(ReadOnlySpan<char> s)
+        public IEnumerable<PathSegment<TVector>> ParsePath(ReadOnlySpan<char> s)
         {
-            var path = Enumerable.Empty<(TVector, int)>();
+            var path = Enumerable.Empty<PathSegment<TVector>>();
             for (int i = 0; i < s.Length;)
                 path = path.Append((ParseVector(s, ref i), ParseInt32(s, ref i)));
             return path;
         }
 
-        public IEnumerable<(TVector v, int d)> ParsePath(string s, char separator) =>
+        public IEnumerable<PathSegment<TVector>> ParsePath(string s, char separator) =>
             ParsePath(s.Split(separator));
 
-        public IEnumerable<(TVector v, int d)> ParsePath(string s, string separator) =>
+        public IEnumerable<PathSegment<TVector>> ParsePath(string s, string separator) =>
             ParsePath(s.Split(separator));
 
-        public IEnumerable<(TVector v, int d)> ParsePath(string[] ss) =>
+        public IEnumerable<PathSegment<TVector>> ParsePath(string[] ss) =>
             ss.Select(ParsePathSegment);
 
-        public IEnumerable<(TVector v, int d)> ParsePath(string[] ss, char separator) =>
+        public IEnumerable<PathSegment<TVector>> ParsePath(string[] ss, char separator) =>
             ss.Select(s => s.Split(separator))
                 .Select(ParsePathSegment);
 
-        public IEnumerable<(TVector v, int d)> ParsePath(string[] ss, string separator) =>
+        public IEnumerable<PathSegment<TVector>> ParsePath(string[] ss, string separator) =>
             ss.Select(s => s.Split(separator))
                 .Select(ParsePathSegment);
 
-        private (TVector, int) ParsePathSegment(string s)
+        private PathSegment<TVector> ParsePathSegment(string s)
         {
             int i = 0;
-            return (ParseVector(s, ref i), int.Parse(s[i..]));
+            return new(ParseVector(s, ref i), int.Parse(s[i..]));
         }
 
-        private (TVector, int) ParsePathSegment(string[] tt) =>
-            (ParseVector(tt[0]), int.Parse(tt[1]));
+        private PathSegment<TVector> ParsePathSegment(string[] tt) =>
+            new(ParseVector(tt[0]), int.Parse(tt[1]));
 
         public virtual bool TryParse(ReadOnlySpan<char> s, ref int i, out TVector vector)
         {
