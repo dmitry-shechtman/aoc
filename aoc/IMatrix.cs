@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface IMatrix<TSelf, TVector, T> : IEquatable<TSelf>, IReadOnlyList<TVector>, IFormattable
+    public interface IMatrix<TSelf, TVector, T> : IEquatable<TSelf>, IReadOnlyList<TVector>, IFormattableEx
         where TSelf : struct, IMatrix<TSelf, TVector, T>
         where TVector : struct, IVector<TVector, TSelf, T>
         where T : struct

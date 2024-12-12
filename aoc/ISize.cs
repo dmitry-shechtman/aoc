@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface ISize<TSelf, T> : IEquatable<TSelf>, IFormattable
+    public interface ISize<TSelf, T> : IEquatable<TSelf>, IFormattableEx
         where TSelf : struct, ISize<TSelf, T>
         where T : struct
     {
