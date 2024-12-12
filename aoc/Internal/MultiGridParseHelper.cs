@@ -1,6 +1,7 @@
 ﻿using aoc.Grids;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace aoc.Internal
 {
@@ -10,6 +11,18 @@ namespace aoc.Internal
         where TGrid : Grid<TGrid>
     {
         private const char DefaultSeparatorChar = '\n';
+
+        public TMulti Parse(string s) =>
+            Parse(s, out _);
+
+        public TMulti Parse(string s, out Size size) =>
+            Parse(s, s.Distinct().ToArray(), out size);
+
+        public TMulti Parse(string s, Func<char, bool> predicate) =>
+            Parse(s, predicate, out _);
+
+        public TMulti Parse(string s, Func<char, bool> predicate, out Size size) =>
+            Parse(s, s.Where(predicate).Distinct().ToArray(), out size);
 
         public TMulti Parse(string s, ReadOnlySpan<char> cc) =>
             Parse(s, cc, out _);

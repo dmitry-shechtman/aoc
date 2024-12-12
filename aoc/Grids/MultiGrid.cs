@@ -41,6 +41,18 @@ namespace aoc.Grids
         {
         }
 
+        public static MultiGrid Parse(string s) =>
+            Helper.Parse(s);
+
+        public static MultiGrid Parse(string s, out Size size) =>
+            Helper.Parse(s, out size);
+
+        public static MultiGrid Parse(string s, Func<char, bool> predicate) =>
+            Helper.Parse(s, predicate);
+
+        public static MultiGrid Parse(string s, Func<char, bool> predicate, out Size size) =>
+            Helper.Parse(s, predicate, out size);
+
         public static MultiGrid Parse(string s, ReadOnlySpan<char> cc) =>
             Helper.Parse(s, cc);
 
