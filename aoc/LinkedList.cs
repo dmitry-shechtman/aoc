@@ -54,6 +54,21 @@ namespace aoc
             return node;
         }
 
+        public void AddBefore(LinkedListNode<T> node, LinkedListNode<T> newNode)
+        {
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+            if (newNode is null)
+                throw new ArgumentNullException(nameof(newNode));
+            newNode.Next = node;
+            if ((newNode.Previous = node.Previous) is null)
+                First = newNode;
+            else
+                node.Previous.Next = newNode;
+            node.Previous = newNode;
+            ++Count;
+        }
+
         public LinkedListNode<T> AddBefore(Predicate<T> match, T value) =>
             AddBefore(Find(match), value);
 
@@ -68,6 +83,21 @@ namespace aoc
             return node;
         }
 
+        public void AddAfter(LinkedListNode<T> node, LinkedListNode<T> newNode)
+        {
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+            if (newNode is null)
+                throw new ArgumentNullException(nameof(newNode));
+            newNode.Previous = node;
+            if ((newNode.Next = node.Next) is null)
+                Last = newNode;
+            else
+                node.Next.Previous = newNode;
+            node.Next = newNode;
+            ++Count;
+        }
+
         public LinkedListNode<T> AddAfter(Predicate<T> match, T value) =>
             AddAfter(Find(match), value);
 
@@ -78,6 +108,18 @@ namespace aoc
                 Last = First;
             ++Count;
             return First;
+        }
+
+        public void AddFirst(LinkedListNode<T> node)
+        {
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+            node.Previous = null;
+            if ((node.Next = First) is null)
+                Last = node;
+            else
+                First.Previous = node;
+            First = node;
         }
 
         public T RemoveFirst()
@@ -99,6 +141,18 @@ namespace aoc
                 First = Last;
             ++Count;
             return Last;
+        }
+
+        public void AddLast(LinkedListNode<T> node)
+        {
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+            node.Next = null;
+            if ((node.Previous = Last) is null)
+                First = node;
+            else
+                Last.Next = node;
+            Last = node;
         }
 
         public T RemoveLast()

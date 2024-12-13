@@ -29,8 +29,8 @@ namespace aoc
 
         public ref T ValueRef => ref value;
         
-        public LinkedListNode<T> Previous { get; private set; }
-        public LinkedListNode<T> Next     { get; private set; }
+        public LinkedListNode<T> Previous { get; internal set; }
+        public LinkedListNode<T> Next     { get; internal set; }
 
         public void Remove()
         {
