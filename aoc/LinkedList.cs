@@ -144,6 +144,12 @@ namespace aoc
         public LinkedListNode<T> FindLast(Predicate<T> match) =>
             FindPrevious(Last, match);
 
+        public void CopyTo(T[] array, int index)
+        {
+            for (var node = First; node is not null; node = node.Next)
+                array[index++] = node.Value;
+        }
+
         public static IEnumerator<T> GetEnumerator(LinkedListNode<T> node)
         {
             for (; node is not null; node = node.Next)
