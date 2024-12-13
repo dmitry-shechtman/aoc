@@ -9,7 +9,8 @@ namespace aoc
         public LinkedListNode<T> First { get; private set; }
         public LinkedListNode<T> Last  { get; private set; }
 
-        public LinkedList()
+        public LinkedList(params T[] values)
+            : this((IEnumerable<T>)values)
         {
         }
 
