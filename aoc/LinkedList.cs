@@ -226,6 +226,13 @@ namespace aoc
                 array[index++] = node.Value;
         }
 
+        public void Reverse()
+        {
+            for (var node = First; node is not null; node = node.Previous)
+                (node.Previous, node.Next) = (node.Next, node.Previous);
+            (First, Last) = (Last, First);
+        }
+
         public static IEnumerator<T> GetEnumerator(LinkedListNode<T> node)
         {
             for (; node is not null; node = node.Next)
