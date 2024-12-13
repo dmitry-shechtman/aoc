@@ -20,7 +20,15 @@ namespace aoc
             Next = this;
         }
 
-        public T Value { get; set; }
+        private T value;
+        public T Value
+        {
+            get => value;
+            set => this.value = value;
+        }
+
+        public ref T ValueRef => ref value;
+        
         public LinkedListNode<T> Previous { get; private set; }
         public LinkedListNode<T> Next     { get; private set; }
 
