@@ -8,6 +8,7 @@ namespace aoc
     {
         public LinkedListNode<T> First { get; private set; }
         public LinkedListNode<T> Last  { get; private set; }
+        public int Count { get; private set; }
 
         public LinkedList(params T[] values)
             : this((IEnumerable<T>)values)
@@ -23,6 +24,7 @@ namespace aoc
                 if (last is null)
                     First = node;
                 last = node;
+                ++Count;
             }
             Last = last;
         }
@@ -34,6 +36,7 @@ namespace aoc
             node = new(value, node.Previous, node);
             if (node.Previous is null)
                 First = node;
+            ++Count;
             return node;
         }
 
@@ -47,6 +50,7 @@ namespace aoc
             node = new(value, node, node.Next);
             if (node.Next is null)
                 Last = node;
+            ++Count;
             return node;
         }
 
@@ -58,6 +62,7 @@ namespace aoc
             First = new(value, null, First);
             if (First.Next is null)
                 Last = First;
+            ++Count;
             return First;
         }
 
@@ -69,6 +74,7 @@ namespace aoc
             node.Remove();
             if ((First = node.Next) is null)
                 Last = null;
+            --Count;
             return node.Value;
         }
 
@@ -77,6 +83,7 @@ namespace aoc
             Last = new(value, Last, null);
             if (Last.Previous is null)
                 First = Last;
+            ++Count;
             return Last;
         }
 
@@ -88,6 +95,7 @@ namespace aoc
             node.Remove();
             if ((Last = node.Previous) is null)
                 First = null;
+            --Count;
             return node.Value;
         }
 
@@ -98,6 +106,7 @@ namespace aoc
                 First = node.Next;
             if (node.Next is null)
                 Last = node.Previous;
+            --Count;
         }
 
         public static LinkedListNode<T> Find(LinkedListNode<T> node, Predicate<T> match)
