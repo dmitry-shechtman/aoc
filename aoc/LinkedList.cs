@@ -241,8 +241,17 @@ namespace aoc
                 yield return node.Value;
         }
 
+        public static IEnumerator<T> GetReverseEnumerator(LinkedListNode<T> node)
+        {
+            for (; node is not null; node = node.Previous)
+                yield return node.Value;
+        }
+
         public IEnumerator<T> GetEnumerator() =>
             GetEnumerator(First);
+
+        public IEnumerator<T> GetReverseEnumerator() =>
+            GetReverseEnumerator(Last);
 
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
