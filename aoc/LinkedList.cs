@@ -29,6 +29,13 @@ namespace aoc
             Last = last;
         }
 
+        public void Clear()
+        {
+            First = null;
+            Last = null;
+            Count = 0;
+        }
+
         public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value)
         {
             if (node is null)
