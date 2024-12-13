@@ -4,11 +4,13 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public sealed class LinkedList<T> : IEnumerable<T>
+    public sealed class LinkedList<T> : ICollection<T>, IReadOnlyCollection<T>
     {
         public LinkedListNode<T> First { get; private set; }
         public LinkedListNode<T> Last  { get; private set; }
         public int Count { get; private set; }
+
+        bool ICollection<T>.IsReadOnly => false;
 
         public LinkedList(params T[] values)
             : this((IEnumerable<T>)values)
@@ -37,6 +39,9 @@ namespace aoc
             Last = null;
             Count = 0;
         }
+
+        void ICollection<T>.Add(T value) =>
+            AddLast(value);
 
         public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value)
         {
