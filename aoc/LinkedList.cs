@@ -9,6 +9,10 @@ namespace aoc
         public LinkedListNode<T> First { get; private set; }
         public LinkedListNode<T> Last  { get; private set; }
 
+        public LinkedList()
+        {
+        }
+
         public LinkedList(IEnumerable<T> values)
         {
             LinkedListNode<T> last = null, node;
