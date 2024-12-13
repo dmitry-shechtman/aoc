@@ -240,6 +240,50 @@ namespace aoc
             return node;
         }
 
+        public int IndexOf(T value) =>
+            DoFindIndex(n => Equals(n.Value, value));
+
+        public int FindIndex(Predicate<T> match) =>
+            match is null
+                ? throw new ArgumentNullException(nameof(match))
+                : DoFindIndex(n => match(n.Value));
+
+        public int FindIndex(Predicate<LinkedListNode<T>> match) =>
+            match is null
+                ? throw new ArgumentNullException(nameof(match))
+                : DoFindIndex(match);
+
+        private int DoFindIndex(Predicate<LinkedListNode<T>> match)
+        {
+            int index = 0;
+            for (var node = First; node is not null; node = node.Next, ++index)
+                if (match(node))
+                    return index;
+            return -1;
+        }
+
+        public int LastIndexOf(T value) =>
+            DoFindLastIndex(n => Equals(n.Value, value));
+
+        public int FindLastIndex(Predicate<T> match) =>
+            match is null
+                ? throw new ArgumentNullException(nameof(match))
+                : DoFindLastIndex(n => match(n.Value));
+
+        public int FindLastIndex(Predicate<LinkedListNode<T>> match) =>
+            match is null
+                ? throw new ArgumentNullException(nameof(match))
+                : DoFindLastIndex(match);
+
+        private int DoFindLastIndex(Predicate<LinkedListNode<T>> match)
+        {
+            int index = Count - 1;
+            for (var node = Last; node is not null; node = node.Previous, --index)
+                if (match(node))
+                    return index;
+            return -1;
+        }
+
         public void CopyTo(T[] array, int index)
         {
             if (array is null)
