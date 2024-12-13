@@ -118,6 +118,19 @@ namespace aoc
             --Count;
         }
 
+        public bool Remove(T value)
+        {
+            for (var node = First; node is not null; node = node.Next)
+            {
+                if (Equals(node.Value, value))
+                {
+                    Remove(node);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool Contains(T value)
         {
             for (var node = First; node is not null; node = node.Next)
