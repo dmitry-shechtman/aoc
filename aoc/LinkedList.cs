@@ -116,6 +116,14 @@ namespace aoc
             --Count;
         }
 
+        public bool Contains(T value)
+        {
+            for (var node = First; node is not null; node = node.Next)
+                if (Equals(node.Value, value))
+                    return true;
+            return false;
+        }
+
         public static LinkedListNode<T> Find(LinkedListNode<T> node, Predicate<T> match)
         {
             while (node is not null && !match(node.Value))
