@@ -17,6 +17,8 @@ namespace aoc
 
         public LinkedList(IEnumerable<T> values)
         {
+            if (values is null)
+                throw new ArgumentNullException(nameof(values));
             LinkedListNode<T> last = null, node;
             foreach (var value in values)
             {
