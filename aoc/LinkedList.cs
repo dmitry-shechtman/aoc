@@ -120,6 +120,7 @@ namespace aoc
             else
                 First.Previous = node;
             First = node;
+            ++Count;
         }
 
         public T RemoveFirst()
@@ -153,6 +154,7 @@ namespace aoc
             else
                 Last.Next = node;
             Last = node;
+            ++Count;
         }
 
         public T RemoveLast()
