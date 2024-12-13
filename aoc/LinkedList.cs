@@ -109,7 +109,7 @@ namespace aoc
         public void Remove(LinkedListNode<T> node)
         {
             if (node is null)
-                throw new InvalidOperationException();
+                throw new ArgumentNullException(nameof(node));
             node.Remove();
             if (node.Previous is null)
                 First = node.Next;
