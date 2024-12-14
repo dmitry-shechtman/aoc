@@ -216,6 +216,30 @@ namespace aoc
         public static LongMatrix3D Translate(LongVector3D v) =>
             Helper.Translate(v);
 
+        private readonly LongMatrix3D Add(LongMatrix3D right) =>
+            new(m11 + right.m11, m12 + right.m12, m13 + right.m13, m14 + right.m14,
+                m21 + right.m21, m22 + right.m22, m23 + right.m23, m24 + right.m24,
+                m31 + right.m31, m32 + right.m32, m33 + right.m33, m34 + right.m34,
+                m41 + right.m41, m42 + right.m42, m43 + right.m43, m44 + right.m44);
+
+        public static LongMatrix3D Add(LongMatrix3D left, LongMatrix3D right) =>
+            left.Add(right);
+
+        public static LongMatrix3D operator +(LongMatrix3D left, LongMatrix3D right) =>
+            left.Add(right);
+
+        private readonly LongMatrix3D Sub(LongMatrix3D right) =>
+            new(m11 - right.m11, m12 - right.m12, m13 - right.m13, m14 - right.m14,
+                m21 - right.m21, m22 - right.m22, m23 - right.m23, m24 - right.m24,
+                m31 - right.m31, m32 - right.m32, m33 - right.m33, m34 - right.m34,
+                m41 - right.m41, m42 - right.m42, m43 - right.m43, m44 - right.m44);
+
+        public static LongMatrix3D Sub(LongMatrix3D left, LongMatrix3D right) =>
+            left.Sub(right);
+
+        public static LongMatrix3D operator -(LongMatrix3D left, LongMatrix3D right) =>
+            left.Sub(right);
+
         public readonly LongVector3D Mul(LongVector3D v) =>
             new(m11 * v.x + m12 * v.y + m13 * v.z + m14,
                 m21 * v.x + m22 * v.y + m23 * v.z + m24,

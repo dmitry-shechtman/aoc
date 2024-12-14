@@ -184,6 +184,28 @@ namespace aoc
         public static LongMatrix Rotate(int degrees) =>
             Helper.Rotate(degrees);
 
+        private readonly LongMatrix Add(LongMatrix right) =>
+            new(m11 + right.m11, m12 + right.m12, m13 + right.m13,
+                m21 + right.m21, m22 + right.m22, m23 + right.m23,
+                m31 + right.m31, m32 + right.m32, m33 + right.m33);
+
+        public static LongMatrix Add(LongMatrix left, LongMatrix right) =>
+            left.Add(right);
+
+        public static LongMatrix operator +(LongMatrix left, LongMatrix right) =>
+            left.Add(right);
+
+        private readonly LongMatrix Sub(LongMatrix right) =>
+            new(m11 - right.m11, m12 - right.m12, m13 - right.m13,
+                m21 - right.m21, m22 - right.m22, m23 - right.m23,
+                m31 - right.m31, m32 - right.m32, m33 - right.m33);
+
+        public static LongMatrix Sub(LongMatrix left, LongMatrix right) =>
+            left.Sub(right);
+
+        public static LongMatrix operator -(LongMatrix left, LongMatrix right) =>
+            left.Sub(right);
+
         public readonly LongVector Mul(LongVector v) =>
             new(m11 * v.x + m12 * v.y + m13,
                 m21 * v.x + m22 * v.y + m23);
