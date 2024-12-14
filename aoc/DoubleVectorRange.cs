@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace aoc
 {
-    using Helper = Internal.VectorRangeHelper<DoubleVectorRange, DoubleVector>;
+    using Helper = Internal.RangeHelper<DoubleVectorRange, DoubleVector, double>;
 
     public readonly struct DoubleVectorRange : IRange2D<DoubleVectorRange, DoubleVector, double>
     {

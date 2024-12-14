@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace aoc
 {
-    using Helper = Internal.VectorRangeHelper<LongVector3DRange, LongVector3D>;
+    using Helper = Internal.RangeHelper<LongVector3DRange, LongVector3D, long>;
 
     public readonly struct LongVector3DRange : IIntegerRange<LongVector3DRange, LongVector3D>, IRange3D<LongVector3DRange, LongVector3D, long>
     {

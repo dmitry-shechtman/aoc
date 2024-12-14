@@ -2,11 +2,11 @@
 
 namespace aoc.Internal
 {
-    sealed class VectorRangeHelper<TRange, TVector> : Helper2<TRange, TVector, RangeHelperStrategy<TRange, TVector>, IVectorHelper<TVector>>
+    sealed class RangeHelper<TRange, TVector, T> : Helper2<TRange, TVector, RangeHelperStrategy<TRange, TVector>, IVectorHelper<TVector>>
         where TRange : struct, IRange<TRange, TVector>
         where TVector : struct, IFormattable
     {
-        public VectorRangeHelper(FromArray<TRange, TVector> fromArray, IVectorHelper<TVector> vector)
+        public RangeHelper(FromArray<TRange, TVector> fromArray, IVectorHelper<TVector> vector)
             : base(fromArray, vector)
         {
         }
