@@ -5,6 +5,9 @@ namespace aoc
 {
     public static class Vector4DExtensions
     {
+        public static Vector4D Sum(this IEnumerable<Vector4D> pp) =>
+            pp.Aggregate((x, y) => x + y);
+
         public static Vector4D Min(this IEnumerable<Vector4D> pp) =>
             new(pp.Min(p => p.x), pp.Min(p => p.y), pp.Min(p => p.z), pp.Min(p => p.w));
 
