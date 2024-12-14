@@ -188,6 +188,15 @@ namespace aoc
         public static Vector operator /(Vector vector, int scalar) =>
             vector.Div(scalar);
 
+        public readonly Vector Mod(Vector other) =>
+            new(x % other.x, y % other.y);
+
+        public static Vector Mod(Vector left, Vector right) =>
+            left.Mod(right);
+
+        public static Vector operator %(Vector left, Vector right) =>
+            left.Mod(right);
+
         public readonly int Dot(Vector other) =>
             x * other.x + y * other.y;
 

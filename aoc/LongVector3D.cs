@@ -193,6 +193,15 @@ namespace aoc
         public static LongVector3D operator /(LongVector3D vector, long scalar) =>
             vector.Div(scalar);
 
+        public readonly LongVector3D Mod(LongVector3D other) =>
+            new(x % other.x, y % other.y, z % other.z);
+
+        public static LongVector3D Mod(LongVector3D left, LongVector3D right) =>
+            left.Mod(right);
+
+        public static LongVector3D operator %(LongVector3D left, LongVector3D right) =>
+            left.Mod(right);
+
         public readonly long Dot(LongVector3D other) =>
             x * other.x + y * other.y + z * other.z;
 

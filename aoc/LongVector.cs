@@ -174,6 +174,15 @@ namespace aoc
         public static LongVector operator /(LongVector vector, long scalar) =>
             vector.Div(scalar);
 
+        public readonly LongVector Mod(LongVector other) =>
+            new(x % other.x, y % other.y);
+
+        public static LongVector Mod(LongVector left, LongVector right) =>
+            left.Mod(right);
+
+        public static LongVector operator %(LongVector left, LongVector right) =>
+            left.Mod(right);
+
         public readonly long Dot(LongVector other) =>
             x * other.x + y * other.y;
 

@@ -196,6 +196,15 @@ namespace aoc
         public static Vector4D operator /(Vector4D vector, int scalar) =>
             vector.Div(scalar);
 
+        public readonly Vector4D Mod(Vector4D other) =>
+            new(x % other.x, y % other.y, z % other.z, w % other.w);
+
+        public static Vector4D Mod(Vector4D left, Vector4D right) =>
+            left.Mod(right);
+
+        public static Vector4D operator %(Vector4D left, Vector4D right) =>
+            left.Mod(right);
+
         public readonly int Dot(Vector4D other) =>
             x * other.x + y * other.y + z * other.z + w * other.w;
 

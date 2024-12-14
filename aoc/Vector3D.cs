@@ -188,6 +188,15 @@ namespace aoc
         public static Vector3D operator /(Vector3D vector, int scalar) =>
             vector.Div(scalar);
 
+        public readonly Vector3D Mod(Vector3D other) =>
+            new(x % other.x, y % other.y, z % other.z);
+
+        public static Vector3D Mod(Vector3D left, Vector3D right) =>
+            left.Mod(right);
+
+        public static Vector3D operator %(Vector3D left, Vector3D right) =>
+            left.Mod(right);
+
         public readonly int Dot(Vector3D other) =>
             x * other.x + y * other.y + z * other.z;
 
