@@ -201,6 +201,12 @@ namespace aoc
         public static bool Invert(DoubleMatrix matrix, out DoubleMatrix inv) =>
             matrix.Invert(out inv);
 
+        public readonly bool Solve(out DoubleVector x) =>
+            Solve(C3, out x);
+
+        public static bool Solve(DoubleMatrix m, out DoubleVector x) =>
+            m.Solve(out x);
+
         public readonly bool Solve(DoubleVector b, out DoubleVector x)
         {
             if (!Invert(out DoubleMatrix inv))
