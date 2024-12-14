@@ -10,6 +10,12 @@ namespace aoc
         public static IEnumerable<(T Value, int Index)> Select<T>(this IEnumerable<T> source) =>
             source.Select((v, i) => (v, i));
 
+        public static IEnumerable<TResult> Select1<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector) =>
+            source.Select(selector);
+
+        public static IEnumerable<TResult> Select2<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector) =>
+            source.Select(selector);
+
         public static IEnumerable<T> SelectMany<T>(this IEnumerable<IEnumerable<T>> source) =>
             source.SelectMany(v => v);
 
