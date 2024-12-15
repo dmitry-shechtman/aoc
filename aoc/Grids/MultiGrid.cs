@@ -36,7 +36,7 @@ namespace aoc.Grids
     {
         private static Helper Helper { get; } = Helper.Instance;
 
-        public MultiGrid(Grid[] grids)
+        public MultiGrid(params Grid[] grids)
             : base(grids)
         {
         }
