@@ -124,7 +124,7 @@ namespace aoc.Internal
         protected abstract string[][] FormatStrings { get; }
 
         protected virtual bool TryGetHeading(ReadOnlySpan<char> s, ref int i, out int heading) =>
-            TryGetHeading(s[i..(i + 1)], out heading);
+            TryGetHeading(s[i..++i], out heading);
 
         private string[] GetFormatStrings(char format)
         {
