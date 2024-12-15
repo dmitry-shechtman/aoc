@@ -47,7 +47,7 @@ namespace aoc.Internal
 
         public TMulti Parse(ReadOnlySpan<char> s, char separator, ReadOnlySpan<char> cc, out Size size)
         {
-            int width = 0, height = 0, x = 0, y = 0, i;
+            int width = 0, height = 1, x = 0, y = 0, i;
             var points = new HashSet<Vector>[cc.Length + 1];
             for (i = 0; i < points.Length; i++)
                 points[i] = new();

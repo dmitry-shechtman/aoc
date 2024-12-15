@@ -191,7 +191,7 @@ namespace aoc.Internal
 
         public static Grid Parse(ReadOnlySpan<char> s, char separator, char c, out Size size)
         {
-            int width = 0, height = 0, x = 0, y = 0;
+            int width = 0, height = 1, x = 0, y = 0;
             HashSet<Vector> points = new();
             for (int i = 0; i < s.Length; ++i, ++x)
             {
