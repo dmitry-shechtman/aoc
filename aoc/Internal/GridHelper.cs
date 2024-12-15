@@ -40,20 +40,25 @@ namespace aoc.Internal
                 : ss[index].ToString();
         }
 
-        public IEnumerable<TVector> ParseVectors(ReadOnlySpan<char> s)
+        public IEnumerable<TVector> ParseVectors(ReadOnlySpan<char> s, ReadOnlySpan<char> skip)
         {
             var vectors = Enumerable.Empty<TVector>();
             for (int i = 0; i < s.Length;)
-                vectors = vectors.Append(ParseVector(s, ref i));
+                if (skip.Contains(s[i]))
+                    ++i;
+                else
+                    vectors = vectors.Append(ParseVector(s, ref i));
             return vectors;
         }
 
-        public bool TryParseVectors(ReadOnlySpan<char> s, out IEnumerable<TVector> value)
+        public bool TryParseVectors(ReadOnlySpan<char> s, ReadOnlySpan<char> skip, out IEnumerable<TVector> vectors)
         {
-            value = Enumerable.Empty<TVector>();
+            vectors = Enumerable.Empty<TVector>();
             for (int i = 0; i < s.Length;)
-                if (TryParse(s, ref i, out TVector vector))
-                    value = value.Append(vector);
+                if (skip.Contains(s[i]))
+                    ++i;
+                else if (TryParse(s, ref i, out TVector vector))
+                    vectors = vectors.Append(vector);
                 else
                     return false;
             return true;

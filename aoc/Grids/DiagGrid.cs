@@ -54,11 +54,11 @@ namespace aoc.Grids
         public static bool TryParseVector(ReadOnlySpan<char> s, out Vector vector) =>
             Helper.TryParseVector(s, out vector);
 
-        public static IEnumerable<Vector> ParseVectors(ReadOnlySpan<char> s) =>
-            Helper.ParseVectors(s);
+        public static IEnumerable<Vector> ParseVectors(ReadOnlySpan<char> s, params char[] skip) =>
+            Helper.ParseVectors(s, skip);
 
-        public static bool TryParseVectors(ReadOnlySpan<char> s, out IEnumerable<Vector> vectors) =>
-            Helper.TryParseVectors(s, out vectors);
+        public static bool TryParseVectors(ReadOnlySpan<char> s, ReadOnlySpan<char> skip, out IEnumerable<Vector> vectors) =>
+            Helper.TryParseVectors(s, skip, out vectors);
 
         public static IEnumerable<PathSegment<Vector>> ParsePath(ReadOnlySpan<char> s) =>
             Helper.ParsePath(s);
