@@ -10,12 +10,14 @@ namespace aoc.Grids
         where TSelf : MultiGrid<TSelf, TGrid>
         where TGrid : Grid<TGrid>
     {
-        protected MultiGrid(TGrid[] grids)
+        protected MultiGrid(TGrid[] grids, ReadOnlySpan<char> cc)
         {
             Grids = grids;
+            Chars = cc.ToArray();
         }
 
         private TGrid[] Grids { get; }
+        internal char[] Chars { get; }
 
         public TGrid this[int index] =>
             Grids[index];
@@ -36,10 +38,19 @@ namespace aoc.Grids
     {
         private static Helper Helper { get; } = Helper.Instance;
 
-        public MultiGrid(Grid[] grids)
-            : base(grids)
+        public MultiGrid(Grid[] grids, ReadOnlySpan<char> cc)
+            : base(grids, cc)
         {
         }
+
+        public override string ToString() =>
+            Helper.ToString(this);
+
+        public string ToString(Size size) =>
+            Helper.ToString(this, size);
+
+        public string ToString(VectorRange range) =>
+            Helper.ToString(this, range);
 
         public static MultiGrid Parse(ReadOnlySpan<char> s) =>
             Helper.Parse(s);

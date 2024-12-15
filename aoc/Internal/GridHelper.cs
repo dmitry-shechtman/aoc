@@ -156,13 +156,30 @@ namespace aoc.Internal
         where TSelf : GridHelper<TSelf, TGrid>
         where TGrid : Grid<TGrid>
     {
+        protected const char DefaultEmptyChar     = '.';
+        protected const char DefaultPointChar     = '#';
+        protected const char DefaultSeparatorChar = '\n';
+
+        public static string ToString(TGrid grid) =>
+            ToString(grid, grid.Range());
+
+        public static string ToString(TGrid grid, Size size) =>
+            ToString(grid, range: new(size));
+
+        public static string ToString(TGrid grid, VectorRange range)
+        {
+            var chars = new char[(range.Width + 1) * range.Height];
+            for (int y = range.Min.X, i = 0; y <= range.Max.Y; y++, chars[i++] = DefaultSeparatorChar)
+                for (int x = range.Min.Y; x <= range.Max.Y; x++)
+                    chars[i++] = grid.Contains((x, y))
+                        ? DefaultPointChar
+                        : DefaultEmptyChar;
+            return new(chars);
+        }
     }
 
     sealed class GridHelper : GridHelper<GridHelper, Grid>
     {
-        private const char DefaultSeparatorChar = '\n';
-        private const char DefaultPointChar     = '#';
-
         private GridHelper()
         {
         }

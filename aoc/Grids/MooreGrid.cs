@@ -52,6 +52,15 @@ namespace aoc.Grids
             return count;
         }
 
+        public override string ToString() =>
+            Helper.ToString(this);
+
+        public string ToString(Size size) =>
+            Helper.ToString(this, size);
+
+        public string ToString(VectorRange range) =>
+            Helper.ToString(this, range);
+
         public static Vector[] Headings =>
             Helper.Headings;
 

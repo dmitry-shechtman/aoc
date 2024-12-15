@@ -10,7 +10,30 @@ namespace aoc.Internal
         where TMulti : MultiGrid<TMulti, TGrid>
         where TGrid : Grid<TGrid>
     {
+        private const char DefaultEmptyChar     = '.';
         private const char DefaultSeparatorChar = '\n';
+
+        public static string ToString(TMulti multi) =>
+            ToString(multi, multi[^1].Range());
+
+        public static string ToString(TMulti multi, Size size) =>
+            ToString(multi, range: new(size));
+
+        public static string ToString(TMulti multi, VectorRange range)
+        {
+            var chars = new char[(range.Width + 1) * range.Height];
+            for (int y = range.Min.Y, i = 0, j = 0; y <= range.Max.Y; y++, chars[j++] = DefaultSeparatorChar)
+            {
+                for (int x = range.Min.X; x <= range.Max.X; x++, i++)
+                {
+                    var index = multi[..^1].FindIndex(g => g.Contains((x, y)));
+                    chars[j++] = index >= 0
+                        ? multi.Chars[index]
+                        : DefaultEmptyChar;
+                }
+            }
+            return new(chars);
+        }
 
         public TMulti Parse(ReadOnlySpan<char> s) =>
             Parse(s, out _);
@@ -71,11 +94,11 @@ namespace aoc.Internal
             var grids = new TGrid[points.Length];
             for (i = 0; i < points.Length; i++)
                 grids[i] = CreateGrid(points[i]);
-            return CreateMulti(grids);
+            return CreateMulti(grids, cc);
         }
 
         protected abstract TGrid CreateGrid(HashSet<Vector> points);
-        protected abstract TMulti CreateMulti(TGrid[] grids);
+        protected abstract TMulti CreateMulti(TGrid[] grids, ReadOnlySpan<char> cc);
     }
 
     sealed class MultiGridParseHelper : MultiGridParseHelper<MultiGridParseHelper, MultiGrid, Grid>
@@ -87,7 +110,7 @@ namespace aoc.Internal
         protected override Grid CreateGrid(HashSet<Vector> points) =>
             new(points);
 
-        protected override MultiGrid CreateMulti(Grid[] grids) =>
-            new(grids);
+        protected override MultiGrid CreateMulti(Grid[] grids, ReadOnlySpan<char> cc) =>
+            new(grids, cc);
     }
 }

@@ -43,6 +43,15 @@ namespace aoc.Grids
             new(p.x - 1, p.y + 1),
         };
 
+        public override string ToString() =>
+            Helper.ToString(this);
+
+        public string ToString(Size size) =>
+            Helper.ToString(this, size);
+
+        public string ToString(VectorRange range) =>
+            Helper.ToString(this, range);
+
         public static Vector[] Headings =>
             Helper.Headings;
 
