@@ -99,10 +99,10 @@ namespace aoc
         public static bool Contains(Size size, Vector vector) =>
             size.Contains(vector);
 
-        public readonly Vector FindChar(string s, char c) =>
+        public readonly Vector FindChar(ReadOnlySpan<char> s, char c) =>
             FromFieldIndex(s.IndexOf(c), width);
 
-        public readonly char GetChar(string s, Vector vector) =>
+        public readonly char GetChar(ReadOnlySpan<char> s, Vector vector) =>
             s[GetFieldIndex(vector)];
 
         public readonly int GetIndex(Vector vector) =>
@@ -114,19 +114,19 @@ namespace aoc
         private readonly int GetFieldIndex(Vector vector) =>
             vector.x + (width + 1) * vector.y;
 
-        public static Size FromField(string s) =>
+        public static Size FromField(ReadOnlySpan<char> s) =>
             FromField(s, GetFieldWidth(s));
 
-        private static Size FromField(string s, int width) =>
+        private static Size FromField(ReadOnlySpan<char> s, int width) =>
             new(width, GetFieldHeight(s, width));
 
         private static Vector FromFieldIndex(int index, int width) =>
             new(index % (width + 1), index / (width + 1));
 
-        private static int GetFieldWidth(string s) =>
+        private static int GetFieldWidth(ReadOnlySpan<char> s) =>
             s.IndexOf('\n');
 
-        private static int GetFieldHeight(string s, int width) =>
+        private static int GetFieldHeight(ReadOnlySpan<char> s, int width) =>
             (s.Length + 1) / (width + 1);
 
         public static Vector operator +(Vector vector, Size size) =>

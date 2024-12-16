@@ -118,13 +118,13 @@ namespace aoc
         private static Vector FromArray(int[] values) =>
             new(values);
 
-        public static Vector FindChar(string s, char c) =>
+        public static Vector FindChar(ReadOnlySpan<char> s, char c) =>
             Size.FromField(s).FindChar(s, c);
 
-        public readonly char GetChar(string s) =>
+        public readonly char GetChar(ReadOnlySpan<char> s) =>
             Size.FromField(s).GetChar(s, this);
 
-        public static char GetChar(Vector p, string s) =>
+        public static char GetChar(Vector p, ReadOnlySpan<char> s) =>
             p.GetChar(s);
 
         public static Vector operator +(Vector vector) =>

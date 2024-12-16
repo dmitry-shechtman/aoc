@@ -255,7 +255,7 @@ namespace aoc
         public readonly long GetLongIndex(Vector vector) =>
             vector.x - Min.x + (long)Width * (vector.y - Min.y);
 
-        public static VectorRange FromField(string s) =>
+        public static VectorRange FromField(ReadOnlySpan<char> s) =>
             new(Size.FromField(s));
 
         public static implicit operator (Vector min, Vector max)(VectorRange value) =>
