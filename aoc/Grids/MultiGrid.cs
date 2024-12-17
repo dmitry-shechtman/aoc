@@ -6,18 +6,16 @@ namespace aoc.Grids
 {
     using Helper = Internal.MultiGridParseHelper;
 
-    public abstract class MultiGrid<TSelf, TGrid> : IReadOnlyList<TGrid>
+    public abstract class MultiGrid<TSelf, TGrid> : IReadOnlyList<TGrid>, IFormattableEx
         where TSelf : MultiGrid<TSelf, TGrid>
         where TGrid : Grid<TGrid>
     {
-        protected MultiGrid(TGrid[] grids, ReadOnlySpan<char> cc)
+        protected MultiGrid(TGrid[] grids)
         {
             Grids = grids;
-            Chars = cc.ToArray();
         }
 
         private TGrid[] Grids { get; }
-        internal char[] Chars { get; }
 
         public TGrid this[int index] =>
             Grids[index];
@@ -32,25 +30,34 @@ namespace aoc.Grids
 
         public TGrid[] Slice(int start, int length) =>
             Grids[start..(start + length)];
+
+        public abstract string ToString(IFormatProvider provider);
+        public abstract string ToString(string format, IFormatProvider formatProvider);
     }
 
     public sealed class MultiGrid : MultiGrid<MultiGrid, Grid>
     {
         private static Helper Helper { get; } = Helper.Instance;
 
-        public MultiGrid(Grid[] grids, ReadOnlySpan<char> cc)
-            : base(grids, cc)
+        public MultiGrid(Grid[] grids)
+            : base(grids)
         {
         }
 
         public override string ToString() =>
             Helper.ToString(this);
 
-        public string ToString(Size size) =>
-            Helper.ToString(this, size);
+        public override string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
 
-        public string ToString(VectorRange range) =>
-            Helper.ToString(this, range);
+        public override string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
+
+        public string ToString(Size size, string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, size, format, provider);
+
+        public string ToString(VectorRange range, string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, range, format, provider);
 
         public static MultiGrid Parse(ReadOnlySpan<char> s) =>
             Helper.Parse(s);

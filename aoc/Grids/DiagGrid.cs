@@ -39,11 +39,17 @@ namespace aoc.Grids
         public override string ToString() =>
             Helper.ToString(this);
 
-        public string ToString(Size size) =>
-            Helper.ToString(this, size);
+        public override string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
 
-        public string ToString(VectorRange range) =>
-            Helper.ToString(this, range);
+        public override string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
+
+        public string ToString(Size size, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
+            Helper.ToString(this, size, format, provider);
+
+        public string ToString(VectorRange range, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
+            Helper.ToString(this, range, format, provider);
 
         public static Vector[] Headings =>
             Helper.Headings;

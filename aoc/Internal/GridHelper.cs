@@ -160,20 +160,36 @@ namespace aoc.Internal
         protected const char DefaultPointChar     = '#';
         protected const char DefaultSeparatorChar = '\n';
 
-        public static string ToString(TGrid grid) =>
-            ToString(grid, grid.Range());
+        public static string ToString(TGrid grid, IFormatProvider provider = null) =>
+            ToString(grid, null, provider);
 
-        public static string ToString(TGrid grid, Size size) =>
-            ToString(grid, range: new(size));
+        public static string ToString(TGrid grid, ReadOnlySpan<char> format, IFormatProvider provider) =>
+            ToString(grid, grid.Range(), format, provider);
 
-        public static string ToString(TGrid grid, VectorRange range)
+        public static string ToString(TGrid grid, Size size, ReadOnlySpan<char> format, IFormatProvider provider) =>
+            ToString(grid, range: new(size), format, provider);
+
+        public static string ToString(TGrid grid, VectorRange range, ReadOnlySpan<char> format, IFormatProvider _)
         {
-            var chars = new char[(range.Width + 1) * range.Height];
-            for (int y = range.Min.X, i = 0; y <= range.Max.Y; y++, chars[i++] = DefaultSeparatorChar)
+            var point = format.Length > 0
+                ? format[0]
+                : DefaultPointChar;
+            var empty = format.Length > 1
+                ? format[1]
+                : DefaultEmptyChar;
+            var separator = format.Length > 2
+                ? format[2..]
+                : new[] { DefaultSeparatorChar };
+            var chars = new char[(range.Width + separator.Length) * range.Height];
+            for (int y = range.Min.X, i = 0, k; y <= range.Max.Y; y++)
+            {
                 for (int x = range.Min.Y; x <= range.Max.Y; x++)
                     chars[i++] = grid.Contains((x, y))
-                        ? DefaultPointChar
-                        : DefaultEmptyChar;
+                        ? point
+                        : empty;
+                for (k = 0; k < separator.Length; k++)
+                    chars[i++] = separator[k];
+            }
             return new(chars);
         }
     }

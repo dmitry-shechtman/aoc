@@ -133,7 +133,7 @@ namespace aoc.Grids
             grid.Points;
     }
 
-    public abstract class Grid<TSelf> : Grid<TSelf, Vector, Size, VectorRange, int>
+    public abstract class Grid<TSelf> : Grid<TSelf, Vector, Size, VectorRange, int>, IFormattableEx
         where TSelf : Grid<TSelf>
     {
         protected Grid(Vector[] points)
@@ -168,6 +168,9 @@ namespace aoc.Grids
 
         public bool RemoveRange(IEnumerable<Vector> range) =>
             range.All(Points.Remove);
+
+        public abstract string ToString(IFormatProvider provider);
+        public abstract string ToString(string format, IFormatProvider formatProvider);
     }
 
     public sealed class Grid : Grid<Grid>
@@ -209,11 +212,17 @@ namespace aoc.Grids
         public override string ToString() =>
             Helper.ToString(this);
 
-        public string ToString(Size size) =>
-            Helper.ToString(this, size);
+        public override string ToString(IFormatProvider provider) =>
+            Helper.ToString(this, provider);
 
-        public string ToString(VectorRange range) =>
-            Helper.ToString(this, range);
+        public override string ToString(string format, IFormatProvider provider = null) =>
+            Helper.ToString(this, format, provider);
+
+        public string ToString(Size size, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
+            Helper.ToString(this, size, format, provider);
+
+        public string ToString(VectorRange range, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
+            Helper.ToString(this, range, format, provider);
 
         public static Vector[] Headings =>
             Helper.Headings;

@@ -13,24 +13,35 @@ namespace aoc.Internal
         private const char DefaultEmptyChar     = '.';
         private const char DefaultSeparatorChar = '\n';
 
-        public static string ToString(TMulti multi) =>
-            ToString(multi, multi[^1].Range());
+        public static string ToString(TMulti multi, IFormatProvider provider = null) =>
+            ToString(multi, format: null, provider);
 
-        public static string ToString(TMulti multi, Size size) =>
-            ToString(multi, range: new(size));
+        public static string ToString(TMulti multi, ReadOnlySpan<char> format, IFormatProvider provider) =>
+            ToString(multi, multi[^1].Range(), format, provider);
 
-        public static string ToString(TMulti multi, VectorRange range)
+        public static string ToString(TMulti multi, Size size, ReadOnlySpan<char> format, IFormatProvider provider) =>
+            ToString(multi, range: new(size), format, provider);
+
+        public static string ToString(TMulti multi, VectorRange range, ReadOnlySpan<char> format, IFormatProvider _)
         {
-            var chars = new char[(range.Width + 1) * range.Height];
-            for (int y = range.Min.Y, i = 0, j = 0; y <= range.Max.Y; y++, chars[j++] = DefaultSeparatorChar)
+            var empty = format.Length >= multi.Count
+                ? format[multi.Count - 1]
+                : DefaultEmptyChar;
+            var separator = format.Length > multi.Count
+                ? format[multi.Count..]
+                : new[] { DefaultSeparatorChar };
+            var chars = new char[(range.Width + separator.Length) * range.Height];
+            for (int y = range.Min.Y, i = 0, j = 0, k; y <= range.Max.Y; y++)
             {
                 for (int x = range.Min.X; x <= range.Max.X; x++, i++)
                 {
                     var index = multi[..^1].FindIndex(g => g.Contains((x, y)));
                     chars[j++] = index >= 0
-                        ? multi.Chars[index]
-                        : DefaultEmptyChar;
+                        ? format[index]
+                        : empty;
                 }
+                for (k = 0; k < separator.Length; k++)
+                    chars[j++] = separator[k];
             }
             return new(chars);
         }
@@ -94,11 +105,11 @@ namespace aoc.Internal
             var grids = new TGrid[points.Length];
             for (i = 0; i < points.Length; i++)
                 grids[i] = CreateGrid(points[i]);
-            return CreateMulti(grids, cc);
+            return CreateMulti(grids);
         }
 
         protected abstract TGrid CreateGrid(HashSet<Vector> points);
-        protected abstract TMulti CreateMulti(TGrid[] grids, ReadOnlySpan<char> cc);
+        protected abstract TMulti CreateMulti(TGrid[] grids);
     }
 
     sealed class MultiGridParseHelper : MultiGridParseHelper<MultiGridParseHelper, MultiGrid, Grid>
@@ -110,7 +121,7 @@ namespace aoc.Internal
         protected override Grid CreateGrid(HashSet<Vector> points) =>
             new(points);
 
-        protected override MultiGrid CreateMulti(Grid[] grids, ReadOnlySpan<char> cc) =>
-            new(grids, cc);
+        protected override MultiGrid CreateMulti(Grid[] grids) =>
+            new(grids);
     }
 }
