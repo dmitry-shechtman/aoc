@@ -5,44 +5,40 @@ namespace System.Text.RegularExpressions
 {
     public static class RegexExtensions
     {
-        public static string[] GetStrings(this Regex regex, string input) =>
-            GetValues(regex, input, s => s);
-
-        public static int[] GetInts(this Regex regex, string input) =>
-            GetValues(regex, input, int.Parse);
-
-        public static long[] GetLongs(this Regex regex, string input) =>
-            GetValues(regex, input, long.Parse);
+        public static T[] GetValues<T>(this Regex regex, string input)
+            where T : IConvertible =>
+                GetValues(regex, input, StringExtensions.ConvertTo<T>);
 
         public static T[] GetValues<T>(this Regex regex, string input,
             Func<string, T> selector) =>
                 regex.Match(input).Groups.GetValues(selector);
 
-        public static IEnumerable<string[]> SelectStringsMany(this Regex regex, string input) =>
-            regex.Matches(input).Select(MatchExtensions.GetStrings);
-
-        public static IEnumerable<int[]> SelectIntsMany(this Regex regex, string input) =>
-            SelectValuesMany(regex, input, int.Parse);
-
-        public static IEnumerable<long[]> SelectLongsMany(this Regex regex, string input) =>
-            SelectValuesMany(regex, input, long.Parse);
+        public static IEnumerable<T[]> SelectValuesMany<T>(this Regex regex, string input,
+            int skipCount = 1)
+                where T : IConvertible =>
+                    SelectValuesMany(regex, input, StringExtensions.ConvertTo<T>, skipCount);
 
         public static IEnumerable<T[]> SelectValuesMany<T>(this Regex regex, string input,
-            Func<string, T> selector) =>
+            Func<string, T> selector, int skipCount = 1) =>
                 regex.Matches(input)
-                    .Select(m => m.Groups.GetValues(selector));
-
-        public static Dictionary<string, string[]> GetAllStrings(this Regex regex, string input) =>
-            regex.Match(input).Groups.GetAllStrings();
-
-        public static Dictionary<string, int[]> GetAllInts(this Regex regex, string input) =>
-            regex.Match(input).Groups.GetAllInts();
-
-        public static Dictionary<string, long[]> GetAllLongs(this Regex regex, string input) =>
-            regex.Match(input).Groups.GetAllLongs();
+                    .Select(m => m.Groups.GetValues(selector, skipCount));
 
         public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
-            Func<Group, T[]> selector) =>
-                regex.Match(input).Groups.GetAllValues(selector);
+            int skipCount = 1)
+                where T : IConvertible =>
+                    GetAllValues(regex, input, StringExtensions.ConvertTo<T>, skipCount);
+
+        public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
+            Func<string, T> selector, int skipCount = 1) =>
+                regex.Match(input).Groups.GetAllValues(selector, skipCount);
+
+        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this Regex regex, string input,
+            int skipCount = 1)
+                where T : IConvertible =>
+                    SelectAllValues(regex, input, StringExtensions.ConvertTo<T>, skipCount);
+
+        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this Regex regex, string input,
+            Func<string, T> selector, int skipCount = 1) =>
+                regex.Match(input).Groups.SelectAllValues(selector, skipCount);
     }
 }

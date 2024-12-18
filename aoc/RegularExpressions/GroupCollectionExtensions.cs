@@ -22,32 +22,41 @@ namespace System.Text.RegularExpressions
                 Enumerable.ToDictionary(groups, keySelector, elementSelector);
 #endif
 
-        public static string[] GetStrings(this GroupCollection groups) =>
-            groups.Select(g => g.Value).ToArray();
-
-        public static int[] GetInts(this GroupCollection groups) =>
-            GetValues(groups, int.Parse);
-
-        public static long[] GetLongs(this GroupCollection groups) =>
-            GetValues(groups, long.Parse);
+        public static T[] GetValues<T>(this GroupCollection groups, int skipCount = 1)
+            where T : IConvertible =>
+                GetValues(groups, StringExtensions.ConvertTo<T>, skipCount);
 
         public static T[] GetValues<T>(this GroupCollection groups,
-            Func<string, T> selector) =>
-                groups.Skip(1)
+            Func<string, T> selector, int skipCount = 1) =>
+                groups.Skip(skipCount)
                     .Select(g => selector(g.Value)).ToArray();
 
-        public static Dictionary<string, string[]> GetAllStrings(this GroupCollection groups) =>
-            GetAllValues(groups, GroupExtensions.GetStrings);
+        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups, int skipCount = 1)
+            where T : IConvertible =>
+                SelectValues(groups, StringExtensions.ConvertTo<T>, skipCount);
 
-        public static Dictionary<string, int[]> GetAllInts(this GroupCollection groups) =>
-            GetAllValues(groups, GroupExtensions.GetInts);
+        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
+            Func<string, T> selector, int skipCount = 1) =>
+                groups.Skip(skipCount)
+                    .Select(g => selector(g.Value));
 
-        public static Dictionary<string, long[]> GetAllLongs(this GroupCollection groups) =>
-            GetAllValues(groups, GroupExtensions.GetLongs);
+        public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups, int skipCount = 1)
+            where T : IConvertible =>
+                GetAllValues(groups, StringExtensions.ConvertTo<T>, skipCount);
 
         public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
-            Func<Group, T[]> selector) =>
-                groups.Skip(1)
-                    .ToDictionary(g => g.Name, selector);
+            Func<string, T> selector, int skipCount = 1) =>
+                groups.Skip(skipCount)
+                    .ToDictionary(g => g.Name, g => g.GetValues(selector));
+
+        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
+            int skipCount = 1)
+                where T : IConvertible =>
+                    SelectAllValues(groups, StringExtensions.ConvertTo<T>, skipCount);
+
+        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
+            Func<string, T> selector, int skipCount = 1) =>
+                groups.Skip(skipCount)
+                    .ToDictionary(g => g.Name, g => g.SelectValues(selector));
     }
 }

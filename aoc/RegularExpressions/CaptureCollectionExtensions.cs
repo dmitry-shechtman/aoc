@@ -5,22 +5,20 @@ namespace System.Text.RegularExpressions
 {
     public static class CaptureCollectionExtensions
     {
-#if !NET6_0_OR_GREATER
-        public static IEnumerable<TResult> Select<TResult>(this CaptureCollection captures, Func<Capture, TResult> selector) =>
-            Enumerable.Select(captures, selector);
-#endif
-
-        public static string[] GetStrings(this CaptureCollection captures) =>
-            GetValues(captures, s => s);
-
-        public static int[] GetInts(this CaptureCollection captures) =>
-            GetValues(captures, int.Parse);
-
-        public static long[] GetLongs(this CaptureCollection captures) =>
-            GetValues(captures, long.Parse);
+        public static T[] GetValues<T>(this CaptureCollection captures)
+            where T : IConvertible =>
+                GetValues(captures, StringExtensions.ConvertTo<T>);
 
         public static T[] GetValues<T>(this CaptureCollection captures,
             Func<string, T> selector) =>
-                captures.Select(c => selector(c.Value)).ToArray();
+                SelectValues(captures, selector).ToArray();
+
+        public static IEnumerable<T> SelectValues<T>(this CaptureCollection captures)
+            where T : IConvertible =>
+                SelectValues(captures, StringExtensions.ConvertTo<T>);
+
+        public static IEnumerable<T> SelectValues<T>(this CaptureCollection captures,
+            Func<string, T> selector) =>
+                captures.Select(c => selector(c.Value));
     }
 }
