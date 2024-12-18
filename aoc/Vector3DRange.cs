@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace aoc
@@ -229,7 +230,9 @@ namespace aoc
             range.Shrink(size);
 
         public readonly IEnumerable<Vector3D> Border(int size = 1) =>
-            System.Linq.Enumerable.Except(this, Shrink(size));
+            size > 0
+                ? this.Except(Shrink(size))
+                : Shrink(size).Except(this);
 
         public static IEnumerable<Vector3D> Border(Vector3DRange range, int size = 1) =>
             range.Border(size);
