@@ -62,7 +62,7 @@ namespace aoc
         {
         }
 
-        public Matrix3D(Vector3D r1, Vector3D r2, Vector3D r3, Vector3D r4 = default)
+        public Matrix3D(Vector3D r1, Vector3D r2, Vector3D r3 = default, Vector3D r4 = default)
             : this(r1.x, r1.y, r1.z, r2.x, r2.y, r2.z, r3.x, r3.y, r3.z, r4.x, r4.y, r4.z)
         {
         }
@@ -198,13 +198,10 @@ namespace aoc
             Helper.TryParse(ss, separator, out matrix);
 
         public static Matrix3D FromRowArray(Vector3D[] rows) =>
-            FromRows(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
+            new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
 
         public static Matrix3D FromColumnArray(Vector3D[] columns) =>
             FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
-
-        public static Matrix3D FromRows(Vector3D r1, Vector3D r2, Vector3D r3 = default, Vector3D r4 = default) =>
-            new(r1, r2, r3, r4);
 
         public static Matrix3D FromColumns(Vector3D c1, Vector3D c2, Vector3D c3, Vector3D c4 = default) =>
             new(c1.x, c2.x, c3.x, c4.x,
@@ -271,13 +268,13 @@ namespace aoc
                 m.m41, m.m42, m.m43, m.m44);
 
         public static implicit operator Matrix3D((Vector3D r1, Vector3D r2, Vector3D r3, Vector3D r4) r) =>
-            FromRows(r.r1, r.r2, r.r3, r.r4);
+            new(r.r1, r.r2, r.r3, r.r4);
 
         public static implicit operator Matrix3D((Vector3D r1, Vector3D r2, Vector3D r3) r) =>
-            FromRows(r.r1, r.r2, r.r3);
+            new(r.r1, r.r2, r.r3);
 
         public static implicit operator Matrix3D((Vector3D r1, Vector3D r2) r) =>
-            FromRows(r.r1, r.r2);
+            new(r.r1, r.r2);
 
         public static explicit operator Matrix3D(Matrix matrix) =>
             new(matrix);

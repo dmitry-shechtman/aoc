@@ -169,13 +169,10 @@ namespace aoc
             Helper.TryParse(ss, separator, out matrix);
 
         public static Matrix FromRowArray(Vector[] rows) =>
-            FromRows(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
+            new(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
 
         public static Matrix FromColumnArray(Vector[] columns) =>
             FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
-
-        public static Matrix FromRows(Vector r1, Vector r2, Vector r3 = default) =>
-            new(r1, r2, r3);
 
         public static Matrix FromColumns(Vector c1, Vector c2, Vector c3 = default) =>
             new(c1.x, c2.x, c3.x,
@@ -238,10 +235,10 @@ namespace aoc
                 m.m31, m.m32, m.m33);
 
         public static implicit operator Matrix((Vector r1, Vector r2, Vector r3) r) =>
-            FromRows(r.r1, r.r2, r.r3);
+            new(r.r1, r.r2, r.r3);
 
         public static implicit operator Matrix((Vector r1, Vector r2) r) =>
-            FromRows(r.r1, r.r2);
+            new(r.r1, r.r2);
 
         public static explicit operator Matrix(Vector vector) =>
             Translate(vector);

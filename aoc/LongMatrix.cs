@@ -165,13 +165,10 @@ namespace aoc
             Helper.TryParse(ss, separator, out matrix);
 
         public static LongMatrix FromRowArray(LongVector[] rows) =>
-            FromRows(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
+            new(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
 
         public static LongMatrix FromColumnArray(LongVector[] columns) =>
             FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
-
-        public static LongMatrix FromRows(LongVector r1, LongVector r2, LongVector r3 = default) =>
-            new(r1, r2, r3);
 
         public static LongMatrix FromColumns(LongVector c1, LongVector c2, LongVector c3 = default) =>
             new(c1.x, c2.x, c3.x,
@@ -234,10 +231,10 @@ namespace aoc
                 m.m31, m.m32, m.m33);
 
         public static implicit operator LongMatrix((LongVector r1, LongVector r2, LongVector r3) r) =>
-            FromRows(r.r1, r.r2, r.r3);
+            new(r.r1, r.r2, r.r3);
 
         public static implicit operator LongMatrix((LongVector r1, LongVector r2) r) =>
-            FromRows(r.r1, r.r2);
+            new(r.r1, r.r2);
 
         public static explicit operator LongMatrix(LongVector vector) =>
             Translate(vector);
