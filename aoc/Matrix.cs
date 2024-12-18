@@ -53,6 +53,11 @@ namespace aoc
         {
         }
 
+        public Matrix(Vector r1, Vector r2, Vector r3 = default)
+            : this(r1.x, r1.y, r2.x, r2.y, r3.x, r3.y)
+        {
+        }
+
         public Matrix(int m)
         {
             m11 = (m & 3) - 1;
@@ -170,9 +175,7 @@ namespace aoc
             FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
 
         public static Matrix FromRows(Vector r1, Vector r2, Vector r3 = default) =>
-            new(r1.x, r1.y,
-                r2.x, r2.y,
-                r3.x, r3.y);
+            new(r1, r2, r3);
 
         public static Matrix FromColumns(Vector c1, Vector c2, Vector c3 = default) =>
             new(c1.x, c2.x, c3.x,

@@ -62,6 +62,11 @@ namespace aoc
         {
         }
 
+        public Matrix3D(Vector3D r1, Vector3D r2, Vector3D r3, Vector3D r4 = default)
+            : this(r1.x, r1.y, r1.z, r2.x, r2.y, r2.z, r3.x, r3.y, r3.z, r4.x, r4.y, r4.z)
+        {
+        }
+
         public Matrix3D(Matrix m)
             : this(m.m11, m.m12, m.m13, m.m21, m.m22, m.m23, m.m31, m.m32, m.m33)
         {
@@ -199,10 +204,7 @@ namespace aoc
             FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
 
         public static Matrix3D FromRows(Vector3D r1, Vector3D r2, Vector3D r3 = default, Vector3D r4 = default) =>
-            new(r1.x, r1.y, r1.z,
-                r2.x, r2.y, r2.z,
-                r3.x, r3.y, r3.z,
-                r4.x, r4.y, r4.z);
+            new(r1, r2, r3, r4);
 
         public static Matrix3D FromColumns(Vector3D c1, Vector3D c2, Vector3D c3, Vector3D c4 = default) =>
             new(c1.x, c2.x, c3.x, c4.x,

@@ -53,6 +53,11 @@ namespace aoc
         {
         }
 
+        public LongMatrix(LongVector r1, LongVector r2, LongVector r3 = default)
+            : this(r1.x, r1.y, r2.x, r2.y, r3.x, r3.y)
+        {
+        }
+
         public LongMatrix(Matrix m)
             : this(m.m11, m.m12, m.m13, m.m21, m.m22, m.m23, m.m31, m.m32, m.m33)
         {
@@ -166,9 +171,7 @@ namespace aoc
             FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
 
         public static LongMatrix FromRows(LongVector r1, LongVector r2, LongVector r3 = default) =>
-            new(r1.x, r1.y,
-                r2.x, r2.y,
-                r3.x, r3.y);
+            new(r1, r2, r3);
 
         public static LongMatrix FromColumns(LongVector c1, LongVector c2, LongVector c3 = default) =>
             new(c1.x, c2.x, c3.x,
