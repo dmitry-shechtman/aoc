@@ -52,13 +52,14 @@ namespace aoc.Internal
         }
     }
 
-    abstract class Helper2<T, TItem, TStrategy, TVectorHelper> : Helper2<T, TItem, TStrategy>
-        where T : IReadOnlyCollection<TItem>
-        where TVectorHelper : IVectorHelper<TItem>
-        where TItem : struct, IFormattable
-        where TStrategy : IHelperStrategy<T, TItem>
+    abstract class Helper2<T, TVector, TItem2, TStrategy, TVectorHelper> : Helper2<T, TVector, TStrategy>
+        where T : IReadOnlyCollection<TVector>
+        where TVectorHelper : IVectorHelper<TVector, TItem2>
+        where TVector : struct, IVector<TVector, TItem2>
+        where TItem2 : struct, IFormattable
+        where TStrategy : IHelperStrategy<T, TVector>
     {
-        protected Helper2(FromArray<T, TItem> fromArray, TVectorHelper vector)
+        protected Helper2(FromArray<T, TVector> fromArray, TVectorHelper vector)
             : base(fromArray, vector.TryParse, vector.TryParse)
         {
         }

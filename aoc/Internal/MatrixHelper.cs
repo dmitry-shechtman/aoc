@@ -32,12 +32,12 @@ namespace aoc.Internal
         }) is not null;
     }
 
-    abstract class MatrixHelper<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, TStrategy, TVectorHelper>
+    abstract class MatrixHelper<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, T, TStrategy, TVectorHelper>
         where TMatrix : struct, IMatrix<TMatrix, TVector, T>
         where TVector : struct, IVector<TVector, TMatrix, T>
         where T : struct, IFormattable
         where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
-        where TVectorHelper : IVectorHelper<TVector>
+        where TVectorHelper : IVectorHelper<TVector, T>
     {
         protected MatrixHelper(FromArray<TMatrix, TVector> fromRows, TVectorHelper vector)
             : base(fromRows, vector)

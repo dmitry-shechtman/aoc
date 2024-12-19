@@ -14,11 +14,11 @@ namespace aoc.Internal
         }
 
         public override char DefaultSeparator => ',';
-
     }
 
-    interface IVectorHelper<TVector>
-        where TVector : struct
+    interface IVectorHelper<TVector, T>
+        where TVector : struct, IVector<TVector, T>
+        where T : struct, IFormattable
     {
         bool TryParse(string s, out TVector vector);
         bool TryParse(string s, char separator, out TVector vector);
@@ -26,7 +26,7 @@ namespace aoc.Internal
         bool TryParse(string s, Regex separator, out TVector vector);
     }
 
-    abstract class VectorHelper<TVector, T, TStrategy> : Helper<TVector, T, TStrategy>, IVectorHelper<TVector>
+    abstract class VectorHelper<TVector, T, TStrategy> : Helper<TVector, T, TStrategy>, IVectorHelper<TVector, T>
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy, TVector, T>
