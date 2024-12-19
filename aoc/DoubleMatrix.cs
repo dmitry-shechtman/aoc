@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct DoubleMatrix : IMatrix2D<DoubleMatrix, DoubleVector, double>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromRows, DoubleVector.Helper));
+            new(() => new(FromRows, FromColumns, DoubleVector.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -169,16 +169,49 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out DoubleMatrix matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
+        public static DoubleMatrix FromRows(params DoubleVector[] rows) =>
+            FromRows(rows.AsSpan());
+
         public static DoubleMatrix FromRows(ReadOnlySpan<DoubleVector> rows) =>
             new(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
 
-        public static DoubleMatrix FromColumns(DoubleVector[] columns) =>
+        public static DoubleMatrix FromRows(double[][] rows) =>
+            Helper.FromRows(rows);
+
+        public static DoubleMatrix FromRows(double[] values) =>
+            Helper.FromRows(values);
+
+        public static DoubleMatrix FromRows(ReadOnlySpan<double> values) =>
+            Helper.FromRows(values);
+
+        public static DoubleMatrix FromRows(double[] values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static DoubleMatrix FromRows(ReadOnlySpan<double> values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static DoubleMatrix FromColumns(ReadOnlySpan<DoubleVector> columns) =>
             FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
 
         public static DoubleMatrix FromColumns(DoubleVector c1, DoubleVector c2, DoubleVector c3 = default) =>
             new(c1.x, c2.x, c3.x,
                 c1.y, c2.y, c3.y,
                 0,    0,    1);
+
+        public static DoubleMatrix FromColumns(double[][] columns) =>
+            Helper.FromColumns(columns);
+
+        public static DoubleMatrix FromColumns(double[] values) =>
+            Helper.FromColumns(values);
+
+        public static DoubleMatrix FromColumns(ReadOnlySpan<double> values) =>
+            Helper.FromColumns(values);
+
+        public static DoubleMatrix FromColumns(double[] values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
+
+        public static DoubleMatrix FromColumns(ReadOnlySpan<double> values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
 
         public readonly double GetDeterminant() =>
             m11 * m22 - m12 * m21;

@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct Matrix : IMatrix2D<Matrix, Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromRows, Vector.Helper));
+            new(() => new(FromRows, FromColumns, Vector.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -168,16 +168,49 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out Matrix matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
+        public static Matrix FromRows(params Vector[] rows) =>
+            FromRows(rows.AsSpan());
+
         public static Matrix FromRows(ReadOnlySpan<Vector> rows) =>
             new(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
 
-        public static Matrix FromColumns(Vector[] columns) =>
+        public static Matrix FromRows(int[][] rows) =>
+            Helper.FromRows(rows);
+
+        public static Matrix FromRows(int[] values) =>
+            Helper.FromRows(values);
+
+        public static Matrix FromRows(ReadOnlySpan<int> values) =>
+            Helper.FromRows(values);
+
+        public static Matrix FromRows(int[] values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static Matrix FromRows(ReadOnlySpan<int> values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static Matrix FromColumns(ReadOnlySpan<Vector> columns) =>
             FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
 
         public static Matrix FromColumns(Vector c1, Vector c2, Vector c3 = default) =>
             new(c1.x, c2.x, c3.x,
                 c1.y, c2.y, c3.y,
                 0,    0,    1);
+
+        public static Matrix FromColumns(int[][] columns) =>
+            Helper.FromColumns(columns);
+
+        public static Matrix FromColumns(int[] values) =>
+            Helper.FromColumns(values);
+
+        public static Matrix FromColumns(ReadOnlySpan<int> values) =>
+            Helper.FromColumns(values);
+
+        public static Matrix FromColumns(int[] values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
+
+        public static Matrix FromColumns(ReadOnlySpan<int> values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
 
         public static Matrix Translate(int x, int y) =>
             Helper.Translate(x, y);

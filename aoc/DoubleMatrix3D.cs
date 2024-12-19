@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct DoubleMatrix3D : IMatrix3D<DoubleMatrix3D, DoubleVector3D, double>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromRows, DoubleVector3D.Helper));
+            new(() => new(FromRows, FromColumns, DoubleVector3D.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -202,10 +202,28 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out DoubleMatrix3D matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
+        public static DoubleMatrix3D FromRows(params DoubleVector3D[] rows) =>
+            FromRows(rows.AsSpan());
+
         public static DoubleMatrix3D FromRows(ReadOnlySpan<DoubleVector3D> rows) =>
             new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
 
-        public static DoubleMatrix3D FromColumns(DoubleVector3D[] columns) =>
+        public static DoubleMatrix3D FromRows(double[][] rows) =>
+            Helper.FromRows(rows);
+
+        public static DoubleMatrix3D FromRows(double[] values) =>
+            Helper.FromRows(values);
+
+        public static DoubleMatrix3D FromRows(ReadOnlySpan<double> values) =>
+            Helper.FromRows(values);
+
+        public static DoubleMatrix3D FromRows(double[] values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static DoubleMatrix3D FromRows(ReadOnlySpan<double> values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static DoubleMatrix3D FromColumns(ReadOnlySpan<DoubleVector3D> columns) =>
             FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
 
         public static DoubleMatrix3D FromColumns(DoubleVector3D c1, DoubleVector3D c2, DoubleVector3D c3, DoubleVector3D c4 = default) =>
@@ -213,6 +231,21 @@ namespace aoc
                 c1.y, c2.y, c3.y, c4.y,
                 c1.z, c2.z, c3.z, c4.z,
                 0, 0, 0, 1);
+
+        public static DoubleMatrix3D FromColumns(double[][] columns) =>
+            Helper.FromColumns(columns);
+
+        public static DoubleMatrix3D FromColumns(double[] values) =>
+            Helper.FromColumns(values);
+
+        public static DoubleMatrix3D FromColumns(ReadOnlySpan<double> values) =>
+            Helper.FromColumns(values);
+
+        public static DoubleMatrix3D FromColumns(double[] values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
+
+        public static DoubleMatrix3D FromColumns(ReadOnlySpan<double> values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
 
         public static DoubleMatrix3D Translate(double x, double y, double z) =>
             Helper.Translate(x, y, z);

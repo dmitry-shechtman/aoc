@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct Matrix3D : IMatrix3D<Matrix3D, Vector3D, int>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromRows, Vector3D.Helper));
+            new(() => new(FromRows, FromColumns, Vector3D.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -197,10 +197,28 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out Matrix3D matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
+        public static Matrix3D FromRows(params Vector3D[] rows) =>
+            FromRows(rows.AsSpan());
+
         public static Matrix3D FromRows(ReadOnlySpan<Vector3D> rows) =>
             new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
 
-        public static Matrix3D FromColumns(Vector3D[] columns) =>
+        public static Matrix3D FromRows(int[][] rows) =>
+            Helper.FromRows(rows);
+
+        public static Matrix3D FromRows(int[] values) =>
+            Helper.FromRows(values);
+
+        public static Matrix3D FromRows(ReadOnlySpan<int> values) =>
+            Helper.FromRows(values);
+
+        public static Matrix3D FromRows(int[] values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static Matrix3D FromRows(ReadOnlySpan<int> values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static Matrix3D FromColumns(ReadOnlySpan<Vector3D> columns) =>
             FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
 
         public static Matrix3D FromColumns(Vector3D c1, Vector3D c2, Vector3D c3, Vector3D c4 = default) =>
@@ -208,6 +226,21 @@ namespace aoc
                 c1.y, c2.y, c3.y, c4.y,
                 c1.z, c2.z, c3.z, c4.z,
                 0,    0,    0,    1);
+
+        public static Matrix3D FromColumns(int[][] columns) =>
+            Helper.FromColumns(columns);
+
+        public static Matrix3D FromColumns(int[] values) =>
+            Helper.FromColumns(values);
+
+        public static Matrix3D FromColumns(ReadOnlySpan<int> values) =>
+            Helper.FromColumns(values);
+
+        public static Matrix3D FromColumns(int[] values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
+
+        public static Matrix3D FromColumns(ReadOnlySpan<int> values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
 
         public static Matrix3D Translate(int x, int y, int z) =>
             Helper.Translate(x, y, z);

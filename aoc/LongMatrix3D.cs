@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct LongMatrix3D : IMatrix3D<LongMatrix3D, LongVector3D, long>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromRows, LongVector3D.Helper));
+            new(() => new(FromRows, FromColumns, LongVector3D.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -197,10 +197,28 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out LongMatrix3D matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
+        public static LongMatrix3D FromRows(params LongVector3D[] rows) =>
+            FromRows(rows.AsSpan());
+
         public static LongMatrix3D FromRows(ReadOnlySpan<LongVector3D> rows) =>
             new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
 
-        public static LongMatrix3D FromColumns(LongVector3D[] columns) =>
+        public static LongMatrix3D FromRows(long[][] rows) =>
+            Helper.FromRows(rows);
+
+        public static LongMatrix3D FromRows(long[] values) =>
+            Helper.FromRows(values);
+
+        public static LongMatrix3D FromRows(ReadOnlySpan<long> values) =>
+            Helper.FromRows(values);
+
+        public static LongMatrix3D FromRows(long[] values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static LongMatrix3D FromRows(ReadOnlySpan<long> values, int chunkSize) =>
+            Helper.FromRows(values, chunkSize);
+
+        public static LongMatrix3D FromColumns(ReadOnlySpan<LongVector3D> columns) =>
             FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
 
         public static LongMatrix3D FromColumns(LongVector3D c1, LongVector3D c2, LongVector3D c3, LongVector3D c4 = default) =>
@@ -208,6 +226,21 @@ namespace aoc
                 c1.y, c2.y, c3.y, c4.y,
                 c1.z, c2.z, c3.z, c4.z,
                 0,    0,    0,    1);
+
+        public static LongMatrix3D FromColumns(long[][] columns) =>
+            Helper.FromColumns(columns);
+
+        public static LongMatrix3D FromColumns(long[] values) =>
+            Helper.FromColumns(values);
+
+        public static LongMatrix3D FromColumns(ReadOnlySpan<long> values) =>
+            Helper.FromColumns(values);
+
+        public static LongMatrix3D FromColumns(long[] values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
+
+        public static LongMatrix3D FromColumns(ReadOnlySpan<long> values, int chunkSize) =>
+            Helper.FromColumns(values, chunkSize);
 
         public static LongMatrix3D Translate(long x, long y, long z) =>
             Helper.Translate(x, y, z);

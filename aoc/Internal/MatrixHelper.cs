@@ -39,14 +39,46 @@ namespace aoc.Internal
         where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
         where TVectorHelper : IVectorHelper<TVector, T>
     {
-        protected MatrixHelper(FromSpan<TMatrix, TVector> fromRows, TVectorHelper vector)
+        protected MatrixHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, TVectorHelper vector)
             : base(fromRows, vector)
         {
+            FromColumnArray = fromColumns;
             Vector = vector;
         }
 
+        public TMatrix FromRows(T[][] rows) =>
+            FromRows(FromArrays(rows));
+
+        public TMatrix FromRows(ReadOnlySpan<T> values, int? chunkSize = null) =>
+            FromRows(Chunk(values, chunkSize));
+
+        public TMatrix FromColumns(T[][] columns) =>
+            FromColumnArray(FromArrays(columns));
+
+        public TMatrix FromColumns(ReadOnlySpan<T> values, int? chunkSize = null) =>
+            FromColumnArray(Chunk(values, chunkSize));
+
         protected TMatrix FromRows(params TVector[] vectors) =>
             FromSpan(vectors);
+
+        private TVector[] FromArrays(T[][] values)
+        {
+            var vectors = new TVector[values.Length];
+            for (int i = 0; i < vectors.Length; i++)
+                vectors[i] = Vector.FromSpan(values[i]);
+            return vectors;
+        }
+
+        private TVector[] Chunk(ReadOnlySpan<T> values, int? chunkSize)
+        {
+            var size = chunkSize ?? MinCount;
+            var vectors = new TVector[values.Length / size];
+            for (int i = 0; i < vectors.Length; ++i)
+                vectors[i] = Vector.FromSpan(values[(i * size)..((i + 1) * size)]);
+            return vectors;
+        }
+
+        private FromSpan<TMatrix, TVector> FromColumnArray { get; }
 
         protected TVectorHelper Vector { get; }
     }
@@ -68,8 +100,8 @@ namespace aoc.Internal
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Matrix2DHelper(FromSpan<TMatrix, TVector> fromRows, Vector2DHelper<TVector, T> vector)
-            : base(fromRows, vector)
+        public Matrix2DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector2DHelper<TVector, T> vector)
+            : base(fromRows, fromColumns, vector)
         {
             Identity         = FromRows(Vector.East,  Vector.South);
             RotateRight      = FromRows(Vector.South, Vector.West);
@@ -122,8 +154,8 @@ namespace aoc.Internal
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Matrix3DHelper(FromSpan<TMatrix, TVector> fromRows, Vector3DHelper<TVector, T> vector)
-            : base(fromRows, vector)
+        public Matrix3DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector3DHelper<TVector, T> vector)
+            : base(fromRows, fromColumns, vector)
         {
             Identity = FromRows(Vector.East, Vector.South, Vector.Down);
         }
