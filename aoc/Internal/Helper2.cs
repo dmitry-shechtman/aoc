@@ -10,8 +10,8 @@ namespace aoc.Internal
         where TItem : IFormattable
         where TStrategy : IHelperStrategy<T, TItem>
     {
-        protected Helper2(FromArray<T, TItem> fromArray, TryParse<TItem> tryParse, TryParse<TItem, char> tryParseChar)
-            : base(fromArray, tryParse)
+        protected Helper2(FromSpan<T, TItem> fromSpan, TryParse<TItem> tryParse, TryParse<TItem, char> tryParseChar)
+            : base(fromSpan, tryParse)
         {
             TryParseItemChar = tryParseChar;
         }
@@ -59,8 +59,8 @@ namespace aoc.Internal
         where TItem2 : struct, IFormattable
         where TStrategy : IHelperStrategy<T, TVector>
     {
-        protected Helper2(FromArray<T, TVector> fromArray, TVectorHelper vector)
-            : base(fromArray, vector.TryParse, vector.TryParse)
+        protected Helper2(FromSpan<T, TVector> fromSpan, TVectorHelper vector)
+            : base(fromSpan, vector.TryParse, vector.TryParse)
         {
         }
     }

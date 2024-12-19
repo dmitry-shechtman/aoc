@@ -10,7 +10,7 @@ namespace aoc
     public readonly struct DoubleVector3D : IVector<DoubleVector3D, DoubleMatrix3D, double>, IVector3D<DoubleVector3D, DoubleVector, double>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, double.TryParse, -1, 0, 1));
+            new(() => new(FromSpan, double.TryParse, -1, 0, 1));
 
         internal static Helper Helper => _helper.Value;
 
@@ -133,8 +133,8 @@ namespace aoc
         public static bool TryParse(string[] ss, out DoubleVector3D vector) =>
             Helper.TryParse(ss, out vector);
 
-        private static DoubleVector3D FromArray(double[] values) =>
-            new(values);
+        private static DoubleVector3D FromSpan(ReadOnlySpan<double> values) =>
+            new(values[0], values[1], values[2]);
 
         public static DoubleVector3D operator +(DoubleVector3D vector) =>
             vector;

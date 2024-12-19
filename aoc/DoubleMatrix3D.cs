@@ -202,7 +202,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out DoubleMatrix3D matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static DoubleMatrix3D FromRows(params DoubleVector3D[] rows) =>
+        public static DoubleMatrix3D FromRows(ReadOnlySpan<DoubleVector3D> rows) =>
             new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
 
         public static DoubleMatrix3D FromColumns(DoubleVector3D[] columns) =>

@@ -164,7 +164,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out LongMatrix matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static LongMatrix FromRows(params LongVector[] rows) =>
+        public static LongMatrix FromRows(ReadOnlySpan<LongVector> rows) =>
             new(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
 
         public static LongMatrix FromColumns(LongVector[] columns) =>

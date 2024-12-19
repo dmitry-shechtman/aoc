@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct Size4D : ISize4D<Size4D, Vector4D, int>, IIntegerSize<Size4D, Vector4D>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, int.TryParse));
+            new(() => new(FromSpan, int.TryParse));
 
         private static Helper Helper => _helper.Value;
 
@@ -107,7 +107,7 @@ namespace aoc
         public static bool TryParse(string[] ss, out Size4D size) =>
             Helper.TryParse(ss, out size);
 
-        private static Size4D FromArray(int[] values) =>
+        private static Size4D FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1], values[2], values[3]);
 
         public readonly bool Contains(Vector4D vector) =>

@@ -7,8 +7,8 @@ namespace aoc.Internal
         where TVector : struct, IVector<TVector, T>
         where T : struct, IFormattable
     {
-        public RangeHelper(FromArray<TRange, TVector> fromArray, IVectorHelper<TVector, T> vector)
-            : base(fromArray, vector)
+        public RangeHelper(FromSpan<TRange, TVector> fromSpan, IVectorHelper<TVector, T> vector)
+            : base(fromSpan, vector)
         {
         }
 

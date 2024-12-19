@@ -9,7 +9,7 @@ namespace aoc
     public readonly struct DoubleVectorRange : IRange2D<DoubleVectorRange, DoubleVector, double>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, DoubleVector.Helper));
+            new(() => new(FromSpan, DoubleVector.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -105,7 +105,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out DoubleVectorRange range) =>
             Helper.TryParse(ss, separator, out range);
 
-        private static DoubleVectorRange FromArray(DoubleVector[] values) =>
+        private static DoubleVectorRange FromSpan(ReadOnlySpan<DoubleVector> values) =>
             new(values[0], values[1]);
 
         public readonly bool Contains(DoubleVector vector) =>

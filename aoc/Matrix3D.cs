@@ -197,7 +197,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out Matrix3D matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static Matrix3D FromRows(params Vector3D[] rows) =>
+        public static Matrix3D FromRows(ReadOnlySpan<Vector3D> rows) =>
             new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
 
         public static Matrix3D FromColumns(Vector3D[] columns) =>

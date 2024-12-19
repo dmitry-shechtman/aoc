@@ -24,6 +24,8 @@ namespace aoc.Internal
         bool TryParse(string s, char separator, out TVector vector);
         bool TryParse(string s, string separator, out TVector vector);
         bool TryParse(string s, Regex separator, out TVector vector);
+
+        FromSpan<TVector, T> FromSpan { get; }
     }
 
     abstract class VectorHelper<TVector, T, TStrategy> : Helper<TVector, T, TStrategy>, IVectorHelper<TVector, T>
@@ -31,8 +33,8 @@ namespace aoc.Internal
         where T : struct, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy, TVector, T>
     {
-        protected VectorHelper(FromArray<TVector, T> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
-            : base(fromArray, tryParse)
+        protected VectorHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
+            : base(fromSpan, tryParse)
         {
             InitHeadings(minusOne, zero, one);
         }
@@ -54,8 +56,8 @@ namespace aoc.Internal
         where TVector : struct, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector2DHelper(FromArray<TVector, T> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
-            : base(fromArray, tryParse, minusOne, zero, one)
+        public Vector2DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
+            : base(fromSpan, tryParse, minusOne, zero, one)
         {
         }
 
@@ -90,8 +92,8 @@ namespace aoc.Internal
         where TVector : struct, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector3DHelper(FromArray<TVector, T> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
-            : base(fromArray, tryParse, minusOne, zero, one)
+        public Vector3DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
+            : base(fromSpan, tryParse, minusOne, zero, one)
         {
         }
 
@@ -130,8 +132,8 @@ namespace aoc.Internal
         where TVector : struct, IVector4D<TVector, T>
         where T : struct, IFormattable
     {
-        public Vector4DHelper(FromArray<TVector, T> fromArray, TryParse<T> tryParse, T minusOne, T zero, T one)
-            : base(fromArray, tryParse, minusOne, zero, one)
+        public Vector4DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
+            : base(fromSpan, tryParse, minusOne, zero, one)
         {
         }
 

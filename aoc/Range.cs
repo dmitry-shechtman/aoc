@@ -10,7 +10,7 @@ namespace aoc
     public readonly struct Range : IIntegerRange<Range, int>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, int.TryParse));
+            new(() => new(FromSpan, int.TryParse));
 
         private static Helper Helper => _helper.Value;
 
@@ -88,7 +88,7 @@ namespace aoc
         public static bool TryParse(string[] ss, out Range range) =>
             Helper.TryParse(ss, out range);
 
-        private static Range FromArray(int[] values) =>
+        private static Range FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1]);
 
         public readonly bool Contains(int value) =>

@@ -39,14 +39,14 @@ namespace aoc.Internal
         where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
         where TVectorHelper : IVectorHelper<TVector, T>
     {
-        protected MatrixHelper(FromArray<TMatrix, TVector> fromRows, TVectorHelper vector)
+        protected MatrixHelper(FromSpan<TMatrix, TVector> fromRows, TVectorHelper vector)
             : base(fromRows, vector)
         {
             Vector = vector;
         }
 
         protected TMatrix FromRows(params TVector[] vectors) =>
-            FromArray(vectors);
+            FromSpan(vectors);
 
         protected TVectorHelper Vector { get; }
     }
@@ -68,7 +68,7 @@ namespace aoc.Internal
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Matrix2DHelper(FromArray<TMatrix, TVector> fromRows, Vector2DHelper<TVector, T> vector)
+        public Matrix2DHelper(FromSpan<TMatrix, TVector> fromRows, Vector2DHelper<TVector, T> vector)
             : base(fromRows, vector)
         {
             Identity         = FromRows(Vector.East,  Vector.South);
@@ -122,7 +122,7 @@ namespace aoc.Internal
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Matrix3DHelper(FromArray<TMatrix, TVector> fromRows, Vector3DHelper<TVector, T> vector)
+        public Matrix3DHelper(FromSpan<TMatrix, TVector> fromRows, Vector3DHelper<TVector, T> vector)
             : base(fromRows, vector)
         {
             Identity = FromRows(Vector.East, Vector.South, Vector.Down);

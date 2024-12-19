@@ -9,7 +9,7 @@ namespace aoc
     public readonly struct DoubleRange : IRange<DoubleRange, double>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, double.TryParse));
+            new(() => new(FromSpan, double.TryParse));
 
         private static Helper Helper => _helper.Value;
 
@@ -88,7 +88,7 @@ namespace aoc
         public static bool TryParse(string[] ss, out DoubleRange range) =>
             Helper.TryParse(ss, out range);
 
-        private static DoubleRange FromArray(double[] values) =>
+        private static DoubleRange FromSpan(ReadOnlySpan<double> values) =>
             new(values[0], values[1]);
 
         public readonly bool Contains(double value) =>

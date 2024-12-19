@@ -31,8 +31,8 @@ namespace aoc.Internal
         where TRange : struct, IRange<TRange, T>
         where T : struct, IFormattable
     {
-        public RangeHelper(FromArray<TRange, T> fromArray, TryParse<T> tryParse)
-            : base(fromArray, tryParse)
+        public RangeHelper(FromSpan<TRange, T> fromSpan, TryParse<T> tryParse)
+            : base(fromSpan, tryParse)
         {
         }
 

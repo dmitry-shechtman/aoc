@@ -169,7 +169,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out DoubleMatrix matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static DoubleMatrix FromRows(params DoubleVector[] rows) =>
+        public static DoubleMatrix FromRows(ReadOnlySpan<DoubleVector> rows) =>
             new(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
 
         public static DoubleMatrix FromColumns(DoubleVector[] columns) =>

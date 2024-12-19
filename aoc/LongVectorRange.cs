@@ -9,7 +9,7 @@ namespace aoc
     public readonly struct LongVectorRange : IIntegerRange<LongVectorRange, LongVector>, IRange2D<LongVectorRange, LongVector, long>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, LongVector.Helper));
+            new(() => new(FromSpan, LongVector.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -118,7 +118,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out LongVectorRange range) =>
             Helper.TryParse(ss, separator, out range);
 
-        private static LongVectorRange FromArray(LongVector[] values) =>
+        private static LongVectorRange FromSpan(ReadOnlySpan<LongVector> values) =>
             new(values[0], values[1]);
 
         public readonly bool Contains(LongVector vector) =>

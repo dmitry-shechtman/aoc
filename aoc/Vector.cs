@@ -10,7 +10,7 @@ namespace aoc
     public readonly struct Vector : IVector<Vector, Matrix, int>, IVector2D<Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, int.TryParse, -1, 0, 1));
+            new(() => new(FromSpan, int.TryParse, -1, 0, 1));
 
         internal static Helper Helper => _helper.Value;
 
@@ -115,8 +115,8 @@ namespace aoc
         public static bool TryParse(string[] ss, out Vector vector) =>
             Helper.TryParse(ss, out vector);
 
-        private static Vector FromArray(int[] values) =>
-            new(values);
+        private static Vector FromSpan(ReadOnlySpan<int> values) =>
+            new(values[0], values[1]);
 
         public static Vector FindChar(ReadOnlySpan<char> s, char c) =>
             Size.FromField(s).FindChar(s, c);

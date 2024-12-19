@@ -9,7 +9,7 @@ namespace aoc
     public readonly struct LongVector3DRange : IIntegerRange<LongVector3DRange, LongVector3D>, IRange3D<LongVector3DRange, LongVector3D, long>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, LongVector3D.Helper));
+            new(() => new(FromSpan, LongVector3D.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -125,7 +125,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out LongVector3DRange range) =>
             Helper.TryParse(ss, separator, out range);
 
-        private static LongVector3DRange FromArray(LongVector3D[] values) =>
+        private static LongVector3DRange FromSpan(ReadOnlySpan<LongVector3D> values) =>
             new(values[0], values[1]);
 
         public readonly bool Contains(LongVector3D vector) =>

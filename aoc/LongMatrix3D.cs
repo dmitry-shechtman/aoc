@@ -197,7 +197,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out LongMatrix3D matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static LongMatrix3D FromRows(LongVector3D[] rows) =>
+        public static LongMatrix3D FromRows(ReadOnlySpan<LongVector3D> rows) =>
             new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
 
         public static LongMatrix3D FromColumns(LongVector3D[] columns) =>

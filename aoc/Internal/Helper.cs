@@ -86,7 +86,7 @@ namespace aoc.Internal
             value[i];
     }
 
-    delegate T FromArray<T, TItem>(params TItem[] values);
+    delegate T FromSpan<T, TItem>(ReadOnlySpan<TItem> values);
     delegate bool TryParse<T>(string s, out T value);
 
     abstract class Helper<T, TItem, TStrategy>
@@ -94,9 +94,9 @@ namespace aoc.Internal
         where TItem : IFormattable
         where TStrategy : IHelperStrategy<T, TItem>
     {
-        protected Helper(FromArray<T, TItem> fromArray, TryParse<TItem> tryParse)
+        protected Helper(FromSpan<T, TItem> fromSpan, TryParse<TItem> tryParse)
         {
-            FromArray = fromArray;
+            FromSpan = fromSpan;
             TryParseItem = tryParse;
             DefaultFormat = Strategy.DefaultFormat;
             DefaultSeparator = Strategy.DefaultSeparator;
@@ -104,12 +104,15 @@ namespace aoc.Internal
             MaxCount = Strategy.MaxCount;
         }
 
-        public    FromArray<T, TItem> FromArray        { get; }
+        public    FromSpan<T, TItem>  FromSpan         { get; }
         protected TryParse<TItem>     TryParseItem     { get; }
         protected string              DefaultFormat    { get; }
         public    char                DefaultSeparator { get; }
         protected int                 MinCount         { get; }
         protected int                 MaxCount         { get; }
+
+        public T FromArray(params TItem[] values) =>
+            FromSpan(values);
 
         public string ToString(T value, IFormatProvider provider = null) =>
             ToStringInner(value, DefaultFormat, provider);

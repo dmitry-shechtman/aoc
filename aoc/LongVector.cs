@@ -10,7 +10,7 @@ namespace aoc
     public readonly struct LongVector : IVector<LongVector, LongMatrix, long>, IVector2D<LongVector, long>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, long.TryParse, -1, 0, 1));
+            new(() => new(FromSpan, long.TryParse, -1, 0, 1));
 
         internal static Helper Helper => _helper.Value;
 
@@ -110,8 +110,8 @@ namespace aoc
         public static bool TryParse(string[] ss, out LongVector vector) =>
             Helper.TryParse(ss, out vector);
 
-        private static LongVector FromArray(long[] values) =>
-            new(values);
+        private static LongVector FromSpan(ReadOnlySpan<long> values) =>
+            new(values[0], values[1]);
 
         public static LongVector operator +(LongVector vector) =>
             vector;

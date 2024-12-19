@@ -10,7 +10,7 @@ namespace aoc
     public readonly struct Vector4DRange : IIntegerRange<Vector4DRange, Vector4D>, IRange4D<Vector4DRange, Vector4D, int>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromArray, Vector4D.Helper));
+            new(() => new(FromSpan, Vector4D.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -134,7 +134,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out Vector4DRange range) =>
             Helper.TryParse(ss, separator, out range);
 
-        private static Vector4DRange FromArray(Vector4D[] values) =>
+        private static Vector4DRange FromSpan(ReadOnlySpan<Vector4D> values) =>
             new(values[0], values[1]);
 
         public readonly bool Contains(Vector4D vector) =>

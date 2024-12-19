@@ -168,7 +168,7 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out Matrix matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static Matrix FromRows(params Vector[] rows) =>
+        public static Matrix FromRows(ReadOnlySpan<Vector> rows) =>
             new(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
 
         public static Matrix FromColumns(Vector[] columns) =>
