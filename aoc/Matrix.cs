@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct Matrix : IMatrix2D<Matrix, Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromRowArray, Vector.Helper));
+            new(() => new(FromRows, Vector.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -168,10 +168,10 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out Matrix matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static Matrix FromRowArray(Vector[] rows) =>
+        public static Matrix FromRows(params Vector[] rows) =>
             new(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
 
-        public static Matrix FromColumnArray(Vector[] columns) =>
+        public static Matrix FromColumns(Vector[] columns) =>
             FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
 
         public static Matrix FromColumns(Vector c1, Vector c2, Vector c3 = default) =>

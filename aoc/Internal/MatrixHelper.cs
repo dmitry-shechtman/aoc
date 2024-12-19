@@ -39,13 +39,13 @@ namespace aoc.Internal
         where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
         where TVectorHelper : IVectorHelper<TVector>
     {
-        protected MatrixHelper(FromArray<TMatrix, TVector> fromRowArray, TVectorHelper vector)
-            : base(fromRowArray, vector)
+        protected MatrixHelper(FromArray<TMatrix, TVector> fromRows, TVectorHelper vector)
+            : base(fromRows, vector)
         {
             Vector = vector;
         }
 
-        protected TMatrix FromRowArray(params TVector[] vectors) =>
+        protected TMatrix FromRows(params TVector[] vectors) =>
             FromArray(vectors);
 
         protected TVectorHelper Vector { get; }
@@ -68,15 +68,15 @@ namespace aoc.Internal
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
         where T : struct, IFormattable
     {
-        public Matrix2DHelper(FromArray<TMatrix, TVector> fromRowArray, Vector2DHelper<TVector, T> vector)
-            : base(fromRowArray, vector)
+        public Matrix2DHelper(FromArray<TMatrix, TVector> fromRows, Vector2DHelper<TVector, T> vector)
+            : base(fromRows, vector)
         {
-            Identity         = FromRowArray(Vector.East,  Vector.South);
-            RotateRight      = FromRowArray(Vector.South, Vector.West);
-            RotateLeft       = FromRowArray(Vector.North, Vector.East);
-            MirrorHorizontal = FromRowArray(Vector.East,  Vector.North);
-            MirrorVertical   = FromRowArray(Vector.West,  Vector.South);
-            Flip             = FromRowArray(Vector.West,  Vector.North);
+            Identity         = FromRows(Vector.East,  Vector.South);
+            RotateRight      = FromRows(Vector.South, Vector.West);
+            RotateLeft       = FromRows(Vector.North, Vector.East);
+            MirrorHorizontal = FromRows(Vector.East,  Vector.North);
+            MirrorVertical   = FromRows(Vector.West,  Vector.South);
+            Flip             = FromRows(Vector.West,  Vector.North);
         }
 
         public TMatrix Identity         { get; }
@@ -90,7 +90,7 @@ namespace aoc.Internal
             Translate(Vector.FromArray(x, y));
 
         public TMatrix Translate(TVector v) =>
-            FromRowArray(Vector.East, Vector.South, v);
+            FromRows(Vector.East, Vector.South, v);
 
         public TMatrix Rotate(int degrees) => degrees switch
         {
@@ -122,10 +122,10 @@ namespace aoc.Internal
         where TVector : struct, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
         where T : struct, IFormattable
     {
-        public Matrix3DHelper(FromArray<TMatrix, TVector> fromRowArray, Vector3DHelper<TVector, T> vector)
-            : base(fromRowArray, vector)
+        public Matrix3DHelper(FromArray<TMatrix, TVector> fromRows, Vector3DHelper<TVector, T> vector)
+            : base(fromRows, vector)
         {
-            Identity = FromRowArray(Vector.East, Vector.South, Vector.Down);
+            Identity = FromRows(Vector.East, Vector.South, Vector.Down);
         }
 
         public TMatrix Identity { get; }
@@ -134,7 +134,7 @@ namespace aoc.Internal
             Translate(Vector.FromArray(x, y, z));
 
         public TMatrix Translate(TVector v) =>
-            FromRowArray(Vector.East, Vector.South, Vector.Down, v);
+            FromRows(Vector.East, Vector.South, Vector.Down, v);
 
         protected override Matrix3DHelperStrategy<TMatrix, TVector, T> Strategy =>
             Matrix3DHelperStrategy<TMatrix, TVector, T>.Instance;

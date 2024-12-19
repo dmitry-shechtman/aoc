@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct DoubleMatrix3D : IMatrix3D<DoubleMatrix3D, DoubleVector3D, double>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromRowArray, DoubleVector3D.Helper));
+            new(() => new(FromRows, DoubleVector3D.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -202,10 +202,10 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out DoubleMatrix3D matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static DoubleMatrix3D FromRowArray(DoubleVector3D[] rows) =>
+        public static DoubleMatrix3D FromRows(params DoubleVector3D[] rows) =>
             new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
 
-        public static DoubleMatrix3D FromColumnArray(DoubleVector3D[] columns) =>
+        public static DoubleMatrix3D FromColumns(DoubleVector3D[] columns) =>
             FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
 
         public static DoubleMatrix3D FromColumns(DoubleVector3D c1, DoubleVector3D c2, DoubleVector3D c3, DoubleVector3D c4 = default) =>

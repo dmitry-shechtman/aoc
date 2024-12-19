@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct LongMatrix : IMatrix2D<LongMatrix, LongVector, long>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromRowArray, LongVector.Helper));
+            new(() => new(FromRows, LongVector.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -164,10 +164,10 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out LongMatrix matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static LongMatrix FromRowArray(LongVector[] rows) =>
+        public static LongMatrix FromRows(params LongVector[] rows) =>
             new(rows[0], rows[1], rows.Length > 2 ? rows[2] : default);
 
-        public static LongMatrix FromColumnArray(LongVector[] columns) =>
+        public static LongMatrix FromColumns(LongVector[] columns) =>
             FromColumns(columns[0], columns[1], columns.Length > 2 ? columns[2] : default);
 
         public static LongMatrix FromColumns(LongVector c1, LongVector c2, LongVector c3 = default) =>

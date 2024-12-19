@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct LongMatrix3D : IMatrix3D<LongMatrix3D, LongVector3D, long>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromRowArray, LongVector3D.Helper));
+            new(() => new(FromRows, LongVector3D.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -197,10 +197,10 @@ namespace aoc
         public static bool TryParse(string[] ss, char separator, out LongMatrix3D matrix) =>
             Helper.TryParse(ss, separator, out matrix);
 
-        public static LongMatrix3D FromRowArray(LongVector3D[] rows) =>
+        public static LongMatrix3D FromRows(LongVector3D[] rows) =>
             new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
 
-        public static LongMatrix3D FromColumnArray(LongVector3D[] columns) =>
+        public static LongMatrix3D FromColumns(LongVector3D[] columns) =>
             FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
 
         public static LongMatrix3D FromColumns(LongVector3D c1, LongVector3D c2, LongVector3D c3, LongVector3D c4 = default) =>
