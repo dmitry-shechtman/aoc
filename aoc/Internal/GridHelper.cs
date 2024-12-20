@@ -213,34 +213,21 @@ namespace aoc.Internal
         };
 
         public static Grid Parse(ReadOnlySpan<char> input) =>
-            Parse(input, size: out _);
+            Parse(input, out _);
 
         public static Grid Parse(ReadOnlySpan<char> input, out VectorRange range) =>
             Parse(input, DefaultSeparatorChar, out range);
 
-        public static Grid Parse(ReadOnlySpan<char> input, out Size size) =>
-            Parse(input, DefaultSeparatorChar, out size);
-
         public static Grid Parse(ReadOnlySpan<char> input, char separator) =>
-            Parse(input, separator, size: out _);
+            Parse(input, separator, out _);
 
         public static Grid Parse(ReadOnlySpan<char> input, char separator, out VectorRange range) =>
             Parse(input, separator, DefaultPointChar, out range);
 
-        public static Grid Parse(ReadOnlySpan<char> input, char separator, out Size size) =>
-            Parse(input, separator, DefaultPointChar, out size);
-
         public static Grid Parse(ReadOnlySpan<char> input, char separator, char point) =>
-            Parse(input, separator, point, size: out _);
+            Parse(input, separator, point, out _);
 
         public static Grid Parse(ReadOnlySpan<char> input, char separator, char point, out VectorRange range)
-        {
-            Grid grid = Parse(input, separator, point, out Size size);
-            range = new(size);
-            return grid;
-        }
-
-        public static Grid Parse(ReadOnlySpan<char> input, char separator, char point, out Size size)
         {
             int width = 0, height = 1, x = 0, y = 0;
             HashSet<Vector> points = new();
@@ -259,7 +246,7 @@ namespace aoc.Internal
                 }
             }
             width = x > width ? x : width;
-            size = new(width, height);
+            range = new((Size)(width, height));
             return new(points);
         }
 

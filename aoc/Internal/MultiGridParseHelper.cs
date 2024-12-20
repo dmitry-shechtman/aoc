@@ -47,43 +47,27 @@ namespace aoc.Internal
         }
 
         public TMulti Parse(ReadOnlySpan<char> input) =>
-            Parse(input, size: out _);
+            Parse(input, out _);
 
         public TMulti Parse(ReadOnlySpan<char> input, out VectorRange range) =>
             Parse(input, GetFormat(input, stackalloc char[256]), out range);
 
-        public TMulti Parse(ReadOnlySpan<char> input, out Size size) =>
-            Parse(input, GetFormat(input, stackalloc char[256]), out size);
-
         public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate) =>
-            Parse(input, predicate, size: out _);
+            Parse(input, predicate, out _);
 
         public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range) =>
             Parse(input, GetFormat(input, stackalloc char[256], predicate), out range);
 
-        public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out Size size) =>
-            Parse(input, GetFormat(input, stackalloc char[256], predicate), out size);
-
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
-            Parse(input, format, size: out _);
+            Parse(input, format, out _);
 
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
             Parse(input, DefaultSeparatorChar, format, out range);
 
-        public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out Size size) =>
-            Parse(input, DefaultSeparatorChar, format, out size);
-
         public TMulti Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format) =>
-            Parse(input, separator, format, size: out _);
+            Parse(input, separator, format, out _);
 
         public TMulti Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format, out VectorRange range)
-        {
-            TMulti multi = Parse(input, separator, format, out Size size);
-            range = new(size);
-            return multi;
-        }
-
-        public TMulti Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format, out Size size)
         {
             int width = 0, height = 1, x = 0, y = 0, i;
             var points = new HashSet<Vector>[format.Length + 1];
@@ -105,7 +89,7 @@ namespace aoc.Internal
                 }
             }
             width = x > width ? x : width;
-            size = new(width, height);
+            range = new((Size)(width, height));
             var grids = new TGrid[points.Length];
             for (i = 0; i < points.Length; i++)
                 grids[i] = CreateGrid(points[i]);
