@@ -46,55 +46,77 @@ namespace aoc.Internal
             return new(chars);
         }
 
-        public TMulti Parse(ReadOnlySpan<char> s) =>
-            Parse(s, out _);
+        public TMulti Parse(ReadOnlySpan<char> input) =>
+            Parse(input, size: out _);
 
-        public TMulti Parse(string s) =>
-            Parse(s, out _);
+        public TMulti Parse(string input) =>
+            Parse(input, size: out _);
 
-        public TMulti Parse(ReadOnlySpan<char> s, out Size size) =>
-            Parse(s.ToString(), out size);
+        public TMulti Parse(ReadOnlySpan<char> input, out VectorRange range) =>
+            Parse(input.ToString(), out range);
 
-        public TMulti Parse(string s, out Size size) =>
-            Parse(s, s.Distinct().ToArray(), out size);
+        public TMulti Parse(string input, out VectorRange range) =>
+            Parse(input, input.Distinct().ToArray(), out range);
 
-        public TMulti Parse(ReadOnlySpan<char> s, Func<char, bool> predicate) =>
-            Parse(s, predicate, out _);
+        public TMulti Parse(ReadOnlySpan<char> input, out Size size) =>
+            Parse(input.ToString(), out size);
 
-        public TMulti Parse(string s, Func<char, bool> predicate) =>
-            Parse(s, predicate, out _);
+        public TMulti Parse(string input, out Size size) =>
+            Parse(input, input.Distinct().ToArray(), out size);
 
-        public TMulti Parse(ReadOnlySpan<char> s, Func<char, bool> predicate, out Size size) =>
-            Parse(s.ToString(), predicate, out size);
+        public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate) =>
+            Parse(input, predicate, size: out _);
 
-        public TMulti Parse(string s, Func<char, bool> predicate, out Size size) =>
-            Parse(s, s.Where(predicate).Distinct().ToArray(), out size);
+        public TMulti Parse(string input, Func<char, bool> predicate) =>
+            Parse(input, predicate, size: out _);
 
-        public TMulti Parse(ReadOnlySpan<char> s, ReadOnlySpan<char> cc) =>
-            Parse(s, cc, out _);
+        public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range) =>
+            Parse(input.ToString(), predicate, out range);
 
-        public TMulti Parse(ReadOnlySpan<char> s, ReadOnlySpan<char> cc, out Size size) =>
-            Parse(s, DefaultSeparatorChar, cc, out size);
+        public TMulti Parse(string input, Func<char, bool> predicate, out VectorRange range) =>
+            Parse(input, input.Where(predicate).Distinct().ToArray(), out range);
 
-        public TMulti Parse(ReadOnlySpan<char> s, char separator, ReadOnlySpan<char> cc) =>
-            Parse(s, separator, cc, out _);
+        public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out Size size) =>
+            Parse(input.ToString(), predicate, out size);
 
-        public TMulti Parse(ReadOnlySpan<char> s, char separator, ReadOnlySpan<char> cc, out Size size)
+        public TMulti Parse(string input, Func<char, bool> predicate, out Size size) =>
+            Parse(input, input.Where(predicate).Distinct().ToArray(), out size);
+
+        public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
+            Parse(input, format, size: out _);
+
+        public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
+            Parse(input, DefaultSeparatorChar, format, out range);
+
+        public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out Size size) =>
+            Parse(input, DefaultSeparatorChar, format, out size);
+
+        public TMulti Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format) =>
+            Parse(input, separator, format, size: out _);
+
+        public TMulti Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format, out VectorRange range)
+        {
+            TMulti multi = Parse(input, separator, format, out Size size);
+            range = new(size);
+            return multi;
+        }
+
+        public TMulti Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format, out Size size)
         {
             int width = 0, height = 1, x = 0, y = 0, i;
-            var points = new HashSet<Vector>[cc.Length + 1];
+            var points = new HashSet<Vector>[format.Length + 1];
             for (i = 0; i < points.Length; i++)
                 points[i] = new();
-            for (int j = 0; j < s.Length; ++j, ++x)
+            for (int j = 0; j < input.Length; ++j, ++x)
             {
-                if (s[j] == separator)
+                if (input[j] == separator)
                 {
                     width = x > width ? x : width;
                     if (x > 0)
                         ++height;
                     (x, y) = (-1, ++y);
                 }
-                else if ((i = cc.IndexOf(s[j])) >= 0)
+                else if ((i = format.IndexOf(input[j])) >= 0)
                 {
                     points[i].Add((x, y));
                     points[^1].Add((x, y));
