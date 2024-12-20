@@ -213,19 +213,32 @@ namespace aoc.Internal
         };
 
         public static Grid Parse(ReadOnlySpan<char> input) =>
-            Parse(input, out _);
+            Parse(input, size: out _);
+
+        public static Grid Parse(ReadOnlySpan<char> input, out VectorRange range) =>
+            Parse(input, DefaultSeparatorChar, out range);
 
         public static Grid Parse(ReadOnlySpan<char> input, out Size size) =>
             Parse(input, DefaultSeparatorChar, out size);
 
         public static Grid Parse(ReadOnlySpan<char> input, char separator) =>
-            Parse(input, separator, out _);
+            Parse(input, separator, size: out _);
+
+        public static Grid Parse(ReadOnlySpan<char> input, char separator, out VectorRange range) =>
+            Parse(input, separator, DefaultPointChar, out range);
 
         public static Grid Parse(ReadOnlySpan<char> input, char separator, out Size size) =>
             Parse(input, separator, DefaultPointChar, out size);
 
         public static Grid Parse(ReadOnlySpan<char> input, char separator, char point) =>
-            Parse(input, separator, point, out _);
+            Parse(input, separator, point, size: out _);
+
+        public static Grid Parse(ReadOnlySpan<char> input, char separator, char point, out VectorRange range)
+        {
+            Grid grid = Parse(input, separator, point, out Size size);
+            range = new(size);
+            return grid;
+        }
 
         public static Grid Parse(ReadOnlySpan<char> input, char separator, char point, out Size size)
         {
