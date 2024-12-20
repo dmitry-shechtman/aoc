@@ -112,15 +112,6 @@ namespace aoc
         private static Vector FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1]);
 
-        public static Vector FindChar(ReadOnlySpan<char> s, char c) =>
-            Size.FromField(s).FindChar(s, c);
-
-        public readonly char GetChar(ReadOnlySpan<char> s) =>
-            Size.FromField(s).GetChar(s, this);
-
-        public static char GetChar(Vector p, ReadOnlySpan<char> s) =>
-            p.GetChar(s);
-
         public static Vector operator +(Vector vector) =>
             vector;
 
