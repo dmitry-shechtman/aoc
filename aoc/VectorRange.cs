@@ -240,6 +240,12 @@ namespace aoc
         public readonly VectorRange SplitSouth(int height) =>
             new(new(Min.x, Min.y + height), Max);
 
+        public readonly Vector FindChar(ReadOnlySpan<char> s, char c) =>
+            Size.FromFieldIndex(s.IndexOf(c), Width);
+
+        public readonly char GetChar(ReadOnlySpan<char> s, Vector vector) =>
+            s[Size.GetFieldIndex(vector, Width)];
+
         public readonly int GetIndex(Vector vector) =>
             vector.x - Min.x + Width * (vector.y - Min.y);
 

@@ -106,7 +106,7 @@ namespace aoc
             vector.x + (long)width * vector.y;
 
         private readonly int GetFieldIndex(Vector vector) =>
-            vector.x + (width + 1) * vector.y;
+            GetFieldIndex(vector, width);
 
         public static Size FromField(ReadOnlySpan<char> s) =>
             FromField(s, GetFieldWidth(s));
@@ -114,7 +114,7 @@ namespace aoc
         private static Size FromField(ReadOnlySpan<char> s, int width) =>
             new(width, GetFieldHeight(s, width));
 
-        private static Vector FromFieldIndex(int index, int width) =>
+        internal static Vector FromFieldIndex(int index, int width) =>
             new(index % (width + 1), index / (width + 1));
 
         private static int GetFieldWidth(ReadOnlySpan<char> s) =>
@@ -122,6 +122,9 @@ namespace aoc
 
         private static int GetFieldHeight(ReadOnlySpan<char> s, int width) =>
             (s.Length + 1) / (width + 1);
+
+        internal static int GetFieldIndex(Vector vector, int width) =>
+            vector.x + (width + 1) * vector.y;
 
         public static Vector operator +(Vector vector, Size size) =>
             new(vector.x + size.width, vector.y + size.height);
