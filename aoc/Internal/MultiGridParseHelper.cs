@@ -49,38 +49,20 @@ namespace aoc.Internal
         public TMulti Parse(ReadOnlySpan<char> input) =>
             Parse(input, size: out _);
 
-        public TMulti Parse(string input) =>
-            Parse(input, size: out _);
-
         public TMulti Parse(ReadOnlySpan<char> input, out VectorRange range) =>
-            Parse(input.ToString(), out range);
-
-        public TMulti Parse(string input, out VectorRange range) =>
-            Parse(input, input.Distinct().ToArray(), out range);
+            Parse(input, GetFormat(input, stackalloc char[256]), out range);
 
         public TMulti Parse(ReadOnlySpan<char> input, out Size size) =>
-            Parse(input.ToString(), out size);
-
-        public TMulti Parse(string input, out Size size) =>
-            Parse(input, input.Distinct().ToArray(), out size);
+            Parse(input, GetFormat(input, stackalloc char[256]), out size);
 
         public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate) =>
             Parse(input, predicate, size: out _);
 
-        public TMulti Parse(string input, Func<char, bool> predicate) =>
-            Parse(input, predicate, size: out _);
-
         public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range) =>
-            Parse(input.ToString(), predicate, out range);
-
-        public TMulti Parse(string input, Func<char, bool> predicate, out VectorRange range) =>
-            Parse(input, input.Where(predicate).Distinct().ToArray(), out range);
+            Parse(input, GetFormat(input, stackalloc char[256], predicate), out range);
 
         public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out Size size) =>
-            Parse(input.ToString(), predicate, out size);
-
-        public TMulti Parse(string input, Func<char, bool> predicate, out Size size) =>
-            Parse(input, input.Where(predicate).Distinct().ToArray(), out size);
+            Parse(input, GetFormat(input, stackalloc char[256], predicate), out size);
 
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
             Parse(input, format, size: out _);
@@ -128,6 +110,20 @@ namespace aoc.Internal
             for (i = 0; i < points.Length; i++)
                 grids[i] = CreateGrid(points[i]);
             return CreateMulti(grids);
+        }
+
+        private static Span<char> GetFormat(ReadOnlySpan<char> input, Span<char> format) =>
+            GetFormat(input, format, c => true);
+
+        private static Span<char> GetFormat(ReadOnlySpan<char> input, Span<char> format, Func<char, bool> predicate)
+        {
+            int count = 0;
+            for (int i = 0; i < input.Length; i++)
+                if (input[i] != DefaultSeparatorChar && predicate(input[i])
+                    && format[..count].IndexOf(input[i]) < 0)
+                    format[count++] = input[i];
+            format[..count].Sort();
+            return format[..count];
         }
 
         protected abstract TGrid CreateGrid(HashSet<Vector> points);
