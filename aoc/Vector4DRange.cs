@@ -122,18 +122,6 @@ namespace aoc
         public static bool TryParse(string s, char separator, char separator2, out Vector4DRange range) =>
             Helper.TryParse(s, separator, separator2, out range);
 
-        public static Vector4DRange Parse(string[] ss) =>
-            Helper.Parse(ss);
-
-        public static bool TryParse(string[] ss, out Vector4DRange range) =>
-            Helper.TryParse(ss, out range);
-
-        public static Vector4DRange Parse(string[] ss, char separator) =>
-            Helper.Parse(ss, separator);
-
-        public static bool TryParse(string[] ss, char separator, out Vector4DRange range) =>
-            Helper.TryParse(ss, separator, out range);
-
         private static Vector4DRange FromSpan(ReadOnlySpan<Vector4D> values) =>
             new(values[0], values[1]);
 

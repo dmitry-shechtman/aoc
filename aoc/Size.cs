@@ -83,12 +83,6 @@ namespace aoc
         public static bool TryParse(string s, Regex separator, out Size size) =>
             Helper.TryParse(s, separator, out size);
 
-        public static Size Parse(string[] ss) =>
-            Helper.Parse(ss);
-
-        public static bool TryParse(string[] ss, out Size size) =>
-            Helper.TryParse(ss, out size);
-
         private static Size FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1]);
 

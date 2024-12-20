@@ -90,12 +90,6 @@ namespace aoc
         public static bool TryParse(string s, Regex separator, out LongRange range) =>
             Helper.TryParse(s, separator, out range);
 
-        public static LongRange Parse(string[] ss) =>
-            Helper.Parse(ss);
-
-        public static bool TryParse(string[] ss, out LongRange range) =>
-            Helper.TryParse(ss, out range);
-
         private static LongRange FromSpan(ReadOnlySpan<long> values) =>
             new(values[0], values[1]);
 

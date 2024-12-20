@@ -104,12 +104,6 @@ namespace aoc
         public static bool TryParse(string s, Regex separator, out LongVector vector) =>
             Helper.TryParse(s, separator, out vector);
 
-        public static LongVector Parse(string[] ss) =>
-            Helper.Parse(ss);
-
-        public static bool TryParse(string[] ss, out LongVector vector) =>
-            Helper.TryParse(ss, out vector);
-
         private static LongVector FromSpan(ReadOnlySpan<long> values) =>
             new(values[0], values[1]);
 

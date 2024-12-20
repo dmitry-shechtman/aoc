@@ -109,12 +109,6 @@ namespace aoc
         public static bool TryParse(string s, Regex separator, out DoubleVector vector) =>
             Helper.TryParse(s, separator, out vector);
 
-        public static DoubleVector Parse(string[] ss) =>
-            Helper.Parse(ss);
-
-        public static bool TryParse(string[] ss, out DoubleVector vector) =>
-            Helper.TryParse(ss, out vector);
-
         private static DoubleVector FromSpan(ReadOnlySpan<double> values) =>
             new(values[0], values[1]);
 

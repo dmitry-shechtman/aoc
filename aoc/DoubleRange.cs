@@ -82,12 +82,6 @@ namespace aoc
         public static bool TryParse(string s, Regex separator, out DoubleRange range) =>
             Helper.TryParse(s, separator, out range);
 
-        public static DoubleRange Parse(string[] ss) =>
-            Helper.Parse(ss);
-
-        public static bool TryParse(string[] ss, out DoubleRange range) =>
-            Helper.TryParse(ss, out range);
-
         private static DoubleRange FromSpan(ReadOnlySpan<double> values) =>
             new(values[0], values[1]);
 
