@@ -17,20 +17,20 @@ namespace aoc.Internal
     }
 
     interface IVectorHelper<TVector, T>
-        where TVector : struct, IVector<TVector, T>
+        where TVector : unmanaged, IVector<TVector, T>
         where T : struct, IFormattable
     {
-        bool TryParse(string s, out TVector vector);
-        bool TryParse(string s, char separator, out TVector vector);
-        bool TryParse(string s, string separator, out TVector vector);
+        bool TryParse(ReadOnlySpan<char> input, out TVector vector);
+        bool TryParse(ReadOnlySpan<char> input, char separator, out TVector vector);
+        bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, out TVector vector);
         bool TryParse(string s, Regex separator, out TVector vector);
 
         FromSpan<TVector, T> FromSpan { get; }
     }
 
     abstract class VectorHelper<TVector, T, TStrategy> : Helper<TVector, T, TStrategy>, IVectorHelper<TVector, T>
-        where TVector : struct, IVector<TVector, T>
-        where T : struct, IFormattable
+        where TVector : unmanaged, IVector<TVector, T>
+        where T : unmanaged, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy, TVector, T>
     {
         protected VectorHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
@@ -53,8 +53,8 @@ namespace aoc.Internal
     }
 
     sealed class Vector2DHelper<TVector, T> : VectorHelper<TVector, T, Vector2DHelperStrategy<TVector, T>>
-        where TVector : struct, IVector2D<TVector, T>
-        where T : struct, IFormattable
+        where TVector : unmanaged, IVector2D<TVector, T>
+        where T : unmanaged, IFormattable
     {
         public Vector2DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromSpan, tryParse, minusOne, zero, one)
@@ -89,8 +89,8 @@ namespace aoc.Internal
     }
 
     sealed class Vector3DHelper<TVector, T> : VectorHelper<TVector, T, Vector3DHelperStrategy<TVector, T>>
-        where TVector : struct, IVector3D<TVector, T>
-        where T : struct, IFormattable
+        where TVector : unmanaged, IVector3D<TVector, T>
+        where T : unmanaged, IFormattable
     {
         public Vector3DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromSpan, tryParse, minusOne, zero, one)
@@ -129,8 +129,8 @@ namespace aoc.Internal
     }
 
     sealed class Vector4DHelper<TVector, T> : VectorHelper<TVector, T, Vector4DHelperStrategy<TVector, T>>
-        where TVector : struct, IVector4D<TVector, T>
-        where T : struct, IFormattable
+        where TVector : unmanaged, IVector4D<TVector, T>
+        where T : unmanaged, IFormattable
     {
         public Vector4DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
             : base(fromSpan, tryParse, minusOne, zero, one)

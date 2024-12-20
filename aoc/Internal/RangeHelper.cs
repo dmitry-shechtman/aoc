@@ -28,8 +28,8 @@ namespace aoc.Internal
     }
 
     sealed class RangeHelper<TRange, T> : Helper<TRange, T, RangeHelperStrategy<TRange, T>>
-        where TRange : struct, IRange<TRange, T>
-        where T : struct, IFormattable
+        where TRange : unmanaged, IRange<TRange, T>
+        where T : unmanaged, IFormattable
     {
         public RangeHelper(FromSpan<TRange, T> fromSpan, TryParse<T> tryParse)
             : base(fromSpan, tryParse)

@@ -33,9 +33,9 @@ namespace aoc.Internal
     }
 
     abstract class MatrixHelper<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, T, TStrategy, TVectorHelper>
-        where TMatrix : struct, IMatrix<TMatrix, TVector, T>
-        where TVector : struct, IVector<TVector, TMatrix, T>
-        where T : struct, IFormattable
+        where TMatrix : unmanaged, IMatrix<TMatrix, TVector, T>
+        where TVector : unmanaged, IVector<TVector, TMatrix, T>
+        where T : unmanaged, IFormattable
         where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
         where TVectorHelper : IVectorHelper<TVector, T>
     {
@@ -96,9 +96,9 @@ namespace aoc.Internal
 
     sealed class Matrix2DHelper<TMatrix, TVector, T> :
             MatrixHelper<TMatrix, TVector, T, Matrix2DHelperStrategy<TMatrix, TVector, T>, Vector2DHelper<TVector, T>>
-        where TMatrix : struct, IMatrix2D<TMatrix, TVector, T>
-        where TVector : struct, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
-        where T : struct, IFormattable
+        where TMatrix : unmanaged, IMatrix2D<TMatrix, TVector, T>
+        where TVector : unmanaged, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
+        where T : unmanaged, IFormattable
     {
         public Matrix2DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector2DHelper<TVector, T> vector)
             : base(fromRows, fromColumns, vector)
@@ -150,9 +150,9 @@ namespace aoc.Internal
 
     sealed class Matrix3DHelper<TMatrix, TVector, T> :
             MatrixHelper<TMatrix, TVector, T, Matrix3DHelperStrategy<TMatrix, TVector, T>, Vector3DHelper<TVector, T>>
-        where TMatrix : struct, IMatrix3D<TMatrix, TVector, T>
-        where TVector : struct, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
-        where T : struct, IFormattable
+        where TMatrix : unmanaged, IMatrix3D<TMatrix, TVector, T>
+        where TVector : unmanaged, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
+        where T : unmanaged, IFormattable
     {
         public Matrix3DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector3DHelper<TVector, T> vector)
             : base(fromRows, fromColumns, vector)
