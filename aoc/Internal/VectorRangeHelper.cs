@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
@@ -11,6 +12,9 @@ namespace aoc.Internal
             : base(fromSpan, vector)
         {
         }
+
+        protected override bool ValidateMatches(MatchCollection matches) =>
+            matches.Count == Vector.MinCount * 2;
 
         protected override RangeHelperStrategy<TRange, TVector> Strategy =>
             RangeHelperStrategy<TRange, TVector>.Instance;

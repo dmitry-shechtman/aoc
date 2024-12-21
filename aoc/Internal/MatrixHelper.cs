@@ -44,7 +44,6 @@ namespace aoc.Internal
             : base(fromRows, vector)
         {
             FromColumnArray = fromColumns;
-            Vector = vector;
         }
 
         public TMatrix FromRows(T[][] rows) =>
@@ -67,10 +66,10 @@ namespace aoc.Internal
         public bool TryParseRowsAny(string input, out TMatrix matrix)
         {
             matrix = default;
-            if (!TryGetMatches(input, out MatchCollection matches))
+            if (!TryGetMatches(input, out var matches))
                 return false;
             Span<T> values = stackalloc T[matches.Count];
-            if (!TryParse(matches, values))
+            if (!Vector.TryParse(matches, values))
                 return false;
             matrix = FromRows(values);
             return true;
@@ -87,27 +86,16 @@ namespace aoc.Internal
             if (!TryGetMatches(input, out var matches))
                 return false;
             Span<T> values = stackalloc T[matches.Count];
-            if (!TryParse(matches, values))
+            if (!Vector.TryParse(matches, values))
                 return false;
             matrix = FromColumns(values);
             return true;
         }
 
-        private bool TryGetMatches(string input, out MatchCollection matches)
-        {
-            matches = Vector.GetMatches(input);
-            return matches.Count == MinCount * MinCount
-                || matches.Count == MinCount * MaxCount
-                || matches.Count == MaxCount * MaxCount;
-        }
-
-        private bool TryParse(MatchCollection matches, Span<T> values)
-        {
-            for (int i = 0; i < matches.Count; i++)
-                if (!Vector.TryParseItem(matches[i].Value, out values[i]))
-                    return false;
-            return true;
-        }
+        protected sealed override bool ValidateMatches(MatchCollection matches) =>
+            matches.Count == MinCount * MinCount ||
+            matches.Count == MinCount * MaxCount ||
+            matches.Count == MaxCount * MaxCount;
 
         protected TMatrix FromRows(params TVector[] vectors) =>
             FromSpan(vectors);
@@ -130,8 +118,6 @@ namespace aoc.Internal
         }
 
         private FromSpan<TMatrix, TVector> FromColumnArray { get; }
-
-        protected TVectorHelper Vector { get; }
     }
 
     sealed class Matrix2DHelperStrategy<TMatrix, TVector, T> : MatrixHelperStrategy<Matrix2DHelperStrategy<TMatrix, TVector, T>, TMatrix, TVector, T>

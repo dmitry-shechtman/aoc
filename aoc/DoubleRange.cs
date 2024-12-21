@@ -9,7 +9,7 @@ namespace aoc
     public readonly struct DoubleRange : IRange<DoubleRange, double>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromSpan, double.TryParse));
+            new(() => new(FromSpan, double.TryParse, @"[-+]?\d+(.\d+)?"));
 
         private static Helper Helper => _helper.Value;
 
@@ -81,6 +81,12 @@ namespace aoc
 
         public static bool TryParse(string s, Regex separator, out DoubleRange range) =>
             Helper.TryParse(s, separator, out range);
+
+        public static DoubleRange ParseAny(string input) =>
+            Helper.ParseAny(input);
+
+        public static bool TryParseAny(string input, out DoubleRange vector) =>
+            Helper.TryParseAny(input, out vector);
 
         private static DoubleRange FromSpan(ReadOnlySpan<double> values) =>
             new(values[0], values[1]);

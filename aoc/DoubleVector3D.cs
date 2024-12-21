@@ -127,6 +127,12 @@ namespace aoc
         public static bool TryParse(string s, Regex separator, out DoubleVector3D vector) =>
             Helper.TryParse(s, separator, out vector);
 
+        public static DoubleVector3D ParseAny(string input) =>
+            Helper.ParseAny(input);
+
+        public static bool TryParseAny(string input, out DoubleVector3D vector) =>
+            Helper.TryParseAny(input, out vector);
+
         private static DoubleVector3D FromSpan(ReadOnlySpan<double> values) =>
             new(values[0], values[1], values[2]);
 

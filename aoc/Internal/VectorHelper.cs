@@ -26,9 +26,10 @@ namespace aoc.Internal
         bool TryParse(string s, Regex separator, out TVector vector);
 
         MatchCollection GetMatches(string input);
+        bool TryParse(MatchCollection matches, Span<T> values);
 
         FromSpan<TVector, T> FromSpan { get; }
-        TryParse<T> TryParseItem { get; }
+        int MinCount { get; }
     }
 
     abstract class VectorHelper<TVector, T, TStrategy> : Helper<TVector, T, TStrategy>, IVectorHelper<TVector, T>
@@ -46,8 +47,17 @@ namespace aoc.Internal
             _regex = new(() => new(pattern));
         }
 
-        public MatchCollection GetMatches(string input) =>
+        protected sealed override MatchCollection GetMatches(string input) =>
             Regex.Matches(input);
+
+        MatchCollection IVectorHelper<TVector, T>.GetMatches(string input) =>
+            GetMatches(input);
+
+        bool IVectorHelper<TVector, T>.TryParse(MatchCollection matches, Span<T> values) =>
+            TryParse(matches, values);
+
+        int IVectorHelper<TVector, T>.MinCount =>
+            MinCount;
 
         protected abstract void InitHeadings(T minusOne, T zero, T one);
     }

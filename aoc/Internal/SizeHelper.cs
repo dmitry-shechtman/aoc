@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
@@ -22,10 +23,16 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
         where TStrategy: SizeHelperStrategy<TStrategy, TSize, TVector, T>
     {
-        protected SizeHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse)
+        protected SizeHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, IVectorHelper<TVector, T> vector)
             : base(fromSpan, tryParse)
         {
+            Vector = vector;
         }
+
+        protected sealed override MatchCollection GetMatches(string input) =>
+            Vector.GetMatches(input);
+
+        private IVectorHelper<TVector, T> Vector { get; }
     }
 
     sealed class Size2DHelperStrategy<TSize, TVector, T> : SizeHelperStrategy<Size2DHelperStrategy<TSize, TVector, T>, TSize, TVector, T>
@@ -44,8 +51,8 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector2D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Size2DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse)
-            : base(fromSpan, tryParse)
+        public Size2DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, IVectorHelper<TVector, T> vector)
+            : base(fromSpan, tryParse, vector)
         {
         }
 
@@ -69,8 +76,8 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector3D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Size3DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse)
-            : base(fromSpan, tryParse)
+        public Size3DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, IVectorHelper<TVector, T> vector)
+            : base(fromSpan, tryParse, vector)
         {
         }
 
@@ -94,8 +101,8 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector4D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Size4DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse)
-            : base(fromSpan, tryParse)
+        public Size4DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, IVectorHelper<TVector, T> vector)
+            : base(fromSpan, tryParse, vector)
         {
         }
 

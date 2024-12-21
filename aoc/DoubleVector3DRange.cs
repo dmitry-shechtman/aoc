@@ -99,6 +99,12 @@ namespace aoc
         public static bool TryParse(string s, char separator, char separator2, out DoubleVector3DRange range) =>
             Helper.TryParse(s, separator, separator2, out range);
 
+        public static DoubleVector3DRange ParseAny(string input) =>
+            Helper.ParseAny(input);
+
+        public static bool TryParseAny(string input, out DoubleVector3DRange vector) =>
+            Helper.TryParseAny(input, out vector);
+
         private static DoubleVector3DRange FromSpan(ReadOnlySpan<DoubleVector3D> values) =>
             new(values[0], values[1]);
 

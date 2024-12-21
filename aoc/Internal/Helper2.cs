@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
@@ -61,6 +62,12 @@ namespace aoc.Internal
         protected Helper2(FromSpan<T, TVector> fromSpan, TVectorHelper vector)
             : base(fromSpan, vector.TryParse, vector.TryParse)
         {
+            Vector = vector;
         }
+
+        protected TVectorHelper Vector { get; }
+
+        protected sealed override MatchCollection GetMatches(string input) =>
+            Vector.GetMatches(input);
     }
 }

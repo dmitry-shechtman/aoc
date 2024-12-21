@@ -136,6 +136,12 @@ namespace aoc
         public static bool TryParse(string s, Regex separator, out Vector4D vector) =>
             Helper.TryParse(s, separator, out vector);
 
+        public static Vector4D ParseAny(string input) =>
+            Helper.ParseAny(input);
+
+        public static bool TryParseAny(string input, out Vector4D vector) =>
+            Helper.TryParseAny(input, out vector);
+
         private static Vector4D FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1], values[2], values[3]);
 

@@ -105,7 +105,7 @@ namespace aoc.Internal
         }
 
         public    FromSpan<T, TItem>  FromSpan         { get; }
-        public    TryParse<TItem>     TryParseItem     { get; }
+        protected TryParse<TItem>     TryParseItem     { get; }
         protected string              DefaultFormat    { get; }
         public    char                DefaultSeparator { get; }
         protected int                 MinCount         { get; }
@@ -173,6 +173,23 @@ namespace aoc.Internal
         public bool TryParse(string input, Regex separator, out T value) =>
             TryParse(separator.Split(input)[1..], out value);
 
+        public T ParseAny(string input) =>
+            TryParseAny(input, out T value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParseAny(string input, out T value)
+        {
+            value = default;
+            if (!TryGetMatches(input, out var matches))
+                return false;
+            Span<TItem> values = stackalloc TItem[matches.Count];
+            if (!TryParse(matches, values))
+                return false;
+            value = FromSpan(values);
+            return true;
+        }
+
         private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, out T value)
         {
             value = default;
@@ -209,6 +226,26 @@ namespace aoc.Internal
         {
             for (int i = 0; i < ss.Length; i++)
                 if (!TryParseItem(ss[i], out values[i]))
+                    return false;
+            return true;
+        }
+
+        protected bool TryGetMatches(string input, out MatchCollection matches)
+        {
+            matches = GetMatches(input);
+            return ValidateMatches(matches);
+        }
+
+        protected abstract MatchCollection GetMatches(string input);
+
+        protected virtual bool ValidateMatches(MatchCollection matches) =>
+            matches.Count >= MinCount &&
+            matches.Count <= MaxCount;
+
+        protected bool TryParse(MatchCollection matches, Span<TItem> values)
+        {
+            for (int i = 0; i < matches.Count; i++)
+                if (!TryParseItem(matches[i].Value, out values[i]))
                     return false;
             return true;
         }

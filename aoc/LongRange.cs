@@ -10,7 +10,7 @@ namespace aoc
     public readonly struct LongRange : IIntegerRange<LongRange, long>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromSpan, long.TryParse));
+            new(() => new(FromSpan, long.TryParse, @"[-+]?\d+"));
 
         private static Helper Helper => _helper.Value;
 
@@ -89,6 +89,12 @@ namespace aoc
 
         public static bool TryParse(string s, Regex separator, out LongRange range) =>
             Helper.TryParse(s, separator, out range);
+
+        public static LongRange ParseAny(string input) =>
+            Helper.ParseAny(input);
+
+        public static bool TryParseAny(string input, out LongRange vector) =>
+            Helper.TryParseAny(input, out vector);
 
         private static LongRange FromSpan(ReadOnlySpan<long> values) =>
             new(values[0], values[1]);

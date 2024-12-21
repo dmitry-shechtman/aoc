@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct Size3D : ISize3D<Size3D, Vector3D, int>, IIntegerSize<Size3D, Vector3D>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromSpan, int.TryParse));
+            new(() => new(FromSpan, int.TryParse, Vector3D.Helper));
 
         private static Helper Helper => _helper.Value;
 
@@ -91,6 +91,12 @@ namespace aoc
 
         public static bool TryParse(string s, Regex separator, out Size3D size) =>
             Helper.TryParse(s, separator, out size);
+
+        public static Size3D ParseAny(string input) =>
+            Helper.ParseAny(input);
+
+        public static bool TryParseAny(string input, out Size3D size) =>
+            Helper.TryParseAny(input, out size);
 
         private static Size3D FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1], values[2]);
