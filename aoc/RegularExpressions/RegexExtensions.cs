@@ -14,31 +14,31 @@ namespace System.Text.RegularExpressions
                 regex.Match(input).Groups.GetValues(selector);
 
         public static IEnumerable<T[]> SelectValuesMany<T>(this Regex regex, string input,
-            int skipCount = 1)
+            Range range = default)
                 where T : IConvertible =>
-                    SelectValuesMany(regex, input, StringExtensions.ConvertTo<T>, skipCount);
+                    SelectValuesMany(regex, input, StringExtensions.ConvertTo<T>, range);
 
         public static IEnumerable<T[]> SelectValuesMany<T>(this Regex regex, string input,
-            Func<string, T> selector, int skipCount = 1) =>
+            Func<string, T> selector, Range range = default) =>
                 regex.Matches(input)
-                    .Select(m => m.Groups.GetValues(selector, skipCount));
+                    .Select(m => m.Groups.GetValues(selector, range));
 
         public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
-            int skipCount = 1)
+            Range range = default)
                 where T : IConvertible =>
-                    GetAllValues(regex, input, StringExtensions.ConvertTo<T>, skipCount);
+                    GetAllValues(regex, input, StringExtensions.ConvertTo<T>, range);
 
         public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
-            Func<string, T> selector, int skipCount = 1) =>
-                regex.Match(input).Groups.GetAllValues(selector, skipCount);
+            Func<string, T> selector, Range range = default) =>
+                regex.Match(input).Groups.GetAllValues(selector, range);
 
         public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this Regex regex, string input,
-            int skipCount = 1)
+            Range range = default)
                 where T : IConvertible =>
-                    SelectAllValues(regex, input, StringExtensions.ConvertTo<T>, skipCount);
+                    SelectAllValues(regex, input, StringExtensions.ConvertTo<T>, range);
 
         public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this Regex regex, string input,
-            Func<string, T> selector, int skipCount = 1) =>
-                regex.Match(input).Groups.SelectAllValues(selector, skipCount);
+            Func<string, T> selector, Range range = default) =>
+                regex.Match(input).Groups.SelectAllValues(selector, range);
     }
 }
