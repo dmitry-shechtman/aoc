@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
@@ -57,6 +58,56 @@ namespace aoc.Internal
 
         public TMatrix FromColumns(ReadOnlySpan<T> values, int? chunkSize = null) =>
             FromColumnArray(Chunk(values, chunkSize));
+
+        public TMatrix ParseRowsAny(string input) =>
+            TryParseRowsAny(input, out TMatrix matrix)
+                ? matrix
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParseRowsAny(string input, out TMatrix matrix)
+        {
+            matrix = default;
+            if (!TryGetMatches(input, out MatchCollection matches))
+                return false;
+            Span<T> values = stackalloc T[matches.Count];
+            if (!TryParse(matches, values))
+                return false;
+            matrix = FromRows(values);
+            return true;
+        }
+
+        public TMatrix ParseColumnsAny(string input) =>
+            TryParseColumnsAny(input, out TMatrix matrix)
+                ? matrix
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParseColumnsAny(string input, out TMatrix matrix)
+        {
+            matrix = default;
+            if (!TryGetMatches(input, out var matches))
+                return false;
+            Span<T> values = stackalloc T[matches.Count];
+            if (!TryParse(matches, values))
+                return false;
+            matrix = FromColumns(values);
+            return true;
+        }
+
+        private bool TryGetMatches(string input, out MatchCollection matches)
+        {
+            matches = Vector.GetMatches(input);
+            return matches.Count == MinCount * MinCount
+                || matches.Count == MinCount * MaxCount
+                || matches.Count == MaxCount * MaxCount;
+        }
+
+        private bool TryParse(MatchCollection matches, Span<T> values)
+        {
+            for (int i = 0; i < matches.Count; i++)
+                if (!Vector.TryParseItem(matches[i].Value, out values[i]))
+                    return false;
+            return true;
+        }
 
         protected TMatrix FromRows(params TVector[] vectors) =>
             FromSpan(vectors);

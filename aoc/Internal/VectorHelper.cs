@@ -25,7 +25,10 @@ namespace aoc.Internal
         bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, out TVector vector);
         bool TryParse(string s, Regex separator, out TVector vector);
 
+        MatchCollection GetMatches(string input);
+
         FromSpan<TVector, T> FromSpan { get; }
+        TryParse<T> TryParseItem { get; }
     }
 
     abstract class VectorHelper<TVector, T, TStrategy> : Helper<TVector, T, TStrategy>, IVectorHelper<TVector, T>
@@ -33,11 +36,18 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy, TVector, T>
     {
-        protected VectorHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
+        private readonly Lazy<Regex> _regex;
+        private Regex Regex => _regex.Value;
+
+        protected VectorHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one, string pattern)
             : base(fromSpan, tryParse)
         {
             InitHeadings(minusOne, zero, one);
+            _regex = new(() => new(pattern));
         }
+
+        public MatchCollection GetMatches(string input) =>
+            Regex.Matches(input);
 
         protected abstract void InitHeadings(T minusOne, T zero, T one);
     }
@@ -56,8 +66,8 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector2D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Vector2DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
-            : base(fromSpan, tryParse, minusOne, zero, one)
+        public Vector2DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one, string pattern)
+            : base(fromSpan, tryParse, minusOne, zero, one, pattern)
         {
         }
 
@@ -92,8 +102,8 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector3D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Vector3DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
-            : base(fromSpan, tryParse, minusOne, zero, one)
+        public Vector3DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one, string pattern)
+            : base(fromSpan, tryParse, minusOne, zero, one, pattern)
         {
         }
 
@@ -132,8 +142,8 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector4D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Vector4DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one)
-            : base(fromSpan, tryParse, minusOne, zero, one)
+        public Vector4DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one, string pattern)
+            : base(fromSpan, tryParse, minusOne, zero, one, pattern)
         {
         }
 

@@ -105,7 +105,7 @@ namespace aoc.Internal
         }
 
         public    FromSpan<T, TItem>  FromSpan         { get; }
-        protected TryParse<TItem>     TryParseItem     { get; }
+        public    TryParse<TItem>     TryParseItem     { get; }
         protected string              DefaultFormat    { get; }
         public    char                DefaultSeparator { get; }
         protected int                 MinCount         { get; }

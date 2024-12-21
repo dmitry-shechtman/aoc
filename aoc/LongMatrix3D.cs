@@ -185,6 +185,18 @@ namespace aoc
         public static bool TryParse(string s, char separator, char separator2, out LongMatrix3D matrix) =>
             Helper.TryParse(s, separator, separator2, out matrix);
 
+        public static LongMatrix3D ParseRowsAny(string input) =>
+            Helper.ParseRowsAny(input);
+
+        public static bool TryParseRowsAny(string input, out LongMatrix3D matrix) =>
+            Helper.TryParseRowsAny(input, out matrix);
+
+        public static LongMatrix3D ParseColumnsAny(string input) =>
+            Helper.ParseColumnsAny(input);
+
+        public static bool TryParseColumnsAny(string input, out LongMatrix3D matrix) =>
+            Helper.TryParseColumnsAny(input, out matrix);
+
         public static LongMatrix3D FromRows(params LongVector3D[] rows) =>
             FromRows(rows.AsSpan());
 
