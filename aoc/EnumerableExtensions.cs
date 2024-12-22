@@ -42,7 +42,7 @@ namespace aoc
             source.OrderByDescending(v => v, comparer);
 #endif
 
-#if !NET6_0_OR_GREATER
+#if !NET6_0_OR_GREATER && !NET6_0
         public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int size) =>
             source.Select()
                 .GroupBy(t => t.Index / size)
