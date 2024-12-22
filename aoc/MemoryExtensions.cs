@@ -26,7 +26,7 @@ namespace aoc
         public static int Split(this ReadOnlySpan<char> source, Span<System.Range> destination, ReadOnlySpan<char> separator, StringSplitOptions options = StringSplitOptions.None)
         {
             int index = 0, start = 0;
-            for (int curr = 0; curr < source.Length; curr++)
+            for (int curr = 0; curr <= source.Length - separator.Length; curr++)
             {
                 if (source[curr..(curr + separator.Length)].SequenceEqual(separator))
                 {
