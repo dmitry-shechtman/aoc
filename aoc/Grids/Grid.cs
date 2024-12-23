@@ -14,9 +14,6 @@ namespace aoc.Grids
         where TRange : struct, IRange<TRange, TVector, T>
         where T : struct
     {
-        protected Grid(TVector[] points) =>
-            Points = new(points);
-
         protected Grid(IEnumerable<TVector> points) =>
             Points = new(points);
 
@@ -136,11 +133,6 @@ namespace aoc.Grids
     public abstract class Grid<TSelf> : Grid<TSelf, Vector, Size, VectorRange, int>, IFormattableEx
         where TSelf : Grid<TSelf>
     {
-        protected Grid(Vector[] points)
-            : base(points)
-        {
-        }
-
         protected Grid(IEnumerable<Vector> points)
             : base(points)
         {

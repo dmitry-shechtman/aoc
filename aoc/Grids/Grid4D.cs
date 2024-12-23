@@ -4,14 +4,25 @@ using System.Linq;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.Grid4DHelper;
-
     public abstract class Grid4D<TSelf> : Grid<TSelf, Vector4D, Size4D, Vector4DRange, int>
         where TSelf : Grid4D<TSelf>
     {
-        protected Grid4D(Vector4D[] points)
-            : base(points)
+        internal sealed class Helper : Internal.GridHelper<Helper, Grid4D, Vector4D>
         {
+            private Helper()
+            {
+            }
+
+            public override Vector4D[] Headings => new[]
+            {
+                Vector4D.North, Vector4D.East, Vector4D.South, Vector4D.West,
+                Vector4D.Up,    Vector4D.Down, Vector4D.Ana,   Vector4D.Kata
+            };
+
+            protected override string[][] FormatStrings => new[]
+            {
+                new[] { "n", "e", "s", "w", "u", "d", "a", "k" }
+            };
         }
 
         protected Grid4D(IEnumerable<Vector4D> points)
@@ -46,31 +57,6 @@ namespace aoc.Grids
 
         public bool RemoveRange(IEnumerable<Vector4D> range) =>
             range.All(Points.Remove);
-    }
-
-    public sealed class Grid4D : Grid4D<Grid4D>
-    {
-        static Helper Helper { get; } = Helper.Instance;
-
-        public Grid4D(params Vector4D[] points)
-            : base(points)
-        {
-        }
-
-        public Grid4D(IEnumerable<Vector4D> points)
-            : base(points)
-        {
-        }
-
-        public Grid4D(IEnumerable<Vector3D> points)
-            : base(points)
-        {
-        }
-
-        public Grid4D(IEnumerable<Vector> points)
-            : base(points)
-        {
-        }
 
         public override IEnumerable<Vector4D> GetNeighbors(Vector4D p) => new Vector4D[]
         {
@@ -96,6 +82,31 @@ namespace aoc.Grids
             new(p.x, p.y, p.z + 1, p.w),
             new(p.x, p.y, p.z, p.w + 1)
         };
+    }
+
+    public sealed class Grid4D : Grid4D<Grid4D>
+    {
+        static new Helper Helper { get; } = Helper.Instance;
+
+        public Grid4D(params Vector4D[] points)
+            : base(points)
+        {
+        }
+
+        public Grid4D(IEnumerable<Vector4D> points)
+            : base(points)
+        {
+        }
+
+        public Grid4D(IEnumerable<Vector3D> points)
+            : base(points)
+        {
+        }
+
+        public Grid4D(IEnumerable<Vector> points)
+            : base(points)
+        {
+        }
 
         public static Vector4D[] Headings =>
             Helper.Headings;

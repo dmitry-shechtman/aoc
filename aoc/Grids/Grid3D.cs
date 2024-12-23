@@ -4,14 +4,25 @@ using System.Linq;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.Grid3DHelper;
-
     public abstract class Grid3D<TSelf> : Grid<TSelf, Vector3D, Size3D, Vector3DRange, int>
         where TSelf : Grid3D<TSelf>
     {
-        protected Grid3D(Vector3D[] points)
-            : base(points)
+        internal sealed class Helper : Internal.GridHelper<Helper, Grid3D, Vector3D>
         {
+            private Helper()
+            {
+            }
+
+            public override Vector3D[] Headings => new[]
+            {
+                Vector3D.North, Vector3D.East, Vector3D.South, Vector3D.West,
+                Vector3D.Up,    Vector3D.Down
+            };
+
+            protected override string[][] FormatStrings => new[]
+            {
+                new[] { "n", "e", "s", "w", "u", "d" }
+            };
         }
 
         protected Grid3D(IEnumerable<Vector3D> points)
@@ -41,11 +52,32 @@ namespace aoc.Grids
 
         public bool RemoveRange(IEnumerable<Vector3D> range) =>
             range.All(Points.Remove);
+
+        public override IEnumerable<Vector3D> GetNeighbors(Vector3D p) => new Vector3D[]
+        {
+            new(p.x, p.y, p.z - 1),
+            new(p.x, p.y - 1, p.z),
+            new(p.x + 1, p.y, p.z),
+            new(p.x, p.y + 1, p.z),
+            new(p.x - 1, p.y, p.z),
+            new(p.x, p.y, p.z + 1)
+        };
+
+        public override IEnumerable<Vector3D> GetNeighborsAndSelf(Vector3D p) => new Vector3D[]
+        {
+            new(p.x, p.y, p.z),
+            new(p.x, p.y, p.z - 1),
+            new(p.x, p.y - 1, p.z),
+            new(p.x + 1, p.y, p.z),
+            new(p.x, p.y + 1, p.z),
+            new(p.x - 1, p.y, p.z),
+            new(p.x, p.y, p.z + 1)
+        };
     }
 
     public sealed class Grid3D : Grid3D<Grid3D>
     {
-        static Helper Helper { get; } = Helper.Instance;
+        static new Helper Helper { get; } = Helper.Instance;
 
         public Grid3D(params Vector3D[] points)
             : base(points)
@@ -61,27 +93,6 @@ namespace aoc.Grids
             : base(points)
         {
         }
-
-        public override Vector3D[] GetNeighbors(Vector3D p) => new Vector3D[]
-        {
-            new(p.x, p.y, p.z - 1),
-            new(p.x, p.y - 1, p.z),
-            new(p.x + 1, p.y, p.z),
-            new(p.x, p.y + 1, p.z),
-            new(p.x - 1, p.y, p.z),
-            new(p.x, p.y, p.z + 1)
-        };
-
-        public override Vector3D[] GetNeighborsAndSelf(Vector3D p) => new Vector3D[]
-        {
-            new(p.x, p.y, p.z),
-            new(p.x, p.y, p.z - 1),
-            new(p.x, p.y - 1, p.z),
-            new(p.x + 1, p.y, p.z),
-            new(p.x, p.y + 1, p.z),
-            new(p.x - 1, p.y, p.z),
-            new(p.x, p.y, p.z + 1)
-        };
 
         public static Vector3D[] Headings =>
             Helper.Headings;

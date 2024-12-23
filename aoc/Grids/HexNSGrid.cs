@@ -3,18 +3,28 @@ using System.Collections.Generic;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.HexNSGridHelper;
-
-    public sealed class HexNSGrid : Grid<HexNSGrid>
+    public abstract class HexNSGrid<TSelf> : Grid<HexNSGrid>
+        where TSelf : HexNSGrid<TSelf>
     {
-        static Helper Helper { get; } = Helper.Instance;
-
-        public HexNSGrid(params Vector[] points)
-            : base(points)
+        internal sealed class Helper : Internal.GridHelper2<Helper, HexNSGrid>
         {
+            private Helper()
+            {
+            }
+
+            public override Vector[] Headings => new[]
+            {
+                Vector.North, Vector.NorthEast, Vector.SouthEast,
+                Vector.South, Vector.SouthWest, Vector.NorthWest
+            };
+
+            protected override string[][] FormatStrings => new[]
+            {
+                new[] { "n", "ne", "se", "s", "sw", "nw" }
+            };
         }
 
-        public HexNSGrid(IEnumerable<Vector> points)
+        protected HexNSGrid(IEnumerable<Vector> points)
             : base(points)
         {
         }
@@ -42,6 +52,21 @@ namespace aoc.Grids
             new(p.x - 1, p.y - 1),
             new(p.x + 1, p.y - 1)
         };
+    }
+
+    public sealed class HexNSGrid : HexNSGrid<HexNSGrid>
+    {
+        static new Helper Helper { get; } = Helper.Instance;
+
+        public HexNSGrid(params Vector[] points)
+            : base(points)
+        {
+        }
+
+        public HexNSGrid(IEnumerable<Vector> points)
+            : base(points)
+        {
+        }
 
         public override string ToString() =>
             Helper.ToString(this);

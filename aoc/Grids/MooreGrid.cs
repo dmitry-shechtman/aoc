@@ -3,18 +3,28 @@ using System.Collections.Generic;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.MooreGridHelper;
-
-    public sealed class MooreGrid : Grid<MooreGrid>
+    public abstract class MooreGrid<TSelf> : Grid<TSelf>
+        where TSelf : MooreGrid<TSelf>
     {
-        static Helper Helper { get; } = Helper.Instance;
-
-        public MooreGrid(params Vector[] points)
-            : base(points)
+        internal sealed class Helper : Internal.GridHelper2<Helper, TSelf>
         {
+            private Helper()
+            {
+            }
+
+            public override Vector[] Headings => new[]
+            {
+                Vector.North, Vector.NorthEast, Vector.East, Vector.SouthEast,
+                Vector.South, Vector.SouthWest, Vector.West, Vector.NorthWest,
+            };
+
+            protected override string[][] FormatStrings => new[]
+            {
+                new[] { "n", "ne", "e", "se", "s", "sw", "w", "nw" }
+            };
         }
 
-        public MooreGrid(IEnumerable<Vector> points)
+        protected MooreGrid(IEnumerable<Vector> points)
             : base(points)
         {
         }
@@ -50,6 +60,21 @@ namespace aoc.Grids
                 for (var x = p.x - 1; x <= p.x + 1; x++)
                     count += Points.Contains((x, y)) ? 1 : 0;
             return count;
+        }
+    }
+
+    public sealed class MooreGrid : MooreGrid<MooreGrid>
+    {
+        static new Helper Helper { get; } = Helper.Instance;
+
+        public MooreGrid(params Vector[] points)
+            : base(points)
+        {
+        }
+
+        public MooreGrid(IEnumerable<Vector> points)
+            : base(points)
+        {
         }
 
         public override string ToString() =>

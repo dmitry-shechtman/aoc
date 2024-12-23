@@ -2,19 +2,15 @@
 
 namespace aoc.Grids
 {
-    public sealed class MooreGrid3D : Grid3D<MooreGrid3D>
+    public abstract class MooreGrid3D<TSelf> : Grid3D<TSelf>
+        where TSelf : MooreGrid3D<TSelf>
     {
-        public MooreGrid3D(params Vector3D[] points)
+        protected MooreGrid3D(IEnumerable<Vector3D> points)
             : base(points)
         {
         }
 
-        public MooreGrid3D(IEnumerable<Vector3D> points)
-            : base(points)
-        {
-        }
-
-        public MooreGrid3D(IEnumerable<Vector> points)
+        protected MooreGrid3D(IEnumerable<Vector> points)
             : base(points)
         {
         }
@@ -54,6 +50,24 @@ namespace aoc.Grids
                     for (var x = p.x - 1; x <= p.x + 1; x++)
                         count += Points.Contains((x, y, z)) ? 1 : 0;
             return count;
+        }
+    }
+
+    public sealed class MooreGrid3D : MooreGrid3D<MooreGrid3D>
+    {
+        public MooreGrid3D(params Vector3D[] points)
+            : base(points)
+        {
+        }
+
+        public MooreGrid3D(IEnumerable<Vector3D> points)
+            : base(points)
+        {
+        }
+
+        public MooreGrid3D(IEnumerable<Vector> points)
+            : base(points)
+        {
         }
     }
 }

@@ -3,18 +3,28 @@ using System.Collections.Generic;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.HexWEGridHelper;
-
-    public sealed class HexWEGrid : Grid<HexWEGrid>
+    public abstract class HexWEGrid<TSelf> : Grid<TSelf>
+        where TSelf : HexWEGrid<TSelf>
     {
-        static Helper Helper { get; } = Helper.Instance;
-
-        public HexWEGrid(params Vector[] points)
-            : base(points)
+        internal sealed class Helper : Internal.GridHelper2<Helper, HexWEGrid>
         {
+            private Helper()
+            {
+            }
+
+            public override Vector[] Headings => new[]
+            {
+                Vector.East, Vector.SouthEast, Vector.SouthWest,
+                Vector.West, Vector.NorthWest, Vector.NorthEast
+            };
+
+            protected override string[][] FormatStrings => new[]
+            {
+                new[] { "e", "se", "sw", "w", "nw", "ne" }
+            };
         }
 
-        public HexWEGrid(IEnumerable<Vector> points)
+        protected HexWEGrid(IEnumerable<Vector> points)
             : base(points)
         {
         }
@@ -42,6 +52,21 @@ namespace aoc.Grids
             new(p.x + 1, p.y + 1),
             new(p.x - 1, p.y + 1),
         };
+    }
+
+    public sealed class HexWEGrid : HexWEGrid<HexWEGrid>
+    {
+        static new Helper Helper { get; } = Helper.Instance;
+
+        public HexWEGrid(params Vector[] points)
+            : base(points)
+        {
+        }
+
+        public HexWEGrid(IEnumerable<Vector> points)
+            : base(points)
+        {
+        }
 
         public override string ToString() =>
             Helper.ToString(this);

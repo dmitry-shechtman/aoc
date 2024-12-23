@@ -3,18 +3,23 @@ using System.Collections.Generic;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.DiagGridHelper;
-
-    public sealed class DiagGrid : Grid<DiagGrid>
+    public abstract class DiagGrid<TSelf> : Grid<TSelf>
+        where TSelf : DiagGrid<TSelf>
     {
-        static Helper Helper { get; } = Helper.Instance;
-
-        public DiagGrid(params Vector[] points)
-            : base(points)
+        internal sealed class Helper : Internal.GridHelper2<Helper, TSelf>
         {
+            public override Vector[] Headings => new[]
+            {
+                Vector.NorthEast, Vector.SouthEast, Vector.SouthWest, Vector.NorthWest
+            };
+
+            protected override string[][] FormatStrings => new[]
+            {
+                new[] { "ne", "se", "sw", "nw" }
+            };
         }
 
-        public DiagGrid(IEnumerable<Vector> points)
+        protected DiagGrid(IEnumerable<Vector> points)
             : base(points)
         {
         }
@@ -35,6 +40,21 @@ namespace aoc.Grids
             new(p.x - 1, p.y + 1),
             new(p.x + 1, p.y + 1)
         };
+    }
+
+    public sealed class DiagGrid : DiagGrid<DiagGrid>
+    {
+        static new Helper Helper { get; } = Helper.Instance;
+
+        public DiagGrid(params Vector[] points)
+            : base(points)
+        {
+        }
+
+        public DiagGrid(IEnumerable<Vector> points)
+            : base(points)
+        {
+        }
 
         public override string ToString() =>
             Helper.ToString(this);
