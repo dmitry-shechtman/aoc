@@ -2,7 +2,8 @@
 
 namespace aoc.Grids
 {
-    public abstract class MooreGrid4D<TSelf> : Grid4D<MooreGrid4D>
+    public abstract class MooreGrid4D<TSelf> : Grid4D<TSelf>
+        where TSelf : MooreGrid4D<TSelf>
     {
         protected MooreGrid4D(IEnumerable<Vector4D> points)
             : base(points)

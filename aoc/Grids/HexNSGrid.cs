@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace aoc.Grids
 {
-    public abstract class HexNSGrid<TSelf> : Grid<HexNSGrid>
+    public abstract class HexNSGrid<TSelf> : Grid<TSelf>
         where TSelf : HexNSGrid<TSelf>
     {
-        internal sealed class Helper : Internal.GridHelper2<Helper, HexNSGrid>
+        internal sealed class Helper : Internal.GridHelper2<Helper, TSelf>
         {
             private Helper()
             {
@@ -34,23 +34,23 @@ namespace aoc.Grids
 
         public override Vector[] GetNeighbors(Vector p) => new Vector[]
         {
-            new(p.x, p.y + 2),
-            new(p.x + 1, p.y + 1),
-            new(p.x - 1, p.y + 1),
-            new(p.x, p.y - 2),
-            new(p.x - 1, p.y - 1),
-            new(p.x + 1, p.y - 1)
+                new(p.x, p.y + 2),
+                new(p.x + 1, p.y + 1),
+                new(p.x - 1, p.y + 1),
+                new(p.x, p.y - 2),
+                new(p.x - 1, p.y - 1),
+                new(p.x + 1, p.y - 1)
         };
 
         public override Vector[] GetNeighborsAndSelf(Vector p) => new Vector[]
         {
-            new(p.x, p.y),
-            new(p.x, p.y + 2),
-            new(p.x + 1, p.y + 1),
-            new(p.x - 1, p.y + 1),
-            new(p.x, p.y - 2),
-            new(p.x - 1, p.y - 1),
-            new(p.x + 1, p.y - 1)
+                new(p.x, p.y),
+                new(p.x, p.y + 2),
+                new(p.x + 1, p.y + 1),
+                new(p.x - 1, p.y + 1),
+                new(p.x, p.y - 2),
+                new(p.x - 1, p.y - 1),
+                new(p.x + 1, p.y - 1)
         };
     }
 

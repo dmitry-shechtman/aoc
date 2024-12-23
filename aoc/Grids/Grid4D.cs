@@ -7,7 +7,7 @@ namespace aoc.Grids
     public abstract class Grid4D<TSelf> : Grid<TSelf, Vector4D, Size4D, Vector4DRange, int>
         where TSelf : Grid4D<TSelf>
     {
-        internal sealed class Helper : Internal.GridHelper<Helper, Grid4D, Vector4D>
+        internal sealed class Helper : Internal.GridHelper<Helper, TSelf, Vector4D>
         {
             private Helper()
             {
@@ -60,27 +60,27 @@ namespace aoc.Grids
 
         public override IEnumerable<Vector4D> GetNeighbors(Vector4D p) => new Vector4D[]
         {
-            new(p.x, p.y, p.z, p.w - 1),
-            new(p.x, p.y, p.z - 1, p.w),
-            new(p.x, p.y - 1, p.z, p.w),
-            new(p.x - 1, p.y, p.z, p.w),
-            new(p.x + 1, p.y, p.z, p.w),
-            new(p.x, p.y + 1, p.z, p.w),
-            new(p.x, p.y, p.z + 1, p.w),
-            new(p.x, p.y, p.z, p.w + 1)
+                new(p.x, p.y, p.z, p.w - 1),
+                new(p.x, p.y, p.z - 1, p.w),
+                new(p.x, p.y - 1, p.z, p.w),
+                new(p.x - 1, p.y, p.z, p.w),
+                new(p.x + 1, p.y, p.z, p.w),
+                new(p.x, p.y + 1, p.z, p.w),
+                new(p.x, p.y, p.z + 1, p.w),
+                new(p.x, p.y, p.z, p.w + 1)
         };
 
         public override IEnumerable<Vector4D> GetNeighborsAndSelf(Vector4D p) => new Vector4D[]
         {
-            new(p.x, p.y, p.z, p.w - 1),
-            new(p.x, p.y, p.z - 1, p.w),
-            new(p.x, p.y - 1, p.z, p.w),
-            new(p.x - 1, p.y, p.z, p.w),
-            new(p.x, p.y, p.z, p.w),
-            new(p.x + 1, p.y, p.z, p.w),
-            new(p.x, p.y + 1, p.z, p.w),
-            new(p.x, p.y, p.z + 1, p.w),
-            new(p.x, p.y, p.z, p.w + 1)
+                new(p.x, p.y, p.z, p.w - 1),
+                new(p.x, p.y, p.z - 1, p.w),
+                new(p.x, p.y - 1, p.z, p.w),
+                new(p.x - 1, p.y, p.z, p.w),
+                new(p.x, p.y, p.z, p.w),
+                new(p.x + 1, p.y, p.z, p.w),
+                new(p.x, p.y + 1, p.z, p.w),
+                new(p.x, p.y, p.z + 1, p.w),
+                new(p.x, p.y, p.z, p.w + 1)
         };
     }
 

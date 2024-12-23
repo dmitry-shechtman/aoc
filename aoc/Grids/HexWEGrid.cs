@@ -6,7 +6,7 @@ namespace aoc.Grids
     public abstract class HexWEGrid<TSelf> : Grid<TSelf>
         where TSelf : HexWEGrid<TSelf>
     {
-        internal sealed class Helper : Internal.GridHelper2<Helper, HexWEGrid>
+        internal sealed class Helper : Internal.GridHelper2<Helper, TSelf>
         {
             private Helper()
             {
@@ -34,23 +34,23 @@ namespace aoc.Grids
 
         public override Vector[] GetNeighbors(Vector p) => new Vector[]
         {
-            new(p.x - 2, p.y),
-            new(p.x - 1, p.y - 1),
-            new(p.x + 1, p.y - 1),
-            new(p.x + 2, p.y),
-            new(p.x + 1, p.y + 1),
-            new(p.x - 1, p.y + 1),
+                new(p.x - 2, p.y),
+                new(p.x - 1, p.y - 1),
+                new(p.x + 1, p.y - 1),
+                new(p.x + 2, p.y),
+                new(p.x + 1, p.y + 1),
+                new(p.x - 1, p.y + 1),
         };
 
         public override Vector[] GetNeighborsAndSelf(Vector p) => new Vector[]
         {
-            new(p.x, p.y),
-            new(p.x - 2, p.y),
-            new(p.x - 1, p.y - 1),
-            new(p.x + 1, p.y - 1),
-            new(p.x + 2, p.y),
-            new(p.x + 1, p.y + 1),
-            new(p.x - 1, p.y + 1),
+                new(p.x, p.y),
+                new(p.x - 2, p.y),
+                new(p.x - 1, p.y - 1),
+                new(p.x + 1, p.y - 1),
+                new(p.x + 2, p.y),
+                new(p.x + 1, p.y + 1),
+                new(p.x - 1, p.y + 1),
         };
     }
 

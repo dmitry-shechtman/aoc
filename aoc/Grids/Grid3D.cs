@@ -7,7 +7,7 @@ namespace aoc.Grids
     public abstract class Grid3D<TSelf> : Grid<TSelf, Vector3D, Size3D, Vector3DRange, int>
         where TSelf : Grid3D<TSelf>
     {
-        internal sealed class Helper : Internal.GridHelper<Helper, Grid3D, Vector3D>
+        internal sealed class Helper : Internal.GridHelper<Helper, TSelf, Vector3D>
         {
             private Helper()
             {
@@ -55,23 +55,23 @@ namespace aoc.Grids
 
         public override IEnumerable<Vector3D> GetNeighbors(Vector3D p) => new Vector3D[]
         {
-            new(p.x, p.y, p.z - 1),
-            new(p.x, p.y - 1, p.z),
-            new(p.x + 1, p.y, p.z),
-            new(p.x, p.y + 1, p.z),
-            new(p.x - 1, p.y, p.z),
-            new(p.x, p.y, p.z + 1)
+                new(p.x, p.y, p.z - 1),
+                new(p.x, p.y - 1, p.z),
+                new(p.x + 1, p.y, p.z),
+                new(p.x, p.y + 1, p.z),
+                new(p.x - 1, p.y, p.z),
+                new(p.x, p.y, p.z + 1)
         };
 
         public override IEnumerable<Vector3D> GetNeighborsAndSelf(Vector3D p) => new Vector3D[]
         {
-            new(p.x, p.y, p.z),
-            new(p.x, p.y, p.z - 1),
-            new(p.x, p.y - 1, p.z),
-            new(p.x + 1, p.y, p.z),
-            new(p.x, p.y + 1, p.z),
-            new(p.x - 1, p.y, p.z),
-            new(p.x, p.y, p.z + 1)
+                new(p.x, p.y, p.z),
+                new(p.x, p.y, p.z - 1),
+                new(p.x, p.y - 1, p.z),
+                new(p.x + 1, p.y, p.z),
+                new(p.x, p.y + 1, p.z),
+                new(p.x - 1, p.y, p.z),
+                new(p.x, p.y, p.z + 1)
         };
     }
 
