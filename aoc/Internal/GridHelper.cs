@@ -156,9 +156,9 @@ namespace aoc.Internal
         where TSelf : GridHelper<TSelf, TGrid>
         where TGrid : Grid<TGrid>
     {
-        protected const char DefaultEmptyChar     = '.';
-        protected const char DefaultPointChar     = '#';
-        protected const char DefaultSeparatorChar = '\n';
+        private const char   DefaultEmptyChar = '.';
+        private const char   DefaultPointChar = '#';
+        private const string DefaultSeparator = "\n";
 
         public static string ToString(TGrid grid, IFormatProvider provider = null) =>
             ToString(grid, null, provider);
@@ -171,15 +171,7 @@ namespace aoc.Internal
 
         public static string ToString(TGrid grid, VectorRange range, ReadOnlySpan<char> format, IFormatProvider _)
         {
-            var point = format.Length > 0
-                ? format[0]
-                : DefaultPointChar;
-            var empty = format.Length > 1
-                ? format[1]
-                : DefaultEmptyChar;
-            var separator = format.Length > 2
-                ? format[2..]
-                : new[] { DefaultSeparatorChar };
+            GetSpecials(format, out var point, out var empty, out var separator);
             var chars = new char[(range.Width + separator.Length) * range.Height];
             for (int y = range.Min.X, i = 0, k; y <= range.Max.Y; y++)
             {
@@ -191,6 +183,19 @@ namespace aoc.Internal
                     chars[i++] = separator[k];
             }
             return new(chars);
+        }
+
+        protected static void GetSpecials(ReadOnlySpan<char> format, out char point, out char empty, out ReadOnlySpan<char> separator, int index = 0)
+        {
+            point = format.Length > index
+                ? format[index]
+                : DefaultPointChar;
+            empty = format.Length > index + 1
+                ? format[index + 1]
+                : DefaultEmptyChar;
+            separator = format.Length > index + 2
+                ? format[(index + 2)..]
+                : DefaultSeparator;
         }
     }
 
@@ -216,38 +221,60 @@ namespace aoc.Internal
             Parse(input, out _);
 
         public static Grid Parse(ReadOnlySpan<char> input, out VectorRange range) =>
-            Parse(input, DefaultSeparatorChar, out range);
+            Parse(input, string.Empty, out range);
 
-        public static Grid Parse(ReadOnlySpan<char> input, char separator) =>
-            Parse(input, separator, out _);
+        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
+            Parse(input, format, out _);
 
-        public static Grid Parse(ReadOnlySpan<char> input, char separator, out VectorRange range) =>
-            Parse(input, separator, DefaultPointChar, out range);
+        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
+            Parse(input, format, Span<Vector>.Empty, out range);
 
-        public static Grid Parse(ReadOnlySpan<char> input, char separator, char point) =>
-            Parse(input, separator, point, out _);
+        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output) =>
+            Parse(input, format, output, out _);
 
-        public static Grid Parse(ReadOnlySpan<char> input, char separator, char point, out VectorRange range)
+        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range) =>
+            TryParse(input, format, output, out range, out Grid value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range, out Grid grid)
         {
             int width = 0, height = 1, x = 0, y = 0;
+            char c;
             HashSet<Vector> points = new();
-            for (int i = 0; i < input.Length; ++i, ++x)
+            GetSpecials(format, out var point, out var empty, out var separator, output.Length);
+            for (int i = 0, j; i < input.Length; ++i, ++x)
             {
-                if (input[i] == separator)
+                if ((c = input[i]) == empty)
+                {
+                }
+                else if (c == point)
+                {
+                    points.Add((x, y));
+                }
+                else if ((j = format.IndexOf(c)) >= 0 && j < output.Length)
+                {
+                    output[j] = (x, y);
+                }
+                else if (i <= input.Length - separator.Length &&
+                    input[i..(i + separator.Length)].SequenceEqual(separator))
                 {
                     width = x > width ? x : width;
                     if (x > 0)
                         ++height;
-                    (x, y) = (-1, ++y);
+                    (x, y, i) = (-1, ++y, i + separator.Length - 1);
                 }
-                else if (input[i] == point)
+                else
                 {
-                    points.Add((x, y));
+                    range = default;
+                    grid = null;
+                    return false;
                 }
             }
             width = x > width ? x : width;
             range = new((Size)(width, height));
-            return new(points);
+            grid = new(points);
+            return true;
         }
 
         public static IEnumerable<(Matrix, int)> ParseTurns(ReadOnlySpan<char> input)

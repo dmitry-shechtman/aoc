@@ -10,8 +10,8 @@ namespace aoc.Internal
         where TMulti : MultiGrid<TMulti, TGrid>
         where TGrid : Grid<TGrid>
     {
-        private const char DefaultEmptyChar     = '.';
-        private const char DefaultSeparatorChar = '\n';
+        private const char   DefaultEmptyChar = '.';
+        private const string DefaultSeparator = "\n";
 
         public static string ToString(TMulti multi, IFormatProvider provider = null) =>
             ToString(multi, format: null, provider);
@@ -24,12 +24,7 @@ namespace aoc.Internal
 
         public static string ToString(TMulti multi, VectorRange range, ReadOnlySpan<char> format, IFormatProvider _)
         {
-            var empty = format.Length >= multi.Count
-                ? format[multi.Count - 1]
-                : DefaultEmptyChar;
-            var separator = format.Length > multi.Count
-                ? format[multi.Count..]
-                : new[] { DefaultSeparatorChar };
+            GetSpecials(format, out var empty, out var separator, multi.Count - 1);
             var chars = new char[(range.Width + separator.Length) * range.Height];
             for (int y = range.Min.Y, i = 0, j = 0, k; y <= range.Max.Y; y++)
             {
@@ -62,12 +57,12 @@ namespace aoc.Internal
             Parse(input, format, out _);
 
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
-            Parse(input, DefaultSeparatorChar, format, out range);
+            Parse(input, format, DefaultSeparator, out range);
 
-        public TMulti Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format) =>
-            Parse(input, separator, format, out _);
+        public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator) =>
+            Parse(input, format, separator, out _);
 
-        public TMulti Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format, out VectorRange range)
+        public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range)
         {
             int width = 0, height = 1, x = 0, y = 0, i;
             var points = new HashSet<Vector>[format.Length + 1];
@@ -75,17 +70,18 @@ namespace aoc.Internal
                 points[i] = new();
             for (int j = 0; j < input.Length; ++j, ++x)
             {
-                if (input[j] == separator)
+                if ((i = format.IndexOf(input[j])) >= 0)
+                {
+                    points[i].Add((x, y));
+                    points[^1].Add((x, y));
+                }
+                else if (j <= input.Length - separator.Length &&
+                    input[j..(j + separator.Length)].SequenceEqual(separator))
                 {
                     width = x > width ? x : width;
                     if (x > 0)
                         ++height;
-                    (x, y) = (-1, ++y);
-                }
-                else if ((i = format.IndexOf(input[j])) >= 0)
-                {
-                    points[i].Add((x, y));
-                    points[^1].Add((x, y));
+                    (x, y, j) = (-1, ++y, j + separator.Length - 1);
                 }
             }
             width = x > width ? x : width;
@@ -103,11 +99,21 @@ namespace aoc.Internal
         {
             int count = 0;
             for (int i = 0; i < input.Length; i++)
-                if (input[i] != DefaultSeparatorChar && predicate(input[i])
+                if (input[i] != '\n' && predicate(input[i])
                     && format[..count].IndexOf(input[i]) < 0)
                     format[count++] = input[i];
             format[..count].Sort();
             return format[..count];
+        }
+
+        private static void GetSpecials(ReadOnlySpan<char> format, out char empty, out ReadOnlySpan<char> separator, int index)
+        {
+            empty = format.Length > index
+                ? format[index]
+                : DefaultEmptyChar;
+            separator = format.Length > index + 1
+                ? format[(index + 1)..]
+                : DefaultSeparator;
         }
 
         protected abstract TGrid CreateGrid(HashSet<Vector> points);

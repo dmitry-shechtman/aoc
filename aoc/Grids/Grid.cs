@@ -245,17 +245,17 @@ namespace aoc.Grids
         public static Grid Parse(ReadOnlySpan<char> input, out VectorRange range) =>
             Helper.Parse(input, out range);
 
-        public static Grid Parse(ReadOnlySpan<char> input, char separator) =>
-            Helper.Parse(input, separator);
+        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
+            Helper.Parse(input, format);
 
-        public static Grid Parse(ReadOnlySpan<char> input, char separator, out VectorRange range) =>
-            Helper.Parse(input, separator, out range);
+        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
+            Helper.Parse(input, format, out range);
 
-        public static Grid Parse(ReadOnlySpan<char> input, char separator, char point) =>
-            Helper.Parse(input, separator, point);
+        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output) =>
+            Helper.Parse(input, format, output);
 
-        public static Grid Parse(ReadOnlySpan<char> input, char separator, char point, out VectorRange range) =>
-            Helper.Parse(input, separator, point, out range);
+        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range) =>
+            Helper.Parse(input, format, output, out range);
 
         public static Vector ParseVector(ReadOnlySpan<char> input) =>
             Helper.ParseVector(input);

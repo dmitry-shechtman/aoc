@@ -80,10 +80,10 @@ namespace aoc.Grids
         public static MultiGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
             Helper.Parse(input, format, out range);
 
-        public static MultiGrid Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format) =>
-            Helper.Parse(input, separator, format);
+        public static MultiGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator) =>
+            Helper.Parse(input, format, separator);
 
-        public static MultiGrid Parse(ReadOnlySpan<char> input, char separator, ReadOnlySpan<char> format, out VectorRange range) =>
-            Helper.Parse(input, separator, format, out range);
+        public static MultiGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range) =>
+            Helper.Parse(input, format, separator, out range);
     }
 }
