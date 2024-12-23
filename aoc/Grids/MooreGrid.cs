@@ -22,44 +22,44 @@ namespace aoc.Grids
             {
                 new[] { "n", "ne", "e", "se", "s", "sw", "w", "nw" }
             };
+
+            public override IEnumerable<Vector> GetNeighbors(Vector p)
+            {
+                for (var y = p.y - 1; y <= p.y + 1; y++)
+                    for (var x = p.x - 1; x <= p.x + 1; x++)
+                        if (p != (x, y))
+                            yield return new(x, y);
+            }
+
+            public override IEnumerable<Vector> GetNeighborsAndSelf(Vector p)
+            {
+                for (var y = p.y - 1; y <= p.y + 1; y++)
+                    for (var x = p.x - 1; x <= p.x + 1; x++)
+                        yield return new(x, y);
+            }
+
+            public override int CountNeighbors(TSelf grid, Vector p)
+            {
+                int count = 0;
+                for (var y = p.y - 1; y <= p.y + 1; y++)
+                    for (var x = p.x - 1; x <= p.x + 1; x++)
+                        count += p != (x, y) && grid.Points.Contains((x, y)) ? 1 : 0;
+                return count;
+            }
+
+            public override int CountNeighborsAndSelf(TSelf grid, Vector p)
+            {
+                int count = 0;
+                for (var y = p.y - 1; y <= p.y + 1; y++)
+                    for (var x = p.x - 1; x <= p.x + 1; x++)
+                        count += grid.Points.Contains((x, y)) ? 1 : 0;
+                return count;
+            }
         }
 
         protected MooreGrid(IEnumerable<Vector> points)
             : base(points)
         {
-        }
-
-        public override IEnumerable<Vector> GetNeighbors(Vector p)
-        {
-            for (var y = p.y - 1; y <= p.y + 1; y++)
-                for (var x = p.x - 1; x <= p.x + 1; x++)
-                    if (p != (x, y))
-                        yield return new(x, y);
-        }
-
-        public override IEnumerable<Vector> GetNeighborsAndSelf(Vector p)
-        {
-            for (var y = p.y - 1; y <= p.y + 1; y++)
-                for (var x = p.x - 1; x <= p.x + 1; x++)
-                    yield return new(x, y);
-        }
-
-        public override int CountNeighbors(Vector p)
-        {
-            int count = 0;
-            for (var y = p.y - 1; y <= p.y + 1; y++)
-                for (var x = p.x - 1; x <= p.x + 1; x++)
-                    count += p != (x, y) && Points.Contains((x, y)) ? 1 : 0;
-            return count;
-        }
-
-        public override int CountNeighborsAndSelf(Vector p)
-        {
-            int count = 0;
-            for (var y = p.y - 1; y <= p.y + 1; y++)
-                for (var x = p.x - 1; x <= p.x + 1; x++)
-                    count += Points.Contains((x, y)) ? 1 : 0;
-            return count;
         }
     }
 
@@ -91,6 +91,18 @@ namespace aoc.Grids
 
         public string ToString(VectorRange range, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
             Helper.ToString(this, range, format, provider);
+
+        public IEnumerable<Vector> GetNeighbors(Vector p) =>
+            Helper.GetNeighbors(p);
+
+        public IEnumerable<Vector> GetNeighborsAndSelf(Vector p) =>
+            Helper.GetNeighborsAndSelf(p);
+
+        public int CountNeighbors(Vector p) =>
+            Helper.CountNeighbors(this, p);
+
+        public int CountNeighborsAndSelf(Vector p) =>
+            Helper.CountNeighborsAndSelf(this, p);
 
         public static Vector[] Headings =>
             Helper.Headings;

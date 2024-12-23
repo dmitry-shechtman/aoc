@@ -7,9 +7,10 @@ namespace aoc.Grids
     public abstract class Grid4D<TSelf> : Grid<TSelf, Vector4D, Size4D, Vector4DRange, int>
         where TSelf : Grid4D<TSelf>
     {
-        internal sealed class Helper : Internal.GridHelper<Helper, TSelf, Vector4D>
+        internal abstract class Helper<THelper> : Internal.GridHelper<THelper, TSelf, Vector4D, Size4D, Vector4DRange, int>
+            where THelper : Helper<THelper>
         {
-            private Helper()
+            protected Helper()
             {
             }
 
@@ -23,6 +24,38 @@ namespace aoc.Grids
             {
                 new[] { "n", "e", "s", "w", "u", "d", "a", "k" }
             };
+
+            public override IEnumerable<Vector4D> GetNeighbors(Vector4D p) => new Vector4D[]
+            {
+                new(p.x, p.y, p.z, p.w - 1),
+                new(p.x, p.y, p.z - 1, p.w),
+                new(p.x, p.y - 1, p.z, p.w),
+                new(p.x - 1, p.y, p.z, p.w),
+                new(p.x + 1, p.y, p.z, p.w),
+                new(p.x, p.y + 1, p.z, p.w),
+                new(p.x, p.y, p.z + 1, p.w),
+                new(p.x, p.y, p.z, p.w + 1)
+            };
+
+            public override IEnumerable<Vector4D> GetNeighborsAndSelf(Vector4D p) => new Vector4D[]
+            {
+                new(p.x, p.y, p.z, p.w - 1),
+                new(p.x, p.y, p.z - 1, p.w),
+                new(p.x, p.y - 1, p.z, p.w),
+                new(p.x - 1, p.y, p.z, p.w),
+                new(p.x, p.y, p.z, p.w),
+                new(p.x + 1, p.y, p.z, p.w),
+                new(p.x, p.y + 1, p.z, p.w),
+                new(p.x, p.y, p.z + 1, p.w),
+                new(p.x, p.y, p.z, p.w + 1)
+            };
+        }
+
+        internal sealed class Helper : Helper<Helper>
+        {
+            private Helper()
+            {
+            }
         }
 
         protected Grid4D(IEnumerable<Vector4D> points)
@@ -57,31 +90,6 @@ namespace aoc.Grids
 
         public bool RemoveRange(IEnumerable<Vector4D> range) =>
             range.All(Points.Remove);
-
-        public override IEnumerable<Vector4D> GetNeighbors(Vector4D p) => new Vector4D[]
-        {
-                new(p.x, p.y, p.z, p.w - 1),
-                new(p.x, p.y, p.z - 1, p.w),
-                new(p.x, p.y - 1, p.z, p.w),
-                new(p.x - 1, p.y, p.z, p.w),
-                new(p.x + 1, p.y, p.z, p.w),
-                new(p.x, p.y + 1, p.z, p.w),
-                new(p.x, p.y, p.z + 1, p.w),
-                new(p.x, p.y, p.z, p.w + 1)
-        };
-
-        public override IEnumerable<Vector4D> GetNeighborsAndSelf(Vector4D p) => new Vector4D[]
-        {
-                new(p.x, p.y, p.z, p.w - 1),
-                new(p.x, p.y, p.z - 1, p.w),
-                new(p.x, p.y - 1, p.z, p.w),
-                new(p.x - 1, p.y, p.z, p.w),
-                new(p.x, p.y, p.z, p.w),
-                new(p.x + 1, p.y, p.z, p.w),
-                new(p.x, p.y + 1, p.z, p.w),
-                new(p.x, p.y, p.z + 1, p.w),
-                new(p.x, p.y, p.z, p.w + 1)
-        };
     }
 
     public sealed class Grid4D : Grid4D<Grid4D>
@@ -107,6 +115,18 @@ namespace aoc.Grids
             : base(points)
         {
         }
+
+        public IEnumerable<Vector4D> GetNeighbors(Vector4D p) =>
+            Helper.GetNeighbors(p);
+
+        public IEnumerable<Vector4D> GetNeighborsAndSelf(Vector4D p) =>
+            Helper.GetNeighborsAndSelf(p);
+
+        public int CountNeighbors(Vector4D p) =>
+            Helper.CountNeighbors(this, p);
+
+        public int CountNeighborsAndSelf(Vector4D p) =>
+            Helper.CountNeighborsAndSelf(this, p);
 
         public static Vector4D[] Headings =>
             Helper.Headings;

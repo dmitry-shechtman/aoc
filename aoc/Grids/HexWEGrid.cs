@@ -22,6 +22,27 @@ namespace aoc.Grids
             {
                 new[] { "e", "se", "sw", "w", "nw", "ne" }
             };
+
+            public override Vector[] GetNeighbors(Vector p) => new Vector[]
+            {
+                new(p.x - 2, p.y),
+                new(p.x - 1, p.y - 1),
+                new(p.x + 1, p.y - 1),
+                new(p.x + 2, p.y),
+                new(p.x + 1, p.y + 1),
+                new(p.x - 1, p.y + 1),
+            };
+
+            public override Vector[] GetNeighborsAndSelf(Vector p) => new Vector[]
+            {
+                new(p.x, p.y),
+                new(p.x - 2, p.y),
+                new(p.x - 1, p.y - 1),
+                new(p.x + 1, p.y - 1),
+                new(p.x + 2, p.y),
+                new(p.x + 1, p.y + 1),
+                new(p.x - 1, p.y + 1),
+            };
         }
 
         protected HexWEGrid(IEnumerable<Vector> points)
@@ -31,27 +52,6 @@ namespace aoc.Grids
 
         public static int Abs(Vector p) =>
             Math.Abs(p.y) + Math.Abs(Math.Abs(p.y) - Math.Abs(p.x)) / 2;
-
-        public override Vector[] GetNeighbors(Vector p) => new Vector[]
-        {
-                new(p.x - 2, p.y),
-                new(p.x - 1, p.y - 1),
-                new(p.x + 1, p.y - 1),
-                new(p.x + 2, p.y),
-                new(p.x + 1, p.y + 1),
-                new(p.x - 1, p.y + 1),
-        };
-
-        public override Vector[] GetNeighborsAndSelf(Vector p) => new Vector[]
-        {
-                new(p.x, p.y),
-                new(p.x - 2, p.y),
-                new(p.x - 1, p.y - 1),
-                new(p.x + 1, p.y - 1),
-                new(p.x + 2, p.y),
-                new(p.x + 1, p.y + 1),
-                new(p.x - 1, p.y + 1),
-        };
     }
 
     public sealed class HexWEGrid : HexWEGrid<HexWEGrid>
@@ -82,6 +82,18 @@ namespace aoc.Grids
 
         public string ToString(VectorRange range, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
             Helper.ToString(this, range, format, provider);
+
+        public IEnumerable<Vector> GetNeighbors(Vector p) =>
+            Helper.GetNeighbors(p);
+
+        public IEnumerable<Vector> GetNeighborsAndSelf(Vector p) =>
+            Helper.GetNeighborsAndSelf(p);
+
+        public int CountNeighbors(Vector p) =>
+            Helper.CountNeighbors(this, p);
+
+        public int CountNeighborsAndSelf(Vector p) =>
+            Helper.CountNeighborsAndSelf(this, p);
 
         public static Vector[] Headings =>
             Helper.Headings;

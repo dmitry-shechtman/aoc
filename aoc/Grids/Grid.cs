@@ -7,7 +7,13 @@ namespace aoc.Grids
 {
     using Helper = Internal.GridHelper;
 
-    public abstract class Grid<TSelf, TVector, TSize, TRange, T> : IReadOnlyCollection<TVector>
+    public interface IGrid<TVector>
+        where TVector : struct, IEquatable<TVector>
+    {
+        HashSet<TVector> Points { get; set; }
+    }
+
+    public abstract class Grid<TSelf, TVector, TSize, TRange, T> : IGrid<TVector>, IReadOnlyCollection<TVector>
         where TSelf : Grid<TSelf, TVector, TSize, TRange, T>
         where TVector : struct, IVector<TVector, T>
         where TSize : struct, ISize<TSize, TVector>
@@ -40,91 +46,11 @@ namespace aoc.Grids
         public bool Contains(TVector point) =>
             Points.Contains(point);
 
-        public int FloodFill(TVector from)
+        HashSet<TVector> IGrid<TVector>.Points
         {
-            Queue<TVector> queue = new();
-            if (Points.Add(from))
-                queue.Enqueue(from);
-            int count = 0;
-            for (; queue.TryDequeue(out from); ++count)
-                foreach (var p in GetNeighbors(from).Where(Points.Add))
-                    queue.Enqueue(p);
-            return count;
+            get => Points;
+            set => Points = value;
         }
-
-        public TSelf MoveNext() =>
-            MoveNext(DefaultFilterInclusive);
-
-        public TSelf MoveNext(TSize size) =>
-            MoveNext(GetAllNeighborsAndSelf(size), DefaultFilterInclusive);
-
-        public TSelf MoveNext(TRange range) =>
-            MoveNext(GetAllNeighborsAndSelf(range), DefaultFilterInclusive);
-
-        public TSelf MoveNext(Func<TVector, bool> predicate, bool inclusive = false) =>
-            MoveNext(GetAllNeighbors(inclusive), predicate);
-
-        public TSelf MoveNext(Func<TVector, bool> predicate, TSize size, bool inclusive = false) =>
-            MoveNext(GetAllNeighbors(size, inclusive), predicate);
-
-        public TSelf MoveNext(Func<TVector, bool> predicate, TRange range, bool inclusive = false) =>
-            MoveNext(GetAllNeighbors(range, inclusive), predicate);
-
-        public TSelf MoveNext(Func<TVector, int, bool> filterInclusive) =>
-            MoveNext(GetAllNeighborsAndSelf(), filterInclusive);
-
-        public TSelf MoveNext(Func<TVector, int, bool> filterInclusive, TSize size) =>
-            MoveNext(GetAllNeighborsAndSelf(size), filterInclusive);
-
-        public TSelf MoveNext(Func<TVector, int, bool> filterInclusive, TRange range) =>
-            MoveNext(GetAllNeighborsAndSelf(range), filterInclusive);
-
-        private TSelf MoveNext(ParallelQuery<TVector> pp, Func<TVector, bool> predicate)
-        {
-            Points = pp.Where(predicate).ToHashSet();
-            return (TSelf)this;
-        }
-
-        private TSelf MoveNext(ParallelQuery<TVector> pp, Func<TVector, int, bool> filterInclusive)
-        {
-            Points = pp.Where(p => filterInclusive(p, CountNeighborsAndSelf(p))).ToHashSet();
-            return (TSelf)this;
-        }
-
-        private ParallelQuery<TVector> GetAllNeighborsAndSelf(TSize size) =>
-            GetAllNeighbors(size, true);
-
-        private ParallelQuery<TVector> GetAllNeighborsAndSelf(TRange range) =>
-            GetAllNeighbors(range, true);
-
-        private ParallelQuery<TVector> GetAllNeighborsAndSelf() =>
-            GetAllNeighbors(true);
-
-        private ParallelQuery<TVector> GetAllNeighbors(TSize size, bool inclusive) =>
-            GetAllNeighbors(inclusive).Where(size.Contains);
-
-        private ParallelQuery<TVector> GetAllNeighbors(TRange range, bool inclusive) =>
-            GetAllNeighbors(inclusive).Where(range.Contains);
-
-        private ParallelQuery<TVector> GetAllNeighbors(bool inclusive)
-        {
-            var query = inclusive
-                ? Points.SelectMany(GetNeighborsAndSelf)
-                : Points.SelectMany(GetNeighbors);
-            return query.Distinct().AsParallel();
-        }
-
-        private bool DefaultFilterInclusive(TVector p, int count) =>
-            count == 3 || count == 4 && Points.Contains(p);
-
-        public virtual int CountNeighbors(TVector p) =>
-            GetNeighbors(p).Count(Points.Contains);
-
-        public virtual int CountNeighborsAndSelf(TVector p) =>
-            GetNeighborsAndSelf(p).Count(Points.Contains);
-
-        public abstract IEnumerable<TVector> GetNeighbors(TVector p);
-        public abstract IEnumerable<TVector> GetNeighborsAndSelf(TVector p);
 
         public static implicit operator HashSet<TVector>(Grid<TSelf, TVector, TSize, TRange, T> grid) =>
             grid.Points;
@@ -184,22 +110,47 @@ namespace aoc.Grids
         {
         }
 
-        public override Vector[] GetNeighbors(Vector p) => new Vector[]
-        {
-            new(p.x, p.y - 1),
-            new(p.x + 1, p.y),
-            new(p.x, p.y + 1),
-            new(p.x - 1, p.y)
-        };
+        public int FloodFill(Vector from) =>
+            Helper.FloodFill(this, from);
 
-        public override Vector[] GetNeighborsAndSelf(Vector p) => new Vector[]
-        {
-            new(p.x, p.y),
-            new(p.x, p.y - 1),
-            new(p.x + 1, p.y),
-            new(p.x, p.y + 1),
-            new(p.x - 1, p.y)
-        };
+        public Grid MoveNext() =>
+            Helper.MoveNext(this);
+
+        public Grid MoveNext(Size size) =>
+            Helper.MoveNext(this, size);
+
+        public Grid MoveNext(VectorRange range) =>
+            Helper.MoveNext(this, range);
+
+        public Grid MoveNext(Func<Vector, bool> predicate, bool inclusive = false) =>
+            Helper.MoveNext(this, predicate, inclusive);
+
+        public Grid MoveNext(Func<Vector, bool> predicate, Size size, bool inclusive = false) =>
+            Helper.MoveNext(this, predicate, size, inclusive);
+
+        public Grid MoveNext(Func<Vector, bool> predicate, VectorRange range, bool inclusive = false) =>
+            Helper.MoveNext(this, predicate, range, inclusive);
+
+        public Grid MoveNext(Func<Vector, int, bool> filterInclusive) =>
+            Helper.MoveNext(this, filterInclusive);
+
+        public Grid MoveNext(Func<Vector, int, bool> filterInclusive, Size size) =>
+            Helper.MoveNext(this, filterInclusive, size);
+
+        public Grid MoveNext(Func<Vector, int, bool> filterInclusive, VectorRange range) =>
+            Helper.MoveNext(this, filterInclusive, range);
+
+        public IEnumerable<Vector> GetNeighbors(Vector p) =>
+            Helper.GetNeighbors(p);
+
+        public IEnumerable<Vector> GetNeighborsAndSelf(Vector p) =>
+            Helper.GetNeighborsAndSelf(p);
+
+        public int CountNeighbors(Vector p) =>
+            Helper.CountNeighbors(this, p);
+
+        public int CountNeighborsAndSelf(Vector p) =>
+            Helper.CountNeighborsAndSelf(this, p);
 
         public override string ToString() =>
             Helper.ToString(this);

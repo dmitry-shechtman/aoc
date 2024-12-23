@@ -7,9 +7,10 @@ namespace aoc.Grids
     public abstract class Grid3D<TSelf> : Grid<TSelf, Vector3D, Size3D, Vector3DRange, int>
         where TSelf : Grid3D<TSelf>
     {
-        internal sealed class Helper : Internal.GridHelper<Helper, TSelf, Vector3D>
+        internal abstract class Helper<THelper> : Internal.GridHelper<THelper, TSelf, Vector3D, Size3D, Vector3DRange, int>
+            where THelper : Helper<THelper>
         {
-            private Helper()
+            protected Helper()
             {
             }
 
@@ -23,6 +24,34 @@ namespace aoc.Grids
             {
                 new[] { "n", "e", "s", "w", "u", "d" }
             };
+
+            public override IEnumerable<Vector3D> GetNeighbors(Vector3D p) => new Vector3D[]
+            {
+                new(p.x, p.y, p.z - 1),
+                new(p.x, p.y - 1, p.z),
+                new(p.x + 1, p.y, p.z),
+                new(p.x, p.y + 1, p.z),
+                new(p.x - 1, p.y, p.z),
+                new(p.x, p.y, p.z + 1)
+            };
+
+            public override IEnumerable<Vector3D> GetNeighborsAndSelf(Vector3D p) => new Vector3D[]
+            {
+                new(p.x, p.y, p.z),
+                new(p.x, p.y, p.z - 1),
+                new(p.x, p.y - 1, p.z),
+                new(p.x + 1, p.y, p.z),
+                new(p.x, p.y + 1, p.z),
+                new(p.x - 1, p.y, p.z),
+                new(p.x, p.y, p.z + 1)
+            };
+        }
+
+        internal sealed class Helper : Helper<Helper>
+        {
+            private Helper()
+            {
+            }
         }
 
         protected Grid3D(IEnumerable<Vector3D> points)
@@ -52,27 +81,6 @@ namespace aoc.Grids
 
         public bool RemoveRange(IEnumerable<Vector3D> range) =>
             range.All(Points.Remove);
-
-        public override IEnumerable<Vector3D> GetNeighbors(Vector3D p) => new Vector3D[]
-        {
-                new(p.x, p.y, p.z - 1),
-                new(p.x, p.y - 1, p.z),
-                new(p.x + 1, p.y, p.z),
-                new(p.x, p.y + 1, p.z),
-                new(p.x - 1, p.y, p.z),
-                new(p.x, p.y, p.z + 1)
-        };
-
-        public override IEnumerable<Vector3D> GetNeighborsAndSelf(Vector3D p) => new Vector3D[]
-        {
-                new(p.x, p.y, p.z),
-                new(p.x, p.y, p.z - 1),
-                new(p.x, p.y - 1, p.z),
-                new(p.x + 1, p.y, p.z),
-                new(p.x, p.y + 1, p.z),
-                new(p.x - 1, p.y, p.z),
-                new(p.x, p.y, p.z + 1)
-        };
     }
 
     public sealed class Grid3D : Grid3D<Grid3D>
@@ -93,6 +101,18 @@ namespace aoc.Grids
             : base(points)
         {
         }
+
+        public IEnumerable<Vector3D> GetNeighbors(Vector3D p) =>
+            Helper.GetNeighbors(p);
+
+        public IEnumerable<Vector3D> GetNeighborsAndSelf(Vector3D p) =>
+            Helper.GetNeighborsAndSelf(p);
+
+        public int CountNeighbors(Vector3D p) =>
+            Helper.CountNeighbors(this, p);
+
+        public int CountNeighborsAndSelf(Vector3D p) =>
+            Helper.CountNeighborsAndSelf(this, p);
 
         public static Vector3D[] Headings =>
             Helper.Headings;
