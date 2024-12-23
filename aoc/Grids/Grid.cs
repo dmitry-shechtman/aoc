@@ -140,10 +140,10 @@ namespace aoc.Grids
         public Grid MoveNext(Func<Vector, int, bool> filterInclusive, VectorRange range) =>
             Helper.MoveNext(this, filterInclusive, range);
 
-        public IEnumerable<Vector> GetNeighbors(Vector p) =>
+        public static IEnumerable<Vector> GetNeighbors(Vector p) =>
             Helper.GetNeighbors(p);
 
-        public IEnumerable<Vector> GetNeighborsAndSelf(Vector p) =>
+        public static IEnumerable<Vector> GetNeighborsAndSelf(Vector p) =>
             Helper.GetNeighborsAndSelf(p);
 
         public int CountNeighbors(Vector p) =>

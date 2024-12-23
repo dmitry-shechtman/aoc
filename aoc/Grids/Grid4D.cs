@@ -116,10 +116,10 @@ namespace aoc.Grids
         {
         }
 
-        public IEnumerable<Vector4D> GetNeighbors(Vector4D p) =>
+        public static IEnumerable<Vector4D> GetNeighbors(Vector4D p) =>
             Helper.GetNeighbors(p);
 
-        public IEnumerable<Vector4D> GetNeighborsAndSelf(Vector4D p) =>
+        public static IEnumerable<Vector4D> GetNeighborsAndSelf(Vector4D p) =>
             Helper.GetNeighborsAndSelf(p);
 
         public int CountNeighbors(Vector4D p) =>

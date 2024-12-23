@@ -71,10 +71,10 @@ namespace aoc.Grids
         public string ToString(VectorRange range, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
             Helper.ToString(this, range, format, provider);
 
-        public IEnumerable<Vector> GetNeighbors(Vector p) =>
+        public static IEnumerable<Vector> GetNeighbors(Vector p) =>
             Helper.GetNeighbors(p);
 
-        public IEnumerable<Vector> GetNeighborsAndSelf(Vector p) =>
+        public static IEnumerable<Vector> GetNeighborsAndSelf(Vector p) =>
             Helper.GetNeighborsAndSelf(p);
 
         public int CountNeighbors(Vector p) =>
