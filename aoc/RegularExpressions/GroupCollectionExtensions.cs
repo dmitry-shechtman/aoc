@@ -29,32 +29,51 @@ namespace System.Text.RegularExpressions
                 Enumerable.ToDictionary(groups, keySelector, elementSelector);
 #endif
 
-        public static T[] GetValues<T>(this GroupCollection groups, Range? range = null)
-            where T : IConvertible =>
-                GetValues(groups, StringExtensions.ConvertTo<T>, range);
+        public static string[] GetValues(this GroupCollection groups,
+            Range? range = null) =>
+                GetValues(groups, s => s, range);
+
+        public static T[] GetValues<T>(this GroupCollection groups,
+            Range? range = null)
+                where T : IConvertible =>
+                    GetValues(groups, StringExtensions.ConvertTo<T>, range);
 
         public static T[] GetValues<T>(this GroupCollection groups,
             Func<string, T> selector, Range? range = null) =>
                 groups.Skip(range)
                     .Select(g => selector(g.Value)).ToArray();
 
-        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups, Range? range = null)
-            where T : IConvertible =>
-                SelectValues(groups, StringExtensions.ConvertTo<T>, range);
+        public static IEnumerable<string> SelectValues(this GroupCollection groups,
+            Range? range = null) =>
+                SelectValues(groups, s => s, range);
+
+        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
+            Range? range = null)
+                where T : IConvertible =>
+                    SelectValues(groups, StringExtensions.ConvertTo<T>, range);
 
         public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
             Func<string, T> selector, Range? range = null) =>
                 groups.Skip(range)
                     .Select(g => selector(g.Value));
 
-        public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups, Range? range = null)
-            where T : IConvertible =>
-                GetAllValues(groups, StringExtensions.ConvertTo<T>, range);
+        public static Dictionary<string, string[]> GetAllValues(this GroupCollection groups,
+            Range? range = null) =>
+                GetAllValues(groups, s => s, range);
+
+        public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
+            Range? range = null)
+                where T : IConvertible =>
+                    GetAllValues(groups, StringExtensions.ConvertTo<T>, range);
 
         public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
             Func<string, T> selector, Range? range = null) =>
                 groups.Skip(range)
                     .ToDictionary(g => g.Name, g => g.GetValues(selector));
+
+        public static Dictionary<string, IEnumerable<string>> SelectAllValues(this GroupCollection groups,
+            Range? range = null) =>
+                SelectAllValues(groups, s => s, range);
 
         public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
             Range? range = null)
