@@ -28,6 +28,9 @@ namespace aoc
         public static int LastIndexOf<T>(this T[] array, T value) =>
             Array.LastIndexOf(array, value);
 
+        public static void Sort<T>(this T[] array) =>
+            Array.Sort(array);
+
         public static void Sort<T>(this T[] array, Comparison<T> comparison) =>
             Array.Sort(array, comparison);
     }
