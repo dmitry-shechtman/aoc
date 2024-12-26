@@ -76,6 +76,17 @@ namespace aoc
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly int FirstSet(int index, out Store store)
+        {
+            if ((store = _bits[index >> Shift] & ~((One << index) - 1)) != 0)
+                return index & ~Mask | BitOperations.TrailingZeroCount(store);
+            for (int i = (index >> Shift) + 1; i < _bits.Length; i++)
+                if ((store = _bits[i]) != 0)
+                    return i << Shift | BitOperations.TrailingZeroCount(store);
+            return -1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly int NextSet(int index, ref Store store)
         {
             if ((store &= ~(One << index)) != 0)
