@@ -60,8 +60,8 @@ namespace aoc
         public readonly int CountSet()
         {
             int count = 0;
-            foreach (var val in _bits)
-                count += BitOperations.PopCount((ulong)val);
+            for (int i = 0; i < _bits.Length; i++)
+                count += BitOperations.PopCount((ulong)_bits[i]);
             return count;
         }
 
