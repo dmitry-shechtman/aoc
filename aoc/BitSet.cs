@@ -78,7 +78,7 @@ namespace aoc
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly int NextSet(int index, ref Store store)
         {
-            if ((store &= ~(store & -store)) != 0)
+            if ((store &= ~(One << index)) != 0)
                 return index & ~Mask | BitOperations.TrailingZeroCount(store);
             for (int i = (index >> Shift) + 1; i < _bits.Length; i++)
                 if ((store = _bits[i]) != 0)
