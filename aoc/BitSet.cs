@@ -66,6 +66,15 @@ namespace aoc
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly bool AnySet()
+        {
+            for (int i = 0; i < _bits.Length; i++)
+                if (_bits[i] != 0)
+                    return true;
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly int FirstSet(out Store store)
         {
             for (int i = 0; i < _bits.Length; i++)
