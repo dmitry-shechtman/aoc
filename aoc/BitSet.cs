@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -140,38 +139,13 @@ namespace aoc
             return this;
         }
 
-        public IEnumerator<int> GetEnumerator() =>
-            new Enumerator(this);
+        public IEnumerator<int> GetEnumerator()
+        {
+            for (int index = FirstSet(out Store store); index >= 0; index = NextSet(index, ref store))
+                yield return index;
+        }
 
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
-
-        private struct Enumerator : IEnumerator<int>
-        {
-            private readonly BitSet bitSet;
-            private int index;
-            private Store store;
-
-            public Enumerator(BitSet bitSet)
-            {
-                this.bitSet = bitSet;
-                index = -1;
-                store = Zero;
-            }
-
-            readonly void IDisposable.Dispose()
-            {
-            }
-
-            public readonly int Current => index;
-
-            readonly object IEnumerator.Current => Current;
-
-            public bool MoveNext() =>
-                (index = bitSet.NextSet(index, ref store)) >= 0;
-
-            public void Reset() =>
-                index = int.MaxValue;
-        }
     }
 }
