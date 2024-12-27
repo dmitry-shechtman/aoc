@@ -75,6 +75,12 @@ namespace aoc
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly int FirstSet()
+        {
+            return FirstSet(out _);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly int FirstSet(out Store store)
         {
             for (int i = 0; i < _bits.Length; i++)
@@ -93,6 +99,13 @@ namespace aoc
                 if ((store = _bits[i]) != 0)
                     return i << Shift | BitOperations.TrailingZeroCount(store);
             return -1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly int NextSet(int index)
+        {
+            var store = _bits[index >> Shift] & ~((One << index) - 1);
+            return NextSet(index, ref store);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
