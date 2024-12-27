@@ -16,16 +16,10 @@ namespace aoc
         private readonly Store[] _bits;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private BitSet(int count, Store[] bits)
+        public BitSet(int count)
         {
             Count = count;
-            _bits = bits;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public BitSet(int count)
-            : this(count, new Store[(count + Mask) >> Shift])
-        {
+            _bits = new Store[(count + Mask) >> Shift];
         }
 
         public BitSet(int count, bool value)
@@ -33,6 +27,13 @@ namespace aoc
         {
             if (value)
                 SetAll();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public BitSet(BitSet from)
+            : this(from.Count)
+        {
+            from._bits.CopyTo(_bits, 0);
         }
 
         public int Count { get; }
@@ -53,9 +54,7 @@ namespace aoc
 
         public readonly BitSet Clone()
         {
-            var bits = new Store[_bits.Length];
-            _bits.CopyTo(bits, 0);
-            return new(Count, bits);
+            return new(this);
         }
 
         public readonly int CountSet()
