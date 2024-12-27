@@ -15,12 +15,14 @@ namespace aoc
 
         private readonly Store[] _bits;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private BitSet(int count, Store[] bits)
         {
             Count = count;
             _bits = bits;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BitSet(int count)
             : this(count, new Store[(count + Mask) >> Shift])
         {
@@ -41,7 +43,11 @@ namespace aoc
 
         public bool this[int index]
         {
-            readonly get => (_bits[index >> Shift] & One << (index & 0x3F)) != 0;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            readonly get =>
+                (_bits[index >> Shift] & One << (index & 0x3F)) != 0;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             set
             {
                 var (i, v) = (index >> Shift, One << (index & 0x3F));
