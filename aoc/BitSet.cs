@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using Store = System.Int64;
+using Store = System.UInt64;
 
 namespace aoc
 {
@@ -61,7 +61,7 @@ namespace aoc
         {
             int count = 0;
             for (int i = 0; i < _bits.Length; i++)
-                count += BitOperations.PopCount((ulong)_bits[i]);
+                count += BitOperations.PopCount(_bits[i]);
             return count;
         }
 
