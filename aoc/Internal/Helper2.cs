@@ -34,7 +34,7 @@ namespace aoc.Internal
         private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, char separator, out T value)
         {
             value = default;
-            if (split.Length < MinCount)
+            if (split.Length < MinCount || split.Length > MaxCount)
                 return false;
             Span<TItem> values = stackalloc TItem[split.Length];
             if (!TryParse(input, split, separator, values))

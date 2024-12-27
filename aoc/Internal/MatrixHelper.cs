@@ -165,7 +165,7 @@ namespace aoc.Internal
             _ => throw new(),
         };
 
-        protected override int GetChunkSize(MatchCollection matches) => matches.Count switch
+        protected override int GetChunkSize(int count) => count switch
         {
             2 * 2 => 2,
             2 * 3 => 2,
@@ -208,7 +208,7 @@ namespace aoc.Internal
         public TMatrix Translate(TVector v) =>
             FromRows(Vector.East, Vector.South, Vector.Down, v);
 
-        protected override int GetChunkSize(MatchCollection matches) => matches.Count switch
+        protected override int GetChunkSize(int count) => count switch
         {
             2 * 3 => 3,
             3 * 3 => 3,

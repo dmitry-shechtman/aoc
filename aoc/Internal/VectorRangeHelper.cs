@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
@@ -13,8 +12,8 @@ namespace aoc.Internal
         {
         }
 
-        protected override int GetChunkSize(MatchCollection matches) =>
-            matches.Count == Vector.MinCount * 2
+        protected override int GetChunkSize(int count) =>
+            count == Vector.MinCount * 2
                 ? Vector.MinCount
                 : 0;
 

@@ -105,7 +105,7 @@ namespace aoc.Internal
         }
 
         public    FromSpan<T, TItem>  FromSpan         { get; }
-        protected TryParse<TItem>     TryParseItem     { get; }
+        private   TryParse<TItem>     TryParseItem     { get; }
         protected string              DefaultFormat    { get; }
         public    char                DefaultSeparator { get; }
         protected int                 MinCount         { get; }
@@ -171,7 +171,7 @@ namespace aoc.Internal
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParse(string input, Regex separator, out T value) =>
-            TryParse(separator.Split(input)[1..], out value);
+            TryParse(separator.Split(input)[1..^1], out value);
 
         public T ParseAny(string input) =>
             TryParseAny(input, out T value)
@@ -181,19 +181,14 @@ namespace aoc.Internal
         public bool TryParseAny(string input, out T value)
         {
             value = default;
-            if (!TryGetMatches(input, out var matches, out _))
-                return false;
-            Span<TItem> values = stackalloc TItem[matches.Count];
-            if (!TryParse(matches, values))
-                return false;
-            value = FromSpan(values);
-            return true;
+            return TryGetMatches(input, out var matches, out _)
+                && TryParse(matches, out value);
         }
 
         private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, out T value)
         {
             value = default;
-            if (split.Length < MinCount)
+            if (split.Length < MinCount || split.Length > MaxCount)
                 return false;
             Span<TItem> values = stackalloc TItem[split.Length];
             if (!TryParse(input, split, values))
@@ -213,7 +208,7 @@ namespace aoc.Internal
         private bool TryParse(string[] ss, out T value)
         {
             value = default;
-            if (ss.Length < MinCount)
+            if (ss.Length < MinCount || ss.Length > MaxCount)
                 return false;
             Span<TItem> values = stackalloc TItem[ss.Length];
             if (!TryParse(ss, values))
@@ -233,15 +228,25 @@ namespace aoc.Internal
         protected bool TryGetMatches(string input, out MatchCollection matches, out int chunkSize)
         {
             matches = GetMatches(input);
-            return (chunkSize = GetChunkSize(matches)) > 0;
+            return (chunkSize = GetChunkSize(matches.Count)) > 0;
         }
 
         protected abstract MatchCollection GetMatches(string input);
 
-        protected virtual int GetChunkSize(MatchCollection matches) =>
-            matches.Count >= MinCount && matches.Count <= MaxCount
+        protected virtual int GetChunkSize(int count) =>
+            count >= MinCount && count <= MaxCount
                 ? 1
                 : 0;
+
+        private bool TryParse(MatchCollection matches, out T value)
+        {
+            value = default;
+            Span<TItem> items = stackalloc TItem[matches.Count];
+            if (!TryParse(matches, items))
+                return false;
+            value = FromSpan(items);
+            return true;
+        }
 
         protected bool TryParse(MatchCollection matches, Span<TItem> values)
         {
