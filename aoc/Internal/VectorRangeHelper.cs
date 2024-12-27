@@ -13,8 +13,10 @@ namespace aoc.Internal
         {
         }
 
-        protected override bool ValidateMatches(MatchCollection matches) =>
-            matches.Count == Vector.MinCount * 2;
+        protected override int GetChunkSize(MatchCollection matches) =>
+            matches.Count == Vector.MinCount * 2
+                ? Vector.MinCount
+                : 0;
 
         protected override RangeHelperStrategy<TRange, TVector> Strategy =>
             RangeHelperStrategy<TRange, TVector>.Instance;

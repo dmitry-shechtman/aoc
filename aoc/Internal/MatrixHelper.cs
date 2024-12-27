@@ -66,12 +66,12 @@ namespace aoc.Internal
         public bool TryParseRowsAny(string input, out TMatrix matrix)
         {
             matrix = default;
-            if (!TryGetMatches(input, out var matches))
+            if (!TryGetMatches(input, out var matches, out var chunkSize))
                 return false;
             Span<T> values = stackalloc T[matches.Count];
             if (!Vector.TryParse(matches, values))
                 return false;
-            matrix = FromRows(values);
+            matrix = FromRows(values, chunkSize);
             return true;
         }
 
@@ -83,19 +83,14 @@ namespace aoc.Internal
         public bool TryParseColumnsAny(string input, out TMatrix matrix)
         {
             matrix = default;
-            if (!TryGetMatches(input, out var matches))
+            if (!TryGetMatches(input, out var matches, out var chunkSize))
                 return false;
             Span<T> values = stackalloc T[matches.Count];
             if (!Vector.TryParse(matches, values))
                 return false;
-            matrix = FromColumns(values);
+            matrix = FromColumns(values, chunkSize);
             return true;
         }
-
-        protected sealed override bool ValidateMatches(MatchCollection matches) =>
-            matches.Count == MinCount * MinCount ||
-            matches.Count == MinCount * MaxCount ||
-            matches.Count == MaxCount * MaxCount;
 
         protected TMatrix FromRows(params TVector[] vectors) =>
             FromSpan(vectors);
@@ -170,6 +165,14 @@ namespace aoc.Internal
             _ => throw new(),
         };
 
+        protected override int GetChunkSize(MatchCollection matches) => matches.Count switch
+        {
+            2 * 2 => 2,
+            2 * 3 => 2,
+            3 * 3 => 3,
+            _ => 0
+        };
+
         protected override Matrix2DHelperStrategy<TMatrix, TVector, T> Strategy =>
             Matrix2DHelperStrategy<TMatrix, TVector, T>.Instance;
     }
@@ -204,6 +207,15 @@ namespace aoc.Internal
 
         public TMatrix Translate(TVector v) =>
             FromRows(Vector.East, Vector.South, Vector.Down, v);
+
+        protected override int GetChunkSize(MatchCollection matches) => matches.Count switch
+        {
+            2 * 3 => 3,
+            3 * 3 => 3,
+            3 * 4 => 3,
+            4 * 4 => 4,
+            _ => 0
+        };
 
         protected override Matrix3DHelperStrategy<TMatrix, TVector, T> Strategy =>
             Matrix3DHelperStrategy<TMatrix, TVector, T>.Instance;

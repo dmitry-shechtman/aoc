@@ -206,7 +206,9 @@ namespace aoc
             FromRows(rows.AsSpan());
 
         public static DoubleMatrix3D FromRows(ReadOnlySpan<DoubleVector3D> rows) =>
-            new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
+            new(rows[0], rows[1],
+                rows.Length > 2 ? rows[2] : default,
+                rows.Length > 3 ? rows[3] : default);
 
         public static DoubleMatrix3D FromRows(double[][] rows) =>
             Helper.FromRows(rows);
@@ -224,7 +226,9 @@ namespace aoc
             Helper.FromRows(values, chunkSize);
 
         public static DoubleMatrix3D FromColumns(ReadOnlySpan<DoubleVector3D> columns) =>
-            FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
+            FromColumns(columns[0], columns[1],
+                columns.Length > 2 ? columns[2] : default,
+                columns.Length > 3 ? columns[3] : default);
 
         public static DoubleMatrix3D FromColumns(DoubleVector3D c1, DoubleVector3D c2, DoubleVector3D c3, DoubleVector3D c4 = default) =>
             new(c1.x, c2.x, c3.x, c4.x,

@@ -181,7 +181,7 @@ namespace aoc.Internal
         public bool TryParseAny(string input, out T value)
         {
             value = default;
-            if (!TryGetMatches(input, out var matches))
+            if (!TryGetMatches(input, out var matches, out _))
                 return false;
             Span<TItem> values = stackalloc TItem[matches.Count];
             if (!TryParse(matches, values))
@@ -230,17 +230,18 @@ namespace aoc.Internal
             return true;
         }
 
-        protected bool TryGetMatches(string input, out MatchCollection matches)
+        protected bool TryGetMatches(string input, out MatchCollection matches, out int chunkSize)
         {
             matches = GetMatches(input);
-            return ValidateMatches(matches);
+            return (chunkSize = GetChunkSize(matches)) > 0;
         }
 
         protected abstract MatchCollection GetMatches(string input);
 
-        protected virtual bool ValidateMatches(MatchCollection matches) =>
-            matches.Count >= MinCount &&
-            matches.Count <= MaxCount;
+        protected virtual int GetChunkSize(MatchCollection matches) =>
+            matches.Count >= MinCount && matches.Count <= MaxCount
+                ? 1
+                : 0;
 
         protected bool TryParse(MatchCollection matches, Span<TItem> values)
         {

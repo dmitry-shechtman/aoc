@@ -201,7 +201,9 @@ namespace aoc
             FromRows(rows.AsSpan());
 
         public static Matrix3D FromRows(ReadOnlySpan<Vector3D> rows) =>
-            new(rows[0], rows[1], rows[2], rows.Length > 3 ? rows[3] : default);
+            new(rows[0], rows[1],
+                rows.Length > 2 ? rows[2] : default,
+                rows.Length > 3 ? rows[3] : default);
 
         public static Matrix3D FromRows(int[][] rows) =>
             Helper.FromRows(rows);
@@ -219,7 +221,9 @@ namespace aoc
             Helper.FromRows(values, chunkSize);
 
         public static Matrix3D FromColumns(ReadOnlySpan<Vector3D> columns) =>
-            FromColumns(columns[0], columns[1], columns[2], columns.Length > 3 ? columns[3] : default);
+            FromColumns(columns[0], columns[1],
+                columns.Length > 2 ? columns[2] : default,
+                columns.Length > 3 ? columns[3] : default);
 
         public static Matrix3D FromColumns(Vector3D c1, Vector3D c2, Vector3D c3, Vector3D c4 = default) =>
             new(c1.x, c2.x, c3.x, c4.x,
