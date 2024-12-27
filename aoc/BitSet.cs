@@ -29,6 +29,18 @@ namespace aoc
                 SetAll();
         }
 
+        public BitSet(bool[] values)
+            : this(values.Length)
+        {
+            for (int i = 0, k = 0; i < _bits.Length; i++)
+            {
+                Store store = Zero;
+                for (int j = 0; j < (1 << Shift) && k < values.Length; j++, k++)
+                    store |= values[k] ? One << j : Zero;
+                _bits[i] = store;
+            }
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BitSet(BitSet from)
             : this(from.Count)
