@@ -32,11 +32,7 @@ namespace aoc
             : this(count)
         {
             if (value)
-            {
-                _bits.Fill(~Zero);
-                if ((count & Mask) != 0)
-                    _bits[^1] = (One << (count & Mask)) - 1;
-            }
+                SetAll();
         }
 
         public int Count { get; }
@@ -143,6 +139,29 @@ namespace aoc
         {
             this[index] = value;
             return this;
+        }
+
+        public void SetAll(bool value)
+        {
+            if (value)
+                SetAll();
+            else
+                ClearAll();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetAll()
+        {
+            _bits.Fill(~Zero);
+            int trail = Count & Mask;
+            if (trail != 0)
+                _bits[^1] = (One << trail) - 1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ClearAll()
+        {
+            _bits.Fill(Zero);
         }
 
         public IEnumerator<int> GetEnumerator()
