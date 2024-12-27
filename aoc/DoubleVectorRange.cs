@@ -96,8 +96,14 @@ namespace aoc
         public static DoubleVectorRange ParseAny(string input) =>
             Helper.ParseAny(input);
 
-        public static bool TryParseAny(string input, out DoubleVectorRange vector) =>
-            Helper.TryParseAny(input, out vector);
+        public static bool TryParseAny(string input, out DoubleVectorRange range) =>
+            Helper.TryParseAny(input, out range);
+
+        public static DoubleVectorRange[] ParseAll(string input) =>
+            Helper.ParseAll(input);
+
+        public static bool TryParseAll(string input, out DoubleVectorRange[] ranges) =>
+            Helper.TryParseAll(input, out ranges);
 
         private static DoubleVectorRange FromSpan(ReadOnlySpan<DoubleVector> values) =>
             new(values[0], values[1]);

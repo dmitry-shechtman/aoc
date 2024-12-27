@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc.Internal
@@ -29,8 +30,8 @@ namespace aoc.Internal
             Vector = vector;
         }
 
-        protected sealed override MatchCollection GetMatches(string input) =>
-            Vector.GetMatches(input);
+        protected sealed override IEnumerable<Match> GetMatches(string input, out int count) =>
+            Vector.GetMatches(input, out count);
 
         private IVectorHelper<TVector, T> Vector { get; }
     }

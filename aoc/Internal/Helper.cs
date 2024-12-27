@@ -94,10 +94,11 @@ namespace aoc.Internal
         where TItem : unmanaged, IFormattable
         where TStrategy : IHelperStrategy<T, TItem>
     {
-        protected Helper(FromSpan<T, TItem> fromSpan, TryParse<TItem> tryParse)
+        protected Helper(FromSpan<T, TItem> fromSpan, TryParse<TItem> tryParse, int chunkSize = 1)
         {
             FromSpan = fromSpan;
             TryParseItem = tryParse;
+            DefaultChunkSize = chunkSize;
             DefaultFormat = Strategy.DefaultFormat;
             DefaultSeparator = Strategy.DefaultSeparator;
             MinCount = Strategy.MinCount;
@@ -106,6 +107,7 @@ namespace aoc.Internal
 
         public    FromSpan<T, TItem>  FromSpan         { get; }
         private   TryParse<TItem>     TryParseItem     { get; }
+        private   int                 DefaultChunkSize  { get; }
         protected string              DefaultFormat    { get; }
         public    char                DefaultSeparator { get; }
         protected int                 MinCount         { get; }
@@ -181,8 +183,44 @@ namespace aoc.Internal
         public bool TryParseAny(string input, out T value)
         {
             value = default;
-            return TryGetMatches(input, out var matches, out _)
-                && TryParse(matches, out value);
+            return TryGetMatches(input, out var matches, out var matchCount, out var chunkSize)
+                && TryParse(matches.GetEnumerator(), matchCount, chunkSize, out value);
+        }
+
+        public T[] ParseAll(string input) =>
+            TryParseAll(input, out var value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParseAll(string input, out T[] value) =>
+            TryParseAll(input, MinCount, out value);
+
+        public T[] ParseAll(string input, int itemCount) =>
+            TryParseAll(input, itemCount, out var value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParseAll(string input, int chunkCount, out T[] value) =>
+            TryParseAll(input, chunkCount, DefaultChunkSize, out value);
+
+        public T[] ParseAll(string input, int chunkCount, int chunkSize) =>
+            TryParseAll(input, chunkCount, chunkSize, out var value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParseAll(string input, int chunkCount, int chunkSize, out T[] values)
+        {
+            values = default;
+            var matches = GetMatches(input, out var matchCount);
+            var itemSize = chunkCount * chunkSize;
+            if (matchCount == 0 || matchCount % itemSize != 0)
+                return false;
+            values = new T[matchCount / itemSize];
+            var enumerator = matches.GetEnumerator();
+            for (int i = 0; i < values.Length; i++)
+                if (!TryParse(enumerator, chunkCount, chunkSize, out values[i]))
+                    return false;
+            return true;
         }
 
         private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, out T value)
@@ -225,34 +263,37 @@ namespace aoc.Internal
             return true;
         }
 
-        protected bool TryGetMatches(string input, out MatchCollection matches, out int chunkSize)
+        protected bool TryGetMatches(string input, out IEnumerable<Match> matches, out int count, out int chunkSize)
         {
-            matches = GetMatches(input);
-            return (chunkSize = GetChunkSize(matches.Count)) > 0;
+            matches = GetMatches(input, out count);
+            return (chunkSize = GetChunkSize(count)) > 0;
         }
 
-        protected abstract MatchCollection GetMatches(string input);
+        protected abstract IEnumerable<Match> GetMatches(string input, out int count);
 
         protected virtual int GetChunkSize(int count) =>
             count >= MinCount && count <= MaxCount
                 ? 1
                 : 0;
 
-        private bool TryParse(MatchCollection matches, out T value)
+        protected bool TryParse(IEnumerator<Match> matches, int chunkCount, int chunkSize, out T value)
         {
             value = default;
-            Span<TItem> items = stackalloc TItem[matches.Count];
-            if (!TryParse(matches, items))
+            Span<TItem> items = stackalloc TItem[chunkCount];
+            if (!TryParse(matches, chunkSize, items))
                 return false;
             value = FromSpan(items);
             return true;
         }
 
-        protected bool TryParse(MatchCollection matches, Span<TItem> values)
+        protected virtual bool TryParse(IEnumerator<Match> matches, int _, Span<TItem> values)
         {
-            for (int i = 0; i < matches.Count; i++)
-                if (!TryParseItem(matches[i].Value, out values[i]))
+            for (int i = 0; i < values.Length; i++)
+            {
+                matches.MoveNext();
+                if (!TryParseItem(matches.Current.Value, out values[i]))
                     return false;
+            }
             return true;
         }
 

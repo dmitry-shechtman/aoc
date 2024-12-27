@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc.Internal
@@ -25,8 +26,9 @@ namespace aoc.Internal
         bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, out TVector vector);
         bool TryParse(string s, Regex separator, out TVector vector);
 
-        MatchCollection GetMatches(string input);
-        bool TryParse(MatchCollection matches, Span<T> values);
+        IEnumerable<Match> GetMatches(string input, out int count);
+        bool TryParse(IEnumerator<Match> matches, Span<T> values);
+        bool TryParse(IEnumerator<Match> matches, int itemCount, out TVector value);
 
         FromSpan<TVector, T> FromSpan { get; }
         int MinCount { get; }
@@ -47,14 +49,21 @@ namespace aoc.Internal
             _regex = new(() => new(pattern));
         }
 
-        protected sealed override MatchCollection GetMatches(string input) =>
-            Regex.Matches(input);
+        protected sealed override IEnumerable<Match> GetMatches(string input, out int count)
+        {
+            var result = Regex.Matches(input);
+            count = result.Count;
+            return result;
+        }
 
-        MatchCollection IVectorHelper<TVector, T>.GetMatches(string input) =>
-            GetMatches(input);
+        IEnumerable<Match> IVectorHelper<TVector, T>.GetMatches(string input, out int count) =>
+            GetMatches(input, out count);
 
-        bool IVectorHelper<TVector, T>.TryParse(MatchCollection matches, Span<T> values) =>
-            TryParse(matches, values);
+        bool IVectorHelper<TVector, T>.TryParse(IEnumerator<Match> matches, Span<T> values) =>
+            TryParse(matches, 0, values);
+
+        bool IVectorHelper<TVector, T>.TryParse(IEnumerator<Match> matches, int itemCount, out TVector value) =>
+            TryParse(matches, itemCount, 0, out value);
 
         int IVectorHelper<TVector, T>.MinCount =>
             MinCount;

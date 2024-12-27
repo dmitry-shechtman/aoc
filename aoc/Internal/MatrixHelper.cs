@@ -66,10 +66,10 @@ namespace aoc.Internal
         public bool TryParseRowsAny(string input, out TMatrix matrix)
         {
             matrix = default;
-            if (!TryGetMatches(input, out var matches, out var chunkSize))
+            if (!TryGetMatches(input, out var matches, out var count, out var chunkSize))
                 return false;
-            Span<T> values = stackalloc T[matches.Count];
-            if (!Vector.TryParse(matches, values))
+            Span<T> values = stackalloc T[count];
+            if (!Vector.TryParse(matches.GetEnumerator(), values))
                 return false;
             matrix = FromRows(values, chunkSize);
             return true;
@@ -83,10 +83,10 @@ namespace aoc.Internal
         public bool TryParseColumnsAny(string input, out TMatrix matrix)
         {
             matrix = default;
-            if (!TryGetMatches(input, out var matches, out var chunkSize))
+            if (!TryGetMatches(input, out var matches, out var count, out var chunkSize))
                 return false;
-            Span<T> values = stackalloc T[matches.Count];
-            if (!Vector.TryParse(matches, values))
+            Span<T> values = stackalloc T[count];
+            if (!Vector.TryParse(matches.GetEnumerator(), values))
                 return false;
             matrix = FromColumns(values, chunkSize);
             return true;

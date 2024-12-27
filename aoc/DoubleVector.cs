@@ -112,6 +112,12 @@ namespace aoc
         public static DoubleVector ParseAny(string input) =>
             Helper.ParseAny(input);
 
+        public static DoubleVector[] ParseAll(string input) =>
+            Helper.ParseAll(input);
+
+        public static bool TryParseAll(string input, out DoubleVector[] vectors) =>
+            Helper.TryParseAll(input, out vectors);
+
         public static bool TryParseAny(string input, out DoubleVector vector) =>
             Helper.TryParseAny(input, out vector);
 

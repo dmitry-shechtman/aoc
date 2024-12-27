@@ -133,6 +133,12 @@ namespace aoc
         public static bool TryParseAny(string input, out DoubleVector3D vector) =>
             Helper.TryParseAny(input, out vector);
 
+        public static DoubleVector3D[] ParseAll(string input) =>
+            Helper.ParseAll(input);
+
+        public static bool TryParseAll(string input, out DoubleVector3D[] vectors) =>
+            Helper.TryParseAll(input, out vectors);
+
         private static DoubleVector3D FromSpan(ReadOnlySpan<double> values) =>
             new(values[0], values[1], values[2]);
 

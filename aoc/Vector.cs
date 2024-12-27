@@ -115,6 +115,12 @@ namespace aoc
         public static bool TryParseAny(string input, out Vector vector) =>
             Helper.TryParseAny(input, out vector);
 
+        public static Vector[] ParseAll(string input) =>
+            Helper.ParseAll(input);
+
+        public static bool TryParseAll(string input, out Vector[] vectors) =>
+            Helper.TryParseAll(input, out vectors);
+
         private static Vector FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1]);
 

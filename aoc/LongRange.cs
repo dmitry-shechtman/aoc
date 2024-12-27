@@ -93,8 +93,14 @@ namespace aoc
         public static LongRange ParseAny(string input) =>
             Helper.ParseAny(input);
 
-        public static bool TryParseAny(string input, out LongRange vector) =>
-            Helper.TryParseAny(input, out vector);
+        public static bool TryParseAny(string input, out LongRange range) =>
+            Helper.TryParseAny(input, out range);
+
+        public static LongRange[] ParseAll(string input) =>
+            Helper.ParseAll(input);
+
+        public static bool TryParseAll(string input, out LongRange[] ranges) =>
+            Helper.TryParseAll(input, out ranges);
 
         private static LongRange FromSpan(ReadOnlySpan<long> values) =>
             new(values[0], values[1]);

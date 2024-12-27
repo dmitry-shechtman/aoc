@@ -107,6 +107,12 @@ namespace aoc
         public static bool TryParseAny(string input, out Size4D size) =>
             Helper.TryParseAny(input, out size);
 
+        public static Size4D[] ParseAll(string input) =>
+            Helper.ParseAll(input);
+
+        public static bool TryParseAll(string input, out Size4D[] sizes) =>
+            Helper.TryParseAll(input, out sizes);
+
         private static Size4D FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1], values[2], values[3]);
 

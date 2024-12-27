@@ -85,8 +85,14 @@ namespace aoc
         public static Range ParseAny(string input) =>
             Helper.ParseAny(input);
 
-        public static bool TryParseAny(string input, out Range vector) =>
-            Helper.TryParseAny(input, out vector);
+        public static bool TryParseAny(string input, out Range range) =>
+            Helper.TryParseAny(input, out range);
+
+        public static Range[] ParseAll(string input) =>
+            Helper.ParseAll(input);
+
+        public static bool TryParseAll(string input, out Range[] ranges) =>
+            Helper.TryParseAll(input, out ranges);
 
         private static Range FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1]);

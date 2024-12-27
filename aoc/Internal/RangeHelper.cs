@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc.Internal
@@ -41,8 +42,12 @@ namespace aoc.Internal
             _regex = new(() => new(pattern));
         }
 
-        protected override MatchCollection GetMatches(string input) =>
-            Regex.Matches(input);
+        protected override IEnumerable<Match> GetMatches(string input, out int count)
+        {
+            var result = Regex.Matches(input);
+            count = result.Count;
+            return result;
+        }
 
         protected override RangeHelperStrategy<TRange, T> Strategy =>
             RangeHelperStrategy<TRange, T>.Instance;

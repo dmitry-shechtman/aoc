@@ -118,8 +118,14 @@ namespace aoc
         public static VectorRange ParseAny(string input) =>
             Helper.ParseAny(input);
 
-        public static bool TryParseAny(string input, out VectorRange vector) =>
-            Helper.TryParseAny(input, out vector);
+        public static bool TryParseAny(string input, out VectorRange range) =>
+            Helper.TryParseAny(input, out range);
+
+        public static VectorRange[] ParseAll(string input) =>
+            Helper.ParseAll(input);
+
+        public static bool TryParseAll(string input, out VectorRange[] ranges) =>
+            Helper.TryParseAll(input, out ranges);
 
         private static VectorRange FromSpan(ReadOnlySpan<Vector> values) =>
             new(values[0], values[1]);
