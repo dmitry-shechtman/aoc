@@ -28,7 +28,6 @@ namespace aoc.Internal
 
         IEnumerable<Match> GetMatches(string input, out int count);
         bool TryParse(IEnumerator<Match> matches, Span<T> values);
-        bool TryParse(IEnumerator<Match> matches, int itemCount, out TVector value);
 
         FromSpan<TVector, T> FromSpan { get; }
         int MinCount { get; }
@@ -60,10 +59,7 @@ namespace aoc.Internal
             GetMatches(input, out count);
 
         bool IVectorHelper<TVector, T>.TryParse(IEnumerator<Match> matches, Span<T> values) =>
-            TryParse(matches, 0, values);
-
-        bool IVectorHelper<TVector, T>.TryParse(IEnumerator<Match> matches, int itemCount, out TVector value) =>
-            TryParse(matches, itemCount, 0, out value);
+            TryParse(matches, values);
 
         int IVectorHelper<TVector, T>.MinCount =>
             MinCount;

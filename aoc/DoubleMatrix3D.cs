@@ -196,11 +196,23 @@ namespace aoc
         public static bool TryParseRowsAny(string input, out DoubleMatrix3D matrix) =>
             Helper.TryParseRowsAny(input, out matrix);
 
+        public static DoubleMatrix3D[] ParseRowsAll(string input, int rowCount = 3, int columnCount = 3) =>
+            Helper.ParseRowsAll(input, rowCount, columnCount);
+
+        public static bool TryParseRowsAll(string input, out DoubleMatrix3D[] matrices) =>
+            Helper.TryParseRowsAll(input, out matrices);
+
         public static DoubleMatrix3D ParseColumnsAny(string input) =>
             Helper.ParseColumnsAny(input);
 
         public static bool TryParseColumnsAny(string input, out DoubleMatrix3D matrix) =>
             Helper.TryParseColumnsAny(input, out matrix);
+
+        public static DoubleMatrix3D[] ParseColumnsAll(string input, int columnCount = 3, int rowCount = 3) =>
+            Helper.ParseColumnsAll(input, columnCount, rowCount);
+
+        public static bool TryParseColumnsAll(string input, out DoubleMatrix3D[] matrices) =>
+            Helper.TryParseColumnsAll(input, out matrices);
 
         public static DoubleMatrix3D FromRows(params DoubleVector3D[] rows) =>
             FromRows(rows.AsSpan());

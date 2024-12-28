@@ -163,11 +163,23 @@ namespace aoc
         public static bool TryParseRowsAny(string input, out DoubleMatrix matrix) =>
             Helper.TryParseRowsAny(input, out matrix);
 
+        public static DoubleMatrix[] ParseRowsAll(string input, int rowCount = 2, int columnCount = 2) =>
+            Helper.ParseRowsAll(input, rowCount, columnCount);
+
+        public static bool TryParseRowsAll(string input, out DoubleMatrix[] matrices) =>
+            Helper.TryParseRowsAll(input, out matrices);
+
         public static DoubleMatrix ParseColumnsAny(string input) =>
             Helper.ParseColumnsAny(input);
 
         public static bool TryParseColumnsAny(string input, out DoubleMatrix matrix) =>
             Helper.TryParseColumnsAny(input, out matrix);
+
+        public static DoubleMatrix[] ParseColumnsAll(string input, int columnCount = 2, int rowCount = 2) =>
+            Helper.ParseColumnsAll(input, columnCount, rowCount);
+
+        public static bool TryParseColumnsAll(string input, out DoubleMatrix[] matrices) =>
+            Helper.TryParseColumnsAll(input, out matrices);
 
         public static DoubleMatrix FromRows(params DoubleVector[] rows) =>
             FromRows(rows.AsSpan());

@@ -43,54 +43,64 @@ namespace aoc.Internal
         protected MatrixHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, TVectorHelper vector)
             : base(fromRows, vector)
         {
-            FromColumnArray = fromColumns;
+            FromColumnSpan = fromColumns;
         }
 
         public TMatrix FromRows(T[][] rows) =>
-            FromRows(FromArrays(rows));
+            FromSpan(FromArrays(rows));
 
-        public TMatrix FromRows(ReadOnlySpan<T> values, int? chunkSize = null) =>
-            FromRows(Chunk(values, chunkSize));
+        public TMatrix FromRows(ReadOnlySpan<T> values, int size = 0) =>
+            FromItems(values, values.Length, size > 0 ? size : MinCount, FromSpan);
 
         public TMatrix FromColumns(T[][] columns) =>
-            FromColumnArray(FromArrays(columns));
+            FromColumnSpan(FromArrays(columns));
 
-        public TMatrix FromColumns(ReadOnlySpan<T> values, int? chunkSize = null) =>
-            FromColumnArray(Chunk(values, chunkSize));
+        public TMatrix FromColumns(ReadOnlySpan<T> values, int size = 0) =>
+            FromItems(values, values.Length, size > 0 ? size : MinCount, FromColumnSpan);
 
         public TMatrix ParseRowsAny(string input) =>
             TryParseRowsAny(input, out TMatrix matrix)
                 ? matrix
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParseRowsAny(string input, out TMatrix matrix)
-        {
-            matrix = default;
-            if (!TryGetMatches(input, out var matches, out var count, out var chunkSize))
-                return false;
-            Span<T> values = stackalloc T[count];
-            if (!Vector.TryParse(matches.GetEnumerator(), values))
-                return false;
-            matrix = FromRows(values, chunkSize);
-            return true;
-        }
+        public bool TryParseRowsAny(string input, out TMatrix matrix) =>
+            TryParseAny(input, FromSpan, out matrix);
+
+        public TMatrix[] ParseRowsAll(string input, int rowCount, int columnCount) =>
+            TryParseRowsAll(input, rowCount, columnCount, out TMatrix[] matrices)
+                ? matrices
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParseRowsAll(string input, out TMatrix[] matrices) =>
+            TryParseRowsAll(input, MinCount, out matrices);
+
+        public bool TryParseRowsAll(string input, int rowCount, out TMatrix[] matrices) =>
+            TryParseRowsAll(input, rowCount, MinCount, out matrices);
+
+        public bool TryParseRowsAll(string input, int rowCount, int columnCount, out TMatrix[] matrices) =>
+            TryParseAll(input, rowCount, columnCount, FromSpan, out matrices);
 
         public TMatrix ParseColumnsAny(string input) =>
             TryParseColumnsAny(input, out TMatrix matrix)
                 ? matrix
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParseColumnsAny(string input, out TMatrix matrix)
-        {
-            matrix = default;
-            if (!TryGetMatches(input, out var matches, out var count, out var chunkSize))
-                return false;
-            Span<T> values = stackalloc T[count];
-            if (!Vector.TryParse(matches.GetEnumerator(), values))
-                return false;
-            matrix = FromColumns(values, chunkSize);
-            return true;
-        }
+        public bool TryParseColumnsAny(string input, out TMatrix matrix) =>
+            TryParseAny(input, FromColumnSpan, out matrix);
+
+        public TMatrix[] ParseColumnsAll(string input, int columnCount, int rowCount) =>
+            TryParseColumnsAll(input, columnCount, rowCount, out TMatrix[] matrices)
+                ? matrices
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParseColumnsAll(string input, out TMatrix[] matrices) =>
+            TryParseColumnsAll(input, MinCount, out matrices);
+
+        public bool TryParseColumnsAll(string input, int columnCount, out TMatrix[] matrices) =>
+            TryParseColumnsAll(input, columnCount, MinCount, out matrices);
+
+        public bool TryParseColumnsAll(string input, int columnCount, int rowCount, out TMatrix[] matrices) =>
+            TryParseAll(input, columnCount, rowCount, FromColumnSpan, out matrices);
 
         protected TMatrix FromRows(params TVector[] vectors) =>
             FromSpan(vectors);
@@ -103,16 +113,7 @@ namespace aoc.Internal
             return vectors;
         }
 
-        private TVector[] Chunk(ReadOnlySpan<T> values, int? chunkSize)
-        {
-            var size = chunkSize ?? MinCount;
-            var vectors = new TVector[values.Length / size];
-            for (int i = 0; i < vectors.Length; ++i)
-                vectors[i] = Vector.FromSpan(values[(i * size)..((i + 1) * size)]);
-            return vectors;
-        }
-
-        private FromSpan<TMatrix, TVector> FromColumnArray { get; }
+        private FromSpan<TMatrix, TVector> FromColumnSpan { get; }
     }
 
     sealed class Matrix2DHelperStrategy<TMatrix, TVector, T> : MatrixHelperStrategy<Matrix2DHelperStrategy<TMatrix, TVector, T>, TMatrix, TVector, T>
