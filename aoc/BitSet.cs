@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -6,7 +7,7 @@ using Store = System.UInt64;
 
 namespace aoc
 {
-    public struct BitSet : IReadOnlyCollection<int>
+    public struct BitSet : ICloneable, IEquatable<BitSet>, IComparable<BitSet>, IReadOnlyCollection<int>
     {
         private const Store Zero  = 0;
         private const Store One   = 1;
@@ -67,6 +68,40 @@ namespace aoc
         public readonly BitSet Clone()
         {
             return new(this);
+        }
+
+        object ICloneable.Clone() => Clone();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly override bool Equals(object obj) =>
+            obj is BitSet other && Equals(other);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly bool Equals(BitSet other)
+        {
+            for (int i = 0; i < _bits.Length; i++)
+                if (_bits[i] != other._bits[i])
+                    return false;
+            return true;
+        }
+
+        public readonly override int GetHashCode()
+        {
+            HashCode hashCode = new();
+            for (int i = 0; i < _bits.Length; i++)
+                hashCode.Add(_bits[i]);
+            return hashCode.ToHashCode();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int CompareTo(BitSet other)
+        {
+            for (int i = _bits.Length - 1; i >= 0; i--)
+                if (_bits[i] > other._bits[i])
+                    return 1;
+                else if (_bits[i] < other._bits[i])
+                    return -1;
+            return 0;
         }
 
         public readonly int CountSet()
@@ -247,5 +282,23 @@ namespace aoc
 
         readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
+        public static bool operator ==(BitSet left, BitSet right) =>
+            left.Equals(right);
+
+        public static bool operator !=(BitSet left, BitSet right) =>
+            !left.Equals(right);
+
+        public static bool operator <(BitSet left, BitSet right) =>
+            left.CompareTo(right) < 0;
+
+        public static bool operator >(BitSet left, BitSet right) =>
+            left.CompareTo(right) > 0;
+
+        public static bool operator <=(BitSet left, BitSet right) =>
+            left.CompareTo(right) <= 0;
+
+        public static bool operator >=(BitSet left, BitSet right) =>
+            left.CompareTo(right) >= 0;
     }
 }
