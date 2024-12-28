@@ -114,6 +114,33 @@ namespace aoc
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly int LastSet()
+        {
+            return LastSet(out _);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly int LastSet(out Store store)
+        {
+            for (int i = _bits.Length - 1; i >= 0; i--)
+                if ((store = _bits[i]) != 0)
+                    return i << Shift | BitOperations.Log2(store);
+            store = 0;
+            return -1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly int LastSet(int index, out Store store)
+        {
+            if ((store = _bits[index >> Shift] & ((One << index) - 1)) != 0)
+                return index & ~Mask | BitOperations.Log2(store);
+            for (int i = (index >> Shift) - 1; i >= 0; i--)
+                if ((store = _bits[i]) != 0)
+                    return i << Shift | BitOperations.Log2(store);
+            return -1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly int NextSet(int index)
         {
             var store = _bits[index >> Shift] & ~((One << index) - 1);
@@ -128,6 +155,24 @@ namespace aoc
             for (int i = (index >> Shift) + 1; i < _bits.Length; i++)
                 if ((store = _bits[i]) != 0)
                     return i << Shift | BitOperations.TrailingZeroCount(store);
+            return -1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly int PreviousSet(int index)
+        {
+            var store = _bits[index >> Shift];
+            return PreviousSet(index, ref store);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly int PreviousSet(int index, ref Store store)
+        {
+            if ((store &= (One << index) - 1) != 0)
+                return index & ~Mask | BitOperations.Log2(store);
+            for (int i = (index >> Shift) - 1; i >= 0; i--)
+                if ((store = _bits[i]) != 0)
+                    return i << Shift | BitOperations.Log2(store);
             return -1;
         }
 
@@ -188,13 +233,19 @@ namespace aoc
             _bits.Fill(Zero);
         }
 
-        public IEnumerator<int> GetEnumerator()
+        public readonly IEnumerator<int> GetEnumerator()
         {
             for (int index = FirstSet(out Store store); index >= 0; index = NextSet(index, ref store))
                 yield return index;
         }
 
-        IEnumerator IEnumerable.GetEnumerator() =>
+        public readonly IEnumerator<int> GetReverseEnumerator()
+        {
+            for (int index = LastSet(out Store store); index >= 0; index = PreviousSet(index, ref store))
+                yield return index;
+        }
+
+        readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
     }
 }
