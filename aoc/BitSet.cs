@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Runtime.CompilerServices;
+using static System.Numerics.BitOperations;
 using Store = System.Int64;
 
 namespace aoc
@@ -108,7 +108,7 @@ namespace aoc
         {
             int count = 0;
             for (int i = 0; i < _bits.Length; i++)
-                count += BitOperations.PopCount((ulong)_bits[i]);
+                count += PopCount((ulong)_bits[i]);
             return count;
         }
 
@@ -132,7 +132,7 @@ namespace aoc
         {
             for (int i = 0; i < _bits.Length; i++)
                 if ((store = _bits[i]) != 0)
-                    return i << Shift | BitOperations.TrailingZeroCount(store);
+                    return i << Shift | TrailingZeroCount(store);
             store = 0;
             return -1;
         }
@@ -141,10 +141,10 @@ namespace aoc
         public readonly int FirstSet(int index, out Store store)
         {
             if ((store = _bits[index >> Shift] & ~((One << index) - 1)) != 0)
-                return index & ~Mask | BitOperations.TrailingZeroCount(store);
+                return index & ~Mask | TrailingZeroCount(store);
             for (int i = (index >> Shift) + 1; i < _bits.Length; i++)
                 if ((store = _bits[i]) != 0)
-                    return i << Shift | BitOperations.TrailingZeroCount(store);
+                    return i << Shift | TrailingZeroCount(store);
             return -1;
         }
 
@@ -159,7 +159,7 @@ namespace aoc
         {
             for (int i = _bits.Length - 1; i >= 0; i--)
                 if ((store = _bits[i]) != 0)
-                    return i << Shift | BitOperations.Log2((ulong)store);
+                    return i << Shift | Log2(store);
             store = 0;
             return -1;
         }
@@ -168,10 +168,10 @@ namespace aoc
         public readonly int LastSet(int index, out Store store)
         {
             if ((store = _bits[index >> Shift] & ((One << index) - 1)) != 0)
-                return index & ~Mask | BitOperations.Log2((ulong)store);
+                return index & ~Mask | Log2(store);
             for (int i = (index >> Shift) - 1; i >= 0; i--)
                 if ((store = _bits[i]) != 0)
-                    return i << Shift | BitOperations.Log2((ulong)store);
+                    return i << Shift | Log2(store);
             return -1;
         }
 
@@ -186,10 +186,10 @@ namespace aoc
         public readonly int NextSet(int index, ref Store store)
         {
             if ((store &= ~(One << index)) != 0)
-                return index & ~Mask | BitOperations.TrailingZeroCount(store);
+                return index & ~Mask | TrailingZeroCount(store);
             for (int i = (index >> Shift) + 1; i < _bits.Length; i++)
                 if ((store = _bits[i]) != 0)
-                    return i << Shift | BitOperations.TrailingZeroCount(store);
+                    return i << Shift | TrailingZeroCount(store);
             return -1;
         }
 
@@ -204,10 +204,10 @@ namespace aoc
         public readonly int PreviousSet(int index, ref Store store)
         {
             if ((store &= (One << index) - 1) != 0)
-                return index & ~Mask | BitOperations.Log2((ulong)store);
+                return index & ~Mask | Log2(store);
             for (int i = (index >> Shift) - 1; i >= 0; i--)
                 if ((store = _bits[i]) != 0)
-                    return i << Shift | BitOperations.Log2((ulong)store);
+                    return i << Shift | Log2(store);
             return -1;
         }
 
@@ -293,6 +293,10 @@ namespace aoc
 
         readonly IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int Log2(long store) =>
+            System.Numerics.BitOperations.Log2((ulong)store);
 
         public static bool operator ==(BitSet left, BitSet right) =>
             left.Equals(right);
