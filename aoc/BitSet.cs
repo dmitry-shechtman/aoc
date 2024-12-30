@@ -239,10 +239,21 @@ namespace aoc
             return this;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BitSet ThenSet(int index, bool value)
         {
             this[index] = value;
             return this;
+        }
+
+        public BitSet ThenSet(int index)
+        {
+            return ThenSet(index, true);
+        }
+
+        public BitSet ThenClear(int index)
+        {
+            return ThenSet(index, false);
         }
 
         public void SetAll(bool value)
