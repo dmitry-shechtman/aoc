@@ -18,9 +18,20 @@ namespace aoc
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BitSet(int count)
+            : this(count, new Store[(count + Mask) >> Shift])
+        {
+        }
+
+        public BitSet(params Store[] bits)
+            : this(bits.Length << Shift, bits)
+        {
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public BitSet(int count, params Store[] bits)
         {
             Count = count;
-            _bits = new Store[(count + Mask) >> Shift];
+            _bits = bits;
         }
 
         public BitSet(int count, bool value)
