@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text;
 using static System.Numerics.BitOperations;
 using Store = System.Int64;
 
 namespace aoc
 {
+    [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
     public struct BitSet : ICloneable, IEquatable<BitSet>, IComparable<BitSet>, IReadOnlyCollection<int>
     {
         private const Store Zero  = 0;
@@ -308,6 +311,14 @@ namespace aoc
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int Log2(long store) =>
             System.Numerics.BitOperations.Log2((ulong)store);
+
+        private readonly string GetDebuggerDisplay()
+        {
+            StringBuilder sb = new("0x");
+            for (int i = _bits.Length - 1; i >= 0; i--)
+                sb.AppendFormat($"{{0:x0{1 << (Shift - 2)}}}", _bits[i]);
+            return sb.ToString();
+        }
 
         public static bool operator ==(BitSet left, BitSet right) =>
             left.Equals(right);
