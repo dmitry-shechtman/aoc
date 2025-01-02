@@ -10,6 +10,9 @@ namespace aoc
         public static void Fill<T>(this T[] array, T value) =>
             Array.Fill(array, value);
 
+        public static void Fill<T>(this T[] array, T value, int index, int count) =>
+            Array.Fill(array, value, index, count);
+
         public static T Find<T>(this T[] array, Predicate<T> match) =>
             Array.Find(array, match);
 
