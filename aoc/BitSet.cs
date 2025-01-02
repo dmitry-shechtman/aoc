@@ -108,6 +108,15 @@ namespace aoc
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override string ToString()
+        {
+            StringBuilder sb = new();
+            for (int i = _bits.Length - 1; i >= 0; i--)
+                sb.AppendFormat($"{{0:x0{1 << (Shift - 2)}}}", _bits[i]);
+            return sb.ToString();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(BitSet other)
         {
             for (int i = _bits.Length - 1; i >= 0; i--)
@@ -314,10 +323,7 @@ namespace aoc
 
         private readonly string GetDebuggerDisplay()
         {
-            StringBuilder sb = new("0x");
-            for (int i = _bits.Length - 1; i >= 0; i--)
-                sb.AppendFormat($"{{0:x0{1 << (Shift - 2)}}}", _bits[i]);
-            return sb.ToString();
+            return $"0x{this}";
         }
 
         public static bool operator ==(BitSet left, BitSet right) =>
