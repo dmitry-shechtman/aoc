@@ -262,6 +262,14 @@ namespace aoc
             return this;
         }
 
+        public BitSet Not()
+        {
+            for (int i = 0; i < _bits.Length; i++)
+                _bits[i] = ~_bits[i];
+            _bits[^1] &= ~((One << (Count & Mask)) - 1);
+            return this;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BitSet ThenSet(int index, bool value)
         {
