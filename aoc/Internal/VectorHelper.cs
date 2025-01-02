@@ -26,7 +26,7 @@ namespace aoc.Internal
         bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, out TVector vector);
         bool TryParse(string s, Regex separator, out TVector vector);
 
-        IEnumerable<Match> GetMatches(string input, out int count);
+        MatchCollection GetMatches(string input, out int count);
         bool TryParse(IEnumerator<Match> matches, Span<T> values);
 
         FromSpan<TVector, T> FromSpan { get; }
@@ -38,24 +38,16 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy, TVector, T>
     {
-        private readonly Lazy<Regex> _regex;
-        private Regex Regex => _regex.Value;
-
-        protected VectorHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one, string pattern)
-            : base(fromSpan, tryParse)
+        protected VectorHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
+            : base(fromSpan, number.TryParse)
         {
-            InitHeadings(minusOne, zero, one);
-            _regex = new(() => new(pattern));
+            Number = number;
         }
 
-        protected sealed override IEnumerable<Match> GetMatches(string input, out int count)
-        {
-            var result = Regex.Matches(input);
-            count = result.Count;
-            return result;
-        }
+        protected sealed override MatchCollection GetMatches(string input, out int count) =>
+            Number.GetMatches(input, out count);
 
-        IEnumerable<Match> IVectorHelper<TVector, T>.GetMatches(string input, out int count) =>
+        MatchCollection IVectorHelper<TVector, T>.GetMatches(string input, out int count) =>
             GetMatches(input, out count);
 
         bool IVectorHelper<TVector, T>.TryParse(IEnumerator<Match> matches, Span<T> values) =>
@@ -64,7 +56,11 @@ namespace aoc.Internal
         int IVectorHelper<TVector, T>.MinCount =>
             MinCount;
 
-        protected abstract void InitHeadings(T minusOne, T zero, T one);
+        private INumberHelper<T> Number { get; }
+
+        protected T MinusOne => Number.MinusOne;
+        protected T Zero     => Number.Zero;
+        protected T One      => Number.One;
     }
 
     sealed class Vector2DHelperStrategy<TVector, T> : VectorHelperStrategy<Vector2DHelperStrategy<TVector, T>, TVector, T>
@@ -81,26 +77,22 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector2D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Vector2DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one, string pattern)
-            : base(fromSpan, tryParse, minusOne, zero, one, pattern)
+        public Vector2DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
+            : base(fromSpan, number)
         {
-        }
-
-        protected override void InitHeadings(T minusOne, T zero, T one)
-        {
-            North = FromArray(zero,     minusOne, zero);
-            East  = FromArray(one,      zero,     zero);
-            South = FromArray(zero,     one,      zero);
-            West  = FromArray(minusOne, zero,     zero);
+            North = FromArray(Zero,     MinusOne, Zero);
+            East  = FromArray(One,      Zero,     Zero);
+            South = FromArray(Zero,     One,      Zero);
+            West  = FromArray(MinusOne, Zero,     Zero);
         }
 
         protected override Vector2DHelperStrategy<TVector, T> Strategy =>
             Vector2DHelperStrategy<TVector, T>.Instance;
 
-        public TVector North { get; private set; }
-        public TVector East  { get; private set; }
-        public TVector South { get; private set; }
-        public TVector West  { get; private set; }
+        public TVector North { get; }
+        public TVector East  { get; }
+        public TVector South { get; }
+        public TVector West  { get; }
     }
 
     sealed class Vector3DHelperStrategy<TVector, T> : VectorHelperStrategy<Vector3DHelperStrategy<TVector, T>, TVector, T>
@@ -117,30 +109,26 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector3D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Vector3DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one, string pattern)
-            : base(fromSpan, tryParse, minusOne, zero, one, pattern)
+        public Vector3DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
+            : base(fromSpan, number)
         {
-        }
-
-        protected override void InitHeadings(T minusOne, T zero, T one)
-        {
-            North = FromArray(zero,     minusOne, zero);
-            East  = FromArray(one,      zero,     zero);
-            South = FromArray(zero,     one,      zero);
-            West  = FromArray(minusOne, zero,     zero);
-            Up    = FromArray(zero,     zero,     minusOne);
-            Down  = FromArray(zero,     zero,     one);
+            North = FromArray(Zero,     MinusOne, Zero);
+            East  = FromArray(One,      Zero,     Zero);
+            South = FromArray(Zero,     One,      Zero);
+            West  = FromArray(MinusOne, Zero,     Zero);
+            Up    = FromArray(Zero,     Zero,     MinusOne);
+            Down  = FromArray(Zero,     Zero,     One);
         }
 
         protected override Vector3DHelperStrategy<TVector, T> Strategy =>
             Vector3DHelperStrategy<TVector, T>.Instance;
 
-        public TVector North { get; private set; }
-        public TVector East  { get; private set; }
-        public TVector South { get; private set; }
-        public TVector West  { get; private set; }
-        public TVector Up    { get; private set; }
-        public TVector Down  { get; private set; }
+        public TVector North { get; }
+        public TVector East  { get; }
+        public TVector South { get; }
+        public TVector West  { get; }
+        public TVector Up    { get; }
+        public TVector Down  { get; }
     }
 
     sealed class Vector4DHelperStrategy<TVector, T> : VectorHelperStrategy<Vector4DHelperStrategy<TVector, T>, TVector, T>
@@ -157,33 +145,29 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector4D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Vector4DHelper(FromSpan<TVector, T> fromSpan, TryParse<T> tryParse, T minusOne, T zero, T one, string pattern)
-            : base(fromSpan, tryParse, minusOne, zero, one, pattern)
+        public Vector4DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
+            : base(fromSpan, number)
         {
-        }
-
-        protected override void InitHeadings(T minusOne, T zero, T one)
-        {
-            North = FromArray(zero,     minusOne, zero,     zero);
-            East  = FromArray(one,      zero,     zero,     zero);
-            South = FromArray(zero,     one,      zero,     zero);
-            West  = FromArray(minusOne, zero,     zero,     zero);
-            Up    = FromArray(zero,     zero,     minusOne, zero);
-            Down  = FromArray(zero,     zero,     one,      zero);
-            Ana   = FromArray(zero,     zero,     zero,     minusOne);
-            Kata  = FromArray(zero,     zero,     zero,     one);
+            North = FromArray(Zero,     MinusOne, Zero,     Zero);
+            East  = FromArray(One,      Zero,     Zero,     Zero);
+            South = FromArray(Zero,     One,      Zero,     Zero);
+            West  = FromArray(MinusOne, Zero,     Zero,     Zero);
+            Up    = FromArray(Zero,     Zero,     MinusOne, Zero);
+            Down  = FromArray(Zero,     Zero,     One,      Zero);
+            Ana   = FromArray(Zero,     Zero,     Zero,     MinusOne);
+            Kata  = FromArray(Zero,     Zero,     Zero,     One);
         }
 
         protected override Vector4DHelperStrategy<TVector, T> Strategy =>
             Vector4DHelperStrategy<TVector, T>.Instance;
 
-        public TVector North { get; private set; }
-        public TVector East  { get; private set; }
-        public TVector South { get; private set; }
-        public TVector West  { get; private set; }
-        public TVector Up    { get; private set; }
-        public TVector Down  { get; private set; }
-        public TVector Ana   { get; private set; }
-        public TVector Kata  { get; private set; }
+        public TVector North { get; }
+        public TVector East  { get; }
+        public TVector South { get; }
+        public TVector West  { get; }
+        public TVector Up    { get; }
+        public TVector Down  { get; }
+        public TVector Ana   { get; }
+        public TVector Kata  { get; }
     }
 }

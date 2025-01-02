@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc.Internal
@@ -24,16 +23,16 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
         where TStrategy: SizeHelperStrategy<TStrategy, TSize, TVector, T>
     {
-        protected SizeHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, IVectorHelper<TVector, T> vector)
+        protected SizeHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, INumberHelper<T> number)
             : base(fromSpan, tryParse)
         {
-            Vector = vector;
+            Number = number;
         }
 
-        protected sealed override IEnumerable<Match> GetMatches(string input, out int count) =>
-            Vector.GetMatches(input, out count);
+        protected sealed override MatchCollection GetMatches(string input, out int count) =>
+            Number.GetMatches(input, out count);
 
-        private IVectorHelper<TVector, T> Vector { get; }
+        private INumberHelper<T> Number { get; }
     }
 
     sealed class Size2DHelperStrategy<TSize, TVector, T> : SizeHelperStrategy<Size2DHelperStrategy<TSize, TVector, T>, TSize, TVector, T>
@@ -52,8 +51,8 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector2D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Size2DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, IVectorHelper<TVector, T> vector)
-            : base(fromSpan, tryParse, vector)
+        public Size2DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, INumberHelper<T> number)
+            : base(fromSpan, tryParse, number)
         {
         }
 
@@ -77,8 +76,8 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector3D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Size3DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, IVectorHelper<TVector, T> vector)
-            : base(fromSpan, tryParse, vector)
+        public Size3DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, INumberHelper<T> number)
+            : base(fromSpan, tryParse, number)
         {
         }
 
@@ -102,8 +101,8 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector4D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Size4DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, IVectorHelper<TVector, T> vector)
-            : base(fromSpan, tryParse, vector)
+        public Size4DHelper(FromSpan<TSize, T> fromSpan, TryParse<T> tryParse, INumberHelper<T> number)
+            : base(fromSpan, tryParse, number)
         {
         }
 

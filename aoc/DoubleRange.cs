@@ -9,7 +9,7 @@ namespace aoc
     public readonly struct DoubleRange : IRange<DoubleRange, double>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromSpan, double.TryParse, @"[-+]?\d+(.\d+)?"));
+            new(() => new(FromSpan, Internal.DoubleHelper.Instance));
 
         private static Helper Helper => _helper.Value;
 

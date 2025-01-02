@@ -10,7 +10,7 @@ namespace aoc
     public readonly struct DoubleVector : IVector<DoubleVector, DoubleMatrix, double>, IVector2D<DoubleVector, double>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromSpan, double.TryParse, -1, 0, 1, @"[-+]?\d+(.\d+)?"));
+            new(() => new(FromSpan, Internal.DoubleHelper.Instance));
 
         internal static Helper Helper => _helper.Value;
 

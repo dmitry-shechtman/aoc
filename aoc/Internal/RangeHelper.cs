@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace aoc.Internal
@@ -33,21 +32,16 @@ namespace aoc.Internal
         where TRange : unmanaged, IRange<TRange, T>
         where T : unmanaged, IFormattable
     {
-        private readonly Lazy<Regex> _regex;
-        private Regex Regex => _regex.Value;
-
-        public RangeHelper(FromSpan<TRange, T> fromSpan, TryParse<T> tryParse, string pattern)
-            : base(fromSpan, tryParse)
+        public RangeHelper(FromSpan<TRange, T> fromSpan, INumberHelper<T> number)
+            : base(fromSpan, number.TryParse)
         {
-            _regex = new(() => new(pattern));
+            Number = number;
         }
 
-        protected override IEnumerable<Match> GetMatches(string input, out int count)
-        {
-            var result = Regex.Matches(input);
-            count = result.Count;
-            return result;
-        }
+        private INumberHelper<T> Number { get; }
+
+        protected override MatchCollection GetMatches(string input, out int count) =>
+            Number.GetMatches(input, out count);
 
         protected override RangeHelperStrategy<TRange, T> Strategy =>
             RangeHelperStrategy<TRange, T>.Instance;

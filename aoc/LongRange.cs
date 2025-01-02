@@ -10,7 +10,7 @@ namespace aoc
     public readonly struct LongRange : IIntegerRange<LongRange, long>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromSpan, long.TryParse, @"[-+]?\d+"));
+            new(() => new(FromSpan, Internal.Int64Helper.Instance));
 
         private static Helper Helper => _helper.Value;
 

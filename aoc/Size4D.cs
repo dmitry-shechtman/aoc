@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct Size4D : ISize4D<Size4D, Vector4D, int>, IIntegerSize<Size4D, Vector4D>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromSpan, int.TryParse, Vector4D.Helper));
+            new(() => new(FromSpan, int.TryParse, Internal.Int32Helper.Instance));
 
         private static Helper Helper => _helper.Value;
 

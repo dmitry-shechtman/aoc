@@ -10,7 +10,7 @@ namespace aoc
     public readonly struct Range : IIntegerRange<Range, int>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromSpan, int.TryParse, @"[-+]?\d+"));
+            new(() => new(FromSpan, Internal.Int32Helper.Instance));
 
         private static Helper Helper => _helper.Value;
 
