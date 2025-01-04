@@ -28,6 +28,9 @@ namespace aoc
         public static bool Any<T>(this IEnumerable<T> source, Func<T, int, bool> predicate) =>
             source.Select().Any(t => predicate(t.Value, t.Index));
 
+        public static TAccumulate Aggregate<TSource, TAccumulate>(this IEnumerable<TSource> collection, TAccumulate seed, Func<TAccumulate, TSource, int, TAccumulate> selector) =>
+            collection.Select().Aggregate(seed, (a, v) => selector(a, v.Value, v.Index));
+
 #if !NET7_0_OR_GREATER
         public static IOrderedEnumerable<T> Order<T>(this IEnumerable<T> source) =>
             source.OrderBy(v => v);
