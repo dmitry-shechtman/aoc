@@ -7,6 +7,9 @@ namespace aoc
         public static void Clear(this Array array) =>
             Array.Clear(array, 0, array.Length);
 
+        public static void Clear(this Array array, int index, int count) =>
+            Array.Clear(array, index, count);
+
         public static void Fill<T>(this T[] array, T value) =>
             Array.Fill(array, value);
 
