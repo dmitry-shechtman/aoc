@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 
 namespace aoc
 {
@@ -28,8 +27,8 @@ namespace aoc
         public static bool Any<T>(this IEnumerable<T> source, Func<T, int, bool> predicate) =>
             source.Select().Any(t => predicate(t.Value, t.Index));
 
-        public static TAccumulate Aggregate<TSource, TAccumulate>(this IEnumerable<TSource> collection, TAccumulate seed, Func<TAccumulate, TSource, int, TAccumulate> selector) =>
-            collection.Select().Aggregate(seed, (a, v) => selector(a, v.Value, v.Index));
+        public static TAccumulate Aggregate<TSource, TAccumulate>(this IEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, int, TAccumulate> selector) =>
+            source.Select().Aggregate(seed, (a, v) => selector(a, v.Value, v.Index));
 
 #if !NET7_0_OR_GREATER
         public static IOrderedEnumerable<T> Order<T>(this IEnumerable<T> source) =>
@@ -76,32 +75,23 @@ namespace aoc
         public static long Sum<TSource>(this IEnumerable<TSource> source, Func<TSource, int, long> selector) =>
             source.Select(selector).Sum();
 
-        public static int Product(this IEnumerable<int> collection) =>
-            collection.Aggregate(1, (a, v) => a * v);
+        public static int Product(this IEnumerable<int> source) =>
+            source.Aggregate(1, (a, v) => a * v);
 
-        public static int Product<T>(this IEnumerable<T> collection, Func<T, int> selector) =>
-            collection.Aggregate(1, (a, v) => a * selector(v));
+        public static int Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector) =>
+            source.Aggregate(1, (a, v) => a * selector(v));
 
         public static int Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, int> selector) =>
-            source.Select(selector).Product();
+            source.Aggregate(1, (a, v, i) => a * selector(v, i));
 
-        public static long Product(this IEnumerable<long> collection) =>
-            collection.Aggregate(1L, (a, v) => a * v);
+        public static long Product(this IEnumerable<long> source) =>
+            source.Aggregate(1L, (a, v) => a * v);
 
-        public static long Product<T>(this IEnumerable<T> collection, Func<T, long> selector) =>
-            collection.Aggregate(1L, (a, v) => a * selector(v));
+        public static long Product<TSource>(this IEnumerable<TSource> source, Func<TSource, long> selector) =>
+            source.Aggregate(1L, (a, v) => a * selector(v));
 
         public static long Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, long> selector) =>
-            source.Select(selector).Product();
-
-        public static BigInteger Product(this IEnumerable<BigInteger> collection) =>
-            collection.Aggregate(BigInteger.One, (a, v) => a * v);
-
-        public static BigInteger Product<T>(this IEnumerable<T> collection, Func<T, BigInteger> selector) =>
-            collection.Aggregate(BigInteger.One, (a, v) => a * selector(v));
-
-        public static BigInteger Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, BigInteger> selector) =>
-            source.Select(selector).Product();
+            source.Aggregate(1L, (a, v, i) => a * selector(v, i));
 
         public static TSource TryMin<TSource>(this IEnumerable<TSource> source, TSource result) =>
             source.Any() ? source.Min() : result;
