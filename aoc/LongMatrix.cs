@@ -125,59 +125,95 @@ namespace aoc
         public readonly LongVector C2 => new(m12, m22);
         public readonly LongVector C3 => new(m13, m23);
 
-        public static LongMatrix Parse(string s) =>
-            Helper.Parse(s);
+        public static LongMatrix Parse(string s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(string s, out LongMatrix matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static LongMatrix Parse(string s, char separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, IFormatProvider provider, out LongMatrix matrix) =>
+            Helper.TryParse(s, provider, out matrix);
+
+        public static LongMatrix Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
+
+        public static bool TryParse(ReadOnlySpan<char> s, out LongMatrix matrix) =>
+            Helper.TryParse(s, out matrix);
+
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongMatrix matrix) =>
+            Helper.TryParse(s, provider, out matrix);
+
+        public static LongMatrix Parse(string s, char separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, char separator, out LongMatrix matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static LongMatrix Parse(string s, string separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, char separator, IFormatProvider provider, out LongMatrix matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static LongMatrix Parse(string s, string separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, string separator, out LongMatrix matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static LongMatrix Parse(string s, Regex separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, string separator, IFormatProvider provider, out LongMatrix matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static LongMatrix Parse(string s, Regex separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, Regex separator, out LongMatrix matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static LongMatrix Parse(string s, char separator, char separator2) =>
-            Helper.Parse(s, separator, separator2);
+        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out LongMatrix matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static LongMatrix Parse(string s, char separator, char separator2, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, separator2, provider);
 
         public static bool TryParse(string s, char separator, char separator2, out LongMatrix matrix) =>
             Helper.TryParse(s, separator, separator2, out matrix);
 
-        public static LongMatrix ParseRowsAny(string input) =>
-            Helper.ParseRowsAny(input);
+        public static bool TryParse(string s, char separator, char separator2, IFormatProvider provider, out LongMatrix matrix) =>
+            Helper.TryParse(s, separator, separator2, provider, out matrix);
+
+        public static LongMatrix ParseRowsAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseRowsAny(input, provider);
 
         public static bool TryParseRowsAny(string input, out LongMatrix matrix) =>
             Helper.TryParseRowsAny(input, out matrix);
 
-        public static LongMatrix[] ParseRowsAll(string input, int rowCount = 2, int columnCount = 2) =>
-            Helper.ParseRowsAll(input, rowCount, columnCount);
+        public static bool TryParseRowsAny(string input, IFormatProvider provider, out LongMatrix matrix) =>
+            Helper.TryParseRowsAny(input, provider, out matrix);
+
+        public static LongMatrix[] ParseRowsAll(string input, IFormatProvider provider = null, int rowCount = 2, int columnCount = 2) =>
+            Helper.ParseRowsAll(input, provider, rowCount, columnCount);
 
         public static bool TryParseRowsAll(string input, out LongMatrix[] matrices) =>
             Helper.TryParseRowsAll(input, out matrices);
 
-        public static LongMatrix ParseColumnsAny(string input) =>
-            Helper.ParseColumnsAny(input);
+        public static bool TryParseRowsAll(string input, IFormatProvider provider, out LongMatrix[] matrices) =>
+            Helper.TryParseRowsAll(input, provider, out matrices);
+
+        public static LongMatrix ParseColumnsAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseColumnsAny(input, provider);
 
         public static bool TryParseColumnsAny(string input, out LongMatrix matrix) =>
             Helper.TryParseColumnsAny(input, out matrix);
 
-        public static LongMatrix[] ParseColumnsAll(string input, int columnCount = 2, int rowCount = 2) =>
-            Helper.ParseColumnsAll(input, columnCount, rowCount);
+        public static bool TryParseColumnsAny(string input, IFormatProvider provider, out LongMatrix matrix) =>
+            Helper.TryParseColumnsAny(input, provider, out matrix);
+
+        public static LongMatrix[] ParseColumnsAll(string input, IFormatProvider provider = null, int columnCount = 2, int rowCount = 2) =>
+            Helper.ParseColumnsAll(input, provider, columnCount, rowCount);
 
         public static bool TryParseColumnsAll(string input, out LongMatrix[] matrices) =>
             Helper.TryParseColumnsAll(input, out matrices);
+
+        public static bool TryParseColumnsAll(string input, IFormatProvider provider, out LongMatrix[] matrices) =>
+            Helper.TryParseColumnsAll(input, provider, out matrices);
 
         public static LongMatrix FromRows(params LongVector[] rows) =>
             FromRows(rows.AsSpan());

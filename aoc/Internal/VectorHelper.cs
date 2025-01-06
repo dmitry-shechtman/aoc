@@ -17,17 +17,11 @@ namespace aoc.Internal
         public override char DefaultSeparator => ',';
     }
 
-    interface IVectorHelper<TVector, T>
+    interface IVectorHelper<TVector, T> : IItemHelper<TVector>, IParseHelper<TVector, char>
         where TVector : unmanaged, IVector<TVector, T>
         where T : struct, IFormattable
     {
-        bool TryParse(ReadOnlySpan<char> input, out TVector vector);
-        bool TryParse(ReadOnlySpan<char> input, char separator, out TVector vector);
-        bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, out TVector vector);
-        bool TryParse(string s, Regex separator, out TVector vector);
-
-        MatchCollection GetMatches(string input, out int count);
-        bool TryParse(IEnumerator<Match> matches, Span<T> values);
+        bool TryParse(IEnumerator<Match> matches, IFormatProvider provider, Span<T> values);
 
         FromSpan<TVector, T> FromSpan { get; }
         int MinCount { get; }
@@ -39,28 +33,16 @@ namespace aoc.Internal
         where TStrategy : VectorHelperStrategy<TStrategy, TVector, T>
     {
         protected VectorHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number.TryParse)
+            : base(fromSpan, number)
         {
-            Number = number;
         }
 
-        protected sealed override MatchCollection GetMatches(string input, out int count) =>
-            Number.GetMatches(input, out count);
+        protected T NegativeOne => Item.NegativeOne;
+        protected T Zero        => Item.Zero;
+        protected T One         => Item.One;
 
-        MatchCollection IVectorHelper<TVector, T>.GetMatches(string input, out int count) =>
-            GetMatches(input, out count);
-
-        bool IVectorHelper<TVector, T>.TryParse(IEnumerator<Match> matches, Span<T> values) =>
-            TryParse(matches, values);
-
-        int IVectorHelper<TVector, T>.MinCount =>
-            MinCount;
-
-        private INumberHelper<T> Number { get; }
-
-        protected T NegativeOne => Number.NegativeOne;
-        protected T Zero        => Number.Zero;
-        protected T One         => Number.One;
+        public TVector POne { get; protected set; }
+        public TVector NOne { get; protected set; }
     }
 
     sealed class Vector2DHelperStrategy<TVector, T> : VectorHelperStrategy<Vector2DHelperStrategy<TVector, T>, TVector, T>
@@ -91,8 +73,6 @@ namespace aoc.Internal
         protected override Vector2DHelperStrategy<TVector, T> Strategy =>
             Vector2DHelperStrategy<TVector, T>.Instance;
 
-        public TVector POne  { get; }
-        public TVector NOne  { get; }
         public TVector North { get; }
         public TVector East  { get; }
         public TVector South { get; }
@@ -129,8 +109,6 @@ namespace aoc.Internal
         protected override Vector3DHelperStrategy<TVector, T> Strategy =>
             Vector3DHelperStrategy<TVector, T>.Instance;
 
-        public TVector POne  { get; }
-        public TVector NOne  { get; }
         public TVector North { get; }
         public TVector East  { get; }
         public TVector South { get; }
@@ -171,8 +149,6 @@ namespace aoc.Internal
         protected override Vector4DHelperStrategy<TVector, T> Strategy =>
             Vector4DHelperStrategy<TVector, T>.Instance;
 
-        public TVector POne  { get; }
-        public TVector NOne  { get; }
         public TVector North { get; }
         public TVector East  { get; }
         public TVector South { get; }

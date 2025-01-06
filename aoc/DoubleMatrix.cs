@@ -130,59 +130,95 @@ namespace aoc
         public readonly DoubleVector C2 => new(m12, m22);
         public readonly DoubleVector C3 => new(m13, m23);
 
-        public static DoubleMatrix Parse(string s) =>
-            Helper.Parse(s);
+        public static DoubleMatrix Parse(string s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(string s, out DoubleMatrix matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static DoubleMatrix Parse(string s, char separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, IFormatProvider provider, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, provider, out matrix);
+
+        public static DoubleMatrix Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
+
+        public static bool TryParse(ReadOnlySpan<char> s, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, out matrix);
+
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, provider, out matrix);
+
+        public static DoubleMatrix Parse(string s, char separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, char separator, out DoubleMatrix matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static DoubleMatrix Parse(string s, string separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, char separator, IFormatProvider provider, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static DoubleMatrix Parse(string s, string separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, string separator, out DoubleMatrix matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static DoubleMatrix Parse(string s, Regex separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, string separator, IFormatProvider provider, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static DoubleMatrix Parse(string s, Regex separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, Regex separator, out DoubleMatrix matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static DoubleMatrix Parse(string s, char separator, char separator2) =>
-            Helper.Parse(s, separator, separator2);
+        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static DoubleMatrix Parse(string s, char separator, char separator2, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, separator2, provider);
 
         public static bool TryParse(string s, char separator, char separator2, out DoubleMatrix matrix) =>
             Helper.TryParse(s, separator, separator2, out matrix);
 
-        public static DoubleMatrix ParseRowsAny(string input) =>
-            Helper.ParseRowsAny(input);
+        public static bool TryParse(string s, char separator, char separator2, IFormatProvider provider, out DoubleMatrix matrix) =>
+            Helper.TryParse(s, separator, separator2, provider, out matrix);
+
+        public static DoubleMatrix ParseRowsAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseRowsAny(input, provider);
 
         public static bool TryParseRowsAny(string input, out DoubleMatrix matrix) =>
             Helper.TryParseRowsAny(input, out matrix);
 
-        public static DoubleMatrix[] ParseRowsAll(string input, int rowCount = 2, int columnCount = 2) =>
-            Helper.ParseRowsAll(input, rowCount, columnCount);
+        public static bool TryParseRowsAny(string input, IFormatProvider provider, out DoubleMatrix matrix) =>
+            Helper.TryParseRowsAny(input, provider, out matrix);
+
+        public static DoubleMatrix[] ParseRowsAll(string input, IFormatProvider provider = null, int rowCount = 2, int columnCount = 2) =>
+            Helper.ParseRowsAll(input, provider, rowCount, columnCount);
 
         public static bool TryParseRowsAll(string input, out DoubleMatrix[] matrices) =>
             Helper.TryParseRowsAll(input, out matrices);
 
-        public static DoubleMatrix ParseColumnsAny(string input) =>
-            Helper.ParseColumnsAny(input);
+        public static bool TryParseRowsAll(string input, IFormatProvider provider, out DoubleMatrix[] matrices) =>
+            Helper.TryParseRowsAll(input, provider, out matrices);
+
+        public static DoubleMatrix ParseColumnsAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseColumnsAny(input, provider);
 
         public static bool TryParseColumnsAny(string input, out DoubleMatrix matrix) =>
             Helper.TryParseColumnsAny(input, out matrix);
 
-        public static DoubleMatrix[] ParseColumnsAll(string input, int columnCount = 2, int rowCount = 2) =>
-            Helper.ParseColumnsAll(input, columnCount, rowCount);
+        public static bool TryParseColumnsAny(string input, IFormatProvider provider, out DoubleMatrix matrix) =>
+            Helper.TryParseColumnsAny(input, provider, out matrix);
+
+        public static DoubleMatrix[] ParseColumnsAll(string input, IFormatProvider provider = null, int columnCount = 2, int rowCount = 2) =>
+            Helper.ParseColumnsAll(input, provider, columnCount, rowCount);
 
         public static bool TryParseColumnsAll(string input, out DoubleMatrix[] matrices) =>
             Helper.TryParseColumnsAll(input, out matrices);
+
+        public static bool TryParseColumnsAll(string input, IFormatProvider provider, out DoubleMatrix[] matrices) =>
+            Helper.TryParseColumnsAll(input, provider, out matrices);
 
         public static DoubleMatrix FromRows(params DoubleVector[] rows) =>
             FromRows(rows.AsSpan());

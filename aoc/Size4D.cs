@@ -77,41 +77,68 @@ namespace aoc
         public readonly long LongLength =>
             (long)width * height * depth * anakata;
 
-        public static Size4D Parse(string s) =>
-            Helper.Parse(s);
+        public static Size4D Parse(string s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(string s, out Size4D size) =>
             Helper.TryParse(s, out size);
 
-        public static Size4D Parse(string s, char separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, IFormatProvider provider, out Size4D size) =>
+            Helper.TryParse(s, provider, out size);
+
+        public static Size4D Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
+
+        public static bool TryParse(ReadOnlySpan<char> s, out Size4D size) =>
+            Helper.TryParse(s, out size);
+
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Size4D size) =>
+            Helper.TryParse(s, provider, out size);
+
+        public static Size4D Parse(string s, char separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, char separator, out Size4D size) =>
             Helper.TryParse(s, separator, out size);
 
-        public static Size4D Parse(string s, string separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, char separator, IFormatProvider provider, out Size4D size) =>
+            Helper.TryParse(s, separator, provider, out size);
+
+        public static Size4D Parse(string s, string separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, string separator, out Size4D size) =>
             Helper.TryParse(s, separator, out size);
 
-        public static Size4D Parse(string s, Regex separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, string separator, IFormatProvider provider, out Size4D size) =>
+            Helper.TryParse(s, separator, provider, out size);
+
+        public static Size4D Parse(string s, Regex separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, Regex separator, out Size4D size) =>
             Helper.TryParse(s, separator, out size);
 
-        public static Size4D ParseAny(string input) =>
-            Helper.ParseAny(input);
+        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out Size4D size) =>
+            Helper.TryParse(s, separator, provider, out size);
+
+        public static Size4D ParseAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseAny(input, provider);
 
         public static bool TryParseAny(string input, out Size4D size) =>
             Helper.TryParseAny(input, out size);
 
-        public static Size4D[] ParseAll(string input) =>
-            Helper.ParseAll(input);
+        public static bool TryParseAny(string input, IFormatProvider provider, out Size4D size) =>
+            Helper.TryParseAny(input, provider, out size);
+
+        public static Size4D[] ParseAll(string input, IFormatProvider provider = null) =>
+            Helper.ParseAll(input, provider);
 
         public static bool TryParseAll(string input, out Size4D[] sizes) =>
             Helper.TryParseAll(input, out sizes);
+
+        public static bool TryParseAll(string input, IFormatProvider provider, out Size4D[] sizes) =>
+            Helper.TryParseAll(input, provider, out sizes);
 
         private static Size4D FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1], values[2], values[3]);

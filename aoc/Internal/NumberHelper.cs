@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -6,17 +7,17 @@ namespace aoc.Internal
 {
     delegate bool TryParseNumber<T>(ReadOnlySpan<char> input, NumberStyles styles, IFormatProvider provider, out T value);
 
-    interface INumberHelper<T>
+    interface INumberHelper<T> : IItemHelper<T>
+        where T : struct, IFormattable
     {
         T NegativeOne { get; }
         T Zero { get; }
         T One { get; }
-
-        bool TryParse(ReadOnlySpan<char> input, out T value);
-        MatchCollection GetMatches(string input, out int count);
     }
 
-    abstract class NumberHelper<TSelf, T> : Singleton<TSelf>, INumberHelper<T> where TSelf : NumberHelper<TSelf, T>
+    abstract class NumberHelper<TSelf, T> : Singleton<TSelf>, INumberHelper<T>
+        where TSelf : NumberHelper<TSelf, T>
+        where T : struct, IFormattable
     {
         private readonly Lazy<Regex> _regex;
         private Regex Regex => _regex.Value;
@@ -31,10 +32,10 @@ namespace aoc.Internal
             _regex = new(() => new(pattern));
         }
 
-        public bool TryParse(ReadOnlySpan<char> input, out T value) =>
-            TryParseNumber(input, DefaultStyles, null, out value);
+        public bool TryParse(ReadOnlySpan<char> input, IFormatProvider provider, out T value) =>
+            TryParseNumber(input, DefaultStyles, provider, out value);
 
-        public MatchCollection GetMatches(string input, out int count)
+        public IEnumerable<Match> GetMatches(string input, out int count)
         {
             var result = Regex.Matches(input);
             count = result.Count;
@@ -51,6 +52,7 @@ namespace aoc.Internal
 
     abstract class IntegerHelper<TSelf, T> : NumberHelper<TSelf, T>
         where TSelf : IntegerHelper<TSelf, T>
+        where T : struct, IFormattable
     {
         protected IntegerHelper(TryParseNumber<T> tryParse, T negativeOne, T zero, T one)
             : base(tryParse, NumberStyles.Integer, negativeOne, zero, one, @"[-+]?\d+")
@@ -76,6 +78,7 @@ namespace aoc.Internal
 
     abstract class FloatHelper<TSelf, T> : NumberHelper<TSelf, T>
         where TSelf : FloatHelper<TSelf, T>
+        where T : struct, IFormattable
     {
         protected FloatHelper(TryParseNumber<T> tryParse, T negativeOne, T zero, T one)
             : base(tryParse, NumberStyles.Float, negativeOne, zero, one, @"[-+]?\d+(.\d+)?")

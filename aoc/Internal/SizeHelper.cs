@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
@@ -24,15 +23,9 @@ namespace aoc.Internal
         where TStrategy: SizeHelperStrategy<TStrategy, TSize, TVector, T>
     {
         protected SizeHelper(FromSpan<TSize, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number.TryParse)
+            : base(fromSpan, number)
         {
-            Number = number;
         }
-
-        protected sealed override MatchCollection GetMatches(string input, out int count) =>
-            Number.GetMatches(input, out count);
-
-        private INumberHelper<T> Number { get; }
     }
 
     sealed class Size2DHelperStrategy<TSize, TVector, T> : SizeHelperStrategy<Size2DHelperStrategy<TSize, TVector, T>, TSize, TVector, T>

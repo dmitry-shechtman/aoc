@@ -87,17 +87,30 @@ namespace aoc.Internal
     }
 
     delegate T FromSpan<T, TItem>(ReadOnlySpan<TItem> values);
-    delegate bool TryParse<T>(ReadOnlySpan<char> input, out T value);
 
-    abstract class Helper<T, TItem, TStrategy>
+    interface IItemHelper<T>
+        where T : struct, IFormattable
+    {
+        bool TryParse(ReadOnlySpan<char> input, IFormatProvider provider, out T value);
+        IEnumerable<Match> GetMatches(string input, out int count);
+    }
+
+    interface IParseHelper<T, TSeparator>
+        where T : struct, IFormattable
+    {
+        bool TryParse(ReadOnlySpan<char> input, TSeparator separator, IFormatProvider provider, out T value);
+    }
+
+    abstract class Helper<T, TItem, TStrategy, TItemHelper>
         where T : unmanaged, IReadOnlyCollection<TItem>
         where TItem : unmanaged, IFormattable
         where TStrategy : IHelperStrategy<T, TItem>
+        where TItemHelper : IItemHelper<TItem>
     {
-        protected Helper(FromSpan<T, TItem> fromSpan, TryParse<TItem> tryParse, int itemSize = 0)
+        protected Helper(FromSpan<T, TItem> fromSpan, TItemHelper item, int itemSize = 0)
         {
             FromSpan = fromSpan;
-            TryParseItem = tryParse;
+            Item = item;
             DefaultFormat = Strategy.DefaultFormat;
             DefaultSeparator = Strategy.DefaultSeparator;
             MinCount = Strategy.MinCount;
@@ -106,11 +119,11 @@ namespace aoc.Internal
         }
 
         public    FromSpan<T, TItem>  FromSpan         { get; }
-        private   TryParse<TItem>     TryParseItem     { get; }
+        protected TItemHelper         Item             { get; }
         private   string              DefaultFormat    { get; }
         public    char                DefaultSeparator { get; }
-        protected int                 MinCount         { get; }
-        protected int                 MaxCount         { get; }
+        public    int                 MinCount         { get; }
+        public    int                 MaxCount         { get; }
         private   int                 ItemSize         { get; }
 
         public T FromArray(params TItem[] values) =>
@@ -137,70 +150,90 @@ namespace aoc.Internal
             return sb.ToString();
         }
 
-        public T Parse(ReadOnlySpan<char> input) =>
-            Parse(input, DefaultSeparator);
+        public T Parse(ReadOnlySpan<char> input, IFormatProvider provider) =>
+            TryParse(input, provider, out T value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParse(ReadOnlySpan<char> input, out T value) =>
-            TryParse(input, DefaultSeparator, out value);
+            TryParse(input, provider: null, out value);
 
-        public T Parse(ReadOnlySpan<char> input, char separator) =>
-            TryParse(input, separator, out T value)
+        public bool TryParse(ReadOnlySpan<char> input, IFormatProvider provider, out T value) =>
+            TryParse(input, DefaultSeparator, provider, out value);
+
+        public T Parse(ReadOnlySpan<char> input, char separator, IFormatProvider provider) =>
+            TryParse(input, separator, provider, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(ReadOnlySpan<char> input, char separator, out T value)
+        public bool TryParse(ReadOnlySpan<char> input, char separator, out T value) =>
+            TryParse(input, separator, null, out value);
+
+        public bool TryParse(ReadOnlySpan<char> input, char separator, IFormatProvider provider, out T value)
         {
             Span<System.Range> split = stackalloc System.Range[MaxCount];
             int count = input.Split(split, separator, StringSplitOptions.TrimEntries);
-            return TryParse(input, split[..count], out value);
+            return TryParse(input, split[..count], provider, out value);
         }
 
-        public T Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator) =>
-            TryParse(input, separator, out T value)
+        public T Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, IFormatProvider provider) =>
+            TryParse(input, separator, provider, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, out T value)
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, out T value) =>
+            TryParse(input, separator, null, out value);
+
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, IFormatProvider provider, out T value)
         {
             Span<System.Range> split = stackalloc System.Range[MaxCount];
             int count = input.Split(split, separator, StringSplitOptions.TrimEntries);
-            return TryParse(input, split[..count], out value);
+            return TryParse(input, split[..count], provider, out value);
         }
 
-        public T Parse(string input, Regex separator) =>
-            TryParse(input, separator, out T value)
+        public T Parse(string input, Regex separator, IFormatProvider provider) =>
+            TryParse(input, separator, provider, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParse(string input, Regex separator, out T value) =>
-            TryParse(separator.Split(input)[1..^1], out value);
+            TryParse(input, separator, null, out value);
 
-        public T ParseAny(string input) =>
-            TryParseAny(input, out T value)
+        public bool TryParse(string input, Regex separator, IFormatProvider provider, out T value) =>
+            TryParse(separator.Split(input)[1..^1], provider, out value);
+
+        public T ParseAny(string input, IFormatProvider provider) =>
+            TryParseAny(input, provider, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParseAny(string input, out T value)
+        public bool TryParseAny(string input, out T value) =>
+            TryParseAny(input, null, out value);
+
+        public bool TryParseAny(string input, IFormatProvider provider, out T value)
         {
             value = default;
             return TryGetMatches(input, out var matches, out var matchCount, out _)
-                && TryParse(matches.GetEnumerator(), matchCount, out value);
+                && TryParse(matches.GetEnumerator(), provider, matchCount, out value);
         }
 
-        public T[] ParseAll(string input) =>
-            TryParseAll(input, out var value)
+        public T[] ParseAll(string input, IFormatProvider provider) =>
+            TryParseAll(input, provider, out var value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParseAll(string input, out T[] value) =>
-            TryParseAll(input, ItemSize, out value);
+        public bool TryParseAll(string input, out T[] values) =>
+            TryParseAll(input, null, out values);
 
-        public T[] ParseAll(string input, int itemSize) =>
-            TryParseAll(input, itemSize, out var value)
-                ? value
+        public bool TryParseAll(string input, IFormatProvider provider, out T[] values) =>
+            TryParseAll(input, provider, ItemSize, out values);
+
+        public T[] ParseAll(string input, IFormatProvider provider, int itemSize) =>
+            TryParseAll(input, provider, itemSize, out var values)
+                ? values
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public virtual bool TryParseAll(string input, int itemSize, out T[] values)
+        public virtual bool TryParseAll(string input, IFormatProvider provider, int itemSize, out T[] values)
         {
             values = default;
             var matches = GetMatches(input, out var matchCount);
@@ -210,47 +243,47 @@ namespace aoc.Internal
             values = new T[matchCount / itemSize];
             var enumerator = matches.GetEnumerator();
             for (int i = 0; i < values.Length; i++)
-                if (!TryParse(enumerator, itemSize, out values[i]))
+                if (!TryParse(enumerator, provider, itemSize, out values[i]))
                     return false;
             return true;
         }
 
-        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, out T value)
+        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, IFormatProvider provider, out T value)
         {
             value = default;
             if (split.Length < MinCount || split.Length > MaxCount)
                 return false;
             Span<TItem> values = stackalloc TItem[split.Length];
-            if (!TryParse(input, split, values))
+            if (!TryParse(input, split, provider, values))
                 return false;
             value = FromSpan(values);
             return true;
         }
 
-        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, Span<TItem> values)
+        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, IFormatProvider provider, Span<TItem> values)
         {
             for (int i = 0; i < split.Length; i++)
-                if (!TryParseItem(input[split[i]], out values[i]))
+                if (!Item.TryParse(input[split[i]], provider, out values[i]))
                     return false;
             return true;
         }
 
-        private bool TryParse(string[] ss, out T value)
+        private bool TryParse(string[] ss, IFormatProvider provider, out T value)
         {
             value = default;
             if (ss.Length < MinCount || ss.Length > MaxCount)
                 return false;
             Span<TItem> values = stackalloc TItem[ss.Length];
-            if (!TryParse(ss, values))
+            if (!TryParse(ss, provider, values))
                 return false;
             value = FromSpan(values);
             return true;
         }
 
-        private bool TryParse(string[] ss, Span<TItem> values)
+        private bool TryParse(string[] ss, IFormatProvider provider, Span<TItem> values)
         {
             for (int i = 0; i < ss.Length; i++)
-                if (!TryParseItem(ss[i], out values[i]))
+                if (!Item.TryParse(ss[i], provider, out values[i]))
                     return false;
             return true;
         }
@@ -261,34 +294,46 @@ namespace aoc.Internal
             return (chunkSize = GetChunkSize(count)) > 0;
         }
 
-        protected abstract IEnumerable<Match> GetMatches(string input, out int count);
+        public IEnumerable<Match> GetMatches(string input, out int count) =>
+            Item.GetMatches(input, out count);
 
         protected virtual int GetChunkSize(int count) =>
             count >= MinCount && count <= MaxCount
                 ? 1
                 : 0;
 
-        private bool TryParse(IEnumerator<Match> matches, int itemSize, out T value)
+        private bool TryParse(IEnumerator<Match> matches, IFormatProvider provider, int itemSize, out T value)
         {
             value = default;
             Span<TItem> items = stackalloc TItem[itemSize];
-            if (!TryParse(matches, items))
+            if (!TryParse(matches, provider, items))
                 return false;
             value = FromSpan(items);
             return true;
         }
 
-        protected bool TryParse(IEnumerator<Match> matches, Span<TItem> values)
+        public bool TryParse(IEnumerator<Match> matches, IFormatProvider provider, Span<TItem> values)
         {
             for (int i = 0; i < values.Length; i++)
             {
                 matches.MoveNext();
-                if (!TryParseItem(matches.Current.Value, out values[i]))
+                if (!Item.TryParse(matches.Current.Value, provider, out values[i]))
                     return false;
             }
             return true;
         }
 
         protected abstract TStrategy Strategy { get; }
+    }
+
+    abstract class Helper<T, TItem, TStrategy> : Helper<T, TItem, TStrategy, INumberHelper<TItem>>
+        where T : unmanaged, IReadOnlyCollection<TItem>
+        where TItem : unmanaged, IFormattable
+        where TStrategy : IHelperStrategy<T, TItem>
+    {
+        protected Helper(FromSpan<T, TItem> fromSpan, INumberHelper<TItem> number, int itemSize = 0)
+            : base(fromSpan, number, itemSize)
+        {
+        }
     }
 }

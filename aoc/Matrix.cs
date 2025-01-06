@@ -129,59 +129,95 @@ namespace aoc
         public readonly Vector C2 => new(m12, m22);
         public readonly Vector C3 => new(m13, m23);
 
-        public static Matrix Parse(string s) =>
-            Helper.Parse(s);
+        public static Matrix Parse(string s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(string s, out Matrix matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static Matrix Parse(string s, char separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, IFormatProvider provider, out Matrix matrix) =>
+            Helper.TryParse(s, provider, out matrix);
+
+        public static Matrix Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
+
+        public static bool TryParse(ReadOnlySpan<char> s, out Matrix matrix) =>
+            Helper.TryParse(s, out matrix);
+
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Matrix matrix) =>
+            Helper.TryParse(s, provider, out matrix);
+
+        public static Matrix Parse(string s, char separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, char separator, out Matrix matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static Matrix Parse(string s, string separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, char separator, IFormatProvider provider, out Matrix matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static Matrix Parse(string s, string separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, string separator, out Matrix matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static Matrix Parse(string s, Regex separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, string separator, IFormatProvider provider, out Matrix matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static Matrix Parse(string s, Regex separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, Regex separator, out Matrix matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static Matrix Parse(string s, char separator, char separator2) =>
-            Helper.Parse(s, separator, separator2);
+        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out Matrix matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static Matrix Parse(string s, char separator, char separator2, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, separator2, provider);
 
         public static bool TryParse(string s, char separator, char separator2, out Matrix matrix) =>
             Helper.TryParse(s, separator, separator2, out matrix);
 
-        public static Matrix ParseRowsAny(string input) =>
-            Helper.ParseRowsAny(input);
+        public static bool TryParse(string s, char separator, char separator2, IFormatProvider provider, out Matrix matrix) =>
+            Helper.TryParse(s, separator, separator2, provider, out matrix);
+
+        public static Matrix ParseRowsAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseRowsAny(input, provider);
 
         public static bool TryParseRowsAny(string input, out Matrix matrix) =>
             Helper.TryParseRowsAny(input, out matrix);
 
-        public static Matrix[] ParseRowsAll(string input, int rowCount = 2, int columnCount = 2) =>
-            Helper.ParseRowsAll(input, rowCount, columnCount);
+        public static bool TryParseRowsAny(string input, IFormatProvider provider, out Matrix matrix) =>
+            Helper.TryParseRowsAny(input, provider, out matrix);
+
+        public static Matrix[] ParseRowsAll(string input, IFormatProvider provider = null, int rowCount = 2, int columnCount = 2) =>
+            Helper.ParseRowsAll(input, provider, rowCount, columnCount);
 
         public static bool TryParseRowsAll(string input, out Matrix[] matrices) =>
             Helper.TryParseRowsAll(input, out matrices);
 
-        public static Matrix ParseColumnsAny(string input) =>
-            Helper.ParseColumnsAny(input);
+        public static bool TryParseRowsAll(string input, IFormatProvider provider, out Matrix[] matrices) =>
+            Helper.TryParseRowsAll(input, provider, out matrices);
+
+        public static Matrix ParseColumnsAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseColumnsAny(input, provider);
 
         public static bool TryParseColumnsAny(string input, out Matrix matrix) =>
             Helper.TryParseColumnsAny(input, out matrix);
 
-        public static Matrix[] ParseColumnsAll(string input, int columnCount = 2, int rowCount = 2) =>
-            Helper.ParseColumnsAll(input, columnCount, rowCount);
+        public static bool TryParseColumnsAny(string input, IFormatProvider provider, out Matrix matrix) =>
+            Helper.TryParseColumnsAny(input, provider, out matrix);
+
+        public static Matrix[] ParseColumnsAll(string input, IFormatProvider provider = null, int columnCount = 2, int rowCount = 2) =>
+            Helper.ParseColumnsAll(input, provider, columnCount, rowCount);
 
         public static bool TryParseColumnsAll(string input, out Matrix[] matrices) =>
             Helper.TryParseColumnsAll(input, out matrices);
+
+        public static bool TryParseColumnsAll(string input, IFormatProvider provider, out Matrix[] matrices) =>
+            Helper.TryParseColumnsAll(input, provider, out matrices);
 
         public static Matrix FromRows(params Vector[] rows) =>
             FromRows(rows.AsSpan());

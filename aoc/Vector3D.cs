@@ -98,41 +98,68 @@ namespace aoc
         public readonly int Y => y;
         public readonly int Z => z;
 
-        public static Vector3D Parse(string s) =>
-            Helper.Parse(s);
+        public static Vector3D Parse(string s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(string s, out Vector3D vector) =>
             Helper.TryParse(s, out vector);
 
-        public static Vector3D Parse(string s, char separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, IFormatProvider provider, out Vector3D vector) =>
+            Helper.TryParse(s, provider, out vector);
+
+        public static Vector3D Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
+
+        public static bool TryParse(ReadOnlySpan<char> s, out Vector3D vector) =>
+            Helper.TryParse(s, out vector);
+
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Vector3D vector) =>
+            Helper.TryParse(s, provider, out vector);
+
+        public static Vector3D Parse(string s, char separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, char separator, out Vector3D vector) =>
             Helper.TryParse(s, separator, out vector);
 
-        public static Vector3D Parse(string s, string separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, char separator, IFormatProvider provider, out Vector3D vector) =>
+            Helper.TryParse(s, separator, provider, out vector);
+
+        public static Vector3D Parse(string s, string separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, string separator, out Vector3D vector) =>
             Helper.TryParse(s, separator, out vector);
 
-        public static Vector3D Parse(string s, Regex separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, string separator, IFormatProvider provider, out Vector3D vector) =>
+            Helper.TryParse(s, separator, provider, out vector);
+
+        public static Vector3D Parse(string s, Regex separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, Regex separator, out Vector3D vector) =>
             Helper.TryParse(s, separator, out vector);
 
-        public static Vector3D ParseAny(string input) =>
-            Helper.ParseAny(input);
+        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out Vector3D vector) =>
+            Helper.TryParse(s, separator, provider, out vector);
+
+        public static Vector3D ParseAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseAny(input, provider);
 
         public static bool TryParseAny(string input, out Vector3D vector) =>
             Helper.TryParseAny(input, out vector);
 
-        public static Vector3D[] ParseAll(string input) =>
-            Helper.ParseAll(input);
+        public static bool TryParseAny(string input, IFormatProvider provider, out Vector3D vector) =>
+            Helper.TryParseAny(input, provider, out vector);
+
+        public static Vector3D[] ParseAll(string input, IFormatProvider provider = null) =>
+            Helper.ParseAll(input, provider);
 
         public static bool TryParseAll(string input, out Vector3D[] vectors) =>
             Helper.TryParseAll(input, out vectors);
+
+        public static bool TryParseAll(string input, IFormatProvider provider, out Vector3D[] vectors) =>
+            Helper.TryParseAll(input, provider, out vectors);
 
         private static Vector3D FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1], values[2]);

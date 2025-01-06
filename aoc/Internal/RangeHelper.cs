@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
@@ -33,15 +32,9 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public RangeHelper(FromSpan<TRange, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number.TryParse)
+            : base(fromSpan, number)
         {
-            Number = number;
         }
-
-        private INumberHelper<T> Number { get; }
-
-        protected override MatchCollection GetMatches(string input, out int count) =>
-            Number.GetMatches(input, out count);
 
         protected override RangeHelperStrategy<TRange, T> Strategy =>
             RangeHelperStrategy<TRange, T>.Instance;

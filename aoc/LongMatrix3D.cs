@@ -158,59 +158,95 @@ namespace aoc
         public readonly LongVector3D C3 => new(m13, m23, m33);
         public readonly LongVector3D C4 => new(m14, m24, m34);
 
-        public static LongMatrix3D Parse(string s) =>
-            Helper.Parse(s);
+        public static LongMatrix3D Parse(string s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(string s, out LongMatrix3D matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static LongMatrix3D Parse(string s, char separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, IFormatProvider provider, out LongMatrix3D matrix) =>
+            Helper.TryParse(s, provider, out matrix);
+
+        public static LongMatrix3D Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
+            Helper.Parse(s, provider);
+
+        public static bool TryParse(ReadOnlySpan<char> s, out LongMatrix3D matrix) =>
+            Helper.TryParse(s, out matrix);
+
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongMatrix3D matrix) =>
+            Helper.TryParse(s, provider, out matrix);
+
+        public static LongMatrix3D Parse(string s, char separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, char separator, out LongMatrix3D matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static LongMatrix3D Parse(string s, string separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, char separator, IFormatProvider provider, out LongMatrix3D matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static LongMatrix3D Parse(string s, string separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, string separator, out LongMatrix3D matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static LongMatrix3D Parse(string s, Regex separator) =>
-            Helper.Parse(s, separator);
+        public static bool TryParse(string s, string separator, IFormatProvider provider, out LongMatrix3D matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static LongMatrix3D Parse(string s, Regex separator, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, provider);
 
         public static bool TryParse(string s, Regex separator, out LongMatrix3D matrix) =>
             Helper.TryParse(s, separator, out matrix);
 
-        public static LongMatrix3D Parse(string s, char separator, char separator2) =>
-            Helper.Parse(s, separator, separator2);
+        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out LongMatrix3D matrix) =>
+            Helper.TryParse(s, separator, provider, out matrix);
+
+        public static LongMatrix3D Parse(string s, char separator, char separator2, IFormatProvider provider = null) =>
+            Helper.Parse(s, separator, separator2, provider);
 
         public static bool TryParse(string s, char separator, char separator2, out LongMatrix3D matrix) =>
             Helper.TryParse(s, separator, separator2, out matrix);
 
-        public static LongMatrix3D ParseRowsAny(string input) =>
-            Helper.ParseRowsAny(input);
+        public static bool TryParse(string s, char separator, char separator2, IFormatProvider provider, out LongMatrix3D matrix) =>
+            Helper.TryParse(s, separator, separator2, provider, out matrix);
+
+        public static LongMatrix3D ParseRowsAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseRowsAny(input, provider);
 
         public static bool TryParseRowsAny(string input, out LongMatrix3D matrix) =>
             Helper.TryParseRowsAny(input, out matrix);
 
-        public static LongMatrix3D[] ParseRowsAll(string input, int rowCount = 3, int columnCount = 3) =>
-            Helper.ParseRowsAll(input, rowCount, columnCount);
+        public static bool TryParseRowsAny(string input, IFormatProvider provider, out LongMatrix3D matrix) =>
+            Helper.TryParseRowsAny(input, provider, out matrix);
+
+        public static LongMatrix3D[] ParseRowsAll(string input, IFormatProvider provider = null, int rowCount = 3, int columnCount = 3) =>
+            Helper.ParseRowsAll(input, provider, rowCount, columnCount);
 
         public static bool TryParseRowsAll(string input, out LongMatrix3D[] matrices) =>
             Helper.TryParseRowsAll(input, out matrices);
 
-        public static LongMatrix3D ParseColumnsAny(string input) =>
-            Helper.ParseColumnsAny(input);
+        public static bool TryParseRowsAll(string input, IFormatProvider provider, out LongMatrix3D[] matrices) =>
+            Helper.TryParseRowsAll(input, provider, out matrices);
+
+        public static LongMatrix3D ParseColumnsAny(string input, IFormatProvider provider = null) =>
+            Helper.ParseColumnsAny(input, provider);
 
         public static bool TryParseColumnsAny(string input, out LongMatrix3D matrix) =>
             Helper.TryParseColumnsAny(input, out matrix);
 
-        public static LongMatrix3D[] ParseColumnsAll(string input, int columnCount = 3, int rowCount = 3) =>
-            Helper.ParseColumnsAll(input, columnCount, rowCount);
+        public static bool TryParseColumnsAny(string input, IFormatProvider provider, out LongMatrix3D matrix) =>
+            Helper.TryParseColumnsAny(input, provider, out matrix);
+
+        public static LongMatrix3D[] ParseColumnsAll(string input, IFormatProvider provider = null, int columnCount = 3, int rowCount = 3) =>
+            Helper.ParseColumnsAll(input, provider, columnCount, rowCount);
 
         public static bool TryParseColumnsAll(string input, out LongMatrix3D[] matrices) =>
             Helper.TryParseColumnsAll(input, out matrices);
+
+        public static bool TryParseColumnsAll(string input, IFormatProvider provider, out LongMatrix3D[] matrices) =>
+            Helper.TryParseColumnsAll(input, provider, out matrices);
 
         public static LongMatrix3D FromRows(params LongVector3D[] rows) =>
             FromRows(rows.AsSpan());
