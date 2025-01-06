@@ -14,7 +14,9 @@ namespace aoc
 
         internal static Helper Helper => _helper.Value;
 
-        public static readonly LongVector3D Zero  = default;
+        public static LongVector3D NegativeOne => Helper.NOne;
+        public static LongVector3D Zero        => default;
+        public static LongVector3D One         => Helper.POne;
 
         public static readonly LongVector3D North = Helper.North;
         public static readonly LongVector3D East  = Helper.East;
@@ -22,6 +24,9 @@ namespace aoc
         public static readonly LongVector3D West  = Helper.West;
         public static readonly LongVector3D Up    = Helper.Up;
         public static readonly LongVector3D Down  = Helper.Down;
+
+        public static LongVector3D AdditiveIdentity       => Zero;
+        public static LongVector3D MultiplicativeIdentity => One;
 
         public readonly long x;
         public readonly long y;

@@ -26,7 +26,7 @@ namespace aoc
         }
 
         public Vector4DRange(Size4D size)
-            : this((Vector4D)size - (1, 1, 1, 1))
+            : this((Vector4D)size - Vector4D.One)
         {
         }
 

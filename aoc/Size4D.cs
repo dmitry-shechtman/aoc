@@ -41,7 +41,7 @@ namespace aoc
         }
 
         public Size4D(Vector4DRange range)
-            : this(range.Max + (1, 1, 1, 1))
+            : this(range.Max + Vector4D.One)
         {
         }
 

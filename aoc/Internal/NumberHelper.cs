@@ -8,7 +8,7 @@ namespace aoc.Internal
 
     interface INumberHelper<T>
     {
-        T MinusOne { get; }
+        T NegativeOne { get; }
         T Zero { get; }
         T One { get; }
 
@@ -21,11 +21,11 @@ namespace aoc.Internal
         private readonly Lazy<Regex> _regex;
         private Regex Regex => _regex.Value;
 
-        protected NumberHelper(TryParseNumber<T> tryParse, NumberStyles defaultStyles, T minusOne, T zero, T one, string pattern)
+        protected NumberHelper(TryParseNumber<T> tryParse, NumberStyles defaultStyles, T negativeOne, T zero, T one, string pattern)
         {
             TryParseNumber = tryParse;
             DefaultStyles = defaultStyles;
-            MinusOne = minusOne;
+            NegativeOne = negativeOne;
             Zero = zero;
             One = one;
             _regex = new(() => new(pattern));
@@ -44,7 +44,7 @@ namespace aoc.Internal
         private TryParseNumber<T> TryParseNumber { get; }
         private NumberStyles DefaultStyles { get; }
 
-        public T MinusOne { get; }
+        public T NegativeOne { get; }
         public T Zero { get; }
         public T One { get; }
     }
@@ -52,8 +52,8 @@ namespace aoc.Internal
     abstract class IntegerHelper<TSelf, T> : NumberHelper<TSelf, T>
         where TSelf : IntegerHelper<TSelf, T>
     {
-        protected IntegerHelper(TryParseNumber<T> tryParse, T minusOne, T zero, T one)
-            : base(tryParse, NumberStyles.Integer, minusOne, zero, one, @"[-+]?\d+")
+        protected IntegerHelper(TryParseNumber<T> tryParse, T negativeOne, T zero, T one)
+            : base(tryParse, NumberStyles.Integer, negativeOne, zero, one, @"[-+]?\d+")
         {
         }
     }
@@ -77,8 +77,8 @@ namespace aoc.Internal
     abstract class FloatHelper<TSelf, T> : NumberHelper<TSelf, T>
         where TSelf : FloatHelper<TSelf, T>
     {
-        protected FloatHelper(TryParseNumber<T> tryParse, T minusOne, T zero, T one)
-            : base(tryParse, NumberStyles.Float, minusOne, zero, one, @"[-+]?\d+(.\d+)?")
+        protected FloatHelper(TryParseNumber<T> tryParse, T negativeOne, T zero, T one)
+            : base(tryParse, NumberStyles.Float, negativeOne, zero, one, @"[-+]?\d+(.\d+)?")
         {
         }
     }

@@ -14,7 +14,9 @@ namespace aoc
 
         internal static Helper Helper => _helper.Value;
 
-        public static readonly Vector Zero      = default;
+        public static Vector NegativeOne      => Helper.NOne;
+        public static Vector Zero             => default;
+        public static Vector One              => Helper.POne;
 
         public static readonly Vector North     = Helper.North;
         public static readonly Vector East      = Helper.East;
@@ -30,6 +32,9 @@ namespace aoc
         public static readonly Vector NorthEast = ( 1, -1);
         public static readonly Vector SouthWest = (-1,  1);
         public static readonly Vector SouthEast = ( 1,  1);
+
+        public static Vector AdditiveIdentity       => Zero;
+        public static Vector MultiplicativeIdentity => One;
 
         public readonly int x;
         public readonly int y;

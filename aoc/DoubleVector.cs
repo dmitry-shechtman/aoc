@@ -14,12 +14,17 @@ namespace aoc
 
         internal static Helper Helper => _helper.Value;
 
-        public static readonly DoubleVector Zero      = default;
+        public static DoubleVector NegativeOne => Helper.NOne;
+        public static DoubleVector Zero        => default;
+        public static DoubleVector One         => Helper.POne;
 
         public static readonly DoubleVector North     = Helper.North;
         public static readonly DoubleVector East      = Helper.East;
         public static readonly DoubleVector South     = Helper.South;
         public static readonly DoubleVector West      = Helper.West;
+
+        public static DoubleVector AdditiveIdentity       => Zero;
+        public static DoubleVector MultiplicativeIdentity => One;
 
         public readonly double x;
         public readonly double y;

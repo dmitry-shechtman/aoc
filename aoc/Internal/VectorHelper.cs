@@ -58,9 +58,9 @@ namespace aoc.Internal
 
         private INumberHelper<T> Number { get; }
 
-        protected T MinusOne => Number.MinusOne;
-        protected T Zero     => Number.Zero;
-        protected T One      => Number.One;
+        protected T NegativeOne => Number.NegativeOne;
+        protected T Zero        => Number.Zero;
+        protected T One         => Number.One;
     }
 
     sealed class Vector2DHelperStrategy<TVector, T> : VectorHelperStrategy<Vector2DHelperStrategy<TVector, T>, TVector, T>
@@ -80,15 +80,19 @@ namespace aoc.Internal
         public Vector2DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
             : base(fromSpan, number)
         {
-            North = FromArray(Zero,     MinusOne, Zero);
-            East  = FromArray(One,      Zero,     Zero);
-            South = FromArray(Zero,     One,      Zero);
-            West  = FromArray(MinusOne, Zero,     Zero);
+            POne  = FromArray(One,         One,         One);
+            NOne  = FromArray(NegativeOne, NegativeOne, NegativeOne);
+            North = FromArray(Zero,        NegativeOne, Zero);
+            East  = FromArray(One,         Zero,        Zero);
+            South = FromArray(Zero,        One,         Zero);
+            West  = FromArray(NegativeOne, Zero,        Zero);
         }
 
         protected override Vector2DHelperStrategy<TVector, T> Strategy =>
             Vector2DHelperStrategy<TVector, T>.Instance;
 
+        public TVector POne  { get; }
+        public TVector NOne  { get; }
         public TVector North { get; }
         public TVector East  { get; }
         public TVector South { get; }
@@ -112,17 +116,21 @@ namespace aoc.Internal
         public Vector3DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
             : base(fromSpan, number)
         {
-            North = FromArray(Zero,     MinusOne, Zero);
-            East  = FromArray(One,      Zero,     Zero);
-            South = FromArray(Zero,     One,      Zero);
-            West  = FromArray(MinusOne, Zero,     Zero);
-            Up    = FromArray(Zero,     Zero,     MinusOne);
-            Down  = FromArray(Zero,     Zero,     One);
+            POne  = FromArray(One,         One,         One);
+            NOne  = FromArray(NegativeOne, NegativeOne, NegativeOne);
+            North = FromArray(Zero,        NegativeOne, Zero);
+            East  = FromArray(One,         Zero,        Zero);
+            South = FromArray(Zero,        One,         Zero);
+            West  = FromArray(NegativeOne, Zero,        Zero);
+            Up    = FromArray(Zero,        Zero,        NegativeOne);
+            Down  = FromArray(Zero,        Zero,        One);
         }
 
         protected override Vector3DHelperStrategy<TVector, T> Strategy =>
             Vector3DHelperStrategy<TVector, T>.Instance;
 
+        public TVector POne  { get; }
+        public TVector NOne  { get; }
         public TVector North { get; }
         public TVector East  { get; }
         public TVector South { get; }
@@ -148,19 +156,23 @@ namespace aoc.Internal
         public Vector4DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
             : base(fromSpan, number)
         {
-            North = FromArray(Zero,     MinusOne, Zero,     Zero);
-            East  = FromArray(One,      Zero,     Zero,     Zero);
-            South = FromArray(Zero,     One,      Zero,     Zero);
-            West  = FromArray(MinusOne, Zero,     Zero,     Zero);
-            Up    = FromArray(Zero,     Zero,     MinusOne, Zero);
-            Down  = FromArray(Zero,     Zero,     One,      Zero);
-            Ana   = FromArray(Zero,     Zero,     Zero,     MinusOne);
-            Kata  = FromArray(Zero,     Zero,     Zero,     One);
+            POne  = FromArray(One,         One,         One,         NegativeOne);
+            NOne  = FromArray(NegativeOne, NegativeOne, NegativeOne, NegativeOne);
+            North = FromArray(Zero,        NegativeOne, Zero,        Zero);
+            East  = FromArray(One,         Zero,        Zero,        Zero);
+            South = FromArray(Zero,        One,         Zero,        Zero);
+            West  = FromArray(NegativeOne, Zero,        Zero,        Zero);
+            Up    = FromArray(Zero,        Zero,        NegativeOne, Zero);
+            Down  = FromArray(Zero,        Zero,        One,         Zero);
+            Ana   = FromArray(Zero,        Zero,        Zero,        NegativeOne);
+            Kata  = FromArray(Zero,        Zero,        Zero,        One);
         }
 
         protected override Vector4DHelperStrategy<TVector, T> Strategy =>
             Vector4DHelperStrategy<TVector, T>.Instance;
 
+        public TVector POne  { get; }
+        public TVector NOne  { get; }
         public TVector North { get; }
         public TVector East  { get; }
         public TVector South { get; }

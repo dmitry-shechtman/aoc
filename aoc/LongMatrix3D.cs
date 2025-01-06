@@ -12,8 +12,11 @@ namespace aoc
 
         private static Helper Helper => _helper.Value;
 
-        public static readonly LongMatrix3D Zero             = default;
-        public static readonly LongMatrix3D Identity         = Helper.Identity;
+        public static LongMatrix3D Zero             => default;
+        public static LongMatrix3D Identity         => Helper.Identity;
+
+        public static LongMatrix3D AdditiveIdentity       => Zero;
+        public static LongMatrix3D MultiplicativeIdentity => Identity;
 
         public readonly long m11;
         public readonly long m12;

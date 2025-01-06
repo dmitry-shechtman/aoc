@@ -26,7 +26,7 @@ namespace aoc
         }
 
         public Vector3DRange(Size3D size)
-            : this((Vector3D)size - (1, 1, 1))
+            : this((Vector3D)size - Vector3D.One)
         {
         }
 

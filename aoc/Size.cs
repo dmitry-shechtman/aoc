@@ -27,7 +27,7 @@ namespace aoc
         }
 
         public Size(VectorRange range)
-            : this(range.Max + (1, 1))
+            : this(range.Max + Vector.One)
         {
         }
 

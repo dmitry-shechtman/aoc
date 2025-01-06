@@ -12,8 +12,11 @@ namespace aoc
 
         private static Helper Helper => _helper.Value;
 
-        public static readonly Matrix3D Zero             = default;
-        public static readonly Matrix3D Identity         = Helper.Identity;
+        public static Matrix3D Zero             => default;
+        public static Matrix3D Identity         => Helper.Identity;
+
+        public static Matrix3D AdditiveIdentity       => Zero;
+        public static Matrix3D MultiplicativeIdentity => Identity;
 
         public readonly int m11;
         public readonly int m12;

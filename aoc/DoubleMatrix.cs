@@ -12,13 +12,16 @@ namespace aoc
 
         private static Helper Helper => _helper.Value;
 
-        public static readonly DoubleMatrix Zero             = default;
-        public static readonly DoubleMatrix Identity         = Helper.Identity;
-        public static readonly DoubleMatrix RotateRight      = Helper.RotateRight;
-        public static readonly DoubleMatrix RotateLeft       = Helper.RotateLeft;
-        public static readonly DoubleMatrix MirrorHorizontal = Helper.MirrorHorizontal;
-        public static readonly DoubleMatrix MirrorVertical   = Helper.MirrorVertical;
-        public static readonly DoubleMatrix Flip             = Helper.Flip;
+        public static DoubleMatrix Zero             => default;
+        public static DoubleMatrix Identity         => Helper.Identity;
+        public static DoubleMatrix RotateRight      => Helper.RotateRight;
+        public static DoubleMatrix RotateLeft       => Helper.RotateLeft;
+        public static DoubleMatrix MirrorHorizontal => Helper.MirrorHorizontal;
+        public static DoubleMatrix MirrorVertical   => Helper.MirrorVertical;
+        public static DoubleMatrix Flip             => Helper.Flip;
+
+        public static DoubleMatrix AdditiveIdentity       => Zero;
+        public static DoubleMatrix MultiplicativeIdentity => Identity;
 
         public readonly double m11;
         public readonly double m12;
