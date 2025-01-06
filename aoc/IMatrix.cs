@@ -42,6 +42,13 @@ namespace aoc
             GetRowEnumerator();
     }
 
+    public interface IIntegerMatrix<TSelf, TVector, T>: IMatrix<TSelf, TVector, T>
+        where TSelf : struct, IIntegerMatrix<TSelf, TVector, T>
+        where TVector : struct, IIntegerVector<TVector, TSelf, T>
+        where T : struct
+    {
+    }
+
     public interface IMatrix2D<TSelf, TVector, T> : IMatrix<TSelf, TVector, T>
         where TSelf : struct, IMatrix2D<TSelf, TVector, T>
         where TVector : struct, IVector<TVector, TSelf, T>, IVector2D<TVector, T>

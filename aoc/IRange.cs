@@ -53,6 +53,13 @@ namespace aoc
             GetEnumerator();
     }
 
+    public interface IIntegerRange<TSelf, TVector, T> : IIntegerRange<TSelf, TVector>
+        where TSelf : struct, IIntegerRange<TSelf, TVector, T>
+        where TVector : struct, IIntegerVector<TVector, T>
+        where T : struct
+    {
+    }
+
     public interface IRange2D<TSelf, TVector, T> : IRange<TSelf, TVector, T>, ISize2D<TSelf, T>
         where TSelf : struct, IRange2D<TSelf, TVector, T>
         where TVector : struct, IVector2D<TVector, T>

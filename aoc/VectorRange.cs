@@ -7,7 +7,7 @@ namespace aoc
 {
     using Helper = Internal.RangeHelper<VectorRange, Vector, int>;
 
-    public readonly struct VectorRange : IIntegerRange<VectorRange, Vector>, IRange2D<VectorRange, Vector, int>
+    public readonly struct VectorRange : IIntegerRange<VectorRange, Vector, int>, IRange2D<VectorRange, Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromSpan, Vector.Helper));

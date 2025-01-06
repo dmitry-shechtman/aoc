@@ -29,12 +29,26 @@ namespace aoc
             GetEnumerator();
     }
 
+    public interface IIntegerVector<TSelf, T> : IVector<TSelf, T>
+        where TSelf : struct, IIntegerVector<TSelf, T>
+        where T : struct
+    {
+        TSelf Mod(TSelf other);
+    }
+
     public interface IVector<TSelf, TMatrix, T> : IVector<TSelf, T>
         where TSelf : struct, IVector<TSelf, TMatrix, T>
         where TMatrix : struct, IMatrix<TMatrix, TSelf, T>
         where T : struct
     {
         TSelf Mul(TMatrix matrix);
+    }
+
+    public interface IIntegerVector<TSelf, TMatrix, T> : IVector<TSelf, TMatrix, T>, IIntegerVector<TSelf, T>
+        where TSelf : struct, IIntegerVector<TSelf, TMatrix, T>
+        where TMatrix : struct, IIntegerMatrix<TMatrix, TSelf, T>
+        where T : struct
+    {
     }
 
     public interface IVector2D<TSelf, T> : IVector<TSelf, T>

@@ -7,7 +7,7 @@ namespace aoc
     using Helper = Internal.Vector3DHelper<Vector3D, int>;
 
     [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
-    public readonly struct Vector3D : IVector<Vector3D, Matrix3D, int>, IVector3D<Vector3D, Vector, int>
+    public readonly struct Vector3D : IIntegerVector<Vector3D, Matrix3D, int>, IVector3D<Vector3D, Vector, int>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromSpan, Internal.Int32Helper.Instance));

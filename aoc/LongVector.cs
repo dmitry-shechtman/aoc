@@ -7,7 +7,7 @@ namespace aoc
     using Helper = Internal.Vector2DHelper<LongVector, long>;
 
     [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
-    public readonly struct LongVector : IVector<LongVector, LongMatrix, long>, IVector2D<LongVector, long>
+    public readonly struct LongVector : IIntegerVector<LongVector, LongMatrix, long>, IVector2D<LongVector, long>
     {
         private static readonly Lazy<Helper> _helper =
             new(() => new(FromSpan, Internal.Int64Helper.Instance));
