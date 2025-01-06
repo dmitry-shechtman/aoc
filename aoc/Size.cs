@@ -8,7 +8,7 @@ namespace aoc
     public readonly struct Size : ISize2D<Size, Vector, int>, IIntegerSize<Size, Vector>
     {
         private static readonly Lazy<Helper> _helper =
-            new(() => new(FromSpan, int.TryParse, Internal.Int32Helper.Instance));
+            new(() => new(FromSpan, Internal.Int32Helper.Instance));
 
         private static Helper Helper => _helper.Value;
 
