@@ -18,10 +18,10 @@ namespace aoc
         public static DoubleVector Zero        => default;
         public static DoubleVector One         => Helper.POne;
 
-        public static readonly DoubleVector North     = Helper.North;
-        public static readonly DoubleVector East      = Helper.East;
-        public static readonly DoubleVector South     = Helper.South;
-        public static readonly DoubleVector West      = Helper.West;
+        public static DoubleVector North       => Helper.North;
+        public static DoubleVector East        => Helper.East;
+        public static DoubleVector South       => Helper.South;
+        public static DoubleVector West        => Helper.West;
 
         public static DoubleVector AdditiveIdentity       => Zero;
         public static DoubleVector MultiplicativeIdentity => One;

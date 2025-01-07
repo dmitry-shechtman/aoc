@@ -7,8 +7,6 @@ namespace aoc
         where TSelf : struct, IRange<TSelf, T>
         where T : struct
     {
-        private const int Cardinality = 2;
-
         T Min { get; }
         T Max { get; }
 
@@ -31,8 +29,7 @@ namespace aoc
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
 
-        int IReadOnlyCollection<T>.Count =>
-            Cardinality;
+        int IReadOnlyCollection<T>.Count => 2;
     }
 
     public interface IRange<TSelf, TVector, T> : IRange<TSelf, TVector>

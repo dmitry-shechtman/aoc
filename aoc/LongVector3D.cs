@@ -18,12 +18,12 @@ namespace aoc
         public static LongVector3D Zero        => default;
         public static LongVector3D One         => Helper.POne;
 
-        public static readonly LongVector3D North = Helper.North;
-        public static readonly LongVector3D East  = Helper.East;
-        public static readonly LongVector3D South = Helper.South;
-        public static readonly LongVector3D West  = Helper.West;
-        public static readonly LongVector3D Up    = Helper.Up;
-        public static readonly LongVector3D Down  = Helper.Down;
+        public static LongVector3D North       => Helper.North;
+        public static LongVector3D East        => Helper.East;
+        public static LongVector3D South       => Helper.South;
+        public static LongVector3D West        => Helper.West;
+        public static LongVector3D Up          => Helper.Up;
+        public static LongVector3D Down        => Helper.Down;
 
         public static LongVector3D AdditiveIdentity       => Zero;
         public static LongVector3D MultiplicativeIdentity => One;

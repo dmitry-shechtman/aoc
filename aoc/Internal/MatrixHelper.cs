@@ -40,9 +40,12 @@ namespace aoc.Internal
         where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
         where TVectorHelper : IVectorHelper<TVector, T>
     {
-        protected MatrixHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, TVectorHelper vector)
+        protected MatrixHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, TVectorHelper vector,
+                TMatrix pOne, TMatrix nOne)
             : base(fromRows, vector)
         {
+            POne = pOne;
+            NOne = nOne;
             FromColumnSpan = fromColumns;
         }
 
@@ -125,6 +128,9 @@ namespace aoc.Internal
             return vectors;
         }
 
+        public TMatrix POne { get; }
+        public TMatrix NOne { get; }
+
         private FromSpan<TMatrix, TVector> FromColumnSpan { get; }
     }
 
@@ -146,9 +152,10 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Matrix2DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector2DHelper<TVector, T> vector)
-            : base(fromRows, fromColumns, vector)
+            : base(fromRows, fromColumns, vector,
+                  pOne: fromRows(new[] { vector.East, vector.South }),
+                  nOne: fromRows(new[] { vector.West, vector.North }))
         {
-            Identity         = FromRows(Vector.East,  Vector.South);
             RotateRight      = FromRows(Vector.South, Vector.West);
             RotateLeft       = FromRows(Vector.North, Vector.East);
             MirrorHorizontal = FromRows(Vector.East,  Vector.North);
@@ -156,7 +163,6 @@ namespace aoc.Internal
             Flip             = FromRows(Vector.West,  Vector.North);
         }
 
-        public TMatrix Identity         { get; }
         public TMatrix RotateRight      { get; }
         public TMatrix RotateLeft       { get; }
         public TMatrix MirrorHorizontal { get; }
@@ -171,7 +177,7 @@ namespace aoc.Internal
 
         public TMatrix Rotate(int degrees) => degrees switch
         {
-            0           => Identity,
+            0           => POne,
             90  or -270 => RotateRight,
             180 or -180 => Flip,
             270 or  -90 => RotateLeft,
@@ -208,12 +214,11 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Matrix3DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector3DHelper<TVector, T> vector)
-            : base(fromRows, fromColumns, vector)
+            : base(fromRows, fromColumns, vector,
+                  pOne: fromRows(new[] { vector.East, vector.South, vector.Down }),
+                  nOne: fromRows(new[] { vector.West, vector.North, vector.Up }))
         {
-            Identity = FromRows(Vector.East, Vector.South, Vector.Down);
         }
-
-        public TMatrix Identity { get; }
 
         public TMatrix Translate(T x, T y, T z) =>
             Translate(Vector.FromArray(x, y, z));

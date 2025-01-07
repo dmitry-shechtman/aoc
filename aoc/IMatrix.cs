@@ -12,8 +12,6 @@ namespace aoc
         void Deconstruct(out TVector r1, out TVector r2);
         void Deconstruct(out TVector r1, out TVector r2, out TVector r3);
 
-        int Cardinality { get; }
-
         TVector GetRow(int index);
         TVector GetColumn(int index);
         T GetElement(int row, int column);
@@ -25,9 +23,6 @@ namespace aoc
 
         TVector IReadOnlyList<TVector>.this[int index] =>
             GetRow(index);
-
-        int IReadOnlyCollection<TVector>.Count =>
-            Cardinality + 1;
 
         IEnumerator<TVector> GetRowEnumerator() =>
             EnumerateRows().GetEnumerator();
@@ -54,8 +49,6 @@ namespace aoc
         where TVector : struct, IVector<TVector, TSelf, T>, IVector2D<TVector, T>
         where T : struct
     {
-        int IMatrix<TSelf, TVector, T>.Cardinality => 2;
-
         TVector R1 { get; }
         TVector R2 { get; }
         TVector R3 { get; }
@@ -96,6 +89,8 @@ namespace aoc
             yield return C2;
             yield return C3;
         }
+
+        int IReadOnlyCollection<TVector>.Count => 3;
     }
 
     public interface IMatrix3D<TSelf, TVector, T> : IMatrix<TSelf, TVector, T>
@@ -103,8 +98,6 @@ namespace aoc
         where TVector : struct, IVector<TVector, TSelf, T>, IVector3D<TVector, T>
         where T : struct
     {
-        int IMatrix<TSelf, TVector, T>.Cardinality => 3;
-
         TVector R1 { get; }
         TVector R2 { get; }
         TVector R3 { get; }
@@ -153,5 +146,7 @@ namespace aoc
             yield return C3;
             yield return C4;
         }
+
+        int IReadOnlyCollection<TVector>.Count => 4;
     }
 }

@@ -32,17 +32,20 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy, TVector, T>
     {
-        protected VectorHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number)
+        protected VectorHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number,
+            TVector pOne, TVector nOne)
+                : base(fromSpan, number)
         {
+            POne = pOne;
+            NOne = nOne;
         }
 
         protected T NegativeOne => Item.NegativeOne;
         protected T Zero        => Item.Zero;
         protected T One         => Item.One;
 
-        public TVector POne { get; protected set; }
-        public TVector NOne { get; protected set; }
+        public TVector POne { get; }
+        public TVector NOne { get; }
     }
 
     sealed class Vector2DHelperStrategy<TVector, T> : VectorHelperStrategy<Vector2DHelperStrategy<TVector, T>, TVector, T>
@@ -59,11 +62,11 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector2D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Vector2DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number)
+        public Vector2DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> T)
+            : base(fromSpan, T,
+                  pOne: fromSpan(new[] { T.One,         T.One,         T.One}),
+                  nOne: fromSpan(new[] { T.NegativeOne, T.NegativeOne, T.NegativeOne }))
         {
-            POne  = FromArray(One,         One,         One);
-            NOne  = FromArray(NegativeOne, NegativeOne, NegativeOne);
             North = FromArray(Zero,        NegativeOne, Zero);
             East  = FromArray(One,         Zero,        Zero);
             South = FromArray(Zero,        One,         Zero);
@@ -93,11 +96,11 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector3D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Vector3DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number)
+        public Vector3DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> T)
+            : base(fromSpan, T,
+                  pOne: fromSpan(new[] { T.One,         T.One,         T.One}),
+                  nOne: fromSpan(new[] { T.NegativeOne, T.NegativeOne, T.NegativeOne }))
         {
-            POne  = FromArray(One,         One,         One);
-            NOne  = FromArray(NegativeOne, NegativeOne, NegativeOne);
             North = FromArray(Zero,        NegativeOne, Zero);
             East  = FromArray(One,         Zero,        Zero);
             South = FromArray(Zero,        One,         Zero);
@@ -131,11 +134,11 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector4D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Vector4DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number)
+        public Vector4DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> T)
+            : base(fromSpan, T,
+                  pOne: fromSpan(new[] { T.One,         T.One,         T.One,         T.One }),
+                  nOne: fromSpan(new[] { T.NegativeOne, T.NegativeOne, T.NegativeOne, T.NegativeOne }))
         {
-            POne  = FromArray(One,         One,         One,         NegativeOne);
-            NOne  = FromArray(NegativeOne, NegativeOne, NegativeOne, NegativeOne);
             North = FromArray(Zero,        NegativeOne, Zero,        Zero);
             East  = FromArray(One,         Zero,        Zero,        Zero);
             South = FromArray(Zero,        One,         Zero,        Zero);

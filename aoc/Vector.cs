@@ -14,24 +14,23 @@ namespace aoc
 
         internal static Helper Helper => _helper.Value;
 
-        public static Vector NegativeOne      => Helper.NOne;
-        public static Vector Zero             => default;
-        public static Vector One              => Helper.POne;
+        public static Vector NegativeOne       => Helper.NOne;
+        public static Vector Zero              => default;
+        public static Vector One               => Helper.POne;
 
-        public static readonly Vector North     = Helper.North;
-        public static readonly Vector East      = Helper.East;
-        public static readonly Vector South     = Helper.South;
-        public static readonly Vector West      = Helper.West;
+        public static Vector North             => Helper.North;
+        public static Vector East              => Helper.East;
+        public static Vector South             => Helper.South;
+        public static Vector West              => Helper.West;
 
-        public static readonly Vector North2    = ( 0, -2);
-        public static readonly Vector East2     = ( 2,  0);
-        public static readonly Vector South2    = ( 0,  2);
-        public static readonly Vector West2     = (-2,  0);
-
-        public static readonly Vector NorthWest = (-1, -1);
-        public static readonly Vector NorthEast = ( 1, -1);
-        public static readonly Vector SouthWest = (-1,  1);
-        public static readonly Vector SouthEast = ( 1,  1);
+        public static Vector North2    { get; } = ( 0, -2);
+        public static Vector East2     { get; } = ( 2,  0);
+        public static Vector South2    { get; } = ( 0,  2);
+        public static Vector West2     { get; } = (-2,  0);
+        public static Vector NorthWest { get; } = (-1, -1);
+        public static Vector NorthEast { get; } = ( 1, -1);
+        public static Vector SouthWest { get; } = (-1,  1);
+        public static Vector SouthEast { get; } = ( 1,  1);
 
         public static Vector AdditiveIdentity       => Zero;
         public static Vector MultiplicativeIdentity => One;

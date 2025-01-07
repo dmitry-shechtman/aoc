@@ -18,14 +18,14 @@ namespace aoc
         public static Vector4D Zero        => default;
         public static Vector4D One         => Helper.POne;
 
-        public static readonly Vector4D North = Helper.North;
-        public static readonly Vector4D East  = Helper.East;
-        public static readonly Vector4D South = Helper.South;
-        public static readonly Vector4D West  = Helper.West;
-        public static readonly Vector4D Up    = Helper.Up;
-        public static readonly Vector4D Down  = Helper.Down;
-        public static readonly Vector4D Ana   = Helper.Ana;
-        public static readonly Vector4D Kata  = Helper.Kata;
+        public static Vector4D North       => Helper.North;
+        public static Vector4D East        => Helper.East;
+        public static Vector4D South       => Helper.South;
+        public static Vector4D West        => Helper.West;
+        public static Vector4D Up          => Helper.Up;
+        public static Vector4D Down        => Helper.Down;
+        public static Vector4D Ana         => Helper.Ana;
+        public static Vector4D Kata        => Helper.Kata;
 
         public static Vector4D AdditiveIdentity       => Zero;
         public static Vector4D MultiplicativeIdentity => One;

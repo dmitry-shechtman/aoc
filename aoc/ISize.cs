@@ -27,8 +27,6 @@ namespace aoc
         where TVector : struct, IVector<TVector, T>
         where T : struct
     {
-        int Cardinality { get; }
-
         T Length { get; }
 
         IEnumerator IEnumerable.GetEnumerator() =>
@@ -48,8 +46,6 @@ namespace aoc
         where TVector : struct, IVector2D<TVector, T>
         where T : struct
     {
-        int ISize<TSelf, TVector, T>.Cardinality => 2;
-
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             yield return Width;
@@ -63,7 +59,7 @@ namespace aoc
             _ => throw new IndexOutOfRangeException()
         };
 
-        int IReadOnlyCollection<T>.Count => Cardinality;
+        int IReadOnlyCollection<T>.Count => 2;
     }
 
     public interface ISize3D<TSelf, T>
@@ -80,8 +76,6 @@ namespace aoc
         where TVector : struct, IVector3D<TVector, T>
         where T : struct
     {
-        int ISize<TSelf, TVector, T>.Cardinality => 3;
-
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             yield return Width;
@@ -97,7 +91,7 @@ namespace aoc
             _ => throw new IndexOutOfRangeException()
         };
 
-        int IReadOnlyCollection<T>.Count => Cardinality;
+        int IReadOnlyCollection<T>.Count => 3;
     }
 
     public interface ISize4D<TSelf, T>
@@ -115,8 +109,6 @@ namespace aoc
         where TVector : struct, IVector4D<TVector, T>
         where T : struct
     {
-        int ISize<TSelf, TVector, T>.Cardinality => 4;
-
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             yield return Width;
@@ -134,6 +126,6 @@ namespace aoc
             _ => throw new IndexOutOfRangeException()
         };
 
-        int IReadOnlyCollection<T>.Count => Cardinality;
+        int IReadOnlyCollection<T>.Count => 4;
     }
 }

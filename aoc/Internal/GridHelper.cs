@@ -385,7 +385,7 @@ namespace aoc.Internal
 
         public static IEnumerable<(Matrix, int)> ParseTurns(ReadOnlySpan<char> input)
         {
-            Matrix t = Matrix.Identity;
+            Matrix t = Matrix.One;
             var turns = Enumerable.Empty<(Matrix, int)>();
             for (int i = 0; i < input.Length; i++)
             {
