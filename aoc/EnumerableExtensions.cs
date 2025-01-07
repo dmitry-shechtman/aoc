@@ -119,22 +119,22 @@ namespace aoc
         public static long Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, long> selector) =>
             source.Aggregate(1L, (a, v, i) => a * selector(v, i));
 
-        public static TSource TryMin<TSource>(this IEnumerable<TSource> source, TSource result) =>
+        public static TSource MinOrDefault<TSource>(this IEnumerable<TSource> source, TSource result) =>
             source.Any() ? source.Min() : result;
 
-        public static TResult TryMin<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
+        public static TResult MinOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
             source.Any() ? source.Min(selector) : result;
 
-        public static TResult TryMin<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
+        public static TResult MinOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
             source.Any() ? source.Min(selector) : result;
 
-        public static TSource TryMax<TSource>(this IEnumerable<TSource> source, TSource result) =>
+        public static TSource MaxOrDefault<TSource>(this IEnumerable<TSource> source, TSource result) =>
             source.Any() ? source.Max() : result;
 
-        public static TResult TryMax<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
+        public static TResult MaxOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
             source.Any() ? source.Max(selector) : result;
 
-        public static TResult TryMax<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
+        public static TResult MaxOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
             source.Any() ? source.Max(selector) : result;
     }
 }
