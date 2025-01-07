@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
-namespace System.Linq
+namespace System.Collections.Generic
 {
     public static class DictionaryExtensions
     {
