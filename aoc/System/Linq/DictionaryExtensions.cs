@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace aoc
+namespace System.Linq
 {
     public static class DictionaryExtensions
     {

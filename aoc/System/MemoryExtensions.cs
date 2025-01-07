@@ -1,7 +1,6 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
-namespace aoc
+namespace System
 {
     public static class MemoryExtensions
     {
@@ -14,7 +13,7 @@ namespace aoc
         }
 
         public static bool All<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) =>
-            All((ReadOnlySpan<TSource>)source, predicate);
+            ((ReadOnlySpan<TSource>)source).All(predicate);
 
         public static bool All<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
@@ -25,7 +24,7 @@ namespace aoc
         }
 
         public static bool All<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) =>
-            All((ReadOnlySpan<TSource>)source, predicate);
+            ((ReadOnlySpan<TSource>)source).All(predicate);
 
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
@@ -36,7 +35,7 @@ namespace aoc
         }
 
         public static bool Any<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) =>
-            Any((ReadOnlySpan<TSource>)source, predicate);
+            ((ReadOnlySpan<TSource>)source).Any(predicate);
 
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
@@ -47,7 +46,7 @@ namespace aoc
         }
 
         public static bool Any<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) =>
-            Any((ReadOnlySpan<TSource>)source, predicate);
+            ((ReadOnlySpan<TSource>)source).Any(predicate);
 
         public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
@@ -58,7 +57,7 @@ namespace aoc
         }
 
         public static int Count<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) =>
-            Count((ReadOnlySpan<TSource>)source, predicate);
+            ((ReadOnlySpan<TSource>)source).Count(predicate);
 
         public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
@@ -69,7 +68,7 @@ namespace aoc
         }
 
         public static int Count<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) =>
-            Count((ReadOnlySpan<TSource>)source, predicate);
+            ((ReadOnlySpan<TSource>)source).Count(predicate);
 
         public static int Sum(this ReadOnlySpan<int> source)
         {
@@ -80,7 +79,7 @@ namespace aoc
         }
 
         public static int Sum(this Span<int> source) =>
-            Sum((ReadOnlySpan<int>)source);
+            ((ReadOnlySpan<int>)source).Sum();
 
         public static int Sum<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int> selector)
         {
@@ -91,7 +90,7 @@ namespace aoc
         }
 
         public static int Sum<TSource>(this Span<TSource> source, Func<TSource, int> selector) =>
-            Sum((ReadOnlySpan<TSource>)source, selector);
+            ((ReadOnlySpan<TSource>)source).Sum(selector);
 
         public static int Sum<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, int> selector)
         {
@@ -102,7 +101,7 @@ namespace aoc
         }
 
         public static int Sum<TSource>(this Span<TSource> source, Func<TSource, int, int> selector) =>
-            Sum((ReadOnlySpan<TSource>)source, selector);
+            ((ReadOnlySpan<TSource>)source).Sum(selector);
 
         public static int Product(this ReadOnlySpan<int> source)
         {
@@ -113,7 +112,7 @@ namespace aoc
         }
 
         public static int Product(this Span<int> source) =>
-            Product((ReadOnlySpan<int>)source);
+            ((ReadOnlySpan<int>)source).Product();
 
         public static int Product<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int> selector)
         {
@@ -124,7 +123,7 @@ namespace aoc
         }
 
         public static int Product<TSource>(this Span<TSource> source, Func<TSource, int> selector) =>
-            Product((ReadOnlySpan<TSource>)source, selector);
+            ((ReadOnlySpan<TSource>)source).Product(selector);
 
         public static int Product<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, int> selector)
         {
@@ -135,7 +134,7 @@ namespace aoc
         }
 
         public static int Product<TSource>(this Span<TSource> source, Func<TSource, int, int> selector) =>
-            Product((ReadOnlySpan<TSource>)source, selector);
+            ((ReadOnlySpan<TSource>)source).Product(selector);
 
 #if !NET8_0_OR_GREATER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
