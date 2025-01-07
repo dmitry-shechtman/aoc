@@ -21,11 +21,37 @@ namespace aoc
         public static IEnumerable<IGrouping<T, T>> Group<T>(this IEnumerable<T> source) =>
             source.GroupBy(v => v);
 
-        public static bool All<T>(this IEnumerable<T> source, Func<T, int, bool> predicate) =>
-            source.Select().All(t => predicate(t.Value, t.Index));
+        public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select()
+                .All(t => predicate(t.Value, t.Index));
 
-        public static bool Any<T>(this IEnumerable<T> source, Func<T, int, bool> predicate) =>
-            source.Select().Any(t => predicate(t.Value, t.Index));
+        public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select()
+                .Any(t => predicate(t.Value, t.Index));
+
+        public static ValueTuple<TSource, int> First<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select()
+                .First(t => predicate(t.Value, t.Index));
+
+        public static ValueTuple<TSource, int> FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select()
+                .FirstOrDefault(t => predicate(t.Value, t.Index));
+
+        public static ValueTuple<TSource, int> Last<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select()
+                .Last(t => predicate(t.Value, t.Index));
+
+        public static ValueTuple<TSource, int> LastOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select()
+                .LastOrDefault(t => predicate(t.Value, t.Index));
+
+        public static ValueTuple<TSource, int> Single<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select()
+                .Single(t => predicate(t.Value, t.Index));
+
+        public static ValueTuple<TSource, int> SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Select()
+                .SingleOrDefault(t => predicate(t.Value, t.Index));
 
         public static TAccumulate Aggregate<TSource, TAccumulate>(this IEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, int, TAccumulate> selector) =>
             source.Select().Aggregate(seed, (a, v) => selector(a, v.Value, v.Index));
