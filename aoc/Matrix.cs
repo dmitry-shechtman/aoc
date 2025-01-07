@@ -12,9 +12,9 @@ namespace aoc
 
         private static Helper Helper => _helper.Value;
 
-        public static Matrix NegativeOne      => Helper.NOne;
+        public static Matrix NegativeOne      => Helper.NegativeOne;
         public static Matrix Zero             => default;
-        public static Matrix One              => Helper.POne;
+        public static Matrix One              => Helper.One;
 
         public static Matrix RotateRight      => Helper.RotateRight;
         public static Matrix RotateLeft       => Helper.RotateLeft;

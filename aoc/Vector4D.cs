@@ -14,9 +14,9 @@ namespace aoc
 
         internal static Helper Helper => _helper.Value;
 
-        public static Vector4D NegativeOne => Helper.NOne;
+        public static Vector4D NegativeOne => Helper.NegativeOne;
         public static Vector4D Zero        => default;
-        public static Vector4D One         => Helper.POne;
+        public static Vector4D One         => Helper.One;
 
         public static Vector4D North       => Helper.North;
         public static Vector4D East        => Helper.East;

@@ -14,9 +14,9 @@ namespace aoc
 
         internal static Helper Helper => _helper.Value;
 
-        public static LongVector NegativeOne => Helper.NOne;
+        public static LongVector NegativeOne => Helper.NegativeOne;
         public static LongVector Zero        => default;
-        public static LongVector One         => Helper.POne;
+        public static LongVector One         => Helper.One;
 
         public static LongVector North       => Helper.North;
         public static LongVector East        => Helper.East;

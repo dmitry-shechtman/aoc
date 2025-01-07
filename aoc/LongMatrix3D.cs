@@ -12,9 +12,9 @@ namespace aoc
 
         private static Helper Helper => _helper.Value;
 
-        public static LongMatrix3D NegativeOne => Helper.NOne;
+        public static LongMatrix3D NegativeOne => Helper.NegativeOne;
         public static LongMatrix3D Zero        => default;
-        public static LongMatrix3D One         => Helper.POne;
+        public static LongMatrix3D One         => Helper.One;
 
         public static LongMatrix3D AdditiveIdentity       => Zero;
         public static LongMatrix3D MultiplicativeIdentity => One;

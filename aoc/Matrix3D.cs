@@ -12,9 +12,9 @@ namespace aoc
 
         private static Helper Helper => _helper.Value;
 
-        public static Matrix3D NegativeOne => Helper.NOne;
+        public static Matrix3D NegativeOne => Helper.NegativeOne;
         public static Matrix3D Zero        => default;
-        public static Matrix3D One         => Helper.POne;
+        public static Matrix3D One         => Helper.One;
 
         public static Matrix3D AdditiveIdentity       => Zero;
         public static Matrix3D MultiplicativeIdentity => One;

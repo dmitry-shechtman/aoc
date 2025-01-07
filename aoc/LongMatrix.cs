@@ -12,9 +12,9 @@ namespace aoc
 
         private static Helper Helper => _helper.Value;
 
-        public static LongMatrix NegativeOne => Helper.NOne;
+        public static LongMatrix NegativeOne => Helper.NegativeOne;
         public static LongMatrix Zero        => default;
-        public static LongMatrix One         => Helper.POne;
+        public static LongMatrix One         => Helper.One;
 
         public static LongMatrix RotateRight      => Helper.RotateRight;
         public static LongMatrix RotateLeft       => Helper.RotateLeft;

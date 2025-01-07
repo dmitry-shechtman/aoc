@@ -44,8 +44,8 @@ namespace aoc.Internal
                 TMatrix pOne, TMatrix nOne)
             : base(fromRows, vector)
         {
-            POne = pOne;
-            NOne = nOne;
+            One = pOne;
+            NegativeOne = nOne;
             FromColumnSpan = fromColumns;
         }
 
@@ -128,8 +128,8 @@ namespace aoc.Internal
             return vectors;
         }
 
-        public TMatrix POne { get; }
-        public TMatrix NOne { get; }
+        public TMatrix One         { get; }
+        public TMatrix NegativeOne { get; }
 
         private FromSpan<TMatrix, TVector> FromColumnSpan { get; }
     }
@@ -151,16 +151,16 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector<TVector, TMatrix, T>, IVector2D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Matrix2DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector2DHelper<TVector, T> vector)
-            : base(fromRows, fromColumns, vector,
-                  pOne: fromRows(new[] { vector.East, vector.South }),
-                  nOne: fromRows(new[] { vector.West, vector.North }))
+        public Matrix2DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector2DHelper<TVector, T> TVector)
+            : base(fromRows, fromColumns, TVector,
+                  pOne: fromRows(new[] { TVector.East, TVector.South }),
+                  nOne: fromRows(new[] { TVector.West, TVector.North }))
         {
-            RotateRight      = FromRows(Vector.South, Vector.West);
-            RotateLeft       = FromRows(Vector.North, Vector.East);
-            MirrorHorizontal = FromRows(Vector.East,  Vector.North);
-            MirrorVertical   = FromRows(Vector.West,  Vector.South);
-            Flip             = FromRows(Vector.West,  Vector.North);
+            RotateRight      = FromRows(TVector.South, TVector.West);
+            RotateLeft       = FromRows(TVector.North, TVector.East);
+            MirrorHorizontal = FromRows(TVector.East,  TVector.North);
+            MirrorVertical   = FromRows(TVector.West,  TVector.South);
+            Flip             = FromRows(TVector.West,  TVector.North);
         }
 
         public TMatrix RotateRight      { get; }
@@ -177,7 +177,7 @@ namespace aoc.Internal
 
         public TMatrix Rotate(int degrees) => degrees switch
         {
-            0           => POne,
+            0           => One,
             90  or -270 => RotateRight,
             180 or -180 => Flip,
             270 or  -90 => RotateLeft,
@@ -213,10 +213,10 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector<TVector, TMatrix, T>, IVector3D<TVector, T>
         where T : unmanaged, IFormattable
     {
-        public Matrix3DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector3DHelper<TVector, T> vector)
-            : base(fromRows, fromColumns, vector,
-                  pOne: fromRows(new[] { vector.East, vector.South, vector.Down }),
-                  nOne: fromRows(new[] { vector.West, vector.North, vector.Up }))
+        public Matrix3DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector3DHelper<TVector, T> TVector)
+            : base(fromRows, fromColumns, TVector,
+                  pOne: fromRows(new[] { TVector.East, TVector.South, TVector.Down }),
+                  nOne: fromRows(new[] { TVector.West, TVector.North, TVector.Up }))
         {
         }
 
