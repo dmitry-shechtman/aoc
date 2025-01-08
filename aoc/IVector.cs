@@ -4,21 +4,26 @@ using System.Collections.Generic;
 
 namespace aoc
 {
-    public interface IVector<TSelf, T> : IReadOnlyList<T>, IEquatable<TSelf>, IFormattableEx
-        where TSelf : struct, IVector<TSelf, T>
-        where T : struct
+    public interface IVector<TSelf> : IEquatable<TSelf>, IFormattableEx
+        where TSelf : IVector<TSelf>
     {
-        T Abs();
         TSelf Abs2();
         TSelf Sign();
         TSelf Neg();
         TSelf Add(TSelf other);
         TSelf Sub(TSelf other);
+        TSelf Min(TSelf other);
+        TSelf Max(TSelf other);
+    }
+
+    public interface IVector<TSelf, T> : IVector<TSelf>, IReadOnlyList<T>
+        where TSelf : struct, IVector<TSelf, T>
+        where T : struct
+    {
+        T Abs();
         TSelf Mul(T scalar);
         TSelf Div(T scalar);
         T Dot(TSelf other);
-        TSelf Min(TSelf other);
-        TSelf Max(TSelf other);
 
         IEnumerator IEnumerable.GetEnumerator() =>
             GetEnumerator();
