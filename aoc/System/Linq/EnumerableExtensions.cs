@@ -103,19 +103,19 @@ namespace System.Linq
             source.Aggregate(1, (a, v) => a * v);
 
         public static int Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int> selector) =>
-            source.Aggregate(1, (a, v) => a * selector(v));
+            source.Select(selector).Product();
 
         public static int Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, int> selector) =>
-            source.Aggregate(1, (a, v, i) => a * selector(v, i));
+            source.Select(selector).Product();
 
         public static long Product(this IEnumerable<long> source) =>
             source.Aggregate(1L, (a, v) => a * v);
 
         public static long Product<TSource>(this IEnumerable<TSource> source, Func<TSource, long> selector) =>
-            source.Aggregate(1L, (a, v) => a * selector(v));
+            source.Select(selector).Product();
 
         public static long Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, long> selector) =>
-            source.Aggregate(1L, (a, v, i) => a * selector(v, i));
+            source.Select(selector).Product();
 
         public static TSource MinOrDefault<TSource>(this IEnumerable<TSource> source, TSource result) =>
             source.Any() ? source.Min() : result;
