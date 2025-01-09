@@ -99,7 +99,13 @@ namespace aoc.Internal
     interface IParseHelper<T, TSeparator>
         where T : struct, IFormattable
     {
-        bool TryParse(ReadOnlySpan<char> input, TSeparator separator, IFormatProvider provider, out T value);
+        bool TryParse(ReadOnlySpan<char> input, TSeparator separator, NumberStyles styles, IFormatProvider provider, out T value);
+    }
+
+    interface ISpanParseHelper<T> : IItemHelper<T>
+        where T : unmanaged, IFormattable
+    {
+        bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, NumberStyles styles, IFormatProvider provider, out T value);
     }
 
     abstract class Helper<T, TItem, TStrategy, TItemHelper> : IBuilder<T>

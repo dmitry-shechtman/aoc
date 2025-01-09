@@ -9,7 +9,7 @@ namespace aoc.Internal
         where T : unmanaged, IReadOnlyCollection<TItem>
         where TItem : unmanaged, IFormattable
         where TStrategy : IHelperStrategy<T, TItem>
-        where TItemHelper : IItemHelper<TItem>, IParseHelper<TItem, char>
+        where TItemHelper : ISpanParseHelper<TItem>, IParseHelper<TItem, char>
     {
         protected Helper2(TStrategy strategy, FromSpan<T, TItem> fromSpan, TItemHelper item, int chunkCount, int chunkSize)
             : base(strategy, fromSpan, item, chunkCount, chunkSize)
@@ -17,36 +17,89 @@ namespace aoc.Internal
         }
 
         public T Parse(ReadOnlySpan<char> input, char separator, char separator2, IFormatProvider provider) =>
-            TryParse(input, separator, separator2, provider, out T value)
+            Parse(input, separator, separator2, 0, provider);
+
+        public T Parse(ReadOnlySpan<char> input, char separator, char separator2, NumberStyles styles, IFormatProvider provider) =>
+            TryParse(input, separator, separator2, styles, provider, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParse(ReadOnlySpan<char> input, char separator, char separator2, out T value) =>
             TryParse(input, separator, separator2, null, out value);
 
-        public bool TryParse(ReadOnlySpan<char> input, char separator, char separator2, IFormatProvider provider, out T value)
+        public bool TryParse(ReadOnlySpan<char> input, char separator, char separator2, IFormatProvider provider, out T value) =>
+            TryParse(input, separator, separator2, 0, provider, out value);
+
+        public bool TryParse(ReadOnlySpan<char> input, char separator, char separator2, NumberStyles styles, out T value) =>
+            TryParse(input, separator, separator2, styles, null, out value);
+
+        public bool TryParse(ReadOnlySpan<char> input, char separator, char separator2, NumberStyles styles, IFormatProvider provider, out T value)
         {
             Span<System.Range> split = stackalloc System.Range[MaxCount];
             int count = input.Split(split, separator, StringSplitOptions.TrimEntries);
-            return TryParse(input, split[..count], separator2, provider, out value);
+            return TryParse(input, split[..count], separator2, styles, provider, out value);
         }
 
-        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, char separator, IFormatProvider provider, out T value)
+        public T Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, ReadOnlySpan<char> separator2, IFormatProvider provider) =>
+            Parse(input, separator, separator2, 0, provider);
+
+        public T Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, ReadOnlySpan<char> separator2, NumberStyles styles, IFormatProvider provider) =>
+            TryParse(input, separator, separator2, styles, provider, out T value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, ReadOnlySpan<char> separator2, out T value) =>
+            TryParse(input, separator, separator2, null, out value);
+
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, ReadOnlySpan<char> separator2, IFormatProvider provider, out T value) =>
+            TryParse(input, separator, separator2, 0, provider, out value);
+
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, ReadOnlySpan<char> separator2, NumberStyles styles, out T value) =>
+            TryParse(input, separator, separator2, styles, null, out value);
+
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, ReadOnlySpan<char> separator2, NumberStyles styles, IFormatProvider provider, out T value)
+        {
+            Span<System.Range> split = stackalloc System.Range[MaxCount];
+            int count = input.Split(split, separator, StringSplitOptions.TrimEntries);
+            return TryParse(input, split[..count], separator2, styles, provider, out value);
+        }
+
+        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, char separator, NumberStyles styles, IFormatProvider provider, out T value)
         {
             value = default;
             if (split.Length < MinCount || split.Length > MaxCount)
                 return false;
             Span<TItem> values = stackalloc TItem[split.Length];
-            if (!TryParse(input, split, separator, values, provider))
+            if (!TryParse(input, split, separator, styles, provider, values))
                 return false;
             value = FromSpan(values);
             return true;
         }
 
-        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, char separator, Span<TItem> values, IFormatProvider provider)
+        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, ReadOnlySpan<char> separator, NumberStyles styles, IFormatProvider provider, out T value)
+        {
+            value = default;
+            if (split.Length < MinCount || split.Length > MaxCount)
+                return false;
+            Span<TItem> values = stackalloc TItem[split.Length];
+            if (!TryParse(input, split, separator, styles, provider, values))
+                return false;
+            value = FromSpan(values);
+            return true;
+        }
+
+        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, char separator, NumberStyles styles, IFormatProvider provider, Span<TItem> values)
         {
             for (int i = 0; i < split.Length; i++)
-                if (!Item.TryParse(input[split[i]], separator, provider, out values[i]))
+                if (!Item.TryParse(input[split[i]], separator, styles, provider, out values[i]))
+                    return false;
+            return true;
+        }
+
+        private bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<System.Range> split, ReadOnlySpan<char> separator, NumberStyles styles, IFormatProvider provider, Span<TItem> values)
+        {
+            for (int i = 0; i < split.Length; i++)
+                if (!Item.TryParse(input[split[i]], separator, styles, provider, out values[i]))
                     return false;
             return true;
         }

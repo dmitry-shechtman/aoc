@@ -18,7 +18,7 @@ namespace aoc.Internal
         public override char DefaultSeparator => ',';
     }
 
-    interface IVectorHelper<TVector, T> : IItemHelper<TVector>, IParseHelper<TVector, char>
+    interface IVectorHelper<TVector, T> : ISpanParseHelper<TVector>, IParseHelper<TVector, char>
         where TVector : unmanaged, IVector<TVector, T>
         where T : struct, IFormattable
     {
