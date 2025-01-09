@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace aoc
 {
@@ -117,6 +116,8 @@ namespace aoc
         public readonly int Z => z;
         public readonly int W => w;
 
+        public static IBuilder<Vector4D> Builder => Helper;
+
         public static Vector4D Parse(string s, IFormatProvider provider = null) =>
             Helper.Parse(s, provider);
 
@@ -134,51 +135,6 @@ namespace aoc
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Vector4D vector) =>
             Helper.TryParse(s, provider, out vector);
-
-        public static Vector4D Parse(string s, char separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, char separator, out Vector4D vector) =>
-            Helper.TryParse(s, separator, out vector);
-
-        public static bool TryParse(string s, char separator, IFormatProvider provider, out Vector4D vector) =>
-            Helper.TryParse(s, separator, provider, out vector);
-
-        public static Vector4D Parse(string s, string separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, string separator, out Vector4D vector) =>
-            Helper.TryParse(s, separator, out vector);
-
-        public static bool TryParse(string s, string separator, IFormatProvider provider, out Vector4D vector) =>
-            Helper.TryParse(s, separator, provider, out vector);
-
-        public static Vector4D Parse(string s, Regex separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, Regex separator, out Vector4D vector) =>
-            Helper.TryParse(s, separator, out vector);
-
-        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out Vector4D vector) =>
-            Helper.TryParse(s, separator, provider, out vector);
-
-        public static Vector4D ParseAny(string input, IFormatProvider provider = null) =>
-            Helper.ParseAny(input, provider);
-
-        public static bool TryParseAny(string input, out Vector4D vector) =>
-            Helper.TryParseAny(input, out vector);
-
-        public static bool TryParseAny(string input, IFormatProvider provider, out Vector4D vector) =>
-            Helper.TryParseAny(input, provider, out vector);
-
-        public static Vector4D[] ParseAll(string input, IFormatProvider provider = null) =>
-            Helper.ParseAll(input, provider);
-
-        public static bool TryParseAll(string input, out Vector4D[] vectors) =>
-            Helper.TryParseAll(input, out vectors);
-
-        public static bool TryParseAll(string input, IFormatProvider provider, out Vector4D[] vectors) =>
-            Helper.TryParseAll(input, provider, out vectors);
 
         private static Vector4D FromSpan(ReadOnlySpan<int> values) =>
             new(values[0], values[1], values[2], values[3]);

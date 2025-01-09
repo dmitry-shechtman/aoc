@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace aoc
 {
@@ -66,6 +65,8 @@ namespace aoc
         readonly int IReadOnlyCollection<long>.Count =>
             (int)Count;
 
+        public static IBuilder<LongRange> Builder => Helper;
+
         public static LongRange Parse(string s, IFormatProvider provider = null) =>
             Helper.Parse(s, provider);
 
@@ -83,51 +84,6 @@ namespace aoc
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongRange range) =>
             Helper.TryParse(s, provider, out range);
-
-        public static LongRange Parse(string s, char separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, char separator, out LongRange range) =>
-            Helper.TryParse(s, separator, out range);
-
-        public static bool TryParse(string s, char separator, IFormatProvider provider, out LongRange range) =>
-            Helper.TryParse(s, separator, provider, out range);
-
-        public static LongRange Parse(string s, string separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, string separator, out LongRange range) =>
-            Helper.TryParse(s, separator, out range);
-
-        public static bool TryParse(string s, string separator, IFormatProvider provider, out LongRange range) =>
-            Helper.TryParse(s, separator, provider, out range);
-
-        public static LongRange Parse(string s, Regex separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, Regex separator, out LongRange range) =>
-            Helper.TryParse(s, separator, out range);
-
-        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out LongRange range) =>
-            Helper.TryParse(s, separator, provider, out range);
-
-        public static LongRange ParseAny(string input, IFormatProvider provider = null) =>
-            Helper.ParseAny(input, provider);
-
-        public static bool TryParseAny(string input, out LongRange range) =>
-            Helper.TryParseAny(input, out range);
-
-        public static bool TryParseAny(string input, IFormatProvider provider, out LongRange range) =>
-            Helper.TryParseAny(input, provider, out range);
-
-        public static LongRange[] ParseAll(string input, IFormatProvider provider = null) =>
-            Helper.ParseAll(input, provider);
-
-        public static bool TryParseAll(string input, out LongRange[] ranges) =>
-            Helper.TryParseAll(input, out ranges);
-
-        public static bool TryParseAll(string input, IFormatProvider provider, out LongRange[] ranges) =>
-            Helper.TryParseAll(input, provider, out ranges);
 
         private static LongRange FromSpan(ReadOnlySpan<long> values) =>
             new(values[0], values[1]);

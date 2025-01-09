@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace aoc
 {
@@ -63,6 +62,9 @@ namespace aoc
             max = Max;
         }
 
+        public static IRangeBuilder<DoubleVectorRange, DoubleVector> Builder =>
+            Helper;
+
         public static DoubleVectorRange Parse(string s, IFormatProvider provider = null) =>
             Helper.Parse(s, provider);
 
@@ -80,60 +82,6 @@ namespace aoc
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleVectorRange range) =>
             Helper.TryParse(s, provider, out range);
-
-        public static DoubleVectorRange Parse(string s, char separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, char separator, out DoubleVectorRange range) =>
-            Helper.TryParse(s, separator, out range);
-
-        public static bool TryParse(string s, char separator, IFormatProvider provider, out DoubleVectorRange range) =>
-            Helper.TryParse(s, separator, provider, out range);
-
-        public static DoubleVectorRange Parse(string s, string separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, string separator, out DoubleVectorRange range) =>
-            Helper.TryParse(s, separator, out range);
-
-        public static bool TryParse(string s, string separator, IFormatProvider provider, out DoubleVectorRange range) =>
-            Helper.TryParse(s, separator, provider, out range);
-
-        public static DoubleVectorRange Parse(string s, Regex separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, Regex separator, out DoubleVectorRange range) =>
-            Helper.TryParse(s, separator, out range);
-
-        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out DoubleVectorRange range) =>
-            Helper.TryParse(s, separator, provider, out range);
-
-        public static DoubleVectorRange Parse(string s, char separator, char separator2, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, separator2, provider);
-
-        public static bool TryParse(string s, char separator, char separator2, out DoubleVectorRange range) =>
-            Helper.TryParse(s, separator, separator2, out range);
-
-        public static bool TryParse(string s, char separator, char separator2, IFormatProvider provider, out DoubleVectorRange range) =>
-            Helper.TryParse(s, separator, separator2, provider, out range);
-
-        public static DoubleVectorRange ParseAny(string input, IFormatProvider provider = null) =>
-            Helper.ParseAny(input, provider);
-
-        public static bool TryParseAny(string input, out DoubleVectorRange range) =>
-            Helper.TryParseAny(input, out range);
-
-        public static bool TryParseAny(string input, IFormatProvider provider, out DoubleVectorRange range) =>
-            Helper.TryParseAny(input, provider, out range);
-
-        public static DoubleVectorRange[] ParseAll(string input, IFormatProvider provider = null) =>
-            Helper.ParseAll(input, provider);
-
-        public static bool TryParseAll(string input, out DoubleVectorRange[] ranges) =>
-            Helper.TryParseAll(input, out ranges);
-
-        public static bool TryParseAll(string input, IFormatProvider provider, out DoubleVectorRange[] ranges) =>
-            Helper.TryParseAll(input, provider, out ranges);
 
         private static DoubleVectorRange FromSpan(ReadOnlySpan<DoubleVector> values) =>
             new(values[0], values[1]);

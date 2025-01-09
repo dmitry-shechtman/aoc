@@ -22,8 +22,9 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
         where TStrategy: SizeHelperStrategy<TStrategy, TSize, TVector, T>
     {
-        protected SizeHelper(FromSpan<TSize, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number)
+        protected SizeHelper(TStrategy strategy,
+            FromSpan<TSize, T> fromSpan, INumberHelper<T> number)
+                : base(strategy, fromSpan, number)
         {
         }
     }
@@ -45,12 +46,10 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Size2DHelper(FromSpan<TSize, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number)
+            : base(Size2DHelperStrategy<TSize, TVector, T>.Instance,
+                  fromSpan, number)
         {
         }
-
-        protected override Size2DHelperStrategy<TSize, TVector, T> Strategy =>
-            Size2DHelperStrategy<TSize, TVector, T>.Instance;
     }
 
     sealed class Size3DHelperStrategy<TSize, TVector, T> : SizeHelperStrategy<Size3DHelperStrategy<TSize, TVector, T>, TSize, TVector, T>
@@ -70,12 +69,10 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Size3DHelper(FromSpan<TSize, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number)
+            : base(Size3DHelperStrategy<TSize, TVector, T>.Instance,
+                  fromSpan, number)
         {
         }
-
-        protected override Size3DHelperStrategy<TSize, TVector, T> Strategy =>
-            Size3DHelperStrategy<TSize, TVector, T>.Instance;
     }
 
     sealed class Size4DHelperStrategy<TSize, TVector, T> : SizeHelperStrategy<Size4DHelperStrategy<TSize, TVector, T>, TSize, TVector, T>
@@ -95,11 +92,9 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Size4DHelper(FromSpan<TSize, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number)
+            : base(Size4DHelperStrategy<TSize, TVector, T>.Instance,
+                  fromSpan, number)
         {
         }
-
-        protected override Size4DHelperStrategy<TSize, TVector, T> Strategy =>
-            Size4DHelperStrategy<TSize, TVector, T>.Instance;
     }
 }

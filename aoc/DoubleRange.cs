@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace aoc
 {
@@ -58,6 +57,8 @@ namespace aoc
             max = Max;
         }
 
+        public static IBuilder<DoubleRange> Builder => Helper;
+
         public static DoubleRange Parse(string s, IFormatProvider provider = null) =>
             Helper.Parse(s, provider);
 
@@ -75,51 +76,6 @@ namespace aoc
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleRange range) =>
             Helper.TryParse(s, provider, out range);
-
-        public static DoubleRange Parse(string s, char separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, char separator, out DoubleRange range) =>
-            Helper.TryParse(s, separator, out range);
-
-        public static bool TryParse(string s, char separator, IFormatProvider provider, out DoubleRange range) =>
-            Helper.TryParse(s, separator, provider, out range);
-
-        public static DoubleRange Parse(string s, string separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, string separator, out DoubleRange range) =>
-            Helper.TryParse(s, separator, out range);
-
-        public static bool TryParse(string s, string separator, IFormatProvider provider, out DoubleRange range) =>
-            Helper.TryParse(s, separator, provider, out range);
-
-        public static DoubleRange Parse(string s, Regex separator, IFormatProvider provider = null) =>
-            Helper.Parse(s, separator, provider);
-
-        public static bool TryParse(string s, Regex separator, out DoubleRange range) =>
-            Helper.TryParse(s, separator, out range);
-
-        public static bool TryParse(string s, Regex separator, IFormatProvider provider, out DoubleRange range) =>
-            Helper.TryParse(s, separator, provider, out range);
-
-        public static DoubleRange ParseAny(string input, IFormatProvider provider = null) =>
-            Helper.ParseAny(input, provider);
-
-        public static bool TryParseAny(string input, out DoubleRange range) =>
-            Helper.TryParseAny(input, out range);
-
-        public static bool TryParseAny(string input, IFormatProvider provider, out DoubleRange range) =>
-            Helper.TryParseAny(input, provider, out range);
-
-        public static DoubleRange[] ParseAll(string input, IFormatProvider provider = null) =>
-            Helper.ParseAll(input, provider);
-
-        public static bool TryParseAll(string input, out DoubleRange[] ranges) =>
-            Helper.TryParseAll(input, out ranges);
-
-        public static bool TryParseAll(string input, IFormatProvider provider, out DoubleRange[] ranges) =>
-            Helper.TryParseAll(input, provider, out ranges);
 
         private static DoubleRange FromSpan(ReadOnlySpan<double> values) =>
             new(values[0], values[1]);

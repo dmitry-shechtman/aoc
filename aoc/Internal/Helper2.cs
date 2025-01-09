@@ -11,8 +11,8 @@ namespace aoc.Internal
         where TStrategy : IHelperStrategy<T, TItem>
         where TItemHelper : IItemHelper<TItem>, IParseHelper<TItem, char>
     {
-        protected Helper2(FromSpan<T, TItem> fromSpan, TItemHelper item, int chunkSize)
-            : base(fromSpan, item, chunkSize)
+        protected Helper2(TStrategy strategy, FromSpan<T, TItem> fromSpan, TItemHelper item, int chunkCount, int chunkSize)
+            : base(strategy, fromSpan, item, chunkCount, chunkSize)
         {
         }
 
@@ -59,12 +59,15 @@ namespace aoc.Internal
         where TItem2 : unmanaged, IFormattable
         where TStrategy : IHelperStrategy<T, TVector>
     {
-        protected Helper2(FromSpan<T, TVector> fromSpan, TVectorHelper vector)
-            : base(fromSpan, vector, vector.MinCount)
+        protected Helper2(TStrategy strategy, FromSpan<T, TVector> fromSpan, TVectorHelper vector)
+            : base(strategy, fromSpan, vector, strategy.MinCount, vector.MinCount)
         {
         }
 
         protected TVectorHelper Vector => Item;
+
+        public sealed override T[] ParseAll(string input, IFormatProvider provider, int chunkCount) =>
+            ParseAll(input, provider, chunkCount, ChunkSize);
 
         public T[] ParseAll(string input, IFormatProvider provider, int chunkCount, int chunkSize) =>
             ParseAll(input, 0, provider, chunkCount, chunkSize);
@@ -74,50 +77,31 @@ namespace aoc.Internal
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public sealed override bool TryParseAll(string input, NumberStyles styles, IFormatProvider provider, int chunkSize, out T[] values) =>
-            TryParseAll(input, styles, provider, MinCount, chunkSize, out values);
+        public bool TryParseAll(string input, int chunkCount, int chunkSize, out T[] values) =>
+            TryParseAll(input, null, chunkCount, chunkSize, out values);
 
-        public bool TryParseAll(string input, NumberStyles styles, IFormatProvider provider, int chunkCount, int chunkSize, out T[] values) =>
-            TryParseAll(input, styles, provider, chunkCount, chunkSize, FromSpan, out values);
+        public bool TryParseAll(string input, IFormatProvider provider, int chunkCount, int chunkSize, out T[] values) =>
+            TryParseAll(input, 0, provider, chunkCount, chunkSize, out values);
 
-        protected bool TryParseAny(string input, NumberStyles styles, IFormatProvider provider, FromSpan<T, TVector> fromSpan, out T value)
-        {
-            value = default;
-            return TryGetMatches(input, out var matches, out var matchCount, out var chunkSize)
-                && TryParse(matches.GetEnumerator(), styles, provider, matchCount, chunkSize, fromSpan, out value);
-        }
+        public bool TryParseAll(string input, NumberStyles styles, int chunkCount, int chunkSize, out T[] values) =>
+            TryParseAll(input, styles, null, chunkCount, chunkSize, out values);
 
-        protected bool TryParseAll(string input, NumberStyles styles, IFormatProvider provider, int chunkCount, int chunkSize, FromSpan<T, TVector> fromSpan, out T[] values)
-        {
-            values = default;
-            var matches = GetMatches(input, out var matchCount);
-            var itemSize = chunkCount * chunkSize;
-            if (matchCount == 0 || matchCount % itemSize != 0)
-                return false;
-            values = new T[matchCount / itemSize];
-            var enumerator = matches.GetEnumerator();
-            for (int i = 0; i < values.Length; i++)
-                if (!TryParse(enumerator, styles, provider, itemSize, chunkSize, fromSpan, out values[i]))
-                    return false;
-            return true;
-        }
-
-        private bool TryParse(IEnumerator<Match> matches, NumberStyles styles, IFormatProvider provider, int itemSize, int chunkSize, FromSpan<T, TVector> fromSpan, out T value)
+        protected override bool TryParse(IEnumerator<Match> matches, NumberStyles styles, IFormatProvider provider, int itemSize, int chunkSize, out T value)
         {
             value = default;
             Span<TItem2> items = stackalloc TItem2[itemSize];
             if (!Vector.TryParse(matches, styles, provider, items))
                 return false;
-            value = FromItems(items, itemSize, chunkSize, fromSpan);
+            value = FromItems(items, itemSize, chunkSize);
             return true;
         }
 
-        protected T FromItems(ReadOnlySpan<TItem2> items, int itemSize, int chunkSize, FromSpan<T, TVector> fromSpan)
+        protected T FromItems(ReadOnlySpan<TItem2> items, int itemSize, int chunkSize)
         {
             Span<TVector> vectors = stackalloc TVector[itemSize / chunkSize];
             for (int i = 0; i < vectors.Length; ++i)
                 vectors[i] = Vector.FromSpan(items[(i * chunkSize)..((i + 1) * chunkSize)]);
-            return fromSpan(vectors);
+            return FromSpan(vectors);
         }
     }
 }

@@ -32,11 +32,8 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public RangeHelper(FromSpan<TRange, T> fromSpan, INumberHelper<T> number)
-            : base(fromSpan, number)
+            : base(RangeHelperStrategy<TRange, T>.Instance, fromSpan, number)
         {
         }
-
-        protected override RangeHelperStrategy<TRange, T> Strategy =>
-            RangeHelperStrategy<TRange, T>.Instance;
     }
 }

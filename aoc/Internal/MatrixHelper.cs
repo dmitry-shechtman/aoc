@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -34,6 +33,43 @@ namespace aoc.Internal
         }) is not null;
     }
 
+    sealed class MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, T, TStrategy, TVectorHelper>, IMatrixBuilder<TMatrix, TVector, T>
+        where TMatrix : unmanaged, IMatrix<TMatrix, TVector, T>
+        where TVector : unmanaged, IVector<TVector, TMatrix, T>
+        where T : unmanaged, IFormattable
+        where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
+        where TVectorHelper : IVectorHelper<TVector, T>
+    {
+        public MatrixBuilder(TStrategy strategy,
+            FromSpan<TMatrix, TVector> fromSpan, TVectorHelper vector)
+                : base(strategy, fromSpan, vector)
+        {
+        }
+
+        public TMatrix FromVectors(TVector[] vectors) =>
+            FromSpan(vectors);
+
+        public TMatrix FromVectors(ReadOnlySpan<TVector> vectors) =>
+            FromSpan(vectors);
+
+        public TMatrix FromVectors(T[][] values)
+        {
+            Span<TVector> vectors = stackalloc TVector[values.Length];
+            for (int i = 0; i < vectors.Length; i++)
+                vectors[i] = Vector.FromSpan(values[i]);
+            return FromSpan(vectors);
+        }
+
+        public TMatrix FromElements(T[] values) =>
+            FromElements(values.AsSpan());
+
+        public TMatrix FromElements(ReadOnlySpan<T> values) =>
+            FromItems(values, values.Length, MinCount);
+
+        public TMatrix FromElements(ReadOnlySpan<T> values, int size) =>
+            FromItems(values, values.Length, size > 0 ? size : MinCount);
+    }
+
     abstract class MatrixHelper<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, T, TStrategy, TVectorHelper>
         where TMatrix : unmanaged, IMatrix<TMatrix, TVector, T>
         where TVector : unmanaged, IVector<TVector, TMatrix, T>
@@ -41,134 +77,25 @@ namespace aoc.Internal
         where TStrategy : MatrixHelperStrategy<TStrategy, TMatrix, TVector, T>
         where TVectorHelper : IVectorHelper<TVector, T>
     {
-        protected MatrixHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, TVectorHelper vector,
-                TMatrix pOne, TMatrix nOne)
-            : base(fromRows, vector)
+        protected MatrixHelper(TStrategy strategy,
+            FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, TVectorHelper vector,
+            TMatrix pOne, TMatrix nOne)
+                : base(strategy, fromRows, vector)
         {
             One = pOne;
             NegativeOne = nOne;
-            FromColumnSpan = fromColumns;
+            Rows = new(strategy, fromRows, vector);
+            Columns = new(strategy, fromColumns, vector);
         }
-
-        public TMatrix FromRows(T[][] rows) =>
-            FromSpan(FromArrays(rows));
-
-        public TMatrix FromRows(ReadOnlySpan<T> values, int size = 0) =>
-            FromItems(values, values.Length, size > 0 ? size : MinCount, FromSpan);
-
-        public TMatrix FromColumns(T[][] columns) =>
-            FromColumnSpan(FromArrays(columns));
-
-        public TMatrix FromColumns(ReadOnlySpan<T> values, int size = 0) =>
-            FromItems(values, values.Length, size > 0 ? size : MinCount, FromColumnSpan);
-
-        public TMatrix ParseRowsAny(string input, IFormatProvider provider) =>
-            ParseRowsAny(input, 0, provider);
-
-        public TMatrix ParseRowsAny(string input, NumberStyles styles, IFormatProvider provider) =>
-            TryParseRowsAny(input, styles, provider, out TMatrix matrix)
-                ? matrix
-                : throw new InvalidOperationException("Input string was not in a correct format.");
-
-        public bool TryParseRowsAny(string input, out TMatrix matrix) =>
-            TryParseRowsAny(input, null, out matrix);
-
-        public bool TryParseRowsAny(string input, NumberStyles styles, out TMatrix matrix) =>
-            TryParseRowsAny(input, styles, null, out matrix);
-
-        public bool TryParseRowsAny(string input, IFormatProvider provider, out TMatrix matrix) =>
-            TryParseRowsAny(input, 0, provider, out matrix);
-
-        public bool TryParseRowsAny(string input, NumberStyles styles, IFormatProvider provider, out TMatrix matrix) =>
-            TryParseAny(input, styles, provider, FromSpan, out matrix);
-
-        public TMatrix[] ParseRowsAll(string input, IFormatProvider provider, int rowCount, int columnCount) =>
-            ParseRowsAll(input, 0, provider, rowCount, columnCount);
-
-        public TMatrix[] ParseRowsAll(string input, NumberStyles styles, IFormatProvider provider, int rowCount, int columnCount) =>
-            TryParseRowsAll(input, styles, provider, rowCount, columnCount, out TMatrix[] matrices)
-                ? matrices
-                : throw new InvalidOperationException("Input string was not in a correct format.");
-
-        public bool TryParseRowsAll(string input, out TMatrix[] matrices) =>
-            TryParseRowsAll(input, null, out matrices);
-
-        public bool TryParseRowsAll(string input, NumberStyles styles, out TMatrix[] matrices) =>
-            TryParseRowsAll(input, styles, null, out matrices);
-
-        public bool TryParseRowsAll(string input, IFormatProvider provider, out TMatrix[] matrices) =>
-            TryParseRowsAll(input, 0, provider, out matrices);
-
-        public bool TryParseRowsAll(string input, NumberStyles styles, IFormatProvider provider, out TMatrix[] matrices) =>
-            TryParseRowsAll(input, styles, provider, MinCount, out matrices);
-
-        public bool TryParseRowsAll(string input, NumberStyles styles, IFormatProvider provider, int rowCount, out TMatrix[] matrices) =>
-            TryParseRowsAll(input, styles, provider, rowCount, MinCount, out matrices);
-
-        public bool TryParseRowsAll(string input, NumberStyles styles, IFormatProvider provider, int rowCount, int columnCount, out TMatrix[] matrices) =>
-            TryParseAll(input, styles, provider, rowCount, columnCount, FromSpan, out matrices);
-
-        public TMatrix ParseColumnsAny(string input, IFormatProvider provider) =>
-            ParseColumnsAny(input, 0, provider);
-
-        public TMatrix ParseColumnsAny(string input, NumberStyles styles, IFormatProvider provider) =>
-            TryParseColumnsAny(input, styles, provider, out TMatrix matrix)
-                ? matrix
-                : throw new InvalidOperationException("Input string was not in a correct format.");
-
-        public bool TryParseColumnsAny(string input, out TMatrix matrix) =>
-            TryParseColumnsAny(input, null, out matrix);
-
-        public bool TryParseColumnsAny(string input, NumberStyles styles, out TMatrix matrix) =>
-            TryParseColumnsAny(input, styles, null, out matrix);
-
-        public bool TryParseColumnsAny(string input, IFormatProvider provider, out TMatrix matrix) =>
-            TryParseColumnsAny(input, 0, provider, out matrix);
-
-        public bool TryParseColumnsAny(string input, NumberStyles styles, IFormatProvider provider, out TMatrix matrix) =>
-            TryParseAny(input, styles, provider, FromColumnSpan, out matrix);
-
-        public TMatrix[] ParseColumnsAll(string input, IFormatProvider provider, int columnCount, int rowCount) =>
-            ParseColumnsAll(input, 0, provider, columnCount, rowCount);
-
-        public TMatrix[] ParseColumnsAll(string input, NumberStyles styles, IFormatProvider provider, int columnCount, int rowCount) =>
-            TryParseColumnsAll(input, styles, provider, columnCount, rowCount, out TMatrix[] matrices)
-                ? matrices
-                : throw new InvalidOperationException("Input string was not in a correct format.");
-
-        public bool TryParseColumnsAll(string input, out TMatrix[] matrices) =>
-            TryParseColumnsAll(input, null, out matrices);
-
-        public bool TryParseColumnsAll(string input, NumberStyles styles, out TMatrix[] matrices) =>
-            TryParseColumnsAll(input, styles, null, out matrices);
-
-        public bool TryParseColumnsAll(string input, IFormatProvider provider, out TMatrix[] matrices) =>
-            TryParseColumnsAll(input, 0, provider, out matrices);
-
-        public bool TryParseColumnsAll(string input, NumberStyles styles, IFormatProvider provider, out TMatrix[] matrices) =>
-            TryParseColumnsAll(input, styles, provider, MinCount, out matrices);
-
-        public bool TryParseColumnsAll(string input, NumberStyles styles, IFormatProvider provider, int columnCount, out TMatrix[] matrices) =>
-            TryParseColumnsAll(input, styles, provider, columnCount, MinCount, out matrices);
-
-        public bool TryParseColumnsAll(string input, NumberStyles styles, IFormatProvider provider, int columnCount, int rowCount, out TMatrix[] matrices) =>
-            TryParseAll(input, styles, provider, columnCount, rowCount, FromColumnSpan, out matrices);
 
         protected TMatrix FromRows(params TVector[] vectors) =>
             FromSpan(vectors);
 
-        private TVector[] FromArrays(T[][] values)
-        {
-            var vectors = new TVector[values.Length];
-            for (int i = 0; i < vectors.Length; i++)
-                vectors[i] = Vector.FromSpan(values[i]);
-            return vectors;
-        }
-
         public TMatrix One         { get; }
         public TMatrix NegativeOne { get; }
 
-        private FromSpan<TMatrix, TVector> FromColumnSpan { get; }
+        public MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> Rows    { get; }
+        public MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> Columns { get; }
     }
 
     sealed class Matrix2DHelperStrategy<TMatrix, TVector, T> : MatrixHelperStrategy<Matrix2DHelperStrategy<TMatrix, TVector, T>, TMatrix, TVector, T>
@@ -189,7 +116,8 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Matrix2DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector2DHelper<TVector, T> TVector)
-            : base(fromRows, fromColumns, TVector,
+            : base(Matrix2DHelperStrategy<TMatrix, TVector, T>.Instance,
+                  fromRows, fromColumns, TVector,
                   pOne: fromRows(new[] { TVector.East, TVector.South }),
                   nOne: fromRows(new[] { TVector.West, TVector.North }))
         {
@@ -228,9 +156,6 @@ namespace aoc.Internal
             3 * 3 => 3,
             _ => 0
         };
-
-        protected override Matrix2DHelperStrategy<TMatrix, TVector, T> Strategy =>
-            Matrix2DHelperStrategy<TMatrix, TVector, T>.Instance;
     }
 
     sealed class Matrix3DHelperStrategy<TMatrix, TVector, T> : MatrixHelperStrategy<Matrix3DHelperStrategy<TMatrix, TVector, T>, TMatrix, TVector, T>
@@ -251,7 +176,8 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Matrix3DHelper(FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, Vector3DHelper<TVector, T> TVector)
-            : base(fromRows, fromColumns, TVector,
+            : base(Matrix3DHelperStrategy<TMatrix, TVector, T>.Instance,
+                  fromRows, fromColumns, TVector,
                   pOne: fromRows(new[] { TVector.East, TVector.South, TVector.Down }),
                   nOne: fromRows(new[] { TVector.West, TVector.North, TVector.Up }))
         {
@@ -271,8 +197,5 @@ namespace aoc.Internal
             4 * 4 => 4,
             _ => 0
         };
-
-        protected override Matrix3DHelperStrategy<TMatrix, TVector, T> Strategy =>
-            Matrix3DHelperStrategy<TMatrix, TVector, T>.Instance;
     }
 }

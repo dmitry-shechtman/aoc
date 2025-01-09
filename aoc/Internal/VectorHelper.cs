@@ -33,9 +33,9 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
         where TStrategy : VectorHelperStrategy<TStrategy, TVector, T>
     {
-        protected VectorHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> number,
+        protected VectorHelper(TStrategy strategy, FromSpan<TVector, T> fromSpan, INumberHelper<T> number,
             TVector pOne, TVector nOne)
-                : base(fromSpan, number)
+                : base(strategy, fromSpan, number)
         {
             One = pOne;
             NegativeOne = nOne;
@@ -60,8 +60,9 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Vector2DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> T)
-            : base(fromSpan, T,
-                  pOne: fromSpan(new[] { T.One,         T.One,         T.One}),
+            : base(Vector2DHelperStrategy<TVector, T>.Instance,
+                  fromSpan, T,
+                  pOne: fromSpan(new[] { T.One,         T.One,         T.One }),
                   nOne: fromSpan(new[] { T.NegativeOne, T.NegativeOne, T.NegativeOne }))
         {
             North = FromArray(T.Zero,        T.NegativeOne, T.Zero);
@@ -69,9 +70,6 @@ namespace aoc.Internal
             South = FromArray(T.Zero,        T.One,         T.Zero);
             West  = FromArray(T.NegativeOne, T.Zero,        T.Zero);
         }
-
-        protected override Vector2DHelperStrategy<TVector, T> Strategy =>
-            Vector2DHelperStrategy<TVector, T>.Instance;
 
         public TVector North { get; }
         public TVector East  { get; }
@@ -94,8 +92,9 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Vector3DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> T)
-            : base(fromSpan, T,
-                  pOne: fromSpan(new[] { T.One,         T.One,         T.One}),
+            : base(Vector3DHelperStrategy<TVector, T>.Instance,
+                  fromSpan, T,
+                  pOne: fromSpan(new[] { T.One,         T.One,         T.One }),
                   nOne: fromSpan(new[] { T.NegativeOne, T.NegativeOne, T.NegativeOne }))
         {
             North = FromArray(T.Zero,        T.NegativeOne, T.Zero);
@@ -105,9 +104,6 @@ namespace aoc.Internal
             Up    = FromArray(T.Zero,        T.Zero,        T.NegativeOne);
             Down  = FromArray(T.Zero,        T.Zero,        T.One);
         }
-
-        protected override Vector3DHelperStrategy<TVector, T> Strategy =>
-            Vector3DHelperStrategy<TVector, T>.Instance;
 
         public TVector North { get; }
         public TVector East  { get; }
@@ -132,7 +128,8 @@ namespace aoc.Internal
         where T : unmanaged, IFormattable
     {
         public Vector4DHelper(FromSpan<TVector, T> fromSpan, INumberHelper<T> T)
-            : base(fromSpan, T,
+            : base(Vector4DHelperStrategy<TVector, T>.Instance,
+                  fromSpan, T,
                   pOne: fromSpan(new[] { T.One,         T.One,         T.One,         T.One }),
                   nOne: fromSpan(new[] { T.NegativeOne, T.NegativeOne, T.NegativeOne, T.NegativeOne }))
         {
@@ -145,9 +142,6 @@ namespace aoc.Internal
             Ana   = FromArray(T.Zero,        T.Zero,        T.Zero,        T.NegativeOne);
             Kata  = FromArray(T.Zero,        T.Zero,        T.Zero,        T.One);
         }
-
-        protected override Vector4DHelperStrategy<TVector, T> Strategy =>
-            Vector4DHelperStrategy<TVector, T>.Instance;
 
         public TVector North { get; }
         public TVector East  { get; }
