@@ -32,8 +32,8 @@ namespace aoc.Internal
             _regex = new(() => new(pattern));
         }
 
-        public bool TryParse(ReadOnlySpan<char> input, IFormatProvider provider, out T value) =>
-            TryParseNumber(input, DefaultStyles, provider, out value);
+        public bool TryParse(ReadOnlySpan<char> input, NumberStyles styles, IFormatProvider provider, out T value) =>
+            TryParseNumber(input, styles != 0 ? styles : DefaultStyles, provider, out value);
 
         public IEnumerable<Match> GetMatches(string input, out int count)
         {

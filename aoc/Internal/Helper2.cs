@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace aoc.Internal
@@ -66,24 +67,27 @@ namespace aoc.Internal
         protected TVectorHelper Vector => Item;
 
         public T[] ParseAll(string input, IFormatProvider provider, int chunkCount, int chunkSize) =>
-            TryParseAll(input, provider, chunkCount, chunkSize, out var value)
+            ParseAll(input, 0, provider, chunkCount, chunkSize);
+
+        public T[] ParseAll(string input, NumberStyles styles, IFormatProvider provider, int chunkCount, int chunkSize) =>
+            TryParseAll(input, styles, provider, chunkCount, chunkSize, out var value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public sealed override bool TryParseAll(string input, IFormatProvider provider, int chunkSize, out T[] values) =>
-            TryParseAll(input, provider, MinCount, chunkSize, out values);
+        public sealed override bool TryParseAll(string input, NumberStyles styles, IFormatProvider provider, int chunkSize, out T[] values) =>
+            TryParseAll(input, styles, provider, MinCount, chunkSize, out values);
 
-        public bool TryParseAll(string input, IFormatProvider provider, int chunkCount, int chunkSize, out T[] values) =>
-            TryParseAll(input, provider, chunkCount, chunkSize, FromSpan, out values);
+        public bool TryParseAll(string input, NumberStyles styles, IFormatProvider provider, int chunkCount, int chunkSize, out T[] values) =>
+            TryParseAll(input, styles, provider, chunkCount, chunkSize, FromSpan, out values);
 
-        protected bool TryParseAny(string input, IFormatProvider provider, FromSpan<T, TVector> fromSpan, out T value)
+        protected bool TryParseAny(string input, NumberStyles styles, IFormatProvider provider, FromSpan<T, TVector> fromSpan, out T value)
         {
             value = default;
             return TryGetMatches(input, out var matches, out var matchCount, out var chunkSize)
-                && TryParse(matches.GetEnumerator(), provider, matchCount, chunkSize, fromSpan, out value);
+                && TryParse(matches.GetEnumerator(), styles, provider, matchCount, chunkSize, fromSpan, out value);
         }
 
-        protected bool TryParseAll(string input, IFormatProvider provider, int chunkCount, int chunkSize, FromSpan<T, TVector> fromSpan, out T[] values)
+        protected bool TryParseAll(string input, NumberStyles styles, IFormatProvider provider, int chunkCount, int chunkSize, FromSpan<T, TVector> fromSpan, out T[] values)
         {
             values = default;
             var matches = GetMatches(input, out var matchCount);
@@ -93,16 +97,16 @@ namespace aoc.Internal
             values = new T[matchCount / itemSize];
             var enumerator = matches.GetEnumerator();
             for (int i = 0; i < values.Length; i++)
-                if (!TryParse(enumerator, provider, itemSize, chunkSize, fromSpan, out values[i]))
+                if (!TryParse(enumerator, styles, provider, itemSize, chunkSize, fromSpan, out values[i]))
                     return false;
             return true;
         }
 
-        private bool TryParse(IEnumerator<Match> matches, IFormatProvider provider, int itemSize, int chunkSize, FromSpan<T, TVector> fromSpan, out T value)
+        private bool TryParse(IEnumerator<Match> matches, NumberStyles styles, IFormatProvider provider, int itemSize, int chunkSize, FromSpan<T, TVector> fromSpan, out T value)
         {
             value = default;
             Span<TItem2> items = stackalloc TItem2[itemSize];
-            if (!Vector.TryParse(matches, provider, items))
+            if (!Vector.TryParse(matches, styles, provider, items))
                 return false;
             value = FromItems(items, itemSize, chunkSize, fromSpan);
             return true;

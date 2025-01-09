@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -62,60 +63,96 @@ namespace aoc.Internal
             FromItems(values, values.Length, size > 0 ? size : MinCount, FromColumnSpan);
 
         public TMatrix ParseRowsAny(string input, IFormatProvider provider) =>
-            TryParseRowsAny(input, provider, out TMatrix matrix)
+            ParseRowsAny(input, 0, provider);
+
+        public TMatrix ParseRowsAny(string input, NumberStyles styles, IFormatProvider provider) =>
+            TryParseRowsAny(input, styles, provider, out TMatrix matrix)
                 ? matrix
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParseRowsAny(string input, out TMatrix matrix) =>
             TryParseRowsAny(input, null, out matrix);
 
+        public bool TryParseRowsAny(string input, NumberStyles styles, out TMatrix matrix) =>
+            TryParseRowsAny(input, styles, null, out matrix);
+
         public bool TryParseRowsAny(string input, IFormatProvider provider, out TMatrix matrix) =>
-            TryParseAny(input, provider, FromSpan, out matrix);
+            TryParseRowsAny(input, 0, provider, out matrix);
+
+        public bool TryParseRowsAny(string input, NumberStyles styles, IFormatProvider provider, out TMatrix matrix) =>
+            TryParseAny(input, styles, provider, FromSpan, out matrix);
 
         public TMatrix[] ParseRowsAll(string input, IFormatProvider provider, int rowCount, int columnCount) =>
-            TryParseRowsAll(input, provider, rowCount, columnCount, out TMatrix[] matrices)
+            ParseRowsAll(input, 0, provider, rowCount, columnCount);
+
+        public TMatrix[] ParseRowsAll(string input, NumberStyles styles, IFormatProvider provider, int rowCount, int columnCount) =>
+            TryParseRowsAll(input, styles, provider, rowCount, columnCount, out TMatrix[] matrices)
                 ? matrices
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParseRowsAll(string input, out TMatrix[] matrices) =>
             TryParseRowsAll(input, null, out matrices);
 
+        public bool TryParseRowsAll(string input, NumberStyles styles, out TMatrix[] matrices) =>
+            TryParseRowsAll(input, styles, null, out matrices);
+
         public bool TryParseRowsAll(string input, IFormatProvider provider, out TMatrix[] matrices) =>
-            TryParseRowsAll(input, provider, MinCount, out matrices);
+            TryParseRowsAll(input, 0, provider, out matrices);
 
-        public bool TryParseRowsAll(string input, IFormatProvider provider, int rowCount, out TMatrix[] matrices) =>
-            TryParseRowsAll(input, provider, rowCount, MinCount, out matrices);
+        public bool TryParseRowsAll(string input, NumberStyles styles, IFormatProvider provider, out TMatrix[] matrices) =>
+            TryParseRowsAll(input, styles, provider, MinCount, out matrices);
 
-        public bool TryParseRowsAll(string input, IFormatProvider provider, int rowCount, int columnCount, out TMatrix[] matrices) =>
-            TryParseAll(input, provider, rowCount, columnCount, FromSpan, out matrices);
+        public bool TryParseRowsAll(string input, NumberStyles styles, IFormatProvider provider, int rowCount, out TMatrix[] matrices) =>
+            TryParseRowsAll(input, styles, provider, rowCount, MinCount, out matrices);
+
+        public bool TryParseRowsAll(string input, NumberStyles styles, IFormatProvider provider, int rowCount, int columnCount, out TMatrix[] matrices) =>
+            TryParseAll(input, styles, provider, rowCount, columnCount, FromSpan, out matrices);
 
         public TMatrix ParseColumnsAny(string input, IFormatProvider provider) =>
-            TryParseColumnsAny(input, provider, out TMatrix matrix)
+            ParseColumnsAny(input, 0, provider);
+
+        public TMatrix ParseColumnsAny(string input, NumberStyles styles, IFormatProvider provider) =>
+            TryParseColumnsAny(input, styles, provider, out TMatrix matrix)
                 ? matrix
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParseColumnsAny(string input, out TMatrix matrix) =>
             TryParseColumnsAny(input, null, out matrix);
 
+        public bool TryParseColumnsAny(string input, NumberStyles styles, out TMatrix matrix) =>
+            TryParseColumnsAny(input, styles, null, out matrix);
+
         public bool TryParseColumnsAny(string input, IFormatProvider provider, out TMatrix matrix) =>
-            TryParseAny(input, provider, FromColumnSpan, out matrix);
+            TryParseColumnsAny(input, 0, provider, out matrix);
+
+        public bool TryParseColumnsAny(string input, NumberStyles styles, IFormatProvider provider, out TMatrix matrix) =>
+            TryParseAny(input, styles, provider, FromColumnSpan, out matrix);
 
         public TMatrix[] ParseColumnsAll(string input, IFormatProvider provider, int columnCount, int rowCount) =>
-            TryParseColumnsAll(input, provider, columnCount, rowCount, out TMatrix[] matrices)
+            ParseColumnsAll(input, 0, provider, columnCount, rowCount);
+
+        public TMatrix[] ParseColumnsAll(string input, NumberStyles styles, IFormatProvider provider, int columnCount, int rowCount) =>
+            TryParseColumnsAll(input, styles, provider, columnCount, rowCount, out TMatrix[] matrices)
                 ? matrices
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
         public bool TryParseColumnsAll(string input, out TMatrix[] matrices) =>
             TryParseColumnsAll(input, null, out matrices);
 
+        public bool TryParseColumnsAll(string input, NumberStyles styles, out TMatrix[] matrices) =>
+            TryParseColumnsAll(input, styles, null, out matrices);
+
         public bool TryParseColumnsAll(string input, IFormatProvider provider, out TMatrix[] matrices) =>
-            TryParseColumnsAll(input, provider, MinCount, out matrices);
+            TryParseColumnsAll(input, 0, provider, out matrices);
 
-        public bool TryParseColumnsAll(string input, IFormatProvider provider, int columnCount, out TMatrix[] matrices) =>
-            TryParseColumnsAll(input, provider, columnCount, MinCount, out matrices);
+        public bool TryParseColumnsAll(string input, NumberStyles styles, IFormatProvider provider, out TMatrix[] matrices) =>
+            TryParseColumnsAll(input, styles, provider, MinCount, out matrices);
 
-        public bool TryParseColumnsAll(string input, IFormatProvider provider, int columnCount, int rowCount, out TMatrix[] matrices) =>
-            TryParseAll(input, provider, columnCount, rowCount, FromColumnSpan, out matrices);
+        public bool TryParseColumnsAll(string input, NumberStyles styles, IFormatProvider provider, int columnCount, out TMatrix[] matrices) =>
+            TryParseColumnsAll(input, styles, provider, columnCount, MinCount, out matrices);
+
+        public bool TryParseColumnsAll(string input, NumberStyles styles, IFormatProvider provider, int columnCount, int rowCount, out TMatrix[] matrices) =>
+            TryParseAll(input, styles, provider, columnCount, rowCount, FromColumnSpan, out matrices);
 
         protected TMatrix FromRows(params TVector[] vectors) =>
             FromSpan(vectors);
