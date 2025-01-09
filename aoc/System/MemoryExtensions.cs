@@ -13,7 +13,7 @@ namespace System
         }
 
         public static bool All<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) =>
-            ((ReadOnlySpan<TSource>)source).All(predicate);
+            All((ReadOnlySpan<TSource>)source, predicate);
 
         public static bool All<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
@@ -24,7 +24,7 @@ namespace System
         }
 
         public static bool All<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) =>
-            ((ReadOnlySpan<TSource>)source).All(predicate);
+            All((ReadOnlySpan<TSource>)source, predicate);
 
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
@@ -35,7 +35,7 @@ namespace System
         }
 
         public static bool Any<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) =>
-            ((ReadOnlySpan<TSource>)source).Any(predicate);
+            Any((ReadOnlySpan<TSource>)source, predicate);
 
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
@@ -46,7 +46,7 @@ namespace System
         }
 
         public static bool Any<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) =>
-            ((ReadOnlySpan<TSource>)source).Any(predicate);
+            Any((ReadOnlySpan<TSource>)source, predicate);
 
         public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
@@ -57,7 +57,7 @@ namespace System
         }
 
         public static int Count<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) =>
-            ((ReadOnlySpan<TSource>)source).Count(predicate);
+            Count((ReadOnlySpan<TSource>)source, predicate);
 
         public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
@@ -68,7 +68,7 @@ namespace System
         }
 
         public static int Count<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) =>
-            ((ReadOnlySpan<TSource>)source).Count(predicate);
+            Count((ReadOnlySpan<TSource>)source, predicate);
 
         public static int Sum(this ReadOnlySpan<int> source)
         {
@@ -79,7 +79,7 @@ namespace System
         }
 
         public static int Sum(this Span<int> source) =>
-            ((ReadOnlySpan<int>)source).Sum();
+            Sum((ReadOnlySpan<int>)source);
 
         public static int Sum<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int> selector)
         {
@@ -90,7 +90,7 @@ namespace System
         }
 
         public static int Sum<TSource>(this Span<TSource> source, Func<TSource, int> selector) =>
-            ((ReadOnlySpan<TSource>)source).Sum(selector);
+            Sum((ReadOnlySpan<TSource>)source, selector);
 
         public static int Sum<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, int> selector)
         {
@@ -101,7 +101,7 @@ namespace System
         }
 
         public static int Sum<TSource>(this Span<TSource> source, Func<TSource, int, int> selector) =>
-            ((ReadOnlySpan<TSource>)source).Sum(selector);
+            Sum((ReadOnlySpan<TSource>)source, selector);
 
         public static int Product(this ReadOnlySpan<int> source)
         {
@@ -112,7 +112,7 @@ namespace System
         }
 
         public static int Product(this Span<int> source) =>
-            ((ReadOnlySpan<int>)source).Product();
+            Product((ReadOnlySpan<int>)source);
 
         public static int Product<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int> selector)
         {
@@ -123,7 +123,7 @@ namespace System
         }
 
         public static int Product<TSource>(this Span<TSource> source, Func<TSource, int> selector) =>
-            ((ReadOnlySpan<TSource>)source).Product(selector);
+            Product((ReadOnlySpan<TSource>)source, selector);
 
         public static int Product<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, int> selector)
         {
@@ -134,11 +134,11 @@ namespace System
         }
 
         public static int Product<TSource>(this Span<TSource> source, Func<TSource, int, int> selector) =>
-            ((ReadOnlySpan<TSource>)source).Product(selector);
+            Product((ReadOnlySpan<TSource>)source, selector);
 
 #if !NET8_0_OR_GREATER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Split(this ReadOnlySpan<char> source, Span<System.Range> destination, char separator, StringSplitOptions options = StringSplitOptions.None)
+        public static int Split(this ReadOnlySpan<char> source, Span<Range> destination, char separator, StringSplitOptions options = StringSplitOptions.None)
         {
             int index = 0, start = 0;
             for (int curr = 0; curr < source.Length; curr++)
@@ -154,7 +154,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Split(this ReadOnlySpan<char> source, Span<System.Range> destination, ReadOnlySpan<char> separator, StringSplitOptions options = StringSplitOptions.None)
+        public static int Split(this ReadOnlySpan<char> source, Span<Range> destination, ReadOnlySpan<char> separator, StringSplitOptions options = StringSplitOptions.None)
         {
             int index = 0, start = 0;
             for (int curr = 0; curr <= source.Length - separator.Length; curr++)
@@ -170,7 +170,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int AddItem(ReadOnlySpan<char> source, Span<System.Range> destination, StringSplitOptions options, int index, int start, int end)
+        private static int AddItem(ReadOnlySpan<char> source, Span<Range> destination, StringSplitOptions options, int index, int start, int end)
         {
             if (options.HasFlag(StringSplitOptions.TrimEntries))
             {
