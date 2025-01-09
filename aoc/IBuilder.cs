@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace aoc
 {
@@ -29,10 +28,6 @@ namespace aoc
         T Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, NumberStyles styles, IFormatProvider provider = null);
         bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, NumberStyles styles, out T result);
         bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, NumberStyles styles, IFormatProvider provider, out T result);
-
-        T Parse(string input, Regex separator, IFormatProvider provider = null);
-        bool TryParse(string input, Regex separator, out T result);
-        bool TryParse(string input, Regex separator, IFormatProvider provider, out T result);
 
         T ParseAny(string input, IFormatProvider provider = null);
         bool TryParseAny(string input, out T result);

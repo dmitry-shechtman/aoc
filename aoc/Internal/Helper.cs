@@ -225,17 +225,6 @@ namespace aoc.Internal
             return TryParse(input, split[..count], styles, provider, out value);
         }
 
-        public T Parse(string input, Regex separator, IFormatProvider provider) =>
-            TryParse(input, separator, provider, out T value)
-                ? value
-                : throw new InvalidOperationException("Input string was not in a correct format.");
-
-        public bool TryParse(string input, Regex separator, out T value) =>
-            TryParse(input, separator, null, out value);
-
-        public bool TryParse(string input, Regex separator, IFormatProvider provider, out T value) =>
-            TryParse(separator.Split(input)[1..^1], provider, out value);
-
         public T ParseAny(string input, IFormatProvider provider) =>
             ParseAny(input, 0, provider);
 
@@ -331,26 +320,6 @@ namespace aoc.Internal
         {
             for (int i = 0; i < split.Length; i++)
                 if (!Item.TryParse(input[split[i]], styles, provider, out values[i]))
-                    return false;
-            return true;
-        }
-
-        private bool TryParse(string[] ss, IFormatProvider provider, out T value)
-        {
-            value = default;
-            if (ss.Length < MinCount || ss.Length > MaxCount)
-                return false;
-            Span<TItem> values = stackalloc TItem[ss.Length];
-            if (!TryParse(ss, provider, values))
-                return false;
-            value = FromSpan(values);
-            return true;
-        }
-
-        private bool TryParse(string[] ss, IFormatProvider provider, Span<TItem> values)
-        {
-            for (int i = 0; i < ss.Length; i++)
-                if (!Item.TryParse(ss[i], 0, provider, out values[i]))
                     return false;
             return true;
         }
