@@ -78,20 +78,26 @@ namespace aoc
         public static IRangeBuilder<LongVectorRange, LongVector> Builder =>
             Helper;
 
-        public static LongVectorRange Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static LongVectorRange Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out LongVectorRange range) =>
             Helper.TryParse(s, out range);
 
+        public static LongVectorRange Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out LongVectorRange range) =>
             Helper.TryParse(s, provider, out range);
 
-        public static LongVectorRange Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static LongVectorRange Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out LongVectorRange range) =>
             Helper.TryParse(s, out range);
+
+        public static LongVectorRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongVectorRange range) =>
             Helper.TryParse(s, provider, out range);

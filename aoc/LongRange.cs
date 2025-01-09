@@ -67,20 +67,26 @@ namespace aoc
 
         public static IBuilder<LongRange> Builder => Helper;
 
-        public static LongRange Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static LongRange Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out LongRange range) =>
             Helper.TryParse(s, out range);
 
+        public static LongRange Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out LongRange range) =>
             Helper.TryParse(s, provider, out range);
 
-        public static LongRange Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static LongRange Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out LongRange range) =>
             Helper.TryParse(s, out range);
+
+        public static LongRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongRange range) =>
             Helper.TryParse(s, provider, out range);

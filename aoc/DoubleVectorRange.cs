@@ -65,20 +65,26 @@ namespace aoc
         public static IRangeBuilder<DoubleVectorRange, DoubleVector> Builder =>
             Helper;
 
-        public static DoubleVectorRange Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static DoubleVectorRange Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out DoubleVectorRange range) =>
             Helper.TryParse(s, out range);
 
+        public static DoubleVectorRange Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out DoubleVectorRange range) =>
             Helper.TryParse(s, provider, out range);
 
-        public static DoubleVectorRange Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static DoubleVectorRange Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out DoubleVectorRange range) =>
             Helper.TryParse(s, out range);
+
+        public static DoubleVectorRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleVectorRange range) =>
             Helper.TryParse(s, provider, out range);

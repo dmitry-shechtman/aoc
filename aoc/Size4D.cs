@@ -78,20 +78,26 @@ namespace aoc
 
         public static IBuilder<Size4D> Builder => Helper;
 
-        public static Size4D Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static Size4D Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out Size4D size) =>
             Helper.TryParse(s, out size);
 
+        public static Size4D Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out Size4D size) =>
             Helper.TryParse(s, provider, out size);
 
-        public static Size4D Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static Size4D Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out Size4D size) =>
             Helper.TryParse(s, out size);
+
+        public static Size4D Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Size4D size) =>
             Helper.TryParse(s, provider, out size);

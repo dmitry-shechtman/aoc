@@ -90,20 +90,26 @@ namespace aoc
 
         public static IBuilder<Vector> Builder => Helper;
 
-        public static Vector Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static Vector Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out Vector vector) =>
             Helper.TryParse(s, out vector);
 
+        public static Vector Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out Vector vector) =>
             Helper.TryParse(s, provider, out vector);
 
-        public static Vector Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static Vector Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out Vector vector) =>
             Helper.TryParse(s, out vector);
+
+        public static Vector Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Vector vector) =>
             Helper.TryParse(s, provider, out vector);

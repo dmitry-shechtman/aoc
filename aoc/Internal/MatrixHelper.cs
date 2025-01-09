@@ -122,7 +122,7 @@ namespace aoc.Internal
         public string ToString(TMatrix matrix, string format, IFormatProvider provider) =>
             Rows.ToString(matrix, format, provider);
 
-        public TMatrix Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public TMatrix Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
             Rows.Parse(s, provider);
 
         public bool TryParse(ReadOnlySpan<char> s, out TMatrix matrix) =>

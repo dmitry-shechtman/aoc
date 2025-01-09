@@ -91,20 +91,26 @@ namespace aoc
 
         public static IBuilder<DoubleVector> Builder => Helper;
 
-        public static DoubleVector Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static DoubleVector Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out DoubleVector vector) =>
             Helper.TryParse(s, out vector);
 
+        public static DoubleVector Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out DoubleVector vector) =>
             Helper.TryParse(s, provider, out vector);
 
-        public static DoubleVector Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static DoubleVector Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out DoubleVector vector) =>
             Helper.TryParse(s, out vector);
+
+        public static DoubleVector Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleVector vector) =>
             Helper.TryParse(s, provider, out vector);

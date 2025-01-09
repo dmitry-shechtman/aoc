@@ -137,20 +137,26 @@ namespace aoc
         public static IMatrixBuilder<DoubleMatrix, DoubleVector, double> Columns =>
             Helper.Columns;
 
-        public static DoubleMatrix Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static DoubleMatrix Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out DoubleMatrix matrix) =>
             Helper.TryParse(s, out matrix);
 
+        public static DoubleMatrix Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out DoubleMatrix matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
-        public static DoubleMatrix Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static DoubleMatrix Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out DoubleMatrix matrix) =>
             Helper.TryParse(s, out matrix);
+
+        public static DoubleMatrix Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleMatrix matrix) =>
             Helper.TryParse(s, provider, out matrix);

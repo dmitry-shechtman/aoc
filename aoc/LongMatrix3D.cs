@@ -164,20 +164,26 @@ namespace aoc
         public static IMatrixBuilder<LongMatrix3D, LongVector3D, long> Columns =>
             Helper.Columns;
 
-        public static LongMatrix3D Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static LongMatrix3D Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out LongMatrix3D matrix) =>
             Helper.TryParse(s, out matrix);
 
+        public static LongMatrix3D Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out LongMatrix3D matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
-        public static LongMatrix3D Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static LongMatrix3D Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out LongMatrix3D matrix) =>
             Helper.TryParse(s, out matrix);
+
+        public static LongMatrix3D Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongMatrix3D matrix) =>
             Helper.TryParse(s, provider, out matrix);

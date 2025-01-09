@@ -89,19 +89,25 @@ namespace aoc
         public static IRangeBuilder<Vector3DRange, Vector3D> Builder =>
             Helper;
 
-        public static Vector3DRange Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static Vector3DRange Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out Vector3DRange range) =>
             Helper.TryParse(s, out range);
 
+        public static Vector3DRange Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out Vector3DRange range) =>
             Helper.TryParse(s, provider, out range);
+
+        public static Vector3DRange Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out Vector3DRange range) =>
             Helper.TryParse(s, out range);
 
-        public static Vector3DRange Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
+        public static Vector3DRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
             Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Vector3DRange range) =>

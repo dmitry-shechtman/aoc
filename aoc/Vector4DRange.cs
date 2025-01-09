@@ -94,20 +94,26 @@ namespace aoc
         public static IRangeBuilder<Vector4DRange, Vector4D> Builder =>
             Helper;
 
-        public static Vector4DRange Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static Vector4DRange Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out Vector4DRange range) =>
             Helper.TryParse(s, out range);
 
+        public static Vector4DRange Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out Vector4DRange range) =>
             Helper.TryParse(s, provider, out range);
 
-        public static Vector4DRange Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static Vector4DRange Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out Vector4DRange range) =>
             Helper.TryParse(s, out range);
+
+        public static Vector4DRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Vector4DRange range) =>
             Helper.TryParse(s, provider, out range);

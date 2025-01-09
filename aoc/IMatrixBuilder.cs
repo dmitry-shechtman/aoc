@@ -16,12 +16,16 @@ namespace aoc
         TMatrix FromElements(ReadOnlySpan<T> values);
         TMatrix FromElements(ReadOnlySpan<T> values, int chunkSize);
 
-        TMatrix[] ParseAll(string input, IFormatProvider provider, int count, int size);
+        TMatrix[] ParseAll(string input, int count, int size) =>
+            ParseAll(input, null, count, size);
         bool TryParseAll(string input, int count, int size, out TMatrix[] matrices);
+        TMatrix[] ParseAll(string input, IFormatProvider provider, int count, int size);
         bool TryParseAll(string input, IFormatProvider provider, int count, int size, out TMatrix[] matrices);
 
-        TMatrix[] ParseAll(string input, NumberStyles styles, IFormatProvider provider, int count, int size);
+        TMatrix[] ParseAll(string input, NumberStyles styles, int count, int size) =>
+            ParseAll(input, styles, null, count, size);
         bool TryParseAll(string input, NumberStyles styles, int count, int size, out TMatrix[] matrices);
+        TMatrix[] ParseAll(string input, NumberStyles styles, IFormatProvider provider, int count, int size);
         bool TryParseAll(string input, NumberStyles styles, IFormatProvider provider, int count, int size, out TMatrix[] matrices);
     }
 }

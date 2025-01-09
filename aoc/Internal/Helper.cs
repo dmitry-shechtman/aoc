@@ -161,7 +161,7 @@ namespace aoc.Internal
             return sb.ToString();
         }
 
-        public T Parse(ReadOnlySpan<char> input, IFormatProvider provider) =>
+        public T Parse(ReadOnlySpan<char> input, IFormatProvider provider = null) =>
             TryParse(input, provider, out T value)
                 ? value
                 : throw new InvalidOperationException("Input string was not in a correct format.");

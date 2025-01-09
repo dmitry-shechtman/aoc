@@ -59,20 +59,26 @@ namespace aoc
 
         public static IBuilder<DoubleRange> Builder => Helper;
 
-        public static DoubleRange Parse(string s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static DoubleRange Parse(string s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(string s, out DoubleRange range) =>
             Helper.TryParse(s, out range);
 
+        public static DoubleRange Parse(string s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
+
         public static bool TryParse(string s, IFormatProvider provider, out DoubleRange range) =>
             Helper.TryParse(s, provider, out range);
 
-        public static DoubleRange Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
-            Helper.Parse(s, provider);
+        public static DoubleRange Parse(ReadOnlySpan<char> s) =>
+            Helper.Parse(s);
 
         public static bool TryParse(ReadOnlySpan<char> s, out DoubleRange range) =>
             Helper.TryParse(s, out range);
+
+        public static DoubleRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Helper.Parse(s, provider);
 
         public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleRange range) =>
             Helper.TryParse(s, provider, out range);
