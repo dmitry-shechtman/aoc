@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -41,9 +42,10 @@ namespace aoc.Internal
         where TVectorHelper : IVectorHelper<TVector, T>
     {
         public MatrixBuilder(TStrategy strategy,
-            FromSpan<TMatrix, TVector> fromSpan, TVectorHelper vector)
+            FromSpan<TMatrix, TVector> fromSpan, TVectorHelper vector, Dictionary<int, int> chunkSizes)
                 : base(strategy, fromSpan, vector)
         {
+            ChunkSizes = chunkSizes;
         }
 
         public TMatrix FromVectors(TVector[] vectors) =>
@@ -68,9 +70,14 @@ namespace aoc.Internal
 
         public TMatrix FromElements(ReadOnlySpan<T> values, int size) =>
             FromItems(values, values.Length, size > 0 ? size : MinCount);
+
+        protected override int GetChunkSize(int count) =>
+            ChunkSizes.GetValueOrDefault(count);
+
+        private Dictionary<int, int> ChunkSizes { get; }
     }
 
-    abstract class MatrixHelper<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, T, TStrategy, TVectorHelper>
+    abstract class MatrixHelper<TMatrix, TVector, T, TStrategy, TVectorHelper>
         where TMatrix : unmanaged, IMatrix<TMatrix, TVector, T>
         where TVector : unmanaged, IVector<TVector, TMatrix, T>
         where T : unmanaged, IFormattable
@@ -80,22 +87,51 @@ namespace aoc.Internal
         protected MatrixHelper(TStrategy strategy,
             FromSpan<TMatrix, TVector> fromRows, FromSpan<TMatrix, TVector> fromColumns, TVectorHelper vector,
             TMatrix pOne, TMatrix nOne)
-                : base(strategy, fromRows, vector)
         {
+            FromRowSpan = fromRows;
+            Vector = vector;
             One = pOne;
             NegativeOne = nOne;
-            Rows = new(strategy, fromRows, vector);
-            Columns = new(strategy, fromColumns, vector);
+            _chunkSizes = new(() => GetChunkSizes());
+            _rows = new(() => new(strategy, fromRows, vector, ChunkSizes));
+            _columns = new(() => new(strategy, fromColumns, vector, ChunkSizes));
         }
 
         protected TMatrix FromRows(params TVector[] vectors) =>
-            FromSpan(vectors);
+            FromRowSpan(vectors);
+
+        private FromSpan<TMatrix, TVector> FromRowSpan { get; }
+
+        protected TVectorHelper Vector { get; }
 
         public TMatrix One         { get; }
         public TMatrix NegativeOne { get; }
 
-        public MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> Rows    { get; }
-        public MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> Columns { get; }
+        private readonly Lazy<Dictionary<int, int>> _chunkSizes;
+        private Dictionary<int, int> ChunkSizes => _chunkSizes.Value;
+
+        private readonly Lazy<MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper>> _rows;
+        public MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> Rows    => _rows.Value;
+
+        private readonly Lazy<MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper>> _columns;
+        public MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> Columns => _columns.Value;
+
+        public string ToString(TMatrix matrix, IFormatProvider provider = null) =>
+            Rows.ToString(matrix, provider);
+
+        public string ToString(TMatrix matrix, string format, IFormatProvider provider) =>
+            Rows.ToString(matrix, format, provider);
+
+        public TMatrix Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+            Rows.Parse(s, provider);
+
+        public bool TryParse(ReadOnlySpan<char> s, out TMatrix matrix) =>
+            Rows.TryParse(s, out matrix);
+
+        public bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out TMatrix matrix) =>
+            Rows.TryParse(s, provider, out matrix);
+
+        protected abstract Dictionary<int, int> GetChunkSizes();
     }
 
     sealed class Matrix2DHelperStrategy<TMatrix, TVector, T> : MatrixHelperStrategy<Matrix2DHelperStrategy<TMatrix, TVector, T>, TMatrix, TVector, T>
@@ -149,12 +185,11 @@ namespace aoc.Internal
             _ => throw new(),
         };
 
-        protected override int GetChunkSize(int count) => count switch
+        protected override Dictionary<int, int> GetChunkSizes() => new()
         {
-            2 * 2 => 2,
-            2 * 3 => 2,
-            3 * 3 => 3,
-            _ => 0
+            [2 * 2] = 2,
+            [2 * 3] = 2,
+            [3 * 3] = 3,
         };
     }
 
@@ -189,13 +224,12 @@ namespace aoc.Internal
         public TMatrix Translate(TVector v) =>
             FromRows(Vector.East, Vector.South, Vector.Down, v);
 
-        protected override int GetChunkSize(int count) => count switch
+        protected override Dictionary<int, int> GetChunkSizes() => new()
         {
-            2 * 3 => 3,
-            3 * 3 => 3,
-            3 * 4 => 3,
-            4 * 4 => 4,
-            _ => 0
+            [2 * 3] = 3,
+            [3 * 3] = 3,
+            [3 * 4] = 3,
+            [4 * 4] = 4,
         };
     }
 }
