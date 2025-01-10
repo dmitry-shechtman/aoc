@@ -60,7 +60,7 @@ namespace aoc.Internal
         public TGrid MoveNext(TGrid grid, Func<TVector, int, bool> filterInclusive, TRange range) =>
             MoveNext(grid, GetAllNeighborsAndSelf(grid, range), filterInclusive);
 
-        private TGrid MoveNext(TGrid grid, ParallelQuery<TVector> pp, Func<TVector, bool> predicate)
+        private static TGrid MoveNext(TGrid grid, ParallelQuery<TVector> pp, Func<TVector, bool> predicate)
         {
             grid.Points = pp.Where(predicate).ToHashSet();
             return grid;
@@ -326,17 +326,36 @@ namespace aoc.Internal
         public static Grid Parse(ReadOnlySpan<char> input) =>
             Parse(input, out _);
 
+        public static bool TryParse(ReadOnlySpan<char> input, out Grid grid) =>
+            TryParse(input, out _, out grid);
+
         public static Grid Parse(ReadOnlySpan<char> input, out VectorRange range) =>
-            Parse(input, string.Empty, out range);
+            TryParse(input, out range, out Grid value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public static bool TryParse(ReadOnlySpan<char> input, out VectorRange range, out Grid grid) =>
+            TryParse(input, string.Empty, out range, out grid);
 
         public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
             Parse(input, format, out _);
 
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out Grid grid) =>
+            TryParse(input, format, out _, out grid);
+
         public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
-            Parse(input, format, Span<Vector>.Empty, out range);
+            TryParse(input, format, out range, out Grid value)
+                ? value
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range, out Grid grid) =>
+            TryParse(input, format, Span<Vector>.Empty, out range, out grid);
 
         public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output) =>
             Parse(input, format, output, out _);
+
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out Grid grid) =>
+            TryParse(input, format, output, out _, out grid);
 
         public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range) =>
             TryParse(input, format, output, out range, out Grid value)

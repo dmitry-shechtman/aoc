@@ -59,31 +59,58 @@ namespace aoc.Grids
         public string ToString(VectorRange range, string format, IFormatProvider provider = null) =>
             Helper.ToString(this, range, format, provider);
 
+        public static MultiGrid Parse(string input) =>
+            Helper.Parse(input);
+
+        public static bool TryParse(string input, out MultiGrid multi) =>
+            Helper.TryParse(input, out multi);
+
         public static MultiGrid Parse(ReadOnlySpan<char> input) =>
             Helper.Parse(input);
 
-        public static MultiGrid Parse(string input) =>
-            Helper.Parse(input);
+        public static bool TryParse(ReadOnlySpan<char> input, out MultiGrid multi) =>
+            Helper.TryParse(input, out multi);
 
         public static MultiGrid Parse(ReadOnlySpan<char> input, out VectorRange range) =>
             Helper.Parse(input, out range);
 
+        public static bool TryParse(ReadOnlySpan<char> input, out VectorRange range, out MultiGrid multi) =>
+            Helper.TryParse(input, out range, out multi);
+
         public static MultiGrid Parse(ReadOnlySpan<char> input, Func<char, bool> predicate) =>
             Helper.Parse(input, predicate);
+
+        public static bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate, out MultiGrid multi) =>
+            Helper.TryParse(input, predicate, out multi);
 
         public static MultiGrid Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range) =>
             Helper.Parse(input, predicate, out range);
 
+        public static bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range, out MultiGrid multi) =>
+            Helper.TryParse(input, predicate, out range, out multi);
+
         public static MultiGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
             Helper.Parse(input, format);
+
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out MultiGrid multi) =>
+            Helper.TryParse(input, format, out multi);
 
         public static MultiGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
             Helper.Parse(input, format, out range);
 
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range, out MultiGrid multi) =>
+            Helper.TryParse(input, format, out range, out multi);
+
         public static MultiGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator) =>
             Helper.Parse(input, format, separator);
 
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out MultiGrid multi) =>
+            Helper.TryParse(input, format, separator, out multi);
+
         public static MultiGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range) =>
             Helper.Parse(input, format, separator, out range);
+
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range, out MultiGrid multi) =>
+            Helper.TryParse(input, format, separator, out range, out multi);
     }
 }

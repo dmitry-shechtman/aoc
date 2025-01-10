@@ -44,44 +44,84 @@ namespace aoc.Internal
         public TMulti Parse(ReadOnlySpan<char> input) =>
             Parse(input, out _);
 
+        public bool TryParse(ReadOnlySpan<char> input, out TMulti multi) =>
+            TryParse(input, out _, out multi);
+
         public TMulti Parse(ReadOnlySpan<char> input, out VectorRange range) =>
-            Parse(input, GetFormat(input, stackalloc char[256]), out range);
+            TryParse(input, out range, out TMulti multi)
+                ? multi
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParse(ReadOnlySpan<char> input, out VectorRange range, out TMulti multi) =>
+            TryParse(input, GetFormat(input, stackalloc char[256]), out range, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate) =>
             Parse(input, predicate, out _);
 
+        public bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate, out TMulti multi) =>
+            TryParse(input, predicate, out _, out multi);
+
         public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range) =>
-            Parse(input, GetFormat(input, stackalloc char[256], predicate), out range);
+            TryParse(input, predicate, out range, out TMulti multi)
+                ? multi
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range, out TMulti multi) =>
+            TryParse(input, GetFormat(input, stackalloc char[256], predicate), out range, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
             Parse(input, format, out _);
 
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out TMulti multi) =>
+            TryParse(input, format, out _, out multi);
+
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
             Parse(input, format, DefaultSeparator, out range);
+
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range, out TMulti multi) =>
+            TryParse(input, format, DefaultSeparator, out range, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator) =>
             Parse(input, format, separator, out _);
 
-        public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range)
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out TMulti multi) =>
+            TryParse(input, format, separator, out _, out multi);
+
+        public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range) =>
+            TryParse(input, format, separator, out range, out TMulti multi)
+                ? multi
+                : throw new InvalidOperationException("Input string was not in a correct format.");
+
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range, out TMulti multi)
         {
-            int width = 0, height = 1, x = 0, y = 0, i;
+            int width = 0, height = 1, x = 0, y = 0, i, j;
+            char c, empty = DefaultEmptyChar;
             var points = new HashSet<Vector>[format.Length + 1];
             for (i = 0; i < points.Length; i++)
                 points[i] = new();
-            for (int j = 0; j < input.Length; ++j, ++x)
+            for (i = 0; i < input.Length; ++i, ++x)
             {
-                if ((i = format.IndexOf(input[j])) >= 0)
+                if ((c = input[i]) == empty)
                 {
-                    points[i].Add((x, y));
+                }
+                else if ((j = format.IndexOf(c)) >= 0)
+                {
+                    points[j].Add((x, y));
                     points[^1].Add((x, y));
                 }
-                else if (j <= input.Length - separator.Length &&
-                    input[j..(j + separator.Length)].SequenceEqual(separator))
+                else if (i <= input.Length - separator.Length &&
+                    input[i..(i + separator.Length)].SequenceEqual(separator))
                 {
                     width = x > width ? x : width;
                     if (x > 0)
                         ++height;
-                    (x, y, j) = (-1, ++y, j + separator.Length - 1);
+                    (x, y, i) = (-1, ++y, i + separator.Length - 1);
+                }
+                else
+                {
+                    range = default;
+                    multi = null;
+                    return false;
                 }
             }
             width = x > width ? x : width;
@@ -89,7 +129,8 @@ namespace aoc.Internal
             var grids = new TGrid[points.Length];
             for (i = 0; i < points.Length; i++)
                 grids[i] = CreateGrid(points[i]);
-            return CreateMulti(grids);
+            multi = CreateMulti(grids);
+            return true;
         }
 
         private static Span<char> GetFormat(ReadOnlySpan<char> input, Span<char> format) =>
