@@ -68,19 +68,6 @@ namespace System.Linq
             source.OrderByDescending(v => v, comparer);
 #endif
 
-#if !NET6_0_OR_GREATER && !NET6_0
-        public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int size) =>
-            source.Select()
-                .GroupBy(t => t.Index / size)
-                .Select(g => g.Select(t => t.Value).ToArray());
-
-        public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector) =>
-            source.OrderBy(keySelector).First();
-
-        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector) =>
-            source.OrderByDescending(keySelector).First();
-#endif
-
         public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
             source.Where(predicate).Count();
 
