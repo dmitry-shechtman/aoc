@@ -35,7 +35,7 @@ namespace aoc.Internal
         }) is not null;
     }
 
-    sealed class MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, T, TStrategy, TVectorHelper>, IMatrixBuilder<TMatrix, TVector, T>
+    sealed class MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> : Helper2<TMatrix, TVector, T, TStrategy, TVectorHelper>, Builders.IMatrixBuilder<TMatrix, TVector, T>
         where TMatrix : unmanaged, IMatrix<TMatrix, TVector, T>
         where TVector : unmanaged, IVector<TVector, TMatrix, T>
         where T : unmanaged, IFormattable

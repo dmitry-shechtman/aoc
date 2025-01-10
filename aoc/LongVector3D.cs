@@ -102,7 +102,7 @@ namespace aoc
         public readonly long Y => y;
         public readonly long Z => z;
 
-        public static IBuilder<LongVector3D> Builder => Helper;
+        public static Builders.IBuilder<LongVector3D> Builder => Helper;
 
         public static LongVector3D Parse(string? s) =>
             Helper.Parse(s);

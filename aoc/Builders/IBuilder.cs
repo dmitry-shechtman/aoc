@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace aoc
+namespace aoc.Builders
 {
     public interface IBuilder<T>
         where T : struct

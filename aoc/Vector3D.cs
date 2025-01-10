@@ -97,7 +97,7 @@ namespace aoc
         public readonly int Y => y;
         public readonly int Z => z;
 
-        public static IBuilder<Vector3D> Builder => Helper;
+        public static Builders.IBuilder<Vector3D> Builder => Helper;
 
         public static Vector3D Parse(string? s) =>
             Helper.Parse(s);

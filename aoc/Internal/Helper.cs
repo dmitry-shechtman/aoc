@@ -112,7 +112,7 @@ namespace aoc.Internal
         bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> separator, NumberStyles styles, IFormatProvider? provider, out T value);
     }
 
-    abstract class Helper<T, TItem, TStrategy, TItemHelper> : IBuilder<T>
+    abstract class Helper<T, TItem, TStrategy, TItemHelper> : Builders.IBuilder<T>
         where T : unmanaged, IReadOnlyCollection<TItem>
         where TItem : unmanaged, IFormattable
         where TStrategy : IHelperStrategy<T, TItem>

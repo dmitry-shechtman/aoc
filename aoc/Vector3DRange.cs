@@ -86,7 +86,7 @@ namespace aoc
         public readonly Vector3D this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width % Height, Min.z + index / (Width * Height));
 
-        public static IRangeBuilder<Vector3DRange, Vector3D> Builder =>
+        public static Builders.IRangeBuilder<Vector3DRange, Vector3D> Builder =>
             Helper;
 
         public static Vector3DRange Parse(string? s) =>

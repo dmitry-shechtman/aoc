@@ -126,10 +126,10 @@ namespace aoc
         public readonly LongVector C2 => new(m12, m22);
         public readonly LongVector C3 => new(m13, m23);
 
-        public static IMatrixBuilder<LongMatrix, LongVector, long> Rows =>
+        public static Builders.IMatrixBuilder<LongMatrix, LongVector, long> Rows =>
             Helper.Rows;
 
-        public static IMatrixBuilder<LongMatrix, LongVector, long> Columns =>
+        public static Builders.IMatrixBuilder<LongMatrix, LongVector, long> Columns =>
             Helper.Columns;
 
         public static LongMatrix Parse(string? s) =>

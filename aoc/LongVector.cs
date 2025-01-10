@@ -84,7 +84,7 @@ namespace aoc
         public readonly long X => x;
         public readonly long Y => y;
 
-        public static IBuilder<LongVector> Builder => Helper;
+        public static Builders.IBuilder<LongVector> Builder => Helper;
 
         public static LongVector Parse(string? s) =>
             Helper.Parse(s);

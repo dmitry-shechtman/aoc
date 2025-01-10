@@ -107,7 +107,7 @@ namespace aoc
         public readonly double Y => y;
         public readonly double Z => z;
 
-        public static IBuilder<DoubleVector3D> Builder => Helper;
+        public static Builders.IBuilder<DoubleVector3D> Builder => Helper;
 
         public static DoubleVector3D Parse(string? s) =>
             Helper.Parse(s);

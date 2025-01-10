@@ -58,7 +58,7 @@ namespace aoc
         public readonly long LongLength =>
             (long)width * height;
 
-        public static IBuilder<Size> Builder => Helper;
+        public static Builders.IBuilder<Size> Builder => Helper;
 
         public static Size Parse(string? s) =>
             Helper.Parse(s);

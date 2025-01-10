@@ -57,7 +57,7 @@ namespace aoc
             max = Max;
         }
 
-        public static IBuilder<DoubleRange> Builder => Helper;
+        public static Builders.IBuilder<DoubleRange> Builder => Helper;
 
         public static DoubleRange Parse(string? s) =>
             Helper.Parse(s);

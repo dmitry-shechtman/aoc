@@ -131,10 +131,10 @@ namespace aoc
         public readonly DoubleVector C2 => new(m12, m22);
         public readonly DoubleVector C3 => new(m13, m23);
 
-        public static IMatrixBuilder<DoubleMatrix, DoubleVector, double> Rows =>
+        public static Builders.IMatrixBuilder<DoubleMatrix, DoubleVector, double> Rows =>
             Helper.Rows;
 
-        public static IMatrixBuilder<DoubleMatrix, DoubleVector, double> Columns =>
+        public static Builders.IMatrixBuilder<DoubleMatrix, DoubleVector, double> Columns =>
             Helper.Columns;
 
         public static DoubleMatrix Parse(string? s) =>

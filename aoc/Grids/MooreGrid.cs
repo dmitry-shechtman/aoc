@@ -108,9 +108,9 @@ namespace aoc.Grids
         public static Vector[] Headings =>
             Helper.Headings;
 
-        public static IHeadingBuilder         Heading => Helper;
-        public static IGridBuilder<MooreGrid> Builder => Helper;
-        public static IVectorBuilder<Vector>  Vector  => Helper;
-        public static IPathBuilder<Vector>    Path    => Helper;
+        public static Builders.IHeadingBuilder         Heading => Helper;
+        public static Builders.IGridBuilder<MooreGrid> Builder => Helper;
+        public static Builders.IVectorBuilder<Vector>  Vector  => Helper;
+        public static Builders.IPathBuilder<Vector>    Path    => Helper;
     }
 }

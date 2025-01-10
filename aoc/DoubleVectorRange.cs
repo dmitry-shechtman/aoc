@@ -62,7 +62,7 @@ namespace aoc
             max = Max;
         }
 
-        public static IRangeBuilder<DoubleVectorRange, DoubleVector> Builder =>
+        public static Builders.IRangeBuilder<DoubleVectorRange, DoubleVector> Builder =>
             Helper;
 
         public static DoubleVectorRange Parse(string? s) =>

@@ -65,7 +65,7 @@ namespace aoc
         readonly int IReadOnlyCollection<long>.Count =>
             (int)Count;
 
-        public static IBuilder<LongRange> Builder => Helper;
+        public static Builders.IBuilder<LongRange> Builder => Helper;
 
         public static LongRange Parse(string? s) =>
             Helper.Parse(s);

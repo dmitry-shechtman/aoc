@@ -163,10 +163,10 @@ namespace aoc
         public readonly DoubleVector3D C3 => new(m13, m23, m33);
         public readonly DoubleVector3D C4 => new(m14, m24, m34);
 
-        public static IMatrixBuilder<DoubleMatrix3D, DoubleVector3D, double> Rows =>
+        public static Builders.IMatrixBuilder<DoubleMatrix3D, DoubleVector3D, double> Rows =>
             Helper.Rows;
 
-        public static IMatrixBuilder<DoubleMatrix3D, DoubleVector3D, double> Columns =>
+        public static Builders.IMatrixBuilder<DoubleMatrix3D, DoubleVector3D, double> Columns =>
             Helper.Columns;
 
         public static DoubleMatrix3D Parse(string? s) =>

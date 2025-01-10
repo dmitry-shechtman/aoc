@@ -158,10 +158,10 @@ namespace aoc
         public readonly LongVector3D C3 => new(m13, m23, m33);
         public readonly LongVector3D C4 => new(m14, m24, m34);
 
-        public static IMatrixBuilder<LongMatrix3D, LongVector3D, long> Rows =>
+        public static Builders.IMatrixBuilder<LongMatrix3D, LongVector3D, long> Rows =>
             Helper.Rows;
 
-        public static IMatrixBuilder<LongMatrix3D, LongVector3D, long> Columns =>
+        public static Builders.IMatrixBuilder<LongMatrix3D, LongVector3D, long> Columns =>
             Helper.Columns;
 
         public static LongMatrix3D Parse(string? s) =>

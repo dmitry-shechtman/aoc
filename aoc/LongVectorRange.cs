@@ -75,7 +75,7 @@ namespace aoc
         readonly int IReadOnlyCollection<LongVector>.Count =>
             (int)Length;
 
-        public static IRangeBuilder<LongVectorRange, LongVector> Builder =>
+        public static Builders.IRangeBuilder<LongVectorRange, LongVector> Builder =>
             Helper;
 
         public static LongVectorRange Parse(string? s) =>

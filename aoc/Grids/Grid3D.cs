@@ -117,8 +117,8 @@ namespace aoc.Grids
         public static Vector3D[] Headings =>
             Helper.Headings;
 
-        public static IHeadingBuilder          Heading => Helper;
-        public static IVectorBuilder<Vector3D> Vector  => Helper;
-        public static IPathBuilder<Vector3D>   Path    => Helper;
+        public static Builders.IHeadingBuilder          Heading => Helper;
+        public static Builders.IVectorBuilder<Vector3D> Vector  => Helper;
+        public static Builders.IPathBuilder<Vector3D>   Path    => Helper;
     }
 }

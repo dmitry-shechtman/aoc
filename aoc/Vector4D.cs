@@ -116,7 +116,7 @@ namespace aoc
         public readonly int Z => z;
         public readonly int W => w;
 
-        public static IBuilder<Vector4D> Builder => Helper;
+        public static Builders.IBuilder<Vector4D> Builder => Helper;
 
         public static Vector4D Parse(string? s) =>
             Helper.Parse(s);

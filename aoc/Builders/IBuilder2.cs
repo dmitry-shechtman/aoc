@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace aoc
+namespace aoc.Builders
 {
     public interface IBuilder2<T> : IBuilder<T>
         where T : struct

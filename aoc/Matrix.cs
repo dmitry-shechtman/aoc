@@ -130,10 +130,10 @@ namespace aoc
         public readonly Vector C2 => new(m12, m22);
         public readonly Vector C3 => new(m13, m23);
 
-        public static IMatrixBuilder<Matrix, Vector, int> Rows =>
+        public static Builders.IMatrixBuilder<Matrix, Vector, int> Rows =>
             Helper.Rows;
 
-        public static IMatrixBuilder<Matrix, Vector, int> Columns =>
+        public static Builders.IMatrixBuilder<Matrix, Vector, int> Columns =>
             Helper.Columns;
 
         public static Matrix Parse(string? s) =>

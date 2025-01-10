@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace aoc
+namespace aoc.Builders
 {
     public interface IMatrixBuilder<TMatrix, TVector, T> : IBuilder2<TMatrix>
         where TMatrix : struct, IMatrix<TMatrix, TVector, T>

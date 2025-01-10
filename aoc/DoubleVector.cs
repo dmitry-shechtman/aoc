@@ -89,7 +89,7 @@ namespace aoc
         public readonly double X => x;
         public readonly double Y => y;
 
-        public static IBuilder<DoubleVector> Builder => Helper;
+        public static Builders.IBuilder<DoubleVector> Builder => Helper;
 
         public static DoubleVector Parse(string? s) =>
             Helper.Parse(s);

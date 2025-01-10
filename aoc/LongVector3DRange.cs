@@ -82,7 +82,7 @@ namespace aoc
         readonly int IReadOnlyCollection<LongVector3D>.Count =>
             (int)Length;
 
-        public static IRangeBuilder<LongVector3DRange, LongVector3D> Builder =>
+        public static Builders.IRangeBuilder<LongVector3DRange, LongVector3D> Builder =>
             Helper;
 
         public static LongVector3DRange Parse(string? s) =>

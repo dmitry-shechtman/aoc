@@ -57,7 +57,7 @@ namespace aoc
         public readonly int this[int index] =>
             Min + index;
 
-        public static IBuilder<Range> Builder => Helper;
+        public static Builders.IBuilder<Range> Builder => Helper;
 
         public static Range Parse(string? s) =>
             Helper.Parse(s);

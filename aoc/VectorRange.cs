@@ -84,7 +84,7 @@ namespace aoc
         public readonly Vector this[int index] =>
             new(Min.x + index % Width, Min.y + index / Width);
 
-        public static IRangeBuilder<VectorRange, Vector> Builder =>
+        public static Builders.IRangeBuilder<VectorRange, Vector> Builder =>
             Helper;
 
         public static VectorRange Parse(string? s) =>

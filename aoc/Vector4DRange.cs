@@ -91,7 +91,7 @@ namespace aoc
                 Min.z + index / (Width * Height) % Depth,
                 Min.w + index / (Width * Height * Depth));
 
-        public static IRangeBuilder<Vector4DRange, Vector4D> Builder =>
+        public static Builders.IRangeBuilder<Vector4DRange, Vector4D> Builder =>
             Helper;
 
         public static Vector4DRange Parse(string? s) =>

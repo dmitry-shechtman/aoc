@@ -158,10 +158,10 @@ namespace aoc
         public readonly Vector3D C3 => new(m13, m23, m33);
         public readonly Vector3D C4 => new(m14, m24, m34);
 
-        public static IMatrixBuilder<Matrix3D, Vector3D, int> Rows =>
+        public static Builders.IMatrixBuilder<Matrix3D, Vector3D, int> Rows =>
             Helper.Rows;
 
-        public static IMatrixBuilder<Matrix3D, Vector3D, int> Columns =>
+        public static Builders.IMatrixBuilder<Matrix3D, Vector3D, int> Columns =>
             Helper.Columns;
 
         public static Matrix3D Parse(string? s) =>

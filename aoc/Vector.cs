@@ -88,7 +88,7 @@ namespace aoc
         public readonly int X => x;
         public readonly int Y => y;
 
-        public static IBuilder<Vector> Builder => Helper;
+        public static Builders.IBuilder<Vector> Builder => Helper;
 
         public static Vector Parse(string? s) =>
             Helper.Parse(s);

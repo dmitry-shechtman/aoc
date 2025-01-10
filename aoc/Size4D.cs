@@ -76,7 +76,7 @@ namespace aoc
         public readonly long LongLength =>
             (long)width * height * depth * anakata;
 
-        public static IBuilder<Size4D> Builder => Helper;
+        public static Builders.IBuilder<Size4D> Builder => Helper;
 
         public static Size4D Parse(string? s) =>
             Helper.Parse(s);
