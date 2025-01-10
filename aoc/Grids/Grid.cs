@@ -245,41 +245,6 @@ namespace aoc.Grids
             [MaybeNullWhen(false)] out Grid grid) =>
                 Helper.TryParse(input, out grid);
 
-        public static Grid Parse(ReadOnlySpan<char> input, out VectorRange range) =>
-            Helper.Parse(input, out range);
-
-        public static bool TryParse(ReadOnlySpan<char> input, out VectorRange range,
-            [MaybeNullWhen(false)] out Grid grid) =>
-                Helper.TryParse(input, out range, out grid);
-
-        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
-            Helper.Parse(input, format);
-
-        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format,
-            [MaybeNullWhen(false)] out Grid grid) =>
-                Helper.TryParse(input, format, out grid);
-
-        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
-            Helper.Parse(input, format, out range);
-
-        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range,
-            [MaybeNullWhen(false)] out Grid grid) =>
-                Helper.TryParse(input, format, out range, out grid);
-
-        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output) =>
-            Helper.Parse(input, format, output);
-
-        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output,
-            [MaybeNullWhen(false)] out Grid grid) =>
-                Helper.TryParse(input, format, output, out grid);
-
-        public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range) =>
-            Helper.Parse(input, format, output, out range);
-
-        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range,
-            [MaybeNullWhen(false)] out Grid grid) =>
-                Helper.TryParse(input, format, output, out range, out grid);
-
         public static IEnumerable<(Matrix, int)> ParseTurns(ReadOnlySpan<char> input) =>
             Helper.ParseTurns(input);
     }
