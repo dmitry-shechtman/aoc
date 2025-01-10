@@ -14,13 +14,13 @@
         public static void Fill<T>(this T[] array, T value, int index, int count) =>
             Array.Fill(array, value, index, count);
 
-        public static T Find<T>(this T[] array, Predicate<T> match) =>
+        public static T? Find<T>(this T[] array, Predicate<T> match) =>
             Array.Find(array, match);
 
         public static int FindIndex<T>(this T[] array, Predicate<T> match) =>
             Array.FindIndex(array, match);
 
-        public static T FindLast<T>(this T[] array, Predicate<T> match) =>
+        public static T? FindLast<T>(this T[] array, Predicate<T> match) =>
             Array.FindLast(array, match);
 
         public static int FindLastIndex<T>(this T[] array, Predicate<T> match) =>

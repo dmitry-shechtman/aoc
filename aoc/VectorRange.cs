@@ -46,7 +46,7 @@ namespace aoc
         public readonly long LongLength =>
             (long)Width * Height;
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is VectorRange other && Equals(other);
 
         public readonly bool Equals(VectorRange other) =>
@@ -59,10 +59,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out Vector min, out Vector max)
@@ -87,16 +87,16 @@ namespace aoc
         public static IRangeBuilder<VectorRange, Vector> Builder =>
             Helper;
 
-        public static VectorRange Parse(string s) =>
+        public static VectorRange Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out VectorRange range) =>
+        public static bool TryParse(string? s, out VectorRange range) =>
             Helper.TryParse(s, out range);
 
-        public static VectorRange Parse(string s, IFormatProvider provider) =>
+        public static VectorRange Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out VectorRange range) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out VectorRange range) =>
             Helper.TryParse(s, provider, out range);
 
         public static VectorRange Parse(ReadOnlySpan<char> s) =>
@@ -105,10 +105,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out VectorRange range) =>
             Helper.TryParse(s, out range);
 
-        public static VectorRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static VectorRange Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out VectorRange range) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out VectorRange range) =>
             Helper.TryParse(s, provider, out range);
 
         private static VectorRange FromSpan(ReadOnlySpan<Vector> values) =>

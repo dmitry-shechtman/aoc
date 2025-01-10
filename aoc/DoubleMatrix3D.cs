@@ -80,7 +80,7 @@ namespace aoc
         {
         }
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is DoubleMatrix3D other && Equals(other);
 
         public readonly bool Equals(DoubleMatrix3D other) =>
@@ -126,10 +126,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out DoubleVector3D r1, out DoubleVector3D r2)
@@ -169,16 +169,16 @@ namespace aoc
         public static IMatrixBuilder<DoubleMatrix3D, DoubleVector3D, double> Columns =>
             Helper.Columns;
 
-        public static DoubleMatrix3D Parse(string s) =>
+        public static DoubleMatrix3D Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out DoubleMatrix3D matrix) =>
+        public static bool TryParse(string? s, out DoubleMatrix3D matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static DoubleMatrix3D Parse(string s, IFormatProvider provider) =>
+        public static DoubleMatrix3D Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out DoubleMatrix3D matrix) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out DoubleMatrix3D matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
         public static DoubleMatrix3D Parse(ReadOnlySpan<char> s) =>
@@ -187,10 +187,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out DoubleMatrix3D matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static DoubleMatrix3D Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static DoubleMatrix3D Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleMatrix3D matrix) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out DoubleMatrix3D matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
         public static DoubleMatrix3D FromRows(params DoubleVector3D[] rows) =>

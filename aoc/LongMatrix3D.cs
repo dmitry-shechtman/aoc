@@ -75,7 +75,7 @@ namespace aoc
         {
         }
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is LongMatrix3D other && Equals(other);
 
         public readonly bool Equals(LongMatrix3D other) =>
@@ -121,10 +121,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out LongVector3D r1, out LongVector3D r2)
@@ -164,16 +164,16 @@ namespace aoc
         public static IMatrixBuilder<LongMatrix3D, LongVector3D, long> Columns =>
             Helper.Columns;
 
-        public static LongMatrix3D Parse(string s) =>
+        public static LongMatrix3D Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out LongMatrix3D matrix) =>
+        public static bool TryParse(string? s, out LongMatrix3D matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static LongMatrix3D Parse(string s, IFormatProvider provider) =>
+        public static LongMatrix3D Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out LongMatrix3D matrix) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out LongMatrix3D matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
         public static LongMatrix3D Parse(ReadOnlySpan<char> s) =>
@@ -182,10 +182,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out LongMatrix3D matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static LongMatrix3D Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static LongMatrix3D Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongMatrix3D matrix) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out LongMatrix3D matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
         public static LongMatrix3D FromRows(params LongVector3D[] rows) =>

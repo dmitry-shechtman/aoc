@@ -43,7 +43,7 @@ namespace aoc
         public readonly double Length =>
             Width * Height * Depth;
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is DoubleVector3DRange other && Equals(other);
 
         public readonly bool Equals(DoubleVector3DRange other) =>
@@ -56,10 +56,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out DoubleVector3D min, out DoubleVector3D max)
@@ -71,16 +71,16 @@ namespace aoc
         public static IRangeBuilder<DoubleVector3DRange, DoubleVector3D> Builder =>
             Helper;
 
-        public static DoubleVector3DRange Parse(string s) =>
+        public static DoubleVector3DRange Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out DoubleVector3DRange range) =>
+        public static bool TryParse(string? s, out DoubleVector3DRange range) =>
             Helper.TryParse(s, out range);
 
-        public static DoubleVector3DRange Parse(string s, IFormatProvider provider) =>
+        public static DoubleVector3DRange Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out DoubleVector3DRange range) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out DoubleVector3DRange range) =>
             Helper.TryParse(s, provider, out range);
 
         public static DoubleVector3DRange Parse(ReadOnlySpan<char> s) =>
@@ -89,10 +89,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out DoubleVector3DRange range) =>
             Helper.TryParse(s, out range);
 
-        public static DoubleVector3DRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static DoubleVector3DRange Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleVector3DRange range) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out DoubleVector3DRange range) =>
             Helper.TryParse(s, provider, out range);
 
         private static DoubleVector3DRange FromSpan(ReadOnlySpan<DoubleVector3D> values) =>

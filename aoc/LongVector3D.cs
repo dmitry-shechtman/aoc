@@ -53,7 +53,7 @@ namespace aoc
         {
         }
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is LongVector3D other && Equals(other);
 
         public readonly bool Equals(LongVector3D other) =>
@@ -67,10 +67,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         private string GetDebuggerDisplay() =>
@@ -104,16 +104,16 @@ namespace aoc
 
         public static IBuilder<LongVector3D> Builder => Helper;
 
-        public static LongVector3D Parse(string s) =>
+        public static LongVector3D Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out LongVector3D vector) =>
+        public static bool TryParse(string? s, out LongVector3D vector) =>
             Helper.TryParse(s, out vector);
 
-        public static LongVector3D Parse(string s, IFormatProvider provider) =>
+        public static LongVector3D Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out LongVector3D vector) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out LongVector3D vector) =>
             Helper.TryParse(s, provider, out vector);
 
         public static LongVector3D Parse(ReadOnlySpan<char> s) =>
@@ -122,10 +122,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out LongVector3D vector) =>
             Helper.TryParse(s, out vector);
 
-        public static LongVector3D Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static LongVector3D Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongVector3D vector) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out LongVector3D vector) =>
             Helper.TryParse(s, provider, out vector);
 
         private static LongVector3D FromSpan(ReadOnlySpan<long> values) =>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace aoc.Grids
@@ -146,8 +147,8 @@ namespace aoc.Grids
         public bool RemoveRange(IEnumerable<Vector> range) =>
             range.All(Points.Remove);
 
-        public abstract string ToString(IFormatProvider provider);
-        public abstract string ToString(string format, IFormatProvider formatProvider);
+        public abstract string ToString(IFormatProvider? provider);
+        public abstract string ToString(string? format, IFormatProvider? formatProvider);
     }
 
     public sealed class Grid : Grid<Grid>
@@ -214,10 +215,10 @@ namespace aoc.Grids
         public override string ToString() =>
             Helper.ToString(this);
 
-        public override string ToString(IFormatProvider provider) =>
+        public override string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public override string ToString(string format, IFormatProvider provider = null) =>
+        public override string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public static Vector[] Headings =>
@@ -228,47 +229,56 @@ namespace aoc.Grids
         public static IVectorBuilder<Vector> Vector  => Helper;
         public static IPathBuilder<Vector>   Path    => Helper;
 
-        public static Grid Parse(string input) =>
+        public static Grid Parse(string? input) =>
             Helper.Parse(input);
 
-        public static bool TryParse(string input, out Grid grid) =>
-            Helper.TryParse(input, out grid);
+        public static bool TryParse(
+            [NotNullWhen(true)] string? input,
+            [MaybeNullWhen(false)] out Grid grid) =>
+                Helper.TryParse(input, out grid);
 
         public static Grid Parse(ReadOnlySpan<char> input) =>
             Helper.Parse(input);
 
-        public static bool TryParse(ReadOnlySpan<char> input, out Grid grid) =>
-            Helper.TryParse(input, out grid);
+        public static bool TryParse(
+            ReadOnlySpan<char> input,
+            [MaybeNullWhen(false)] out Grid grid) =>
+                Helper.TryParse(input, out grid);
 
         public static Grid Parse(ReadOnlySpan<char> input, out VectorRange range) =>
             Helper.Parse(input, out range);
 
-        public static bool TryParse(ReadOnlySpan<char> input, out VectorRange range, out Grid grid) =>
-            Helper.TryParse(input, out range, out grid);
+        public static bool TryParse(ReadOnlySpan<char> input, out VectorRange range,
+            [MaybeNullWhen(false)] out Grid grid) =>
+                Helper.TryParse(input, out range, out grid);
 
         public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
             Helper.Parse(input, format);
 
-        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out Grid grid) =>
-            Helper.TryParse(input, format, out grid);
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format,
+            [MaybeNullWhen(false)] out Grid grid) =>
+                Helper.TryParse(input, format, out grid);
 
         public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
             Helper.Parse(input, format, out range);
 
-        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range, out Grid grid) =>
-            Helper.TryParse(input, format, out range, out grid);
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range,
+            [MaybeNullWhen(false)] out Grid grid) =>
+                Helper.TryParse(input, format, out range, out grid);
 
         public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output) =>
             Helper.Parse(input, format, output);
 
-        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out Grid grid) =>
-            Helper.TryParse(input, format, output, out grid);
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output,
+            [MaybeNullWhen(false)] out Grid grid) =>
+                Helper.TryParse(input, format, output, out grid);
 
         public static Grid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range) =>
             Helper.Parse(input, format, output, out range);
 
-        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range, out Grid grid) =>
-            Helper.TryParse(input, format, output, out range, out grid);
+        public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range,
+            [MaybeNullWhen(false)] out Grid grid) =>
+                Helper.TryParse(input, format, output, out range, out grid);
 
         public static IEnumerable<(Matrix, int)> ParseTurns(ReadOnlySpan<char> input) =>
             Helper.ParseTurns(input);

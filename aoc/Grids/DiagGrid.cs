@@ -70,10 +70,10 @@ namespace aoc.Grids
         public override string ToString() =>
             Helper.ToString(this);
 
-        public override string ToString(IFormatProvider provider) =>
+        public override string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public override string ToString(string format, IFormatProvider provider = null) =>
+        public override string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public static IEnumerable<Vector> GetNeighbors(Vector p) =>

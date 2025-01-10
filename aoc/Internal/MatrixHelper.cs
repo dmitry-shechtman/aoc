@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -25,7 +26,7 @@ namespace aoc.Internal
         protected override string SeparatorString =>
             $"{DefaultSeparator} ";
 
-        public sealed override bool TryGetItem(TMatrix matrix, string format, IFormatProvider provider, ref int i, out IFormattable item) => (item = format[i] switch
+        public sealed override bool TryGetItem(TMatrix matrix, string format, IFormatProvider? provider, ref int i, [MaybeNullWhen(false)] out IFormattable item) => (item = format[i] switch
         {
             'r' => matrix.GetRow(format[++i] - '1'),
             'c' => matrix.GetColumn(format[++i] - '1'),
@@ -116,19 +117,19 @@ namespace aoc.Internal
         private readonly Lazy<MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper>> _columns;
         public MatrixBuilder<TMatrix, TVector, T, TStrategy, TVectorHelper> Columns => _columns.Value;
 
-        public string ToString(TMatrix matrix, IFormatProvider provider = null) =>
+        public string ToString(TMatrix matrix, IFormatProvider? provider = null) =>
             Rows.ToString(matrix, provider);
 
-        public string ToString(TMatrix matrix, string format, IFormatProvider provider) =>
+        public string ToString(TMatrix matrix, string? format, IFormatProvider? provider) =>
             Rows.ToString(matrix, format, provider);
 
-        public TMatrix Parse(ReadOnlySpan<char> s, IFormatProvider provider = null) =>
+        public TMatrix Parse(ReadOnlySpan<char> s, IFormatProvider? provider = null) =>
             Rows.Parse(s, provider);
 
         public bool TryParse(ReadOnlySpan<char> s, out TMatrix matrix) =>
             Rows.TryParse(s, out matrix);
 
-        public bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out TMatrix matrix) =>
+        public bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out TMatrix matrix) =>
             Rows.TryParse(s, provider, out matrix);
 
         protected abstract Dictionary<int, int> GetChunkSizes();

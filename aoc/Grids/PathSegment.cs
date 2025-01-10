@@ -14,7 +14,7 @@ namespace aoc.Grids
             this.d = d;
         }
 
-        public override bool Equals(object obj) =>
+        public override bool Equals(object? obj) =>
             obj is PathSegment<TVector> other &&
                 Equals(other);
 

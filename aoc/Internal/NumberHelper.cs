@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
-    delegate bool TryParseNumber<T>(ReadOnlySpan<char> input, NumberStyles styles, IFormatProvider provider, out T value);
+    delegate bool TryParseNumber<T>(ReadOnlySpan<char> input, NumberStyles styles, IFormatProvider? provider, out T value);
 
     interface INumberHelper<T> : IItemHelper<T>
         where T : struct, IFormattable
@@ -32,12 +32,14 @@ namespace aoc.Internal
             _regex = new(() => new(pattern));
         }
 
-        public bool TryParse(ReadOnlySpan<char> input, NumberStyles styles, IFormatProvider provider, out T value) =>
+        public bool TryParse(ReadOnlySpan<char> input, NumberStyles styles, IFormatProvider? provider, out T value) =>
             TryParseNumber(input, styles != 0 ? styles : DefaultStyles, provider, out value);
 
-        public IEnumerable<Match> GetMatches(string input, out int count)
+        public IEnumerable<Match> GetMatches(string? input, out int count)
         {
-            var result = Regex.Matches(input);
+            IReadOnlyCollection<Match> result = input is not null
+                ? Regex.Matches(input)
+                : Array.Empty<Match>();
             count = result.Count;
             return result;
         }

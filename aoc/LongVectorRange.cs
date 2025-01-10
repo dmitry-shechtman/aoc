@@ -37,7 +37,7 @@ namespace aoc
         public readonly long Length =>
             Width * Height;
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is LongVectorRange other && Equals(other);
 
         public readonly bool Equals(LongVectorRange other) =>
@@ -50,10 +50,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out LongVector min, out LongVector max)
@@ -78,16 +78,16 @@ namespace aoc
         public static IRangeBuilder<LongVectorRange, LongVector> Builder =>
             Helper;
 
-        public static LongVectorRange Parse(string s) =>
+        public static LongVectorRange Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out LongVectorRange range) =>
+        public static bool TryParse(string? s, out LongVectorRange range) =>
             Helper.TryParse(s, out range);
 
-        public static LongVectorRange Parse(string s, IFormatProvider provider) =>
+        public static LongVectorRange Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out LongVectorRange range) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out LongVectorRange range) =>
             Helper.TryParse(s, provider, out range);
 
         public static LongVectorRange Parse(ReadOnlySpan<char> s) =>
@@ -96,10 +96,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out LongVectorRange range) =>
             Helper.TryParse(s, out range);
 
-        public static LongVectorRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static LongVectorRange Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongVectorRange range) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out LongVectorRange range) =>
             Helper.TryParse(s, provider, out range);
 
         private static LongVectorRange FromSpan(ReadOnlySpan<LongVector> values) =>

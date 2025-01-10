@@ -6,6 +6,7 @@ namespace System.Collections.Generic
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, TValue value)
+            where TKey : notnull
         {
             if (!dic.TryGetValue(key, out var result))
                 dic.Add(key, result = value);
@@ -13,6 +14,7 @@ namespace System.Collections.Generic
         }
 
         public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey key, Func<TKey, TValue> factory)
+            where TKey : notnull
         {
             if (!dic.TryGetValue(key, out var result))
                 dic.Add(key, result = factory(key));

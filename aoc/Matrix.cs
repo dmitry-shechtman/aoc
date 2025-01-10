@@ -71,7 +71,7 @@ namespace aoc
             m13 = m23 = m31 = m32 = m33 = 0;
         }
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is Matrix matrix && Equals(matrix);
 
         public readonly bool Equals(Matrix other) =>
@@ -103,10 +103,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out Vector r1, out Vector r2)
@@ -136,16 +136,16 @@ namespace aoc
         public static IMatrixBuilder<Matrix, Vector, int> Columns =>
             Helper.Columns;
 
-        public static Matrix Parse(string s) =>
+        public static Matrix Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out Matrix matrix) =>
+        public static bool TryParse(string? s, out Matrix matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static Matrix Parse(string s, IFormatProvider provider) =>
+        public static Matrix Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out Matrix matrix) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out Matrix matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
         public static Matrix Parse(ReadOnlySpan<char> s) =>
@@ -154,10 +154,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out Matrix matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static Matrix Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static Matrix Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Matrix matrix) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out Matrix matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
         public static Matrix FromRows(params Vector[] rows) =>

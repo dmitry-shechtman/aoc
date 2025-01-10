@@ -4,9 +4,9 @@ namespace aoc
 {
     public sealed class LinkedListNode<T>
     {
-        public LinkedListNode(T value, LinkedListNode<T> previous, LinkedListNode<T> next)
+        public LinkedListNode(T value, LinkedListNode<T>? previous, LinkedListNode<T>? next)
         {
-            Value = value;
+            this.value = value;
             if ((Previous = previous) is not null)
                 Previous.Next = this;
             if ((Next = next) is not null)
@@ -15,7 +15,7 @@ namespace aoc
 
         public LinkedListNode(T value)
         {
-            Value = value;
+            this.value = value;
             Previous = this;
             Next = this;
         }
@@ -29,8 +29,8 @@ namespace aoc
 
         public ref T ValueRef => ref value;
         
-        public LinkedListNode<T> Previous { get; internal set; }
-        public LinkedListNode<T> Next     { get; internal set; }
+        public LinkedListNode<T>? Previous { get; internal set; }
+        public LinkedListNode<T>? Next     { get; internal set; }
 
         public void Remove()
         {
@@ -40,20 +40,20 @@ namespace aoc
                 Next.Previous = Previous;
         }
 
-        public LinkedListNode<T> Skip(int count)
+        public LinkedListNode<T>? Skip(int count)
         {
             var node = this;
             for (int i = 0; node is not null && i < count; i++)
-                node = node?.Next
+                node = node.Next
                     ?? throw new ArgumentOutOfRangeException(nameof(count));
             return node;
         }
 
-        public LinkedListNode<T> SkipBack(int count)
+        public LinkedListNode<T>? SkipBack(int count)
         {
             var node = this;
             for (int i = 0; node is not null && i < count; i++)
-                node = node?.Previous
+                node = node.Previous
                     ?? throw new ArgumentOutOfRangeException(nameof(count));
             return node;
         }

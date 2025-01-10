@@ -22,7 +22,7 @@ namespace aoc.Internal
         where TVector : unmanaged, IVector<TVector, T>
         where T : struct, IFormattable
     {
-        bool TryParse(IEnumerator<Match> matches, NumberStyles styles, IFormatProvider provider, Span<T> values);
+        bool TryParse(IEnumerator<Match> matches, NumberStyles styles, IFormatProvider? provider, Span<T> values);
 
         FromSpan<TVector, T> FromSpan { get; }
         int MinCount { get; }

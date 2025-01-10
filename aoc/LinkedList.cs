@@ -6,8 +6,8 @@ namespace aoc
 {
     public sealed class LinkedList<T> : ICollection<T>, IReadOnlyCollection<T>
     {
-        public LinkedListNode<T> First { get; private set; }
-        public LinkedListNode<T> Last  { get; private set; }
+        public LinkedListNode<T>? First { get; private set; }
+        public LinkedListNode<T>? Last  { get; private set; }
         public int Count { get; private set; }
 
         bool ICollection<T>.IsReadOnly => false;
@@ -21,7 +21,7 @@ namespace aoc
         {
             if (values is null)
                 throw new ArgumentNullException(nameof(values));
-            LinkedListNode<T> last = null, node;
+            LinkedListNode<T>? last = null, node;
             foreach (var value in values)
             {
                 node = new(value, last, null);
@@ -43,7 +43,7 @@ namespace aoc
         void ICollection<T>.Add(T value) =>
             AddLast(value);
 
-        public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value)
+        public LinkedListNode<T> AddBefore(LinkedListNode<T>? node, T value)
         {
             if (node is null)
                 return AddLast(value);
@@ -64,7 +64,7 @@ namespace aoc
             if ((newNode.Previous = node.Previous) is null)
                 First = newNode;
             else
-                node.Previous.Next = newNode;
+                node.Previous!.Next = newNode;
             node.Previous = newNode;
             ++Count;
         }
@@ -72,7 +72,7 @@ namespace aoc
         public LinkedListNode<T> AddBefore(Predicate<T> match, T value) =>
             AddBefore(Find(match), value);
 
-        public LinkedListNode<T> AddAfter(LinkedListNode<T> node, T value)
+        public LinkedListNode<T> AddAfter(LinkedListNode<T>? node, T value)
         {
             if (node is null)
                 return AddFirst(value);
@@ -93,7 +93,7 @@ namespace aoc
             if ((newNode.Next = node.Next) is null)
                 Last = newNode;
             else
-                node.Next.Previous = newNode;
+                node.Next!.Previous = newNode;
             node.Next = newNode;
             ++Count;
         }
@@ -118,16 +118,14 @@ namespace aoc
             if ((node.Next = First) is null)
                 Last = node;
             else
-                First.Previous = node;
+                First!.Previous = node;
             First = node;
             ++Count;
         }
 
         public T RemoveFirst()
         {
-            var node = First;
-            if (node is null)
-                throw new InvalidOperationException();
+            var node = First ?? throw new InvalidOperationException();
             node.Remove();
             if ((First = node.Next) is null)
                 Last = null;
@@ -152,16 +150,14 @@ namespace aoc
             if ((node.Previous = Last) is null)
                 First = node;
             else
-                Last.Next = node;
+                Last!.Next = node;
             Last = node;
             ++Count;
         }
 
         public T RemoveLast()
         {
-            var node = Last;
-            if (node is null)
-                throw new InvalidOperationException();
+            var node = Last ?? throw new InvalidOperationException();
             node.Remove();
             if ((Last = node.Previous) is null)
                 First = null;
@@ -202,38 +198,38 @@ namespace aoc
             return false;
         }
 
-        public static LinkedListNode<T> Find(LinkedListNode<T> node, Predicate<T> match) =>
+        public static LinkedListNode<T>? Find(LinkedListNode<T> node, Predicate<T> match) =>
             node is null
                 ? throw new ArgumentNullException(nameof(node))
                 : match is null
                     ? throw new ArgumentNullException(nameof(match))
                     : DoFind(node, match);
 
-        public LinkedListNode<T> Find(Predicate<T> match) =>
+        public LinkedListNode<T>? Find(Predicate<T> match) =>
             match is null
                 ? throw new ArgumentNullException(nameof(match))
                 : DoFind(First, match);
 
-        private static LinkedListNode<T> DoFind(LinkedListNode<T> node, Predicate<T> match)
+        private static LinkedListNode<T>? DoFind(LinkedListNode<T>? node, Predicate<T> match)
         {
             while (node is not null && !match(node.Value))
                 node = node.Next;
             return node;
         }
 
-        public static LinkedListNode<T> FindPrevious(LinkedListNode<T> node, Predicate<T> match) =>
+        public static LinkedListNode<T>? FindPrevious(LinkedListNode<T> node, Predicate<T> match) =>
             node is null
                 ? throw new ArgumentNullException(nameof(node))
                 : match is null
                     ? throw new ArgumentNullException(nameof(match))
                     : DoFindPrevious(node, match);
 
-        public LinkedListNode<T> FindLast(Predicate<T> match) =>
+        public LinkedListNode<T>? FindLast(Predicate<T> match) =>
             match is null
                 ? throw new ArgumentNullException(nameof(match))
                 : DoFindPrevious(Last, match);
 
-        private static LinkedListNode<T> DoFindPrevious(LinkedListNode<T> node, Predicate<T> match)
+        private static LinkedListNode<T>? DoFindPrevious(LinkedListNode<T>? node, Predicate<T> match)
         {
             while (node is not null && !match(node.Value))
                 node = node.Previous;
@@ -301,13 +297,13 @@ namespace aoc
             (First, Last) = (Last, First);
         }
 
-        public static IEnumerator<T> GetEnumerator(LinkedListNode<T> node)
+        public static IEnumerator<T> GetEnumerator(LinkedListNode<T>? node)
         {
             for (; node is not null; node = node.Next)
                 yield return node.Value;
         }
 
-        public static IEnumerator<T> GetReverseEnumerator(LinkedListNode<T> node)
+        public static IEnumerator<T> GetReverseEnumerator(LinkedListNode<T>? node)
         {
             for (; node is not null; node = node.Previous)
                 yield return node.Value;

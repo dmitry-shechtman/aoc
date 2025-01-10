@@ -33,7 +33,7 @@ namespace aoc
 
         public readonly double Count => Max - Min;
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is DoubleRange other && Equals(other);
 
         public readonly bool Equals(DoubleRange other) =>
@@ -45,10 +45,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out double min, out double max)
@@ -59,16 +59,16 @@ namespace aoc
 
         public static IBuilder<DoubleRange> Builder => Helper;
 
-        public static DoubleRange Parse(string s) =>
+        public static DoubleRange Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out DoubleRange range) =>
+        public static bool TryParse(string? s, out DoubleRange range) =>
             Helper.TryParse(s, out range);
 
-        public static DoubleRange Parse(string s, IFormatProvider provider) =>
+        public static DoubleRange Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out DoubleRange range) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out DoubleRange range) =>
             Helper.TryParse(s, provider, out range);
 
         public static DoubleRange Parse(ReadOnlySpan<char> s) =>
@@ -77,10 +77,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out DoubleRange range) =>
             Helper.TryParse(s, out range);
 
-        public static DoubleRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static DoubleRange Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleRange range) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out DoubleRange range) =>
             Helper.TryParse(s, provider, out range);
 
         private static DoubleRange FromSpan(ReadOnlySpan<double> values) =>

@@ -74,10 +74,10 @@ namespace System.Linq
         public static long LongCount<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
             source.Where(predicate).LongCount();
 
-        public static TResult Min<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector) =>
+        public static TResult? Min<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector) =>
             source.Select(selector).Min();
 
-        public static TResult Max<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector) =>
+        public static TResult? Max<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector) =>
             source.Select(selector).Max();
 
         public static int Sum<TSource>(this IEnumerable<TSource> source, Func<TSource, int, int> selector) =>
@@ -104,22 +104,22 @@ namespace System.Linq
         public static long Product<TSource>(this IEnumerable<TSource> source, Func<TSource, int, long> selector) =>
             source.Select(selector).Product();
 
-        public static TSource MinOrDefault<TSource>(this IEnumerable<TSource> source, TSource result) =>
+        public static TSource? MinOrDefault<TSource>(this IEnumerable<TSource> source, TSource result) =>
             source.Any() ? source.Min() : result;
 
-        public static TResult MinOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
+        public static TResult? MinOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
             source.Any() ? source.Min(selector) : result;
 
-        public static TResult MinOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
+        public static TResult? MinOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
             source.Any() ? source.Min(selector) : result;
 
-        public static TSource MaxOrDefault<TSource>(this IEnumerable<TSource> source, TSource result) =>
+        public static TSource? MaxOrDefault<TSource>(this IEnumerable<TSource> source, TSource result) =>
             source.Any() ? source.Max() : result;
 
-        public static TResult MaxOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
+        public static TResult? MaxOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector, TResult result) =>
             source.Any() ? source.Max(selector) : result;
 
-        public static TResult MaxOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
+        public static TResult? MaxOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector, TResult result) =>
             source.Any() ? source.Max(selector) : result;
     }
 }

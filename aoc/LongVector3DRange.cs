@@ -43,7 +43,7 @@ namespace aoc
         public readonly long Length =>
             Width * Height * Depth;
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is LongVector3DRange other && Equals(other);
 
         public readonly bool Equals(LongVector3DRange other) =>
@@ -56,10 +56,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out LongVector3D min, out LongVector3D max)
@@ -85,16 +85,16 @@ namespace aoc
         public static IRangeBuilder<LongVector3DRange, LongVector3D> Builder =>
             Helper;
 
-        public static LongVector3DRange Parse(string s) =>
+        public static LongVector3DRange Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out LongVector3DRange range) =>
+        public static bool TryParse(string? s, out LongVector3DRange range) =>
             Helper.TryParse(s, out range);
 
-        public static LongVector3DRange Parse(string s, IFormatProvider provider) =>
+        public static LongVector3DRange Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out LongVector3DRange range) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out LongVector3DRange range) =>
             Helper.TryParse(s, provider, out range);
 
         public static LongVector3DRange Parse(ReadOnlySpan<char> s) =>
@@ -103,10 +103,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out LongVector3DRange range) =>
             Helper.TryParse(s, out range);
 
-        public static LongVector3DRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static LongVector3DRange Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongVector3DRange range) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out LongVector3DRange range) =>
             Helper.TryParse(s, provider, out range);
 
         private static LongVector3DRange FromSpan(ReadOnlySpan<LongVector3D> values) =>

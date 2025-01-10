@@ -34,7 +34,7 @@ namespace aoc
             width   == other.width &&
             height  == other.height;
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is Size other && Equals(other);
 
         public readonly override int GetHashCode() =>
@@ -43,10 +43,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly int Width   => width;
@@ -60,16 +60,16 @@ namespace aoc
 
         public static IBuilder<Size> Builder => Helper;
 
-        public static Size Parse(string s) =>
+        public static Size Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out Size size) =>
+        public static bool TryParse(string? s, out Size size) =>
             Helper.TryParse(s, out size);
 
-        public static Size Parse(string s, IFormatProvider provider) =>
+        public static Size Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out Size size) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out Size size) =>
             Helper.TryParse(s, provider, out size);
 
         public static Size Parse(ReadOnlySpan<char> s) =>
@@ -78,10 +78,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out Size size) =>
             Helper.TryParse(s, out size);
 
-        public static Size Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static Size Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Size size) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out Size size) =>
             Helper.TryParse(s, provider, out size);
 
         private static Size FromSpan(ReadOnlySpan<int> values) =>

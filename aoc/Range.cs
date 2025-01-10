@@ -24,7 +24,7 @@ namespace aoc
 
         public readonly int Count => Max - Min + 1;
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is Range other && Equals(other);
 
         public readonly bool Equals(Range other) =>
@@ -36,10 +36,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out int min, out int max)
@@ -59,16 +59,16 @@ namespace aoc
 
         public static IBuilder<Range> Builder => Helper;
 
-        public static Range Parse(string s) =>
+        public static Range Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out Range range) =>
+        public static bool TryParse(string? s, out Range range) =>
             Helper.TryParse(s, out range);
 
-        public static Range Parse(string s, IFormatProvider provider) =>
+        public static Range Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out Range range) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out Range range) =>
             Helper.TryParse(s, provider, out range);
 
         public static Range Parse(ReadOnlySpan<char> s) =>
@@ -77,10 +77,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out Range range) =>
             Helper.TryParse(s, out range);
 
-        public static Range Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static Range Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out Range range) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out Range range) =>
             Helper.TryParse(s, provider, out range);
 
         private static Range FromSpan(ReadOnlySpan<int> values) =>

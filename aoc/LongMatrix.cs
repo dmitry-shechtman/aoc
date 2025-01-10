@@ -67,7 +67,7 @@ namespace aoc
         {
         }
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is LongMatrix other && Equals(other);
 
         public readonly bool Equals(LongMatrix other) =>
@@ -99,10 +99,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out LongVector r1, out LongVector r2)
@@ -132,16 +132,16 @@ namespace aoc
         public static IMatrixBuilder<LongMatrix, LongVector, long> Columns =>
             Helper.Columns;
 
-        public static LongMatrix Parse(string s) =>
+        public static LongMatrix Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out LongMatrix matrix) =>
+        public static bool TryParse(string? s, out LongMatrix matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static LongMatrix Parse(string s, IFormatProvider provider) =>
+        public static LongMatrix Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out LongMatrix matrix) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out LongMatrix matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
         public static LongMatrix Parse(ReadOnlySpan<char> s) =>
@@ -150,10 +150,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out LongMatrix matrix) =>
             Helper.TryParse(s, out matrix);
 
-        public static LongMatrix Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static LongMatrix Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongMatrix matrix) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out LongMatrix matrix) =>
             Helper.TryParse(s, provider, out matrix);
 
         public static LongMatrix FromRows(params LongVector[] rows) =>

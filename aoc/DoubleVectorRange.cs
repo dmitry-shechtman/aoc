@@ -37,7 +37,7 @@ namespace aoc
         public readonly double Length =>
             Width * Height;
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is DoubleVectorRange other && Equals(other);
 
         public readonly bool Equals(DoubleVectorRange other) =>
@@ -50,10 +50,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out DoubleVector min, out DoubleVector max)
@@ -65,16 +65,16 @@ namespace aoc
         public static IRangeBuilder<DoubleVectorRange, DoubleVector> Builder =>
             Helper;
 
-        public static DoubleVectorRange Parse(string s) =>
+        public static DoubleVectorRange Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out DoubleVectorRange range) =>
+        public static bool TryParse(string? s, out DoubleVectorRange range) =>
             Helper.TryParse(s, out range);
 
-        public static DoubleVectorRange Parse(string s, IFormatProvider provider) =>
+        public static DoubleVectorRange Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out DoubleVectorRange range) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out DoubleVectorRange range) =>
             Helper.TryParse(s, provider, out range);
 
         public static DoubleVectorRange Parse(ReadOnlySpan<char> s) =>
@@ -83,10 +83,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out DoubleVectorRange range) =>
             Helper.TryParse(s, out range);
 
-        public static DoubleVectorRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static DoubleVectorRange Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out DoubleVectorRange range) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out DoubleVectorRange range) =>
             Helper.TryParse(s, provider, out range);
 
         private static DoubleVectorRange FromSpan(ReadOnlySpan<DoubleVector> values) =>

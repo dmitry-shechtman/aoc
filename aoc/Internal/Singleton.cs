@@ -10,6 +10,6 @@ namespace aoc.Internal
         public static TSelf Instance => _instance.Value;
 
         private static TSelf CreateInstance() =>
-            (TSelf)Activator.CreateInstance(typeof(TSelf), true);
+            (TSelf)Activator.CreateInstance(typeof(TSelf), true)!;
     }
 }

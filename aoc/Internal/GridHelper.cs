@@ -1,6 +1,7 @@
 ﻿using aoc.Grids;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace aoc.Internal
@@ -124,8 +125,7 @@ namespace aoc.Internal
             int index = Headings.IndexOf(vector);
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(vector));
-            string[] ss = GetFormatStrings(format);
-            if (ss is null)
+            if (!TryGetFormatStrings(format, out var ss))
                 throw new ArgumentOutOfRangeException(nameof(format));
             return char.IsUpper(format)
                 ? ss[index].ToUpperInvariant()
@@ -184,25 +184,28 @@ namespace aoc.Internal
             return path;
         }
 
-        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string input, char separator) =>
-            ParsePath(input.Split(separator));
+        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string? input, char separator) =>
+            ParsePath(input?.Split(separator));
 
-        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string input, string separator) =>
-            ParsePath(input.Split(separator));
+        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string? input, string separator) =>
+            ParsePath(input?.Split(separator));
 
-        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string[] ss) =>
+        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string[]? ss) =>
             ParsePath(ss);
 
-        IEnumerable<PathSegment<TVector>> ParsePath(string[] ss) =>
-            ss.Select(ParsePathSegment);
+        IEnumerable<PathSegment<TVector>> ParsePath(string[]? ss) =>
+            ss?.Select(ParsePathSegment)
+                ?? Enumerable.Empty<PathSegment<TVector>>();
 
-        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string[] ss, char separator) =>
-            ss.Select(input => input.Split(separator))
-                .Select(ParsePathSegment);
+        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string[]? ss, char separator) =>
+            ParsePath(ss?.Select(input => input.Split(separator)));
 
-        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string[] ss, string separator) =>
-            ss.Select(input => input.Split(separator))
-                .Select(ParsePathSegment);
+        IEnumerable<PathSegment<TVector>> IPathBuilder<TVector>.Parse(string[]? ss, string separator) =>
+            ParsePath(ss?.Select(input => input.Split(separator)));
+
+        IEnumerable<PathSegment<TVector>> ParsePath(IEnumerable<string[]>? tt) =>
+            tt?.Select(ParsePathSegment)
+                ?? Enumerable.Empty<PathSegment<TVector>>();
 
         private PathSegment<TVector> ParsePathSegment(string input)
         {
@@ -229,13 +232,14 @@ namespace aoc.Internal
         protected virtual bool TryGetHeading(ReadOnlySpan<char> input, ref int i, out int heading) =>
             TryGetHeading(input[i..++i], out heading);
 
-        private string[] GetFormatStrings(char format)
+        private bool TryGetFormatStrings(char format, [MaybeNullWhen(false)] out string[] ss)
         {
             string input = $"{format}";
-            foreach (var ss in FormatStrings)
-                if (ss.Contains(input, StringComparer.OrdinalIgnoreCase))
-                    return ss;
-            return null;
+            for (int i = 0; i < FormatStrings.Length; i++)
+                if ((ss = FormatStrings[i]).Contains(input, StringComparer.OrdinalIgnoreCase))
+                    return true;
+            ss = null;
+            return false;
         }
 
         protected static int ParseInt32(ReadOnlySpan<char> input, ref int i)
@@ -258,10 +262,10 @@ namespace aoc.Internal
         private const char   DefaultPointChar = '#';
         private const string DefaultSeparator = "\n";
 
-        public string ToString(TGrid grid, IFormatProvider provider = null) =>
+        public string ToString(TGrid grid, IFormatProvider? provider = null) =>
             ToString(grid, null, provider);
 
-        public string ToString(TGrid grid, ReadOnlySpan<char> format, IFormatProvider _) =>
+        public string ToString(TGrid grid, ReadOnlySpan<char> format, IFormatProvider? _) =>
             ToString(grid, grid.Range(), format);
 
         public string ToString(TGrid grid, Size size, ReadOnlySpan<char> format) =>
@@ -299,43 +303,49 @@ namespace aoc.Internal
         public TGrid Parse(ReadOnlySpan<char> input) =>
             Parse(input, out _);
 
-        public bool TryParse(ReadOnlySpan<char> input, out TGrid grid) =>
-            TryParse(input, out _, out grid);
+        public bool TryParse(ReadOnlySpan<char> input,
+            [MaybeNullWhen(false)] out TGrid grid) =>
+                TryParse(input, out _, out grid);
 
         public TGrid Parse(ReadOnlySpan<char> input, out VectorRange range) =>
-            TryParse(input, out range, out TGrid value)
-                ? value
+            TryParse(input, out range, out TGrid? grid)
+                ? grid
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(ReadOnlySpan<char> input, out VectorRange range, out TGrid grid) =>
-            TryParse(input, string.Empty, out range, out grid);
+        public bool TryParse(ReadOnlySpan<char> input, out VectorRange range,
+            [MaybeNullWhen(false)] out TGrid grid) =>
+                TryParse(input, string.Empty, out range, out grid);
 
         public TGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
             Parse(input, format, out _);
 
-        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out TGrid grid) =>
-            TryParse(input, format, out _, out grid);
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format,
+            [MaybeNullWhen(false)] out TGrid grid) =>
+                TryParse(input, format, out _, out grid);
 
         public TGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
-            TryParse(input, format, out range, out TGrid value)
-                ? value
+            TryParse(input, format, out range, out TGrid? grid)
+                ? grid
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range, out TGrid grid) =>
-            TryParse(input, format, Span<Vector>.Empty, out range, out grid);
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range,
+            [MaybeNullWhen(false)] out TGrid grid) =>
+                TryParse(input, format, Span<Vector>.Empty, out range, out grid);
 
         public TGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output) =>
             Parse(input, format, output, out _);
 
-        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out TGrid grid) =>
-            TryParse(input, format, output, out _, out grid);
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output,
+            [MaybeNullWhen(false)] out TGrid grid) =>
+                TryParse(input, format, output, out _, out grid);
 
         public TGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range) =>
-            TryParse(input, format, output, out range, out TGrid value)
-                ? value
+            TryParse(input, format, output, out range, out TGrid? grid)
+                ? grid
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range, out TGrid grid)
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range,
+            [MaybeNullWhen(false)] out TGrid grid)
         {
             int width = 0, height = 1, x = 0, y = 0;
             char c;

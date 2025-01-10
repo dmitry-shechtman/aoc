@@ -29,7 +29,7 @@ namespace aoc
 
         public readonly long Count => Max - Min + 1;
 
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is LongRange other && Equals(other);
 
         public readonly bool Equals(LongRange other) =>
@@ -41,10 +41,10 @@ namespace aoc
         public readonly override string ToString() =>
             Helper.ToString(this);
 
-        public readonly string ToString(IFormatProvider provider) =>
+        public readonly string ToString(IFormatProvider? provider) =>
             Helper.ToString(this, provider);
 
-        public readonly string ToString(string format, IFormatProvider provider = null) =>
+        public readonly string ToString(string? format, IFormatProvider? provider = null) =>
             Helper.ToString(this, format, provider);
 
         public readonly void Deconstruct(out long min, out long max)
@@ -67,16 +67,16 @@ namespace aoc
 
         public static IBuilder<LongRange> Builder => Helper;
 
-        public static LongRange Parse(string s) =>
+        public static LongRange Parse(string? s) =>
             Helper.Parse(s);
 
-        public static bool TryParse(string s, out LongRange range) =>
+        public static bool TryParse(string? s, out LongRange range) =>
             Helper.TryParse(s, out range);
 
-        public static LongRange Parse(string s, IFormatProvider provider) =>
+        public static LongRange Parse(string? s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(string s, IFormatProvider provider, out LongRange range) =>
+        public static bool TryParse(string? s, IFormatProvider? provider, out LongRange range) =>
             Helper.TryParse(s, provider, out range);
 
         public static LongRange Parse(ReadOnlySpan<char> s) =>
@@ -85,10 +85,10 @@ namespace aoc
         public static bool TryParse(ReadOnlySpan<char> s, out LongRange range) =>
             Helper.TryParse(s, out range);
 
-        public static LongRange Parse(ReadOnlySpan<char> s, IFormatProvider provider) =>
+        public static LongRange Parse(ReadOnlySpan<char> s, IFormatProvider? provider) =>
             Helper.Parse(s, provider);
 
-        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider provider, out LongRange range) =>
+        public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out LongRange range) =>
             Helper.TryParse(s, provider, out range);
 
         private static LongRange FromSpan(ReadOnlySpan<long> values) =>

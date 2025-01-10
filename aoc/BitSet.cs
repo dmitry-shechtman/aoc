@@ -87,7 +87,7 @@ namespace aoc
         object ICloneable.Clone() => Clone();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly override bool Equals(object obj) =>
+        public readonly override bool Equals(object? obj) =>
             obj is BitSet other && Equals(other);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

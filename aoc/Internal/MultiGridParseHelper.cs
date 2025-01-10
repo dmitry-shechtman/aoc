@@ -1,6 +1,7 @@
 ﻿using aoc.Grids;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace aoc.Internal
@@ -13,16 +14,16 @@ namespace aoc.Internal
         private const char   DefaultEmptyChar = '.';
         private const string DefaultSeparator = "\n";
 
-        public static string ToString(TMulti multi, IFormatProvider provider = null) =>
+        public static string ToString(TMulti multi, IFormatProvider? provider = null) =>
             ToString(multi, format: null, provider);
 
-        public static string ToString(TMulti multi, ReadOnlySpan<char> format, IFormatProvider provider) =>
+        public static string ToString(TMulti multi, ReadOnlySpan<char> format, IFormatProvider? provider) =>
             ToString(multi, multi[^1].Range(), format, provider);
 
-        public static string ToString(TMulti multi, Size size, ReadOnlySpan<char> format, IFormatProvider provider) =>
+        public static string ToString(TMulti multi, Size size, ReadOnlySpan<char> format, IFormatProvider? provider) =>
             ToString(multi, range: new(size), format, provider);
 
-        public static string ToString(TMulti multi, VectorRange range, ReadOnlySpan<char> format, IFormatProvider _)
+        public static string ToString(TMulti multi, VectorRange range, ReadOnlySpan<char> format, IFormatProvider? _)
         {
             GetSpecials(format, out var empty, out var separator, multi.Count - 1);
             var chars = new char[(range.Width + separator.Length) * range.Height];
@@ -44,55 +45,63 @@ namespace aoc.Internal
         public TMulti Parse(ReadOnlySpan<char> input) =>
             Parse(input, out _);
 
-        public bool TryParse(ReadOnlySpan<char> input, out TMulti multi) =>
-            TryParse(input, out _, out multi);
+        public bool TryParse(ReadOnlySpan<char> input,
+            [MaybeNullWhen(false)] out TMulti multi) =>
+                TryParse(input, out _, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, out VectorRange range) =>
-            TryParse(input, out range, out TMulti multi)
+            TryParse(input, out range, out TMulti? multi)
                 ? multi
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(ReadOnlySpan<char> input, out VectorRange range, out TMulti multi) =>
-            TryParse(input, GetFormat(input, stackalloc char[256]), out range, out multi);
+        public bool TryParse(ReadOnlySpan<char> input, out VectorRange range,
+            [MaybeNullWhen(false)] out TMulti multi) =>
+                TryParse(input, GetFormat(input, stackalloc char[256]), out range, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate) =>
             Parse(input, predicate, out _);
 
-        public bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate, out TMulti multi) =>
-            TryParse(input, predicate, out _, out multi);
+        public bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate,
+            [MaybeNullWhen(false)] out TMulti multi) =>
+                TryParse(input, predicate, out _, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range) =>
-            TryParse(input, predicate, out range, out TMulti multi)
+            TryParse(input, predicate, out range, out TMulti? multi)
                 ? multi
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range, out TMulti multi) =>
-            TryParse(input, GetFormat(input, stackalloc char[256], predicate), out range, out multi);
+        public bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range,
+            [MaybeNullWhen(false)] out TMulti multi) =>
+                TryParse(input, GetFormat(input, stackalloc char[256], predicate), out range, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format) =>
             Parse(input, format, out _);
 
-        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out TMulti multi) =>
-            TryParse(input, format, out _, out multi);
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format,
+            [MaybeNullWhen(false)] out TMulti multi) =>
+                TryParse(input, format, out _, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range) =>
             Parse(input, format, DefaultSeparator, out range);
 
-        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range, out TMulti multi) =>
-            TryParse(input, format, DefaultSeparator, out range, out multi);
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range,
+            [MaybeNullWhen(false)] out TMulti multi) =>
+                TryParse(input, format, DefaultSeparator, out range, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator) =>
             Parse(input, format, separator, out _);
 
-        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out TMulti multi) =>
-            TryParse(input, format, separator, out _, out multi);
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator,
+            [MaybeNullWhen(false)] out TMulti multi) =>
+                TryParse(input, format, separator, out _, out multi);
 
         public TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range) =>
-            TryParse(input, format, separator, out range, out TMulti multi)
+            TryParse(input, format, separator, out range, out TMulti? multi)
                 ? multi
                 : throw new InvalidOperationException("Input string was not in a correct format.");
 
-        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range, out TMulti multi)
+        public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range,
+            [MaybeNullWhen(false)] out TMulti multi)
         {
             int width = 0, height = 1, x = 0, y = 0, i, j;
             char c, empty = DefaultEmptyChar;

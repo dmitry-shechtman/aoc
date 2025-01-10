@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace aoc
 {
@@ -24,9 +25,10 @@ namespace aoc
             where T : struct =>
                 span[size.GetIndex(key)] = value;
 
-        public static bool TryGetValue<TSize, T, TValue>(this TSize size, TValue[] array, T key, out TValue value)
-            where TSize : struct, IIntegerSize<TSize, T>
-            where T : struct
+        public static bool TryGetValue<TSize, T, TValue>(this TSize size, TValue[] array, T key,
+            [MaybeNullWhen(false)] out TValue value)
+                where TSize : struct, IIntegerSize<TSize, T>
+                where T : struct
         {
             if (!size.Contains(key))
             {
@@ -37,9 +39,10 @@ namespace aoc
             return true;
         }
 
-        public static bool TryGetValue<TSize, T, TValue>(this TSize size, ReadOnlySpan<TValue> span, T key, out TValue value)
-            where TSize : struct, IIntegerSize<TSize, T>
-            where T : struct
+        public static bool TryGetValue<TSize, T, TValue>(this TSize size, ReadOnlySpan<TValue> span, T key,
+            [MaybeNullWhen(false)] out TValue value)
+                where TSize : struct, IIntegerSize<TSize, T>
+                where T : struct
         {
             if (!size.Contains(key))
             {
