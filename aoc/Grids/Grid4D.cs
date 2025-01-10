@@ -131,43 +131,8 @@ namespace aoc.Grids
         public static Vector4D[] Headings =>
             Helper.Headings;
 
-        public static int GetHeading(ReadOnlySpan<char> s) =>
-            Helper.GetHeading(s);
-
-        public static bool TryGetHeading(ReadOnlySpan<char> s, out int heading) =>
-            Helper.TryGetHeading(s, out heading);
-
-        public static string ToString(Vector4D vector, char format) =>
-            Helper.ToString(vector, format);
-
-        public static Vector4D ParseVector(ReadOnlySpan<char> s) =>
-            Helper.ParseVector(s);
-
-        public static bool TryParseVector(ReadOnlySpan<char> s, out Vector4D vector) =>
-            Helper.TryParseVector(s, out vector);
-
-        public static IEnumerable<Vector4D> ParseVectors(ReadOnlySpan<char> s, params char[] skip) =>
-            Helper.ParseVectors(s, skip);
-
-        public static bool TryParseVectors(ReadOnlySpan<char> s, ReadOnlySpan<char> skip, out IEnumerable<Vector4D> vectors) =>
-            Helper.TryParseVectors(s, skip, out vectors);
-
-        public static IEnumerable<PathSegment<Vector4D>> ParsePath(ReadOnlySpan<char> s) =>
-            Helper.ParsePath(s);
-
-        public static IEnumerable<PathSegment<Vector4D>> ParsePath(string s, char separator) =>
-            Helper.ParsePath(s, separator);
-
-        public static IEnumerable<PathSegment<Vector4D>> ParsePath(string s, string separator) =>
-            Helper.ParsePath(s, separator);
-
-        public static IEnumerable<PathSegment<Vector4D>> ParsePath(string[] ss) =>
-            Helper.ParsePath(ss);
-
-        public static IEnumerable<PathSegment<Vector4D>> ParsePath(string[] ss, char separator) =>
-            Helper.ParsePath(ss, separator);
-
-        public static IEnumerable<PathSegment<Vector4D>> ParsePath(string[] ss, string separator) =>
-            Helper.ParsePath(ss, separator);
+        public static IHeadingBuilder          Heading => Helper;
+        public static IVectorBuilder<Vector4D> Vector  => Helper;
+        public static IPathBuilder<Vector4D>   Path    => Helper;
     }
 }

@@ -90,5 +90,8 @@ namespace aoc.Grids
 
         public int CountNeighborsAndSelf(Vector3D p) =>
             Helper.CountNeighborsAndSelf(this, p);
+
+        public static IVectorBuilder<Vector3D> Vector => Helper;
+        public static IPathBuilder<Vector3D>   Path   => Helper;
     }
 }

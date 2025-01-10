@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace aoc.Grids
 {
-    using Helper = Internal.GridHelper;
+    using Helper = Grid.GridHelper;
 
     public interface IGrid<TVector>
-        where TVector : struct, IEquatable<TVector>
+        where TVector : struct, IVector<TVector>
     {
         HashSet<TVector> Points { get; set; }
     }
@@ -59,6 +59,65 @@ namespace aoc.Grids
     public abstract class Grid<TSelf> : Grid<TSelf, Vector, Size, VectorRange, int>, IFormattableEx
         where TSelf : Grid<TSelf>
     {
+        internal sealed class GridHelper : Internal.GridHelper<GridHelper, Grid>
+        {
+            private GridHelper()
+            {
+            }
+
+            public override Vector[] Headings => new[]
+            {
+                Vector.North, Vector.East, Vector.South, Vector.West
+            };
+
+            protected override string[][] FormatStrings => new[]
+            {
+                new[] { "n", "e", "s", "w" },
+                new[] { "u", "r", "d", "l" },
+                new[] { "^", ">", "v", "<" }
+            };
+
+            public override Vector[] GetNeighbors(Vector p) => new Vector[]
+            {
+                new(p.x, p.y - 1),
+                new(p.x + 1, p.y),
+                new(p.x, p.y + 1),
+                new(p.x - 1, p.y)
+            };
+
+            public override Vector[] GetNeighborsAndSelf(Vector p) => new Vector[]
+            {
+                new(p.x, p.y),
+                new(p.x, p.y - 1),
+                new(p.x + 1, p.y),
+                new(p.x, p.y + 1),
+                new(p.x - 1, p.y)
+            };
+
+            public static IEnumerable<(Matrix, int)> ParseTurns(ReadOnlySpan<char> input)
+            {
+                Matrix t = Matrix.One;
+                var turns = Enumerable.Empty<(Matrix, int)>();
+                for (int i = 0; i < input.Length; i++)
+                {
+                    turns = turns.Append((t, ParseInt32(input, ref i)));
+                    if (i == input.Length)
+                        break;
+                    t = ParseTurn(input[i]);
+                }
+                return turns;
+            }
+
+            private static Matrix ParseTurn(char c) => char.ToLower(c) switch
+            {
+                'r' => Matrix.RotateRight,
+                'l' => Matrix.RotateLeft,
+                _ => throw new InvalidOperationException($"Unexpected character: {c}"),
+            };
+
+            protected override Grid CreateGrid(HashSet<Vector> points) => new(points);
+        }
+
         protected Grid(IEnumerable<Vector> points)
             : base(points)
         {
@@ -161,23 +220,13 @@ namespace aoc.Grids
         public override string ToString(string format, IFormatProvider provider = null) =>
             Helper.ToString(this, format, provider);
 
-        public string ToString(Size size, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
-            Helper.ToString(this, size, format, provider);
-
-        public string ToString(VectorRange range, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
-            Helper.ToString(this, range, format, provider);
-
         public static Vector[] Headings =>
             Helper.Headings;
 
-        public static int GetHeading(ReadOnlySpan<char> input) =>
-            Helper.GetHeading(input);
-
-        public static bool TryGetHeading(ReadOnlySpan<char> input, out int heading) =>
-            Helper.TryGetHeading(input, out heading);
-
-        public static string ToString(Vector vector, char format) =>
-            Helper.ToString(vector, format);
+        public static IHeadingBuilder        Heading => Helper;
+        public static IGridBuilder<Grid>     Builder => Helper;
+        public static IVectorBuilder<Vector> Vector  => Helper;
+        public static IPathBuilder<Vector>   Path    => Helper;
 
         public static Grid Parse(string input) =>
             Helper.Parse(input);
@@ -221,37 +270,7 @@ namespace aoc.Grids
         public static bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output, out VectorRange range, out Grid grid) =>
             Helper.TryParse(input, format, output, out range, out grid);
 
-        public static Vector ParseVector(ReadOnlySpan<char> input) =>
-            Helper.ParseVector(input);
-
-        public static bool TryParseVector(ReadOnlySpan<char> input, out Vector vector) =>
-            Helper.TryParseVector(input, out vector);
-
-        public static IEnumerable<Vector> ParseVectors(ReadOnlySpan<char> input, params char[] skip) =>
-            Helper.ParseVectors(input, skip);
-
-        public static bool TryParseVectors(ReadOnlySpan<char> input, ReadOnlySpan<char> skip, out IEnumerable<Vector> vectors) =>
-            Helper.TryParseVectors(input, skip, out vectors);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(ReadOnlySpan<char> input) =>
-            Helper.ParsePath(input);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string input, char separator) =>
-            Helper.ParsePath(input, separator);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string input, string separator) =>
-            Helper.ParsePath(input, separator);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string[] ss) =>
-            Helper.ParsePath(ss);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string[] ss, char separator) =>
-            Helper.ParsePath(ss, separator);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string[] ss, string separator) =>
-            Helper.ParsePath(ss, separator);
-
-        public static IEnumerable<(Matrix, int)> ParseTurns(string input) =>
+        public static IEnumerable<(Matrix, int)> ParseTurns(ReadOnlySpan<char> input) =>
             Helper.ParseTurns(input);
     }
 }

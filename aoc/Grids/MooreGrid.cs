@@ -6,12 +6,10 @@ namespace aoc.Grids
     public abstract class MooreGrid<TSelf> : Grid<TSelf>
         where TSelf : MooreGrid<TSelf>
     {
-        internal sealed class Helper : Internal.GridHelper2<Helper, TSelf>
+        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper2<THelper, TGrid>
+            where THelper : Helper<THelper, TGrid>
+            where TGrid : MooreGrid<TGrid>
         {
-            private Helper()
-            {
-            }
-
             public override Vector[] Headings => new[]
             {
                 Vector.North, Vector.NorthEast, Vector.East, Vector.SouthEast,
@@ -38,7 +36,7 @@ namespace aoc.Grids
                         yield return new(x, y);
             }
 
-            public override int CountNeighbors(TSelf grid, Vector p)
+            public override int CountNeighbors(TGrid grid, Vector p)
             {
                 int count = 0;
                 for (var y = p.y - 1; y <= p.y + 1; y++)
@@ -47,7 +45,7 @@ namespace aoc.Grids
                 return count;
             }
 
-            public override int CountNeighborsAndSelf(TSelf grid, Vector p)
+            public override int CountNeighborsAndSelf(TGrid grid, Vector p)
             {
                 int count = 0;
                 for (var y = p.y - 1; y <= p.y + 1; y++)
@@ -55,6 +53,15 @@ namespace aoc.Grids
                         count += grid.Points.Contains((x, y)) ? 1 : 0;
                 return count;
             }
+        }
+
+        internal sealed class Helper : Helper<Helper, MooreGrid>
+        {
+            private Helper()
+            {
+            }
+
+            protected override MooreGrid CreateGrid(HashSet<Vector> points) => new(points);
         }
 
         protected MooreGrid(IEnumerable<Vector> points)
@@ -86,12 +93,6 @@ namespace aoc.Grids
         public override string ToString(IFormatProvider provider) =>
             Helper.ToString(this, provider);
 
-        public string ToString(Size size, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
-            Helper.ToString(this, size, format, provider);
-
-        public string ToString(VectorRange range, ReadOnlySpan<char> format = default, IFormatProvider provider = null) =>
-            Helper.ToString(this, range, format, provider);
-
         public static IEnumerable<Vector> GetNeighbors(Vector p) =>
             Helper.GetNeighbors(p);
 
@@ -107,43 +108,9 @@ namespace aoc.Grids
         public static Vector[] Headings =>
             Helper.Headings;
 
-        public static int GetHeading(ReadOnlySpan<char> s) =>
-            Helper.GetHeading(s);
-
-        public static bool TryGetHeading(ReadOnlySpan<char> s, out int heading) =>
-            Helper.TryGetHeading(s, out heading);
-
-        public static string ToString(Vector vector, char format) =>
-            Helper.ToString(vector, format);
-
-        public static Vector ParseVector(ReadOnlySpan<char> s) =>
-            Helper.ParseVector(s);
-
-        public static bool TryParseVector(ReadOnlySpan<char> s, out Vector vector) =>
-            Helper.TryParseVector(s, out vector);
-
-        public static IEnumerable<Vector> ParseVectors(ReadOnlySpan<char> s, params char[] skip) =>
-            Helper.ParseVectors(s, skip);
-
-        public static bool TryParseVectors(ReadOnlySpan<char> s, ReadOnlySpan<char> skip, out IEnumerable<Vector> vectors) =>
-            Helper.TryParseVectors(s, skip, out vectors);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(ReadOnlySpan<char> s) =>
-            Helper.ParsePath(s);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string s, char separator) =>
-            Helper.ParsePath(s, separator);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string s, string separator) =>
-            Helper.ParsePath(s, separator);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string[] ss) =>
-            Helper.ParsePath(ss);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string[] ss, char separator) =>
-            Helper.ParsePath(ss, separator);
-
-        public static IEnumerable<PathSegment<Vector>> ParsePath(string[] ss, string separator) =>
-            Helper.ParsePath(ss, separator);
+        public static IHeadingBuilder         Heading => Helper;
+        public static IGridBuilder<MooreGrid> Builder => Helper;
+        public static IVectorBuilder<Vector>  Vector  => Helper;
+        public static IPathBuilder<Vector>    Path    => Helper;
     }
 }
