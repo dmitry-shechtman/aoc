@@ -1,4 +1,5 @@
 ﻿using aoc.Grids;
+using aoc.Grids.Builders;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -6,7 +7,7 @@ using System.Linq;
 
 namespace aoc.Internal
 {
-    abstract class MultiGridParseHelper<TSelf, TMulti, TGrid> : Singleton<TSelf>
+    abstract class MultiGridParseHelper<TSelf, TMulti, TGrid> : Singleton<TSelf>, IMultiGridBuilder<TMulti, TGrid>
         where TSelf : MultiGridParseHelper<TSelf, TMulti, TGrid>
         where TMulti : MultiGrid<TMulti, TGrid>
         where TGrid : Grid<TGrid>
@@ -14,16 +15,16 @@ namespace aoc.Internal
         private const char   DefaultEmptyChar = '.';
         private const string DefaultSeparator = "\n";
 
-        public static string ToString(TMulti multi, IFormatProvider? provider = null) =>
-            ToString(multi, format: null, provider);
+        public string ToString(TMulti multi, IFormatProvider? provider = null) =>
+            ToString(multi, null, provider);
 
-        public static string ToString(TMulti multi, ReadOnlySpan<char> format, IFormatProvider? provider) =>
-            ToString(multi, multi[^1].Range(), format, provider);
+        public string ToString(TMulti multi, ReadOnlySpan<char> format, IFormatProvider? _) =>
+            ToString(multi, multi[^1].Range(), format);
 
-        public static string ToString(TMulti multi, Size size, ReadOnlySpan<char> format, IFormatProvider? provider) =>
-            ToString(multi, range: new(size), format, provider);
+        public string ToString(TMulti multi, Size size, ReadOnlySpan<char> format) =>
+            ToString(multi, range: new(size), format);
 
-        public static string ToString(TMulti multi, VectorRange range, ReadOnlySpan<char> format, IFormatProvider? _)
+        public string ToString(TMulti multi, VectorRange range, ReadOnlySpan<char> format)
         {
             GetSpecials(format, out var empty, out var separator, multi.Count - 1);
             var chars = new char[(range.Width + separator.Length) * range.Height];
