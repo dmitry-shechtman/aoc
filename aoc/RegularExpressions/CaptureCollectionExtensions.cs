@@ -1,36 +1,51 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace System.Text.RegularExpressions
 {
     public static class CaptureCollectionExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string[] GetValues(this CaptureCollection captures) =>
+            SelectValues(captures).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this CaptureCollection captures,
             IFormatProvider? provider = null)
                 where T : IConvertible =>
-                    GetValues(captures, StringExtensions.ConvertTo<T>, provider);
+                    SelectValues<T>(captures, provider).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this CaptureCollection captures,
-            Func<string, T> selector) =>
+            ParseSpan<T> selector) =>
                 SelectValues(captures, selector).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this CaptureCollection captures,
-            Func<string, IFormatProvider?, T> selector,
+            ParseSpan<T, IFormatProvider> selector,
             IFormatProvider? provider = null) =>
                 SelectValues(captures, selector, provider).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<string> SelectValues(this CaptureCollection captures) =>
+            captures.Select(c => c.Value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> SelectValues<T>(this CaptureCollection captures,
             IFormatProvider? provider = null)
                 where T : IConvertible =>
-                    SelectValues(captures, StringExtensions.ConvertTo<T>, provider);
+                    captures.Select(c => c.Value.ConvertTo<T>(provider));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> SelectValues<T>(this CaptureCollection captures,
-            Func<string, T> selector) =>
-                captures.Select(c => selector(c.Value));
+            ParseSpan<T> selector) =>
+                captures.Select(c => selector(c.ValueSpan));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> SelectValues<T>(this CaptureCollection captures,
-            Func<string, IFormatProvider?, T> selector,
+            ParseSpan<T, IFormatProvider> selector,
             IFormatProvider? provider = null) =>
-                captures.Select(c => selector(c.Value, provider));
+                captures.Select(c => selector(c.ValueSpan, provider));
     }
 }

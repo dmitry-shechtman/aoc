@@ -363,7 +363,7 @@ namespace aoc.Internal
             for (int i = 0; i < values.Length; i++)
             {
                 matches.MoveNext();
-                if (!Item.TryParse(matches.Current.Value, styles, provider, out values[i]))
+                if (!Item.TryParse(matches.Current.ValueSpan, styles, provider, out values[i]))
                     return false;
             }
             return true;
