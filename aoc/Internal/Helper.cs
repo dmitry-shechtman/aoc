@@ -7,41 +7,28 @@ using System.Text.RegularExpressions;
 
 namespace aoc.Internal
 {
-    interface IHelperStrategy<T, TItem>
-        where T : IReadOnlyCollection<TItem>
-        where TItem : IFormattable
-    {
-        char      DefaultSeparator { get; }
-        string    DefaultFormat    { get; }
-        string[]  FormatKeys       { get; }
-        int       MinCount         { get; }
-        int       MaxCount         { get; }
-
-        bool TryGetItem(T value, string format, IFormatProvider? provider, ref int i,
-            [MaybeNullWhen(false)] out IFormattable item);
-    }
-
-    abstract class HelperStrategy<TSelf, T, TItem> : Singleton<TSelf>, IHelperStrategy<T, TItem>
+    abstract class HelperStrategy<TSelf, T, TItem> : Singleton<TSelf>
         where TSelf : HelperStrategy<TSelf, T, TItem>
         where T : IReadOnlyCollection<TItem>
         where TItem : IFormattable
     {
-        protected HelperStrategy(params string[] formatKeys)
+        protected HelperStrategy(int minCount, int maxCount, char separatorChar, string separatorString, string[] formatKeys)
         {
+            MinCount = minCount;
+            MaxCount = maxCount;
+            DefaultSeparator = separatorChar;
+            SeparatorString = separatorString;
             FormatKeys = formatKeys;
         }
 
-        public abstract char DefaultSeparator { get; }
-        public string[] FormatKeys { get; }
+        public    int      MinCount         { get; }
+        public    int      MaxCount         { get; }
+        public    char     DefaultSeparator { get; }
+        public    string   SeparatorString  { get; }
+        protected string[] FormatKeys       { get; }
 
-        public string   DefaultFormat =>
+        public string GetDefaultFormat() =>
             string.Join(SeparatorString, FormatKeys);
-
-        public virtual int MinCount => FormatKeys.Length;
-        public virtual int MaxCount => FormatKeys.Length;
-
-        protected virtual string SeparatorString =>
-            $"{DefaultSeparator}";
 
         public abstract bool TryGetItem(T value, string format, IFormatProvider? provider, ref int i,
             [MaybeNullWhen(false)] out IFormattable item);
@@ -52,8 +39,8 @@ namespace aoc.Internal
         where T : IReadOnlyCollection<TItem>
         where TItem : IFormattable
     {
-        protected ItemHelperStrategy(params string[] formatKeys)
-            : base(formatKeys)
+        protected ItemHelperStrategy(char separatorChar, string separatorString, params string[] formatKeys)
+            : base(formatKeys.Length, formatKeys.Length, separatorChar, separatorString, formatKeys)
         {
         }
 
@@ -82,8 +69,8 @@ namespace aoc.Internal
         where T : IReadOnlyList<TItem>
         where TItem : IFormattable
     {
-        public ListHelperStrategy(params string[] formatKeys)
-            : base(formatKeys)
+        public ListHelperStrategy(char separator, string[] formatKeys)
+            : base(separator, $"{separator}", formatKeys)
         {
         }
 
@@ -115,7 +102,7 @@ namespace aoc.Internal
     abstract class Helper<T, TItem, TStrategy, TItemHelper> : Builders.IBuilder<T>
         where T : unmanaged, IReadOnlyCollection<TItem>
         where TItem : unmanaged, IFormattable
-        where TStrategy : IHelperStrategy<T, TItem>
+        where TStrategy : HelperStrategy<TStrategy, T, TItem>
         where TItemHelper : IItemHelper<TItem>
     {
         protected Helper(TStrategy strategy, FromSpan<T, TItem> fromSpan, TItemHelper item, int chunkCount = 1, int chunkSize = 0)
@@ -123,7 +110,7 @@ namespace aoc.Internal
             Strategy = strategy;
             FromSpan = fromSpan;
             Item = item;
-            DefaultFormat = Strategy.DefaultFormat;
+            _defaultFormat = new(Strategy.GetDefaultFormat);
             DefaultSeparator = Strategy.DefaultSeparator;
             MinCount = Strategy.MinCount;
             MaxCount = Strategy.MaxCount;
@@ -134,12 +121,14 @@ namespace aoc.Internal
         private   TStrategy           Strategy         { get; }
         public    FromSpan<T, TItem>  FromSpan         { get; }
         protected TItemHelper         Item             { get; }
-        private   string              DefaultFormat    { get; }
-        public    char                DefaultSeparator { get; }
+        private   char                DefaultSeparator { get; }
         public    int                 MinCount         { get; }
         public    int                 MaxCount         { get; }
         private   int                 ChunkCount       { get; }
         protected int                 ChunkSize        { get; }
+
+        private readonly Lazy<string> _defaultFormat;
+        private string DefaultFormat => _defaultFormat.Value;
 
         public T FromArray(params TItem[] values) =>
             FromSpan(values);
@@ -154,7 +143,7 @@ namespace aoc.Internal
             return ToStringInner(value, format, provider);
         }
 
-        protected string ToStringInner(T value, string format, IFormatProvider? provider)
+        private string ToStringInner(T value, string format, IFormatProvider? provider)
         {
             StringBuilder sb = new();
             for (int i = 0; i < format.Length; i++)
@@ -384,7 +373,7 @@ namespace aoc.Internal
     abstract class Helper<T, TItem, TStrategy> : Helper<T, TItem, TStrategy, INumberHelper<TItem>>
         where T : unmanaged, IReadOnlyCollection<TItem>
         where TItem : unmanaged, IFormattable
-        where TStrategy : IHelperStrategy<T, TItem>
+        where TStrategy : HelperStrategy<TStrategy, T, TItem>
     {
         protected Helper(TStrategy strategy, FromSpan<T, TItem> fromSpan, INumberHelper<TItem> number)
             : base(strategy, fromSpan, number)

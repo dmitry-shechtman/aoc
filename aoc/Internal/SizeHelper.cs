@@ -9,11 +9,9 @@ namespace aoc.Internal
         where T : struct, IFormattable
     {
         protected SizeHelperStrategy(params string[] formatKeys)
-            : base(formatKeys)
+            : base(':', formatKeys)
         {
         }
-
-        public override char DefaultSeparator => ':';
     }
 
     abstract class SizeHelper<TSize, TVector, T, TStrategy> : Helper<TSize, T, TStrategy>

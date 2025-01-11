@@ -11,11 +11,9 @@ namespace aoc.Internal
         where TSelf : VectorHelperStrategy<TSelf, TVector, T>
     {
         protected VectorHelperStrategy(params string[] formatKeys)
-            : base(formatKeys)
+            : base(',', formatKeys)
         {
         }
-
-        public override char DefaultSeparator => ',';
     }
 
     interface IVectorHelper<TVector, T> : ISpanParseHelper<TVector>, IParseHelper<TVector, char>

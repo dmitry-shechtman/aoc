@@ -13,18 +13,10 @@ namespace aoc.Internal
         where T : struct, IFormattable
     {
         protected MatrixHelperStrategy(int cardinality)
-            : base(Enumerable.Range(1, cardinality + 1).Select(i => $"r{i}").ToArray())
+            : base(minCount: 2, maxCount: cardinality + 1, separatorChar: ';',
+                  "; ", Enumerable.Range(1, cardinality + 1).Select(i => $"r{i}").ToArray())
         {
-            MaxCount = cardinality + 1;
         }
-
-        public override int MinCount => 2;
-        public override int MaxCount { get; }
-
-        public override char DefaultSeparator => ';';
-
-        protected override string SeparatorString =>
-            $"{DefaultSeparator} ";
 
         public sealed override bool TryGetItem(TMatrix matrix, string format, IFormatProvider? provider, ref int i, [MaybeNullWhen(false)] out IFormattable item) => (item = format[i] switch
         {
@@ -93,7 +85,7 @@ namespace aoc.Internal
             Vector = vector;
             One = pOne;
             NegativeOne = nOne;
-            _chunkSizes = new(() => GetChunkSizes());
+            _chunkSizes = new(GetChunkSizes);
             _rows = new(() => new(strategy, fromRows, vector, ChunkSizes));
             _columns = new(() => new(strategy, fromColumns, vector, ChunkSizes));
         }

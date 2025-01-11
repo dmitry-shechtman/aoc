@@ -9,7 +9,7 @@ namespace aoc.Internal
     abstract class Helper2<T, TItem, TStrategy, TItemHelper> : Helper<T, TItem, TStrategy, TItemHelper>
         where T : unmanaged, IReadOnlyCollection<TItem>
         where TItem : unmanaged, IFormattable
-        where TStrategy : IHelperStrategy<T, TItem>
+        where TStrategy : HelperStrategy<TStrategy, T, TItem>
         where TItemHelper : ISpanParseHelper<TItem>, IParseHelper<TItem, char>
     {
         protected Helper2(TStrategy strategy, FromSpan<T, TItem> fromSpan, TItemHelper item, int chunkCount, int chunkSize)
@@ -111,7 +111,7 @@ namespace aoc.Internal
         where TVectorHelper : IVectorHelper<TVector, TItem2>
         where TVector : unmanaged, IVector<TVector, TItem2>
         where TItem2 : unmanaged, IFormattable
-        where TStrategy : IHelperStrategy<T, TVector>
+        where TStrategy : HelperStrategy<TStrategy, T, TVector>
     {
         protected Helper2(TStrategy strategy, FromSpan<T, TVector> fromSpan, TVectorHelper vector)
             : base(strategy, fromSpan, vector, strategy.MinCount, vector.MinCount)

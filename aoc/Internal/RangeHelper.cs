@@ -7,17 +7,9 @@ namespace aoc.Internal
         where T : struct, IFormattable
     {
         private RangeHelperStrategy()
-            : base("min", "max")
+            : base('~', " ~ ", "min", "max")
         {
         }
-
-        public override int MinCount => 2;
-        public override int MaxCount => 2;
-
-        public override char DefaultSeparator => '~';
-
-        protected override string SeparatorString =>
-            $" {DefaultSeparator} ";
 
         protected override T GetItem(TRange range, int i) => i switch
         {
