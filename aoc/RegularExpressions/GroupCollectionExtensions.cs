@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -65,6 +66,13 @@ namespace System.Text.RegularExpressions
                     .Select(g => selector(g.ValueSpan, provider)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                groups.Skip(range)
+                    .Select(g => selector(g.ValueSpan, styles, provider)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<string> SelectValues(this GroupCollection groups,
             Range? range = null) =>
                 groups.Skip(range)
@@ -89,6 +97,13 @@ namespace System.Text.RegularExpressions
             Range? range = null, IFormatProvider? provider = null) =>
                 groups.Skip(range)
                     .Select(g => selector(g.ValueSpan, provider));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                groups.Skip(range)
+                    .Select(g => selector(g.ValueSpan, styles, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, string[]> GetAllValues(this GroupCollection groups,
@@ -117,6 +132,13 @@ namespace System.Text.RegularExpressions
                     .ToDictionary(g => g.Name, g => g.GetValues(selector, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                groups.Skip(range)
+                    .ToDictionary(g => g.Name, g => g.GetValues(selector, provider, styles));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, IEnumerable<string>> SelectAllValues(this GroupCollection groups,
             Range? range = null) =>
                 groups.Skip(range)
@@ -141,5 +163,12 @@ namespace System.Text.RegularExpressions
             Range? range = null, IFormatProvider? provider = null) =>
                 groups.Skip(range)
                     .ToDictionary(g => g.Name, g => g.SelectValues(selector, provider));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                groups.Skip(range)
+                    .ToDictionary(g => g.Name, g => g.SelectValues(selector, provider, styles));
     }
 }

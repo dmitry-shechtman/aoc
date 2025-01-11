@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -28,6 +29,12 @@ namespace System.Text.RegularExpressions
                 SelectValues(group, selector, provider).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetValues<T>(this Group group,
+            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                SelectValues(group, selector, provider, styles).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<string> SelectValues(this Group group) =>
             group.Captures.SelectValues();
 
@@ -47,5 +54,11 @@ namespace System.Text.RegularExpressions
             ParseSpan<T, IFormatProvider> selector,
             IFormatProvider? provider = null) =>
                 group.Captures.SelectValues(selector, provider);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> SelectValues<T>(this Group group,
+            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                group.Captures.SelectValues(selector, provider, styles);
     }
 }
