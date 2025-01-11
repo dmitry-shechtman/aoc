@@ -13,6 +13,12 @@ namespace System.Linq
         public static IEnumerable<TResult> Select2<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector) =>
             source.Select(selector);
 
+        public static IEnumerable<TSource> Where1<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) =>
+            source.Where(predicate);
+
+        public static IEnumerable<TSource> Where2<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Where(predicate);
+
         public static IEnumerable<T> SelectMany<T>(this IEnumerable<IEnumerable<T>> source) =>
             source.SelectMany(v => v);
 
