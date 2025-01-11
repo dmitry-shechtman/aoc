@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 
@@ -36,6 +37,25 @@ namespace System.Text.RegularExpressions
                 regex.Match(input).Groups
                     .GetValues(selector, provider: provider, styles: styles);
 
+        public static T[] GetValues<T>(this Regex regex, string input,
+            CultureInfo? culture) =>
+                regex.Match(input).Groups
+                    .GetValues<T>(culture: culture);
+
+        public static T[] GetValues<T>(this Regex regex, string input,
+            TypeConverter converter, CultureInfo? culture = null) =>
+                regex.Match(input).Groups
+                    .GetValues<T>(converter, culture: culture);
+
+        public static T[] GetValuesInvariant<T>(this Regex regex, string input) =>
+            regex.Match(input).Groups
+                .GetValuesInvariant<T>();
+
+        public static T[] GetValuesInvariant<T>(this Regex regex, string input,
+            TypeConverter converter) =>
+                regex.Match(input).Groups
+                    .GetValuesInvariant<T>(converter);
+
         public static IEnumerable<string[]> SelectValuesMany(this Regex regex, string input,
             Range? range = null) =>
                 regex.Matches(input)
@@ -69,6 +89,34 @@ namespace System.Text.RegularExpressions
                     .Select(m => m.Groups
                         .GetValues(selector, range, provider, styles));
 
+        public static IEnumerable<T[]> SelectValuesMany<T>(this Regex regex, string input,
+            Range? range, CultureInfo? culture)
+        {
+            var converter = TypeDescriptor.GetConverter(typeof(T));
+            return converter.CanConvertTo(typeof(T))
+                ? SelectValuesMany<T>(regex, input, converter, range, culture)
+                : throw new InvalidOperationException();
+        }
+
+        public static IEnumerable<T[]> SelectValuesMany<T>(this Regex regex, string input,
+            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
+                regex.Matches(input)
+                    .Select(m => m.Groups.GetValues<T>(converter, range, culture));
+
+        public static IEnumerable<T[]> SelectValuesManyInvariant<T>(this Regex regex, string input,
+            Range? range = null)
+        {
+            var converter = TypeDescriptor.GetConverter(typeof(T));
+            return converter.CanConvertTo(typeof(T))
+                ? SelectValuesManyInvariant<T>(regex, input, converter, range)
+                : throw new InvalidOperationException();
+        }
+
+        public static IEnumerable<T[]> SelectValuesManyInvariant<T>(this Regex regex, string input,
+            TypeConverter converter, Range? range = null) =>
+                regex.Matches(input)
+                    .Select(m => m.Groups.GetValuesInvariant<T>(converter, range));
+
         public static Dictionary<string, string[]> GetAllValues(this Regex regex, string input,
             Range? range = null) =>
                 regex.Match(input).Groups
@@ -97,6 +145,26 @@ namespace System.Text.RegularExpressions
                 regex.Match(input).Groups
                     .GetAllValues(selector, range, provider, styles);
 
+        public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
+            Range? range, CultureInfo? culture) =>
+                regex.Match(input).Groups
+                    .GetAllValues<T>(range, culture);
+
+        public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
+            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
+                regex.Match(input).Groups
+                    .GetAllValues<T>(converter, range, culture);
+
+        public static Dictionary<string, T[]> GetAllValuesInvariant<T>(this Regex regex, string input,
+            Range? range = null) =>
+                regex.Match(input).Groups
+                    .GetAllValuesInvariant<T>(range);
+
+        public static Dictionary<string, T[]> GetAllValuesInvariant<T>(this Regex regex, string input,
+            TypeConverter converter, Range? range = null) =>
+                regex.Match(input).Groups
+                    .GetAllValuesInvariant<T>(converter, range);
+
         public static Dictionary<string, IEnumerable<string>> SelectAllValues(this Regex regex, string input,
             Range? range = null) =>
                 regex.Match(input).Groups
@@ -124,5 +192,25 @@ namespace System.Text.RegularExpressions
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Match(input).Groups
                     .SelectAllValues(selector, range, provider, styles);
+
+        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this Regex regex, string input,
+            Range? range, CultureInfo? culture) =>
+                regex.Match(input).Groups
+                    .SelectAllValues<T>(range, culture);
+
+        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this Regex regex, string input,
+            TypeConverter converter, Range? range, CultureInfo? culture) =>
+                regex.Match(input).Groups
+                    .SelectAllValues<T>(converter, range, culture);
+
+        public static Dictionary<string, IEnumerable<T>> SelectAllValuesInvariant<T>(this Regex regex, string input,
+            Range? range = null) =>
+                regex.Match(input).Groups
+                    .SelectAllValuesInvariant<T>(range);
+
+        public static Dictionary<string, IEnumerable<T>> SelectAllValuesInvariant<T>(this Regex regex, string input,
+            TypeConverter converter, Range? range = null) =>
+                regex.Match(input).Groups
+                    .SelectAllValuesInvariant<T>(converter, range);
     }
 }
