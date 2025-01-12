@@ -22,15 +22,11 @@ namespace System.Text.RegularExpressions
             Enumerable.Take<Group>(groups, count);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<Group> Skip(GroupCollection groups, Range range)
+        public static IEnumerable<Group> Skip(this GroupCollection groups, Range range)
         {
             var (offset, length) = range.GetOffsetAndLength(groups.Count);
             return groups.Skip(offset).Take(length);
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<Group> Skip(this GroupCollection groups, Range? range) =>
-            range is null ? groups : Skip(groups, range.Value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(this GroupCollection groups,
@@ -39,6 +35,10 @@ namespace System.Text.RegularExpressions
             where TKey : notnull =>
                 Enumerable.ToDictionary(groups, keySelector, elementSelector);
 #endif
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static IEnumerable<Group> Skip(this GroupCollection groups, Range? range) =>
+            range is null ? groups : Skip(groups, range.Value);
 
         #region GetValues
 
