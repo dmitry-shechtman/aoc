@@ -36,29 +36,29 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<string> SelectValues(this Group group) =>
-            group.Captures.SelectValues();
+            group.Captures.Select(c => c.Value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> SelectValues<T>(this Group group,
             IFormatProvider? provider = null)
                 where T : IConvertible =>
-                    group.Captures.SelectValues<T>(provider);
+                    group.Captures.Select(c => c.Value.ConvertTo<T>(provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> SelectValues<T>(this Group group,
             ParseSpan<T> selector) =>
-                group.Captures.SelectValues(selector);
+                group.Captures.Select(c => selector(c.ValueSpan));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> SelectValues<T>(this Group group,
             ParseSpan<T, IFormatProvider> selector,
             IFormatProvider? provider = null) =>
-                group.Captures.SelectValues(selector, provider);
+                group.Captures.Select(c => selector(c.ValueSpan, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> SelectValues<T>(this Group group,
             ParseSpan<T, NumberStyles, IFormatProvider> selector,
             IFormatProvider? provider = null, NumberStyles styles = 0) =>
-                group.Captures.SelectValues(selector, provider, styles);
+                group.Captures.Select(c => selector(c.ValueSpan, styles, provider));
     }
 }
