@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace System.Text.RegularExpressions
@@ -15,13 +13,5 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T ConvertFromInvariantString<T>(this TypeConverter converter, string value) =>
             (T)converter.ConvertFromInvariantString(value)!;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> ConvertFromStrings<T>(this TypeConverter converter, Group group, CultureInfo? culture) =>
-            group.Captures.Select(c => ConvertFromString<T>(converter, c.Value, culture));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> ConvertFromInvariantStrings<T>(this TypeConverter converter, Group group) =>
-            group.Captures.Select(c => ConvertFromInvariantString<T>(converter, c.Value));
     }
 }
