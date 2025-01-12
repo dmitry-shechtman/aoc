@@ -40,6 +40,8 @@ namespace System.Text.RegularExpressions
                 Enumerable.ToDictionary(groups, keySelector, elementSelector);
 #endif
 
+        #region GetValues
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string[] GetValues(this GroupCollection groups,
             Range? range = null) =>
@@ -104,6 +106,10 @@ namespace System.Text.RegularExpressions
             TypeConverter converter, Range? range = null) =>
                 groups.Skip(range)
                     .Select(g => converter.ConvertFromInvariantString<T>(g.Value)).ToArray();
+
+        #endregion
+
+        #region EnumerateValues
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<string> EnumerateValues(this GroupCollection groups,
@@ -170,6 +176,10 @@ namespace System.Text.RegularExpressions
                 groups.Skip(range)
                     .Select(g => converter.ConvertFromInvariantString<T>(g.Value));
 
+        #endregion
+
+        #region GetAllValues
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, string[]> GetAllValues(this GroupCollection groups,
             Range? range = null) =>
@@ -235,6 +245,10 @@ namespace System.Text.RegularExpressions
                 groups.Skip(range)
                     .ToDictionary(g => g.Name, g => converter.ConvertFromInvariantStrings<T>(g).ToArray());
 
+        #endregion
+
+        #region EnumerateAllValues
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, IEnumerable<string>> EnumerateAllValues(this GroupCollection groups,
             Range? range = null) =>
@@ -299,5 +313,7 @@ namespace System.Text.RegularExpressions
             TypeConverter converter, Range? range = null) =>
                 groups.Skip(range)
                     .ToDictionary(g => g.Name, converter.ConvertFromInvariantStrings<T>);
+
+        #endregion
     }
 }
