@@ -22,20 +22,20 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this Group group,
-            ParseSpan<T> selector) =>
-                EnumerateValues(group, selector).ToArray();
+            ParseSpan<T> parse) =>
+                EnumerateValues(group, parse).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this Group group,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             IFormatProvider? provider = null) =>
-                EnumerateValues(group, selector, provider).ToArray();
+                EnumerateValues(group, parse, provider).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this Group group,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             IFormatProvider? provider = null, NumberStyles styles = 0) =>
-                EnumerateValues(group, selector, provider, styles).ToArray();
+                EnumerateValues(group, parse, provider, styles).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this Group group,
@@ -60,6 +60,17 @@ namespace System.Text.RegularExpressions
             TypeConverter converter) =>
                 EnumerateValuesInvariant<T>(group, converter).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetValuesInvariant<T>(this Group group,
+            ParseSpan<T, IFormatProvider> parse) =>
+                EnumerateValuesInvariant(group, parse).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetValuesInvariant<T>(this Group group,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            NumberStyles styles = 0) =>
+                EnumerateValuesInvariant(group, parse, styles).ToArray();
+
         #endregion
 
         #region EnumerateValues
@@ -76,20 +87,20 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateValues<T>(this Group group,
-            ParseSpan<T> selector) =>
-                group.Captures.Select(c => selector(c.ValueSpan));
+            ParseSpan<T> parse) =>
+                group.Captures.Select(c => parse(c.ValueSpan));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateValues<T>(this Group group,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             IFormatProvider? provider = null) =>
-                group.Captures.Select(c => selector(c.ValueSpan, provider));
+                group.Captures.Select(c => parse(c.ValueSpan, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateValues<T>(this Group group,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             IFormatProvider? provider = null, NumberStyles styles = 0) =>
-                group.Captures.Select(c => selector(c.ValueSpan, styles, provider));
+                group.Captures.Select(c => parse(c.ValueSpan, styles, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateValues<T>(this Group group,
@@ -113,6 +124,17 @@ namespace System.Text.RegularExpressions
         public static IEnumerable<T> EnumerateValuesInvariant<T>(this Group group,
             TypeConverter converter) =>
                 group.Captures.Select(c => converter.ConvertFromInvariantString<T>(c.Value));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this Group group,
+            ParseSpan<T, IFormatProvider> parse) =>
+                group.Captures.Select(c => parse(c.ValueSpan, CultureInfo.InvariantCulture));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this Group group,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            NumberStyles styles = 0) =>
+                group.Captures.Select(c => parse(c.ValueSpan, styles, CultureInfo.InvariantCulture));
 
         #endregion
     }

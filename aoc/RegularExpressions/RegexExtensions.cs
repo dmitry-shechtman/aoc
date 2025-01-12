@@ -24,21 +24,21 @@ namespace System.Text.RegularExpressions
                         .GetGroupValues<T>(provider: provider);
 
         public static T[] GetGroupValues<T>(this Regex regex, string input,
-            ParseSpan<T> selector) =>
+            ParseSpan<T> parse) =>
                 regex.Match(input).Groups
-                    .GetGroupValues(selector);
+                    .GetGroupValues(parse);
 
         public static T[] GetGroupValues<T>(this Regex regex, string input,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             IFormatProvider? provider = null) =>
                 regex.Match(input).Groups
-                    .GetGroupValues(selector, provider: provider);
+                    .GetGroupValues(parse, provider: provider);
 
         public static T[] GetGroupValues<T>(this Regex regex, string input,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Match(input).Groups
-                    .GetGroupValues(selector, provider: provider, styles: styles);
+                    .GetGroupValues(parse, provider: provider, styles: styles);
 
         public static T[] GetGroupValues<T>(this Regex regex, string input,
             CultureInfo? culture) =>
@@ -73,21 +73,21 @@ namespace System.Text.RegularExpressions
                         .EnumerateGroupValues<T>(provider: provider);
 
         public static IEnumerable<T> EnumerateGroupValues<T>(this Regex regex, string input,
-            ParseSpan<T> selector) =>
+            ParseSpan<T> parse) =>
                 regex.Match(input).Groups
-                    .EnumerateGroupValues(selector);
+                    .EnumerateGroupValues(parse);
 
         public static IEnumerable<T> EnumerateGroupValues<T>(this Regex regex, string input,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             IFormatProvider? provider = null) =>
                 regex.Match(input).Groups
-                    .EnumerateGroupValues(selector, provider: provider);
+                    .EnumerateGroupValues(parse, provider: provider);
 
         public static IEnumerable<T> EnumerateGroupValues<T>(this Regex regex, string input,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Match(input).Groups
-                    .EnumerateGroupValues(selector, provider: provider, styles: styles);
+                    .EnumerateGroupValues(parse, provider: provider, styles: styles);
 
         public static IEnumerable<T> EnumerateGroupValues<T>(this Regex regex, string input,
             CultureInfo? culture) =>
@@ -127,24 +127,24 @@ namespace System.Text.RegularExpressions
                             .GetGroupValues<T>(range, provider));
 
         public static IEnumerable<T[]> EnumerateValuesMany<T>(this Regex regex, string input,
-            ParseSpan<T> selector, Range? range = null) =>
+            ParseSpan<T> parse, Range? range = null) =>
                 regex.Matches(input)
                     .Select(m => m.Groups
-                        .GetGroupValues(selector, range));
+                        .GetGroupValues(parse, range));
 
         public static IEnumerable<T[]> EnumerateValuesMany<T>(this Regex regex, string input,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null) =>
                 regex.Matches(input)
                     .Select(m => m.Groups
-                        .GetGroupValues(selector, range, provider));
+                        .GetGroupValues(parse, range, provider));
 
         public static IEnumerable<T[]> EnumerateValuesMany<T>(this Regex regex, string input,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Matches(input)
                     .Select(m => m.Groups
-                        .GetGroupValues(selector, range, provider, styles));
+                        .GetGroupValues(parse, range, provider, styles));
 
         public static IEnumerable<T[]> EnumerateValuesMany<T>(this Regex regex, string input,
             Range? range, CultureInfo? culture) =>
@@ -191,37 +191,78 @@ namespace System.Text.RegularExpressions
         public static T[] GetValues<T>(this Regex regex, string input, Index index,
             IFormatProvider? provider = null)
                 where T : IConvertible =>
-                    regex.Match(input).Groups[index].GetValues<T>(provider);
+                    regex.Match(input).Groups[index]
+                        .GetValues<T>(provider);
 
         public static T[] GetValues<T>(this Regex regex, string input, string key,
             IFormatProvider? provider = null)
                 where T : IConvertible =>
-                    regex.Match(input).Groups[key].GetValues<T>(provider);
+                    regex.Match(input).Groups[key]
+                        .GetValues<T>(provider);
+
+        public static T[] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, Index index) =>
+                regex.Match(input).Groups[index]
+                    .GetValues(parse);
+
+        public static T[] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, string key) =>
+                regex.Match(input).Groups[key]
+                    .GetValues(parse);
+
+        public static T[] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse, Index index,
+            IFormatProvider? provider = null) =>
+                regex.Match(input).Groups[index]
+                    .GetValues(parse, provider);
+
+        public static T[] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse, string key,
+            IFormatProvider? provider = null) =>
+                regex.Match(input).Groups[key]
+                    .GetValues(parse, provider);
+
+        public static T[] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse, Index index,
+            IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                regex.Match(input).Groups[index]
+                    .GetValues(parse, provider, styles);
+
+        public static T[] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse, string key,
+            IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                regex.Match(input).Groups[key]
+                    .GetValues(parse, provider, styles);
 
         public static T[][] GetValues<T>(this Regex regex, string input,
             Range? range = null, IFormatProvider? provider = null)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.GetValues<T>(range, provider);
+                    regex.Match(input).Groups
+                        .GetValues<T>(range, provider);
 
         public static T[][] GetValues<T>(this Regex regex, string input,
             params Index[] indices)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.GetValues<T>(null, indices);
+                    regex.Match(input).Groups
+                        .GetValues<T>(provider: null, indices);
 
         public static T[][] GetValues<T>(this Regex regex, string input,
             params string[] keys)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.GetValues<T>(null, keys);
+                    regex.Match(input).Groups
+                        .GetValues<T>(provider: null, keys);
 
         public static T[][] GetValues<T>(this Regex regex, string input,
             IFormatProvider? provider, params Index[] indices)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.GetValues<T>(provider, indices);
+                    regex.Match(input).Groups
+                        .GetValues<T>(provider, indices);
 
         public static T[][] GetValues<T>(this Regex regex, string input,
             IFormatProvider? provider, params string[] keys)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.GetValues<T>(provider, keys);
+                    regex.Match(input).Groups
+                        .GetValues<T>(provider, keys);
 
         public static T[] GetValues<T>(this Regex regex, string input,
             Index index, CultureInfo? culture = null) =>
@@ -246,27 +287,83 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this Regex regex, string input,
             TypeConverter converter, Index index, CultureInfo? culture = null) =>
-                regex.Match(input).Groups[index].GetValues<T>(converter, culture);
+                regex.Match(input).Groups[index]
+                    .GetValues<T>(converter, culture);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this Regex regex, string input,
             TypeConverter converter, string key, CultureInfo? culture = null) =>
-                regex.Match(input).Groups[key].GetValues<T>(converter, culture);
+                regex.Match(input).Groups[key]
+                    .GetValues<T>(converter, culture);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValues<T>(this Regex regex, string input,
-            TypeConverter converter, CultureInfo? culture, Range? range) =>
-                regex.Match(input).Groups.GetValues<T>(converter, culture, range);
+            TypeConverter converter, CultureInfo? culture, Range? range = null) =>
+                regex.Match(input).Groups
+                    .GetValues<T>(converter, culture, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValues<T>(this Regex regex, string input,
             TypeConverter converter, CultureInfo? culture, params Index[] indices) =>
-                regex.Match(input).Groups.GetValues<T>(converter, culture, indices);
+                regex.Match(input).Groups
+                    .GetValues<T>(converter, culture, indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValues<T>(this Regex regex, string input,
             TypeConverter converter, CultureInfo? culture, params string[] keys) =>
-                regex.Match(input).Groups.GetValues<T>(converter, culture, keys);
+                regex.Match(input).Groups
+                    .GetValues<T>(converter, culture, keys);
+
+        public static T[][] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, params Index[] indices) =>
+                regex.Match(input).Groups
+                    .GetValues(parse, indices);
+
+        public static T[][] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, params string[] keys) =>
+                regex.Match(input).Groups
+                    .GetValues(parse, keys);
+
+        public static T[][] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse,
+            IFormatProvider? provider, params Index[] indices) =>
+                regex.Match(input).Groups
+                    .GetValues(parse, provider, indices);
+
+        public static T[][] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse,
+            IFormatProvider? provider, params string[] keys) =>
+                regex.Match(input).Groups
+                    .GetValues(parse, provider, keys);
+
+        public static T[][] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            IFormatProvider? provider, NumberStyles styles, params Index[] indices) =>
+                regex.Match(input).Groups
+                    .GetValues(parse, provider, styles, indices);
+
+        public static T[][] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            IFormatProvider? provider, NumberStyles styles, params string[] keys) =>
+                regex.Match(input).Groups
+                    .GetValues(parse, provider, styles, keys);
+
+        public static T[][] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, Range? range = null) =>
+                regex.Match(input).Groups
+                    .GetValues(parse, range);
+
+        public static T[][] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse,
+            Range? range = null, IFormatProvider? provider = null) =>
+                regex.Match(input).Groups
+                    .GetValues(parse, range, provider);
+
+        public static T[][] GetValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                regex.Match(input).Groups
+                    .GetValues(parse, range, provider, styles);
 
         #endregion
 
@@ -295,27 +392,66 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, Index index) =>
-                regex.Match(input).Groups[index].GetValuesInvariant<T>(converter);
+                regex.Match(input).Groups[index]
+                    .GetValuesInvariant<T>(converter);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, string key) =>
-                regex.Match(input).Groups[key].GetValuesInvariant<T>(converter);
+                regex.Match(input).Groups[key]
+                    .GetValuesInvariant<T>(converter);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, Range? range = null) =>
-                regex.Match(input).Groups.GetValuesInvariant<T>(converter, range);
+                regex.Match(input).Groups
+                    .GetValuesInvariant<T>(converter, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, params Index[] indices) =>
-                regex.Match(input).Groups.GetValuesInvariant<T>(converter, indices);
+                regex.Match(input).Groups
+                    .GetValuesInvariant<T>(converter, indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, params string[] keys) =>
-                regex.Match(input).Groups.GetValuesInvariant<T>(converter, keys);
+                regex.Match(input).Groups
+                    .GetValuesInvariant<T>(converter, keys);
+
+        public static T[][] GetValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse,
+            Range? range = null) =>
+                regex.Match(input).Groups
+                    .GetValuesInvariant(parse, range);
+
+        public static T[][] GetValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Range? range = null, NumberStyles styles = 0) =>
+                regex.Match(input).Groups
+                    .GetValuesInvariant(parse, range, styles);
+
+        public static T[] GetValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse, Index index) =>
+                regex.Match(input).Groups
+                    .GetValuesInvariant(parse, index);
+
+        public static T[] GetValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse, string key) =>
+                regex.Match(input).Groups
+                    .GetValuesInvariant(parse, key);
+
+        public static T[] GetValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse, Index index,
+            NumberStyles styles = 0) =>
+                regex.Match(input).Groups
+                    .GetValuesInvariant(parse, index, styles);
+
+        public static T[] GetValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse, string key,
+            NumberStyles styles = 0) =>
+                regex.Match(input).Groups
+                    .GetValuesInvariant(parse, key, styles);
 
         #endregion
 
@@ -342,37 +478,78 @@ namespace System.Text.RegularExpressions
         public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input, Index index,
             IFormatProvider? provider = null)
                 where T : IConvertible =>
-                    regex.Match(input).Groups[index].EnumerateValues<T>(provider);
+                    regex.Match(input).Groups[index]
+                        .EnumerateValues<T>(provider);
 
         public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input, string key,
             IFormatProvider? provider = null)
                 where T : IConvertible =>
-                    regex.Match(input).Groups[key].EnumerateValues<T>(provider);
+                    regex.Match(input).Groups[key]
+                        .EnumerateValues<T>(provider);
+
+        public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, Index index) =>
+                regex.Match(input).Groups[index]
+                    .EnumerateValues(parse);
+
+        public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, string key) =>
+                regex.Match(input).Groups[key]
+                    .EnumerateValues(parse);
+
+        public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse, Index index,
+            IFormatProvider? provider = null) =>
+                regex.Match(input).Groups[index]
+                    .EnumerateValues(parse, provider);
+
+        public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse, string key,
+            IFormatProvider? provider = null) =>
+                regex.Match(input).Groups[key]
+                    .EnumerateValues(parse, provider);
+
+        public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse, Index index,
+            IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                regex.Match(input).Groups[index]
+                    .EnumerateValues(parse, provider, styles);
+
+        public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse, string key,
+            IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                regex.Match(input).Groups[key]
+                    .EnumerateValues(parse, provider, styles);
 
         public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
             Range? range = null, IFormatProvider? provider = null)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.EnumerateValues<T>(range, provider);
+                    regex.Match(input).Groups
+                        .EnumerateValues<T>(range, provider);
 
         public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
             params Index[] indices)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.EnumerateValues<T>(null, indices);
+                    regex.Match(input).Groups
+                        .EnumerateValues<T>(provider: null, indices);
 
         public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
             params string[] keys)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.EnumerateValues<T>(null, keys);
+                    regex.Match(input).Groups
+                        .EnumerateValues<T>(provider: null, keys);
 
         public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
             IFormatProvider? provider, params Index[] indices)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.EnumerateValues<T>(provider, indices);
+                    regex.Match(input).Groups
+                        .EnumerateValues<T>(provider, indices);
 
         public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
             IFormatProvider? provider, params string[] keys)
                 where T : IConvertible =>
-                    regex.Match(input).Groups.EnumerateValues<T>(provider, keys);
+                    regex.Match(input).Groups
+                        .EnumerateValues<T>(provider, keys);
 
         public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input,
             Index index, CultureInfo? culture = null) =>
@@ -397,27 +574,83 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input,
             TypeConverter converter, Index index, CultureInfo? culture = null) =>
-                regex.Match(input).Groups[index].EnumerateValues<T>(converter, culture);
+                regex.Match(input).Groups[index]
+                    .EnumerateValues<T>(converter, culture);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateValues<T>(this Regex regex, string input,
             TypeConverter converter, string key, CultureInfo? culture = null) =>
-                regex.Match(input).Groups[key].EnumerateValues<T>(converter, culture);
+                regex.Match(input).Groups[key]
+                    .EnumerateValues<T>(converter, culture);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
-            TypeConverter converter, CultureInfo? culture, Range? range) =>
-                regex.Match(input).Groups.EnumerateValues<T>(converter, culture, range);
+            TypeConverter converter, CultureInfo? culture, Range? range = null) =>
+                regex.Match(input).Groups
+                    .EnumerateValues<T>(converter, culture, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
             TypeConverter converter, CultureInfo? culture, params Index[] indices) =>
-                regex.Match(input).Groups.EnumerateValues<T>(converter, culture, indices);
+                regex.Match(input).Groups
+                    .EnumerateValues<T>(converter, culture, indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
             TypeConverter converter, CultureInfo? culture, params string[] keys) =>
-                regex.Match(input).Groups.EnumerateValues<T>(converter, culture, keys);
+                regex.Match(input).Groups
+                    .EnumerateValues<T>(converter, culture, keys);
+
+        public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, params Index[] indices) =>
+                regex.Match(input).Groups
+                    .EnumerateValues(parse, indices);
+
+        public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, params string[] keys) =>
+                regex.Match(input).Groups
+                    .EnumerateValues(parse, keys);
+
+        public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse,
+            IFormatProvider? provider, params Index[] indices) =>
+                regex.Match(input).Groups
+                    .EnumerateValues(parse, provider, indices);
+
+        public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse,
+            IFormatProvider? provider, params string[] keys) =>
+                regex.Match(input).Groups
+                    .EnumerateValues(parse, provider, keys);
+
+        public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            IFormatProvider? provider, NumberStyles styles, params Index[] indices) =>
+                regex.Match(input).Groups
+                    .EnumerateValues(parse, provider, styles, indices);
+
+        public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            IFormatProvider? provider, NumberStyles styles, params string[] keys) =>
+                regex.Match(input).Groups
+                    .EnumerateValues(parse, provider, styles, keys);
+
+        public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T> parse, Range? range = null) =>
+                regex.Match(input).Groups
+                    .EnumerateValues(parse, range);
+
+        public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse,
+            Range? range = null, IFormatProvider? provider = null) =>
+                regex.Match(input).Groups
+                    .EnumerateValues(parse, range, provider);
+
+        public static IEnumerable<T>[] EnumerateValues<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                regex.Match(input).Groups
+                    .EnumerateValues(parse, range, provider, styles);
 
         #endregion
 
@@ -446,27 +679,66 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, Index index) =>
-                regex.Match(input).Groups[index].EnumerateValuesInvariant<T>(converter);
+                regex.Match(input).Groups[index]
+                    .EnumerateValuesInvariant<T>(converter);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, string key) =>
-                regex.Match(input).Groups[key].EnumerateValuesInvariant<T>(converter);
+                regex.Match(input).Groups[key]
+                    .EnumerateValuesInvariant<T>(converter);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, Range? range = null) =>
-                regex.Match(input).Groups.EnumerateValuesInvariant<T>(converter, range);
+                regex.Match(input).Groups
+                    .EnumerateValuesInvariant<T>(converter, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, params Index[] indices) =>
-                regex.Match(input).Groups.EnumerateValuesInvariant<T>(converter, indices);
+                regex.Match(input).Groups
+                    .EnumerateValuesInvariant<T>(converter, indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this Regex regex, string input,
             TypeConverter converter, params string[] keys) =>
-                regex.Match(input).Groups.EnumerateValuesInvariant<T>(converter, keys);
+                regex.Match(input).Groups
+                    .EnumerateValuesInvariant<T>(converter, keys);
+
+        public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse,
+            Range? range = null) =>
+                regex.Match(input).Groups
+                    .EnumerateValuesInvariant(parse, range);
+
+        public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Range? range = null, NumberStyles styles = 0) =>
+                regex.Match(input).Groups
+                    .EnumerateValuesInvariant(parse, range, styles);
+
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse, Index index) =>
+                regex.Match(input).Groups
+                    .EnumerateValuesInvariant(parse, index);
+
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, IFormatProvider> parse, string key) =>
+                regex.Match(input).Groups
+                    .EnumerateValuesInvariant(parse, key);
+
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse, Index index,
+            NumberStyles styles = 0) =>
+                regex.Match(input).Groups
+                    .EnumerateValuesInvariant(parse, index, styles);
+
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this Regex regex, string input,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse, string key,
+            NumberStyles styles = 0) =>
+                regex.Match(input).Groups
+                    .EnumerateValuesInvariant(parse, key, styles);
 
         #endregion
 
@@ -484,21 +756,21 @@ namespace System.Text.RegularExpressions
                         .GetAllValues<T>(range, provider);
 
         public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
-            ParseSpan<T> selector, Range? range = null) =>
+            ParseSpan<T> parse, Range? range = null) =>
                 regex.Match(input).Groups
-                    .GetAllValues(selector, range);
+                    .GetAllValues(parse, range);
 
         public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null) =>
                 regex.Match(input).Groups
-                    .GetAllValues(selector, range, provider);
+                    .GetAllValues(parse, range, provider);
 
         public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Match(input).Groups
-                    .GetAllValues(selector, range, provider, styles);
+                    .GetAllValues(parse, range, provider, styles);
 
         public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
             Range? range, CultureInfo? culture) =>
@@ -536,21 +808,21 @@ namespace System.Text.RegularExpressions
                         .EnumerateAllValues<T>(range, provider);
 
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this Regex regex, string input,
-            ParseSpan<T> selector, Range? range = null) =>
+            ParseSpan<T> parse, Range? range = null) =>
                 regex.Match(input).Groups
-                    .EnumerateAllValues(selector, range);
+                    .EnumerateAllValues(parse, range);
 
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this Regex regex, string input,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null) =>
                 regex.Match(input).Groups
-                    .EnumerateAllValues(selector, range, provider);
+                    .EnumerateAllValues(parse, range, provider);
 
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this Regex regex, string input,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Match(input).Groups
-                    .EnumerateAllValues(selector, range, provider, styles);
+                    .EnumerateAllValues(parse, range, provider, styles);
 
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this Regex regex, string input,
             Range? range, CultureInfo? culture) =>

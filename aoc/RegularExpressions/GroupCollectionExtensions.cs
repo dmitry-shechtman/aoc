@@ -65,23 +65,23 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetGroupValues<T>(this GroupCollection groups,
-            ParseSpan<T> selector, Range? range = null) =>
+            ParseSpan<T> parse, Range? range = null) =>
                 groups.Skip(range)
-                    .Select(g => selector(g.ValueSpan)).ToArray();
+                    .Select(g => parse(g.ValueSpan)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetGroupValues<T>(this GroupCollection groups,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null) =>
                 groups.Skip(range)
-                    .Select(g => selector(g.ValueSpan, provider)).ToArray();
+                    .Select(g => parse(g.ValueSpan, provider)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetGroupValues<T>(this GroupCollection groups,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 groups.Skip(range)
-                    .Select(g => selector(g.ValueSpan, styles, provider)).ToArray();
+                    .Select(g => parse(g.ValueSpan, styles, provider)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetGroupValues<T>(this GroupCollection groups,
@@ -124,23 +124,23 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
-            ParseSpan<T> selector, Range? range = null) =>
+            ParseSpan<T> parse, Range? range = null) =>
                 groups.Skip(range)
-                    .Select(g => selector(g.ValueSpan));
+                    .Select(g => parse(g.ValueSpan));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null) =>
                 groups.Skip(range)
-                    .Select(g => selector(g.ValueSpan, provider));
+                    .Select(g => parse(g.ValueSpan, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 groups.Skip(range)
-                    .Select(g => selector(g.ValueSpan, styles, provider));
+                    .Select(g => parse(g.ValueSpan, styles, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
@@ -218,8 +218,63 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T> parse, params Index[] indices) =>
+                indices.Select(i => groups[i].GetValues(parse)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T> parse, params string[] keys) =>
+                keys.Select(k => groups[k].GetValues(parse)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse,
+            IFormatProvider? provider, params Index[] indices) =>
+                indices.Select(i => groups[i].GetValues(parse, provider)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse,
+            IFormatProvider? provider, params string[] keys) =>
+                keys.Select(k => groups[k].GetValues(parse, provider)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            IFormatProvider? provider, NumberStyles styles, params Index[] indices) =>
+                indices.Select(i => groups[i].GetValues(parse, provider, styles)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            IFormatProvider? provider, NumberStyles styles, params string[] keys) =>
+                keys.Select(k => groups[k].GetValues(parse, provider, styles)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T> parse, Range? range = null) =>
+                groups.Skip(range)
+                    .Select(g => g.GetValues(parse)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse,
+            Range? range = null, IFormatProvider? provider = null) =>
+                groups.Skip(range)
+                    .Select(g => g.GetValues(parse, provider)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                groups.Skip(range)
+                    .Select(g => g.GetValues(parse, provider, styles)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
             TypeConverter converter, CultureInfo? culture, Range? range = null) =>
-                groups.Skip(range).Select(g => g.GetValues<T>(converter, culture)).ToArray();
+                groups.Skip(range)
+                    .Select(g => g.GetValues<T>(converter, culture)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValues<T>(this GroupCollection groups,
@@ -253,7 +308,8 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
-                groups.Skip(range).Select(g => g.GetValuesInvariant<T>(converter)).ToArray();
+                groups.Skip(range)
+                    .Select(g => g.GetValuesInvariant<T>(converter)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
@@ -264,6 +320,42 @@ namespace System.Text.RegularExpressions
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, params string[] keys) =>
                 keys.Select(k => groups[k].GetValuesInvariant<T>(converter)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse,
+            Range? range = null) =>
+                groups.Skip(range)
+                    .Select(g => g.GetValuesInvariant(parse)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Range? range = null, NumberStyles styles = 0) =>
+                groups.Skip(range)
+                    .Select(g => g.GetValuesInvariant(parse, styles)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse, Index index) =>
+                groups[index].GetValuesInvariant(parse);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse, string key) =>
+                groups[key].GetValuesInvariant(parse);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Index index, NumberStyles styles = 0) =>
+                groups[index].GetValuesInvariant(parse, styles);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            string key, NumberStyles styles = 0) =>
+                groups[key].GetValuesInvariant(parse, styles);
 
         #endregion
 
@@ -319,8 +411,63 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            ParseSpan<T> parse, params Index[] indices) =>
+                indices.Select(i => groups[i].EnumerateValues(parse)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            ParseSpan<T> parse, params string[] keys) =>
+                keys.Select(k => groups[k].EnumerateValues(parse)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse,
+            IFormatProvider? provider, params Index[] indices) =>
+                indices.Select(i => groups[i].EnumerateValues(parse, provider)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse,
+            IFormatProvider? provider, params string[] keys) =>
+                keys.Select(k => groups[k].EnumerateValues(parse, provider)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            IFormatProvider? provider, NumberStyles styles, params Index[] indices) =>
+                indices.Select(i => groups[i].EnumerateValues(parse, provider, styles)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            IFormatProvider? provider, NumberStyles styles, params string[] keys) =>
+                keys.Select(k => groups[k].EnumerateValues(parse, provider, styles)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            ParseSpan<T> parse, Range? range = null) =>
+                groups.Skip(range)
+                    .Select(g => g.EnumerateValues(parse)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse,
+            Range? range = null, IFormatProvider? provider = null) =>
+                groups.Skip(range)
+                    .Select(g => g.EnumerateValues(parse, provider)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
+                groups.Skip(range)
+                    .Select(g => g.EnumerateValues(parse, provider, styles)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
             TypeConverter converter, CultureInfo? culture, Range? range = null) =>
-                groups.Skip(range).Select(g => g.EnumerateValues<T>(converter, culture)).ToArray();
+                groups.Skip(range)
+                    .Select(g => g.EnumerateValues<T>(converter, culture)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
@@ -354,7 +501,8 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
-                groups.Skip(range).Select(g => g.EnumerateValuesInvariant<T>(converter)).ToArray();
+                groups.Skip(range)
+                    .Select(g => g.EnumerateValuesInvariant<T>(converter)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
@@ -365,6 +513,42 @@ namespace System.Text.RegularExpressions
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, params string[] keys) =>
                 keys.Select(k => groups[k].EnumerateValuesInvariant<T>(converter)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse,
+            Range? range = null) =>
+                groups.Skip(range)
+                    .Select(g => g.EnumerateValuesInvariant(parse)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Range? range = null, NumberStyles styles = 0) =>
+                groups.Skip(range)
+                    .Select(g => g.EnumerateValuesInvariant(parse, styles)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse, Index index) =>
+                groups[index].EnumerateValuesInvariant(parse);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, IFormatProvider> parse, string key) =>
+                groups[key].EnumerateValuesInvariant(parse);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            Index index, NumberStyles styles = 0) =>
+                groups[index].EnumerateValuesInvariant(parse, styles);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this GroupCollection groups,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
+            string key, NumberStyles styles = 0) =>
+                groups[key].EnumerateValuesInvariant(parse, styles);
 
         #endregion
 
@@ -385,23 +569,23 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
-            ParseSpan<T> selector, Range? range = null) =>
+            ParseSpan<T> parse, Range? range = null) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.GetValues(selector));
+                    .ToDictionary(g => g.Name, g => g.GetValues(parse));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.GetValues(selector, provider));
+                    .ToDictionary(g => g.Name, g => g.GetValues(parse, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.GetValues(selector, provider, styles));
+                    .ToDictionary(g => g.Name, g => g.GetValues(parse, provider, styles));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
@@ -444,23 +628,23 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
-            ParseSpan<T> selector, Range? range = null) =>
+            ParseSpan<T> parse, Range? range = null) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.EnumerateValues(selector));
+                    .ToDictionary(g => g.Name, g => g.EnumerateValues(parse));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
-            ParseSpan<T, IFormatProvider> selector,
+            ParseSpan<T, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.EnumerateValues(selector, provider));
+                    .ToDictionary(g => g.Name, g => g.EnumerateValues(parse, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
-            ParseSpan<T, NumberStyles, IFormatProvider> selector,
+            ParseSpan<T, NumberStyles, IFormatProvider> parse,
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.EnumerateValues(selector, provider, styles));
+                    .ToDictionary(g => g.Name, g => g.EnumerateValues(parse, provider, styles));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
