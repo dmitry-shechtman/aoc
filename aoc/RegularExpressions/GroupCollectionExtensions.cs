@@ -106,66 +106,66 @@ namespace System.Text.RegularExpressions
                     .Select(g => converter.ConvertFromInvariantString<T>(g.Value)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<string> SelectValues(this GroupCollection groups,
+        public static IEnumerable<string> EnumerateValues(this GroupCollection groups,
             Range? range = null) =>
                 groups.Skip(range)
                     .Select(g => g.Value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
+        public static IEnumerable<T> EnumerateValues<T>(this GroupCollection groups,
             Range? range = null, IFormatProvider? provider = null)
                 where T : IConvertible =>
                     groups.Skip(range)
                         .Select(g => g.Value.ConvertTo<T>(provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
+        public static IEnumerable<T> EnumerateValues<T>(this GroupCollection groups,
             ParseSpan<T> selector, Range? range = null) =>
                 groups.Skip(range)
                     .Select(g => selector(g.ValueSpan));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
+        public static IEnumerable<T> EnumerateValues<T>(this GroupCollection groups,
             ParseSpan<T, IFormatProvider> selector,
             Range? range = null, IFormatProvider? provider = null) =>
                 groups.Skip(range)
                     .Select(g => selector(g.ValueSpan, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
+        public static IEnumerable<T> EnumerateValues<T>(this GroupCollection groups,
             ParseSpan<T, NumberStyles, IFormatProvider> selector,
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 groups.Skip(range)
                     .Select(g => selector(g.ValueSpan, styles, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
+        public static IEnumerable<T> EnumerateValues<T>(this GroupCollection groups,
             Range? range, CultureInfo? culture)
         {
             var converter = TypeDescriptor.GetConverter(typeof(T));
             return converter.CanConvertTo(typeof(T))
-                ? SelectValues<T>(groups, converter, range, culture)
+                ? EnumerateValues<T>(groups, converter, range, culture)
                 : throw new InvalidOperationException();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> SelectValues<T>(this GroupCollection groups,
+        public static IEnumerable<T> EnumerateValues<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
                 groups.Skip(range)
                     .Select(g => converter.ConvertFromString<T>(g.Value, culture));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> SelectValuesInvariant<T>(this GroupCollection groups,
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this GroupCollection groups,
             Range? range = null)
         {
             var converter = TypeDescriptor.GetConverter(typeof(T));
             return converter.CanConvertTo(typeof(T))
-                ? SelectValuesInvariant<T>(groups, converter, range)
+                ? EnumerateValuesInvariant<T>(groups, converter, range)
                 : throw new InvalidOperationException();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> SelectValuesInvariant<T>(this GroupCollection groups,
+        public static IEnumerable<T> EnumerateValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
                 groups.Skip(range)
                     .Select(g => converter.ConvertFromInvariantString<T>(g.Value));
@@ -236,66 +236,66 @@ namespace System.Text.RegularExpressions
                     .ToDictionary(g => g.Name, g => converter.ConvertFromInvariantStrings<T>(g).ToArray());
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<string>> SelectAllValues(this GroupCollection groups,
+        public static Dictionary<string, IEnumerable<string>> EnumerateAllValues(this GroupCollection groups,
             Range? range = null) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.SelectValues());
+                    .ToDictionary(g => g.Name, g => g.EnumerateValues());
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
             Range? range = null, IFormatProvider? provider = null)
                 where T : IConvertible =>
                     groups.Skip(range)
-                        .ToDictionary(g => g.Name, g => g.SelectValues<T>(provider));
+                        .ToDictionary(g => g.Name, g => g.EnumerateValues<T>(provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
             ParseSpan<T> selector, Range? range = null) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.SelectValues(selector));
+                    .ToDictionary(g => g.Name, g => g.EnumerateValues(selector));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
             ParseSpan<T, IFormatProvider> selector,
             Range? range = null, IFormatProvider? provider = null) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.SelectValues(selector, provider));
+                    .ToDictionary(g => g.Name, g => g.EnumerateValues(selector, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
             ParseSpan<T, NumberStyles, IFormatProvider> selector,
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.SelectValues(selector, provider, styles));
+                    .ToDictionary(g => g.Name, g => g.EnumerateValues(selector, provider, styles));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
             Range? range = null, CultureInfo? culture = null)
         {
             var converter = TypeDescriptor.GetConverter(typeof(T));
             return converter.CanConvertTo(typeof(T))
-                ? SelectAllValues<T>(groups, converter, range, culture)
+                ? EnumerateAllValues<T>(groups, converter, range, culture)
                 : throw new InvalidOperationException();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> SelectAllValues<T>(this GroupCollection groups,
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
                 groups.Skip(range)
                     .ToDictionary(g => g.Name, g => converter.ConvertFromStrings<T>(g, culture));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> SelectAllValuesInvariant<T>(this GroupCollection groups,
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValuesInvariant<T>(this GroupCollection groups,
             Range? range = null)
         {
             var converter = TypeDescriptor.GetConverter(typeof(T));
             return converter.CanConvertTo(typeof(T))
-                ? SelectAllValuesInvariant<T>(groups, converter, range)
+                ? EnumerateAllValuesInvariant<T>(groups, converter, range)
                 : throw new InvalidOperationException();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> SelectAllValuesInvariant<T>(this GroupCollection groups,
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
                 groups.Skip(range)
                     .ToDictionary(g => g.Name, converter.ConvertFromInvariantStrings<T>);
