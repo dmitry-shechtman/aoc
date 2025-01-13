@@ -16,13 +16,7 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetValues<T>(this Group group,
-            IFormatProvider? provider = null)
-                where T : IConvertible =>
-                    EnumerateValues<T>(group, provider).ToArray();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[] GetValues<T>(this Group group,
-            CultureInfo? culture) =>
+            CultureInfo? culture = null) =>
                 EnumerateValues<T>(group, culture).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -91,13 +85,7 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateValues<T>(this Group group,
-            IFormatProvider? provider = null)
-                where T : IConvertible =>
-                    group.Captures.Select(c => c.Value.ConvertTo<T>(provider));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> EnumerateValues<T>(this Group group,
-            CultureInfo? culture) =>
+            CultureInfo? culture = null) =>
                 EnumerateValues(group, TypeConverter<T>.Instance, culture);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
