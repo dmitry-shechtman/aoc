@@ -179,7 +179,7 @@ namespace System
             int index = 0, start = 0;
             for (int curr = 0; curr <= source.Length - separator.Length; curr++)
             {
-                if (source[curr..(curr + separator.Length)].SequenceEqual(separator))
+                if (source[curr..].StartsWith(separator))
                 {
                     index += AddItem(source, destination, options, index, start, curr);
                     start = curr + separator.Length;

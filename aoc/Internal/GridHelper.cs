@@ -366,7 +366,7 @@ namespace aoc.Internal
                     output[j] = (x, y);
                 }
                 else if (i <= input.Length - separator.Length &&
-                    input[i..(i + separator.Length)].SequenceEqual(separator))
+                    input[i..].StartsWith(separator))
                 {
                     width = x > width ? x : width;
                     if (x > 0)
