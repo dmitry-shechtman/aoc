@@ -23,6 +23,16 @@ namespace System.Text.RegularExpressions
                         .GetGroupValues<T>(provider: provider);
 
         public static T[] GetGroupValues<T>(this Regex regex, string input,
+            CultureInfo? culture) =>
+                regex.Match(input).Groups
+                    .GetGroupValues<T>(culture: culture);
+
+        public static T[] GetGroupValues<T>(this Regex regex, string input,
+            TypeConverter converter, CultureInfo? culture = null) =>
+                regex.Match(input).Groups
+                    .GetGroupValues<T>(converter, culture: culture);
+
+        public static T[] GetGroupValues<T>(this Regex regex, string input,
             ParseSpan<T> parse) =>
                 regex.Match(input).Groups
                     .GetGroupValues(parse);
@@ -38,16 +48,6 @@ namespace System.Text.RegularExpressions
             IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Match(input).Groups
                     .GetGroupValues(parse, provider: provider, styles: styles);
-
-        public static T[] GetGroupValues<T>(this Regex regex, string input,
-            CultureInfo? culture) =>
-                regex.Match(input).Groups
-                    .GetGroupValues<T>(culture: culture);
-
-        public static T[] GetGroupValues<T>(this Regex regex, string input,
-            TypeConverter converter, CultureInfo? culture = null) =>
-                regex.Match(input).Groups
-                    .GetGroupValues<T>(converter, culture: culture);
 
         public static T[] GetGroupValuesInvariant<T>(this Regex regex, string input) =>
             regex.Match(input).Groups
@@ -72,6 +72,16 @@ namespace System.Text.RegularExpressions
                         .EnumerateGroupValues<T>(provider: provider);
 
         public static IEnumerable<T> EnumerateGroupValues<T>(this Regex regex, string input,
+            CultureInfo? culture) =>
+                regex.Match(input).Groups
+                    .EnumerateGroupValues<T>(null, culture);
+
+        public static IEnumerable<T> EnumerateGroupValues<T>(this Regex regex, string input,
+            TypeConverter converter, CultureInfo? culture = null) =>
+                regex.Match(input).Groups
+                    .EnumerateGroupValues<T>(converter, null, culture);
+
+        public static IEnumerable<T> EnumerateGroupValues<T>(this Regex regex, string input,
             ParseSpan<T> parse) =>
                 regex.Match(input).Groups
                     .EnumerateGroupValues(parse);
@@ -87,16 +97,6 @@ namespace System.Text.RegularExpressions
             IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Match(input).Groups
                     .EnumerateGroupValues(parse, provider: provider, styles: styles);
-
-        public static IEnumerable<T> EnumerateGroupValues<T>(this Regex regex, string input,
-            CultureInfo? culture) =>
-                regex.Match(input).Groups
-                    .EnumerateGroupValues<T>(null, culture);
-
-        public static IEnumerable<T> EnumerateGroupValues<T>(this Regex regex, string input,
-            TypeConverter converter, CultureInfo? culture = null) =>
-                regex.Match(input).Groups
-                    .EnumerateGroupValues<T>(converter, null, culture);
 
         public static IEnumerable<T> EnumerateGroupValuesInvariant<T>(this Regex regex, string input,
             Range? range = null) =>
@@ -126,6 +126,16 @@ namespace System.Text.RegularExpressions
                             .GetGroupValues<T>(range, provider));
 
         public static IEnumerable<T[]> EnumerateValuesMany<T>(this Regex regex, string input,
+            Range? range, CultureInfo? culture) =>
+                regex.Matches(input)
+                    .Select(m => m.Groups.GetGroupValues<T>(range, culture));
+
+        public static IEnumerable<T[]> EnumerateValuesMany<T>(this Regex regex, string input,
+            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
+                regex.Matches(input)
+                    .Select(m => m.Groups.GetGroupValues<T>(converter, range, culture));
+
+        public static IEnumerable<T[]> EnumerateValuesMany<T>(this Regex regex, string input,
             ParseSpan<T> parse, Range? range = null) =>
                 regex.Matches(input)
                     .Select(m => m.Groups
@@ -144,16 +154,6 @@ namespace System.Text.RegularExpressions
                 regex.Matches(input)
                     .Select(m => m.Groups
                         .GetGroupValues(parse, range, provider, styles));
-
-        public static IEnumerable<T[]> EnumerateValuesMany<T>(this Regex regex, string input,
-            Range? range, CultureInfo? culture) =>
-                regex.Matches(input)
-                    .Select(m => m.Groups.GetGroupValues<T>(range, culture));
-
-        public static IEnumerable<T[]> EnumerateValuesMany<T>(this Regex regex, string input,
-            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
-                regex.Matches(input)
-                    .Select(m => m.Groups.GetGroupValues<T>(converter, range, culture));
 
         public static IEnumerable<T[]> EnumerateValuesManyInvariant<T>(this Regex regex, string input,
             Range? range = null) =>
@@ -755,6 +755,16 @@ namespace System.Text.RegularExpressions
                         .GetAllValues<T>(range, provider);
 
         public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
+            Range? range, CultureInfo? culture) =>
+                regex.Match(input).Groups
+                    .GetAllValues<T>(range, culture);
+
+        public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
+            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
+                regex.Match(input).Groups
+                    .GetAllValues<T>(converter, range, culture);
+
+        public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
             ParseSpan<T> parse, Range? range = null) =>
                 regex.Match(input).Groups
                     .GetAllValues(parse, range);
@@ -770,16 +780,6 @@ namespace System.Text.RegularExpressions
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Match(input).Groups
                     .GetAllValues(parse, range, provider, styles);
-
-        public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
-            Range? range, CultureInfo? culture) =>
-                regex.Match(input).Groups
-                    .GetAllValues<T>(range, culture);
-
-        public static Dictionary<string, T[]> GetAllValues<T>(this Regex regex, string input,
-            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
-                regex.Match(input).Groups
-                    .GetAllValues<T>(converter, range, culture);
 
         public static Dictionary<string, T[]> GetAllValuesInvariant<T>(this Regex regex, string input,
             Range? range = null) =>
@@ -807,6 +807,16 @@ namespace System.Text.RegularExpressions
                         .EnumerateAllValues<T>(range, provider);
 
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this Regex regex, string input,
+            Range? range, CultureInfo? culture) =>
+                regex.Match(input).Groups
+                    .EnumerateAllValues<T>(range, culture);
+
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this Regex regex, string input,
+            TypeConverter converter, Range? range, CultureInfo? culture) =>
+                regex.Match(input).Groups
+                    .EnumerateAllValues<T>(converter, range, culture);
+
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this Regex regex, string input,
             ParseSpan<T> parse, Range? range = null) =>
                 regex.Match(input).Groups
                     .EnumerateAllValues(parse, range);
@@ -822,16 +832,6 @@ namespace System.Text.RegularExpressions
             Range? range = null, IFormatProvider? provider = null, NumberStyles styles = 0) =>
                 regex.Match(input).Groups
                     .EnumerateAllValues(parse, range, provider, styles);
-
-        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this Regex regex, string input,
-            Range? range, CultureInfo? culture) =>
-                regex.Match(input).Groups
-                    .EnumerateAllValues<T>(range, culture);
-
-        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this Regex regex, string input,
-            TypeConverter converter, Range? range, CultureInfo? culture) =>
-                regex.Match(input).Groups
-                    .EnumerateAllValues<T>(converter, range, culture);
 
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValuesInvariant<T>(this Regex regex, string input,
             Range? range = null) =>

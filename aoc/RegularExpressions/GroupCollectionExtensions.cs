@@ -65,6 +65,22 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetGroupValues<T>(this GroupCollection groups,
+            Range? range = null, CultureInfo? culture = null) =>
+                GetGroupValues(groups, TypeConverter<T>.Instance, range, culture);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetGroupValues<T>(this GroupCollection groups,
+            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
+                GetGroupValues(groups, new TypeConverter<T>(converter), range, culture);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static T[] GetGroupValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range, CultureInfo? culture) =>
+                groups.Skip(range)
+                    .Select(g => converter.ConvertFromString(g.Value, culture)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] GetGroupValues<T>(this GroupCollection groups,
             ParseSpan<T> parse, Range? range = null) =>
                 groups.Skip(range)
                     .Select(g => parse(g.ValueSpan)).ToArray();
@@ -84,26 +100,20 @@ namespace System.Text.RegularExpressions
                     .Select(g => parse(g.ValueSpan, styles, provider)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[] GetGroupValues<T>(this GroupCollection groups,
-            Range? range = null, CultureInfo? culture = null) =>
-                GetGroupValues<T>(groups, Util.GetConverter<T>(), range, culture);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[] GetGroupValues<T>(this GroupCollection groups,
-            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
-                groups.Skip(range)
-                    .Select(g => converter.ConvertFromString<T>(g.Value, culture)).ToArray();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetGroupValuesInvariant<T>(this GroupCollection groups,
             Range? range = null) =>
-                GetGroupValuesInvariant<T>(groups, Util.GetConverter<T>(), range);
+                GetGroupValuesInvariant(groups, TypeConverter<T>.Instance, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] GetGroupValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
+                GetGroupValuesInvariant(groups, new TypeConverter<T>(converter), range);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static T[] GetGroupValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range) =>
                 groups.Skip(range)
-                    .Select(g => converter.ConvertFromInvariantString<T>(g.Value)).ToArray();
+                    .Select(g => converter.ConvertFromInvariantString(g.Value)).ToArray();
 
         #endregion
 
@@ -121,6 +131,22 @@ namespace System.Text.RegularExpressions
                 where T : IConvertible =>
                     groups.Skip(range)
                         .Select(g => g.Value.ConvertTo<T>(provider));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
+            Range? range, CultureInfo? culture) =>
+                EnumerateGroupValues(groups, TypeConverter<T>.Instance, range, culture);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
+            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
+                EnumerateGroupValues(groups, new TypeConverter<T>(converter), range, culture);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range, CultureInfo? culture) =>
+                groups.Skip(range)
+                    .Select(g => converter.ConvertFromString(g.Value, culture));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
@@ -143,26 +169,20 @@ namespace System.Text.RegularExpressions
                     .Select(g => parse(g.ValueSpan, styles, provider));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
-            Range? range, CultureInfo? culture) =>
-                EnumerateGroupValues<T>(groups, Util.GetConverter<T>(), range, culture);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> EnumerateGroupValues<T>(this GroupCollection groups,
-            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
-                groups.Skip(range)
-                    .Select(g => converter.ConvertFromString<T>(g.Value, culture));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateGroupValuesInvariant<T>(this GroupCollection groups,
             Range? range = null) =>
-                EnumerateGroupValuesInvariant<T>(groups, Util.GetConverter<T>(), range);
+                EnumerateGroupValuesInvariant(groups, TypeConverter<T>.Instance, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> EnumerateGroupValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
+                EnumerateGroupValuesInvariant(groups, new TypeConverter<T>(converter), range);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IEnumerable<T> EnumerateGroupValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range) =>
                 groups.Skip(range)
-                    .Select(g => converter.ConvertFromInvariantString<T>(g.Value));
+                    .Select(g => converter.ConvertFromInvariantString(g.Value));
 
         #endregion
 
@@ -204,17 +224,48 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValues<T>(this GroupCollection groups,
             CultureInfo? culture, Range? range = null) =>
-                GetValues<T>(groups, Util.GetConverter<T>(), culture, range);
+                GetValues(groups, TypeConverter<T>.Instance, culture, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValues<T>(this GroupCollection groups,
             CultureInfo? culture, params Index[] indices) =>
-                GetValues<T>(groups, Util.GetConverter<T>(), culture, indices);
+                GetValues(groups, TypeConverter<T>.Instance, culture, indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValues<T>(this GroupCollection groups,
             CultureInfo? culture, params string[] keys) =>
-                GetValues<T>(groups, Util.GetConverter<T>(), culture, keys);
+                GetValues(groups, TypeConverter<T>.Instance, culture, keys);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            TypeConverter converter, CultureInfo? culture, Range? range = null) =>
+                GetValues(groups, new TypeConverter<T>(converter), culture, range);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            TypeConverter converter, CultureInfo? culture, params Index[] indices) =>
+                GetValues(groups, new TypeConverter<T>(converter), culture, indices);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[][] GetValues<T>(this GroupCollection groups,
+            TypeConverter converter, CultureInfo? culture, params string[] keys) =>
+                GetValues(groups, new TypeConverter<T>(converter), culture, keys);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static T[][] GetValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, CultureInfo? culture, Range? range) =>
+                groups.Skip(range)
+                    .Select(g => g.GetValues(converter, culture)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static T[][] GetValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, CultureInfo? culture, Index[] indices) =>
+                indices.Select(i => groups[i].GetValues(converter, culture)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static T[][] GetValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, CultureInfo? culture, string[] keys) =>
+                keys.Select(k => groups[k].GetValues(converter, culture)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValues<T>(this GroupCollection groups,
@@ -270,22 +321,6 @@ namespace System.Text.RegularExpressions
                 groups.Skip(range)
                     .Select(g => g.GetValues(parse, provider, styles)).ToArray();
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[][] GetValues<T>(this GroupCollection groups,
-            TypeConverter converter, CultureInfo? culture, Range? range = null) =>
-                groups.Skip(range)
-                    .Select(g => g.GetValues<T>(converter, culture)).ToArray();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[][] GetValues<T>(this GroupCollection groups,
-            TypeConverter converter, CultureInfo? culture, params Index[] indices) =>
-                indices.Select(i => groups[i].GetValues<T>(converter, culture)).ToArray();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[][] GetValues<T>(this GroupCollection groups,
-            TypeConverter converter, CultureInfo? culture, params string[] keys) =>
-                keys.Select(k => groups[k].GetValues<T>(converter, culture)).ToArray();
-
         #endregion
 
         #region GetValuesInvariant
@@ -293,33 +328,48 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
             Range? range = null) =>
-                GetValuesInvariant<T>(groups, Util.GetConverter<T>(), range);
+                GetValuesInvariant(groups, TypeConverter<T>.Instance, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
             params Index[] indices) =>
-                GetValuesInvariant<T>(groups, Util.GetConverter<T>(), indices);
+                GetValuesInvariant(groups, TypeConverter<T>.Instance, indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
             params string[] keys) =>
-                GetValuesInvariant<T>(groups, Util.GetConverter<T>(), keys);
+                GetValuesInvariant(groups, TypeConverter<T>.Instance, keys);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
-                groups.Skip(range)
-                    .Select(g => g.GetValuesInvariant<T>(converter)).ToArray();
+                GetValuesInvariant(groups, new TypeConverter<T>(converter), range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, params Index[] indices) =>
-                indices.Select(i => groups[i].GetValuesInvariant<T>(converter)).ToArray();
+                GetValuesInvariant(groups, new TypeConverter<T>(converter), indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, params string[] keys) =>
-                keys.Select(k => groups[k].GetValuesInvariant<T>(converter)).ToArray();
+                GetValuesInvariant(groups, new TypeConverter<T>(converter), keys);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static T[][] GetValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range) =>
+                groups.Skip(range)
+                    .Select(g => g.GetValuesInvariant(converter)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static T[][] GetValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Index[] indices) =>
+                indices.Select(i => groups[i].GetValuesInvariant(converter)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static T[][] GetValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, string[] keys) =>
+                keys.Select(k => groups[k].GetValuesInvariant(converter)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[][] GetValuesInvariant<T>(this GroupCollection groups,
@@ -397,17 +447,48 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
             CultureInfo? culture, Range? range = null) =>
-                EnumerateValues<T>(groups, Util.GetConverter<T>(), culture, range);
+                EnumerateValues(groups, TypeConverter<T>.Instance, culture, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
             CultureInfo? culture, params Index[] indices) =>
-                EnumerateValues<T>(groups, Util.GetConverter<T>(), culture, indices);
+                EnumerateValues(groups, TypeConverter<T>.Instance, culture, indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
             CultureInfo? culture, params string[] keys) =>
-                EnumerateValues<T>(groups, Util.GetConverter<T>(), culture, keys);
+                EnumerateValues(groups, TypeConverter<T>.Instance, culture, keys);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            TypeConverter converter, CultureInfo? culture, Range? range = null) =>
+                EnumerateValues(groups, new TypeConverter<T>(converter), culture, range);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            TypeConverter converter, CultureInfo? culture, params Index[] indices) =>
+                EnumerateValues(groups, new TypeConverter<T>(converter), culture, indices);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            TypeConverter converter, CultureInfo? culture, params string[] keys) =>
+                EnumerateValues(groups, new TypeConverter<T>(converter), culture, keys);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, CultureInfo? culture, Range? range) =>
+                groups.Skip(range)
+                    .Select(g => g.EnumerateValues(converter, culture)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, CultureInfo? culture, Index[] indices) =>
+                indices.Select(i => groups[i].EnumerateValues(converter, culture)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, CultureInfo? culture, string[] keys) =>
+                keys.Select(k => groups[k].EnumerateValues(converter, culture)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
@@ -463,22 +544,6 @@ namespace System.Text.RegularExpressions
                 groups.Skip(range)
                     .Select(g => g.EnumerateValues(parse, provider, styles)).ToArray();
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
-            TypeConverter converter, CultureInfo? culture, Range? range = null) =>
-                groups.Skip(range)
-                    .Select(g => g.EnumerateValues<T>(converter, culture)).ToArray();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
-            TypeConverter converter, CultureInfo? culture, params Index[] indices) =>
-                indices.Select(i => groups[i].EnumerateValues<T>(converter, culture)).ToArray();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T>[] EnumerateValues<T>(this GroupCollection groups,
-            TypeConverter converter, CultureInfo? culture, params string[] keys) =>
-                keys.Select(k => groups[k].EnumerateValues<T>(converter, culture)).ToArray();
-
         #endregion
 
         #region EnumerateValuesInvariant
@@ -486,33 +551,48 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
             Range? range = null) =>
-                EnumerateValuesInvariant<T>(groups, Util.GetConverter<T>(), range);
+                EnumerateValuesInvariant(groups, TypeConverter<T>.Instance, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
             params Index[] indices) =>
-                EnumerateValuesInvariant<T>(groups, Util.GetConverter<T>(), indices);
+                EnumerateValuesInvariant(groups, TypeConverter<T>.Instance, indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
             params string[] keys) =>
-                EnumerateValuesInvariant<T>(groups, Util.GetConverter<T>(), keys);
+                EnumerateValuesInvariant(groups, TypeConverter<T>.Instance, keys);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
-                groups.Skip(range)
-                    .Select(g => g.EnumerateValuesInvariant<T>(converter)).ToArray();
+                EnumerateValuesInvariant(groups, new TypeConverter<T>(converter), range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, params Index[] indices) =>
-                indices.Select(i => groups[i].EnumerateValuesInvariant<T>(converter)).ToArray();
+                EnumerateValuesInvariant(groups, new TypeConverter<T>(converter), indices);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, params string[] keys) =>
-                keys.Select(k => groups[k].EnumerateValuesInvariant<T>(converter)).ToArray();
+                EnumerateValuesInvariant(groups, new TypeConverter<T>(converter), keys);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range) =>
+                groups.Skip(range)
+                    .Select(g => g.EnumerateValuesInvariant(converter)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Index[] indices) =>
+                indices.Select(i => groups[i].EnumerateValuesInvariant(converter)).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, string[] keys) =>
+                keys.Select(k => groups[k].EnumerateValuesInvariant(converter)).ToArray();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T>[] EnumerateValuesInvariant<T>(this GroupCollection groups,
@@ -569,6 +649,22 @@ namespace System.Text.RegularExpressions
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
+            Range? range, CultureInfo? culture) =>
+                GetAllValues(groups, TypeConverter<T>.Instance, range, culture);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
+            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
+                GetAllValues(groups, new TypeConverter<T>(converter), range, culture);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range, CultureInfo? culture) =>
+                groups.Skip(range)
+                    .ToDictionary(g => g.Name, g => g.GetValues(converter, culture));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
             ParseSpan<T> parse, Range? range = null) =>
                 groups.Skip(range)
                     .ToDictionary(g => g.Name, g => g.GetValues(parse));
@@ -588,26 +684,20 @@ namespace System.Text.RegularExpressions
                     .ToDictionary(g => g.Name, g => g.GetValues(parse, provider, styles));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
-            Range? range, CultureInfo? culture) =>
-                GetAllValues<T>(groups, Util.GetConverter<T>(), range, culture);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, T[]> GetAllValues<T>(this GroupCollection groups,
-            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
-                groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.GetValues<T>(converter, culture));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, T[]> GetAllValuesInvariant<T>(this GroupCollection groups,
             Range? range = null) =>
-                GetAllValuesInvariant<T>(groups, Util.GetConverter<T>(), range);
+                GetAllValuesInvariant(groups, TypeConverter<T>.Instance, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, T[]> GetAllValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
+                GetAllValuesInvariant(groups, new TypeConverter<T>(converter), range);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Dictionary<string, T[]> GetAllValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.GetValuesInvariant<T>(converter));
+                    .ToDictionary(g => g.Name, g => g.GetValuesInvariant(converter));
 
         #endregion
 
@@ -625,6 +715,22 @@ namespace System.Text.RegularExpressions
                 where T : IConvertible =>
                     groups.Skip(range)
                         .ToDictionary(g => g.Name, g => g.EnumerateValues<T>(provider));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
+            Range? range = null, CultureInfo? culture = null) =>
+                EnumerateAllValues(groups, TypeConverter<T>.Instance, range, culture);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
+            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
+                EnumerateAllValues(groups, new TypeConverter<T>(converter), range, culture);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range, CultureInfo? culture) =>
+                groups.Skip(range)
+                    .ToDictionary(g => g.Name, g => g.EnumerateValues(converter, culture));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
@@ -647,26 +753,20 @@ namespace System.Text.RegularExpressions
                     .ToDictionary(g => g.Name, g => g.EnumerateValues(parse, provider, styles));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
-            Range? range = null, CultureInfo? culture = null) =>
-                EnumerateAllValues<T>(groups, Util.GetConverter<T>(), range, culture);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<string, IEnumerable<T>> EnumerateAllValues<T>(this GroupCollection groups,
-            TypeConverter converter, Range? range = null, CultureInfo? culture = null) =>
-                groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.EnumerateValues<T>(converter, culture));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValuesInvariant<T>(this GroupCollection groups,
             Range? range = null) =>
-                EnumerateAllValuesInvariant<T>(groups, Util.GetConverter<T>(), range);
+                EnumerateAllValuesInvariant(groups, TypeConverter<T>.Instance, range);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Dictionary<string, IEnumerable<T>> EnumerateAllValuesInvariant<T>(this GroupCollection groups,
             TypeConverter converter, Range? range = null) =>
+                EnumerateAllValuesInvariant(groups, new TypeConverter<T>(converter), range);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Dictionary<string, IEnumerable<T>> EnumerateAllValuesInvariant<T>(this GroupCollection groups,
+            TypeConverter<T> converter, Range? range) =>
                 groups.Skip(range)
-                    .ToDictionary(g => g.Name, g => g.EnumerateValuesInvariant<T>(converter));
+                    .ToDictionary(g => g.Name, g => g.EnumerateValuesInvariant(converter));
 
         #endregion
     }
