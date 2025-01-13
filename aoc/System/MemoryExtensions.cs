@@ -4,6 +4,55 @@ namespace System
 {
     public static class MemoryExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TSource Aggregate<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, TSource, TSource> selector)
+        {
+            TSource acc = source[0];
+            for (int i = 1; i < source.Length; i++)
+                acc = selector(acc, source[i]);
+            return acc;
+        }
+
+        public static TSource Aggregate<TSource>(this Span<TSource> source, Func<TSource, TSource, TSource> selector) =>
+            Aggregate((ReadOnlySpan<TSource>)source, selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TSource Aggregate<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, TSource, int, TSource> selector)
+        {
+            TSource acc = source[0];
+            for (int i = 1; i < source.Length; i++)
+                acc = selector(acc, source[i], i);
+            return acc;
+        }
+
+        public static TSource Aggregate<TSource>(this Span<TSource> source, Func<TSource, TSource, int, TSource> selector) =>
+            Aggregate((ReadOnlySpan<TSource>)source, selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TAccumulate Aggregate<TSource, TAccumulate>(this ReadOnlySpan<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> selector)
+        {
+            TAccumulate acc = seed;
+            for (int i = 0; i < source.Length; i++)
+                acc = selector(acc, source[i]);
+            return acc;
+        }
+
+        public static TAccumulate Aggregate<TSource, TAccumulate>(this Span<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> selector) =>
+            Aggregate((ReadOnlySpan<TSource>)source, seed, selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TAccumulate Aggregate<TSource, TAccumulate>(this ReadOnlySpan<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, int, TAccumulate> selector)
+        {
+            TAccumulate acc = seed;
+            for (int i = 0; i < source.Length; i++)
+                acc = selector(acc, source[i], i);
+            return acc;
+        }
+
+        public static TAccumulate Aggregate<TSource, TAccumulate>(this Span<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, int, TAccumulate> selector) =>
+            Aggregate((ReadOnlySpan<TSource>)source, seed, selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
             for (int i = 0; i < source.Length; i++)
@@ -15,6 +64,7 @@ namespace System
         public static bool All<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) =>
             All((ReadOnlySpan<TSource>)source, predicate);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
             for (int i = 0; i < source.Length; i++)
@@ -26,6 +76,7 @@ namespace System
         public static bool All<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) =>
             All((ReadOnlySpan<TSource>)source, predicate);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
             for (int i = 0; i < source.Length; i++)
@@ -37,6 +88,7 @@ namespace System
         public static bool Any<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) =>
             Any((ReadOnlySpan<TSource>)source, predicate);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
             for (int i = 0; i < source.Length; i++)
@@ -48,90 +100,58 @@ namespace System
         public static bool Any<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) =>
             Any((ReadOnlySpan<TSource>)source, predicate);
 
-        public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
-        {
-            int count = 0;
-            for (int i = 0; i < source.Length; i++)
-                count += predicate(source[i]) ? 1 : 0;
-            return count;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate) =>
+            source.Aggregate(0, (a, v) => predicate(v) ? a + 1 : a);
 
         public static int Count<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) =>
             Count((ReadOnlySpan<TSource>)source, predicate);
 
-        public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
-        {
-            int count = 0;
-            for (int i = 0; i < source.Length; i++)
-                count += predicate(source[i], i) ? 1 : 0;
-            return count;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate) =>
+            source.Aggregate(0, (a, v, i) => predicate(v, i) ? a + 1 : a);
 
         public static int Count<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) =>
             Count((ReadOnlySpan<TSource>)source, predicate);
 
-        public static int Sum(this ReadOnlySpan<int> source)
-        {
-            int sum = 0;
-            for (int i = 0; i < source.Length; i++)
-                sum += source[i];
-            return sum;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum(this ReadOnlySpan<int> source) =>
+            source.Aggregate(0, (a, v) => a + v);
 
         public static int Sum(this Span<int> source) =>
             Sum((ReadOnlySpan<int>)source);
 
-        public static int Sum<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int> selector)
-        {
-            int sum = 0;
-            for (int i = 0; i < source.Length; i++)
-                sum += selector(source[i]);
-            return sum;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int> selector) =>
+            source.Aggregate(0, (a, v) => a + selector(v));
 
         public static int Sum<TSource>(this Span<TSource> source, Func<TSource, int> selector) =>
             Sum((ReadOnlySpan<TSource>)source, selector);
 
-        public static int Sum<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, int> selector)
-        {
-            int sum = 0;
-            for (int i = 0; i < source.Length; i++)
-                sum += selector(source[i], i);
-            return sum;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, int> selector) =>
+            source.Aggregate(0, (a, v, i) => a + selector(v, i));
 
         public static int Sum<TSource>(this Span<TSource> source, Func<TSource, int, int> selector) =>
             Sum((ReadOnlySpan<TSource>)source, selector);
 
-        public static int Product(this ReadOnlySpan<int> source)
-        {
-            int product = 1;
-            for (int i = 0; i < source.Length; i++)
-                product *= source[i];
-            return product;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Product(this ReadOnlySpan<int> source) =>
+            source.Aggregate(1, (a, v) => a * v);
 
         public static int Product(this Span<int> source) =>
             Product((ReadOnlySpan<int>)source);
 
-        public static int Product<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int> selector)
-        {
-            int product = 1;
-            for (int i = 0; i < source.Length; i++)
-                product *= selector(source[i]);
-            return product;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Product<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int> selector) =>
+            source.Aggregate(1, (a, v) => a * selector(v));
 
         public static int Product<TSource>(this Span<TSource> source, Func<TSource, int> selector) =>
             Product((ReadOnlySpan<TSource>)source, selector);
 
-        public static int Product<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, int> selector)
-        {
-            int product = 1;
-            for (int i = 0; i < source.Length; i++)
-                product *= selector(source[i], i);
-            return product;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Product<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, int> selector) =>
+            source.Aggregate(1, (a, v, i) => a * selector(v, i));
 
         public static int Product<TSource>(this Span<TSource> source, Func<TSource, int, int> selector) =>
             Product((ReadOnlySpan<TSource>)source, selector);
