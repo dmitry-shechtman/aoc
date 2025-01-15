@@ -11,7 +11,7 @@ namespace aoc.Internal
             IHeadingBuilder, IVectorBuilder<TVector>, IPathBuilder<TVector>,
             INextBuilder<TGrid, TVector>
         where TSelf : GridHelper<TSelf, TGrid, TVector>
-        where TGrid : IGrid<TVector>, IReadOnlyCollection<TVector>
+        where TGrid : IGrid<TVector>
         where TVector : struct, IVector<TVector>
     {
         public abstract TVector[] Headings { get; }

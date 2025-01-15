@@ -8,7 +8,7 @@ namespace aoc.Grids
 {
     using Helper = Grid.GridHelper;
 
-    public abstract class Grid<TSelf, TVector> : IGrid<TVector>, IReadOnlyCollection<TVector>
+    public abstract class Grid<TSelf, TVector> : IGrid<TVector>
         where TSelf : Grid<TSelf, TVector>
         where TVector : struct, IVector<TVector>
     {

@@ -2,7 +2,7 @@
 
 namespace aoc.Grids
 {
-    public interface IGrid<TVector>
+    public interface IGrid<TVector> : IReadOnlyCollection<TVector>
         where TVector : struct, IVector<TVector>
     {
         HashSet<TVector> Points { get; }
