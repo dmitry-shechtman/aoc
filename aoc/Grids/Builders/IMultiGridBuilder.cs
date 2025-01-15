@@ -5,7 +5,7 @@ namespace aoc.Grids.Builders
 {
     public interface IMultiGridBuilder<TMulti, TGrid> : IBaseGridBuilder<TMulti>
         where TMulti : MultiGrid<TMulti, TGrid>
-        where TGrid : Grid<TGrid>
+        where TGrid : Grid2D<TGrid>
     {
         TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate);
         bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate,

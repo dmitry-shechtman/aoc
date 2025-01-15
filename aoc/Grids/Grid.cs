@@ -8,12 +8,6 @@ namespace aoc.Grids
 {
     using Helper = Grid.GridHelper;
 
-    public interface IGrid<TVector>
-        where TVector : struct, IVector<TVector>
-    {
-        HashSet<TVector> Points { get; set; }
-    }
-
     public abstract class Grid<TSelf, TVector, TSize, TRange, T> : IGrid<TVector>, IReadOnlyCollection<TVector>
         where TSelf : Grid<TSelf, TVector, TSize, TRange, T>
         where TVector : struct, IVector<TVector, T>
@@ -57,10 +51,10 @@ namespace aoc.Grids
             grid.Points;
     }
 
-    public abstract class Grid<TSelf> : Grid<TSelf, Vector, Size, VectorRange, int>, IFormattableEx
-        where TSelf : Grid<TSelf>
+    public abstract class Grid2D<TSelf> : Grid<TSelf, Vector, Size, VectorRange, int>, IFormattableEx
+        where TSelf : Grid2D<TSelf>
     {
-        internal sealed class GridHelper : Internal.GridHelper<GridHelper, Grid>
+        internal sealed class GridHelper : Internal.Grid2DHelper<GridHelper, Grid>
         {
             private GridHelper()
             {
@@ -119,12 +113,12 @@ namespace aoc.Grids
             protected override Grid CreateGrid(HashSet<Vector> points) => new(points);
         }
 
-        protected Grid(IEnumerable<Vector> points)
+        protected Grid2D(IEnumerable<Vector> points)
             : base(points)
         {
         }
 
-        protected Grid(HashSet<Vector> points)
+        protected Grid2D(HashSet<Vector> points)
             : base(points)
         {
         }
@@ -151,7 +145,7 @@ namespace aoc.Grids
         public abstract string ToString(string? format, IFormatProvider? provider = null);
     }
 
-    public sealed class Grid : Grid<Grid>
+    public sealed class Grid : Grid2D<Grid>, IGrid2D<Grid, Vector>
     {
         static Helper Helper { get; } = Helper.Instance;
 
@@ -229,7 +223,7 @@ namespace aoc.Grids
         public static Builders.IVectorBuilder<Vector> Vector  => Helper;
         public static Builders.IPathBuilder<Vector>   Path    => Helper;
 
-        public static Grid Parse(string? input) =>
+        public static Grid Parse(string input) =>
             Helper.Parse(input);
 
         public static bool TryParse(

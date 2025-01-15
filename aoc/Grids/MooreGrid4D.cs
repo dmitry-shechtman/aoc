@@ -69,7 +69,7 @@ namespace aoc.Grids
         }
     }
 
-    public sealed class MooreGrid4D : MooreGrid4D<MooreGrid4D>
+    public sealed class MooreGrid4D : MooreGrid4D<MooreGrid4D>, IGrid4D<MooreGrid4D, Vector4D>
     {
         static new MooreHelper Helper { get; } = MooreHelper.Instance;
 

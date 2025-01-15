@@ -255,9 +255,9 @@ namespace aoc.Internal
         }
     }
 
-    abstract class GridHelper<TSelf, TGrid> : GridHelper<TSelf, TGrid, Vector, Size, VectorRange, int>, IGridBuilder<TGrid>
-        where TSelf : GridHelper<TSelf, TGrid>
-        where TGrid : Grid<TGrid>
+    abstract class Grid2DHelper<TSelf, TGrid> : GridHelper<TSelf, TGrid, Vector, Size, VectorRange, int>, IGridBuilder<TGrid>
+        where TSelf : Grid2DHelper<TSelf, TGrid>
+        where TGrid : Grid2D<TGrid>
     {
         private const char   DefaultEmptyChar = '.';
         private const char   DefaultPointChar = '#';
@@ -408,9 +408,9 @@ namespace aoc.Internal
         protected abstract TGrid CreateGrid(HashSet<Vector> points);
     }
 
-    abstract class GridHelper2<TSelf, TGrid> : GridHelper<TSelf, TGrid>
-        where TSelf : GridHelper2<TSelf, TGrid>
-        where TGrid : Grid<TGrid>
+    abstract class Grid2DHelper2<TSelf, TGrid> : Grid2DHelper<TSelf, TGrid>
+        where TSelf : Grid2DHelper2<TSelf, TGrid>
+        where TGrid : Grid2D<TGrid>
     {
         protected override bool TryGetHeading(ReadOnlySpan<char> input, ref int i, out int heading) =>
             i < input.Length + 2 && TryGetHeading(input[i..(i + 2)], out heading) ||

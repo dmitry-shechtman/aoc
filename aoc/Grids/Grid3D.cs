@@ -83,7 +83,7 @@ namespace aoc.Grids
             range.All(Points.Remove);
     }
 
-    public sealed class Grid3D : Grid3D<Grid3D>
+    public sealed class Grid3D : Grid3D<Grid3D>, IGrid3D<Grid3D, Vector3D>
     {
         static new Helper Helper { get; } = Helper.Instance;
 

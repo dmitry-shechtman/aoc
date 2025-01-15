@@ -9,7 +9,7 @@ namespace aoc.Internal
     abstract class MultiGridParseHelper<TSelf, TMulti, TGrid> : Singleton<TSelf>, IMultiGridBuilder<TMulti, TGrid>
         where TSelf : MultiGridParseHelper<TSelf, TMulti, TGrid>
         where TMulti : MultiGrid<TMulti, TGrid>
-        where TGrid : Grid<TGrid>
+        where TGrid : Grid2D<TGrid>
     {
         private const char   DefaultEmptyChar = '.';
         private const string DefaultSeparator = "\n";

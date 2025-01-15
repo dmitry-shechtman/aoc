@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace aoc.Grids
 {
-    public abstract class HexNSGrid<TSelf> : Grid<TSelf>
+    public abstract class HexNSGrid<TSelf> : Grid2D<TSelf>
         where TSelf : HexNSGrid<TSelf>
     {
-        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper2<THelper, TGrid>
+        internal abstract class Helper<THelper, TGrid> : Internal.Grid2DHelper2<THelper, TGrid>
             where THelper : Helper<THelper, TGrid>
             where TGrid : HexNSGrid<TGrid>
         {
@@ -61,7 +62,7 @@ namespace aoc.Grids
             Math.Abs(p.x) + Math.Abs(Math.Abs(p.x) - Math.Abs(p.y)) / 2;
     }
 
-    public sealed class HexNSGrid : HexNSGrid<HexNSGrid>
+    public sealed class HexNSGrid : HexNSGrid<HexNSGrid>, IGrid2D<HexNSGrid, Vector>
     {
         static new Helper Helper { get; } = Helper.Instance;
 
@@ -103,5 +104,21 @@ namespace aoc.Grids
         public static Builders.IGridBuilder<HexNSGrid> Builder => Helper;
         public static Builders.IVectorBuilder<Vector>  Vector  => Helper;
         public static Builders.IPathBuilder<Vector>    Path    => Helper;
+
+        public static HexNSGrid Parse(string input) =>
+            Helper.Parse(input);
+
+        public static bool TryParse(
+            [NotNullWhen(true)] string? input,
+            [MaybeNullWhen(false)] out HexNSGrid grid) =>
+                Helper.TryParse(input, out grid);
+
+        public static HexNSGrid Parse(ReadOnlySpan<char> input) =>
+            Helper.Parse(input);
+
+        public static bool TryParse(
+            ReadOnlySpan<char> input,
+            [MaybeNullWhen(false)] out HexNSGrid grid) =>
+                Helper.TryParse(input, out grid);
     }
 }

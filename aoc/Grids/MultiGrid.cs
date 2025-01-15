@@ -9,7 +9,7 @@ namespace aoc.Grids
 
     public abstract class MultiGrid<TSelf, TGrid> : IReadOnlyList<TGrid>, IFormattableEx
         where TSelf : MultiGrid<TSelf, TGrid>
-        where TGrid : Grid<TGrid>
+        where TGrid : Grid2D<TGrid>
     {
         protected MultiGrid(TGrid[] grids)
         {

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace aoc.Grids.Builders
 {
     public interface IGridBuilder<TGrid> : IBaseGridBuilder<TGrid>
-        where TGrid : Grid<TGrid>
+        where TGrid : IGrid<Vector>
     {
         TGrid Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output);
         bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, Span<Vector> output,

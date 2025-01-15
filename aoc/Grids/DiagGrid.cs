@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace aoc.Grids
 {
-    public abstract class DiagGrid<TSelf> : Grid<TSelf>
+    public abstract class DiagGrid<TSelf> : Grid2D<TSelf>
         where TSelf : DiagGrid<TSelf>
     {
-        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper2<THelper, TGrid>
+        internal abstract class Helper<THelper, TGrid> : Internal.Grid2DHelper2<THelper, TGrid>
             where THelper : Helper<THelper, TGrid>
             where TGrid : DiagGrid<TGrid>
         {
@@ -53,7 +54,7 @@ namespace aoc.Grids
         }
     }
 
-    public sealed class DiagGrid : DiagGrid<DiagGrid>
+    public sealed class DiagGrid : DiagGrid<DiagGrid>, IGrid2D<DiagGrid, Vector>
     {
         static new Helper Helper { get; } = Helper.Instance;
 
@@ -95,5 +96,21 @@ namespace aoc.Grids
         public static Builders.IGridBuilder<DiagGrid>  Builder => Helper;
         public static Builders.IVectorBuilder<Vector>  Vector  => Helper;
         public static Builders.IPathBuilder<Vector>    Path    => Helper;
+
+        public static DiagGrid Parse(string input) =>
+            Helper.Parse(input);
+
+        public static bool TryParse(
+            [NotNullWhen(true)] string? input,
+            [MaybeNullWhen(false)] out DiagGrid grid) =>
+                Helper.TryParse(input, out grid);
+
+        public static DiagGrid Parse(ReadOnlySpan<char> input) =>
+            Helper.Parse(input);
+
+        public static bool TryParse(
+            ReadOnlySpan<char> input,
+            [MaybeNullWhen(false)] out DiagGrid grid) =>
+                Helper.TryParse(input, out grid);
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace aoc.Grids
 {
-    public abstract class MooreGrid<TSelf> : Grid<TSelf>
+    public abstract class MooreGrid<TSelf> : Grid2D<TSelf>
         where TSelf : MooreGrid<TSelf>
     {
-        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper2<THelper, TGrid>
+        internal abstract class Helper<THelper, TGrid> : Internal.Grid2DHelper2<THelper, TGrid>
             where THelper : Helper<THelper, TGrid>
             where TGrid : MooreGrid<TGrid>
         {
@@ -70,7 +71,7 @@ namespace aoc.Grids
         }
     }
 
-    public sealed class MooreGrid : MooreGrid<MooreGrid>
+    public sealed class MooreGrid : MooreGrid<MooreGrid>, IGrid2D<MooreGrid, Vector>
     {
         static new Helper Helper { get; } = Helper.Instance;
 
@@ -112,5 +113,21 @@ namespace aoc.Grids
         public static Builders.IGridBuilder<MooreGrid> Builder => Helper;
         public static Builders.IVectorBuilder<Vector>  Vector  => Helper;
         public static Builders.IPathBuilder<Vector>    Path    => Helper;
+
+        public static MooreGrid Parse(string input) =>
+            Helper.Parse(input);
+
+        public static bool TryParse(
+            [NotNullWhen(true)] string? input,
+            [MaybeNullWhen(false)] out MooreGrid grid) =>
+                Helper.TryParse(input, out grid);
+
+        public static MooreGrid Parse(ReadOnlySpan<char> input) =>
+            Helper.Parse(input);
+
+        public static bool TryParse(
+            ReadOnlySpan<char> input,
+            [MaybeNullWhen(false)] out MooreGrid grid) =>
+                Helper.TryParse(input, out grid);
     }
 }

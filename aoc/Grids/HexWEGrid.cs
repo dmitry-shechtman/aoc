@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace aoc.Grids
 {
-    public abstract class HexWEGrid<TSelf> : Grid<TSelf>
+    public abstract class HexWEGrid<TSelf> : Grid2D<TSelf>
         where TSelf : HexWEGrid<TSelf>
     {
-        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper2<THelper, TGrid>
+        internal abstract class Helper<THelper, TGrid> : Internal.Grid2DHelper2<THelper, TGrid>
             where THelper : Helper<THelper, TGrid>
             where TGrid : HexWEGrid<TGrid>
         {
@@ -61,7 +62,7 @@ namespace aoc.Grids
             Math.Abs(p.y) + Math.Abs(Math.Abs(p.y) - Math.Abs(p.x)) / 2;
     }
 
-    public sealed class HexWEGrid : HexWEGrid<HexWEGrid>
+    public sealed class HexWEGrid : HexWEGrid<HexWEGrid>, IGrid2D<HexWEGrid, Vector>
     {
         static new Helper Helper { get; } = Helper.Instance;
 
@@ -103,5 +104,21 @@ namespace aoc.Grids
         public static Builders.IGridBuilder<HexWEGrid> Builder => Helper;
         public static Builders.IVectorBuilder<Vector>  Vector  => Helper;
         public static Builders.IPathBuilder<Vector>    Path    => Helper;
+
+        public static HexWEGrid Parse(string input) =>
+            Helper.Parse(input);
+
+        public static bool TryParse(
+            [NotNullWhen(true)] string? input,
+            [MaybeNullWhen(false)] out HexWEGrid grid) =>
+                Helper.TryParse(input, out grid);
+
+        public static HexWEGrid Parse(ReadOnlySpan<char> input) =>
+            Helper.Parse(input);
+
+        public static bool TryParse(
+            ReadOnlySpan<char> input,
+            [MaybeNullWhen(false)] out HexWEGrid grid) =>
+                Helper.TryParse(input, out grid);
     }
 }

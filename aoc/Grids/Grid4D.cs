@@ -92,7 +92,7 @@ namespace aoc.Grids
             range.All(Points.Remove);
     }
 
-    public sealed class Grid4D : Grid4D<Grid4D>
+    public sealed class Grid4D : Grid4D<Grid4D>, IGrid4D<Grid4D, Vector4D>
     {
         static new Helper Helper { get; } = Helper.Instance;
 
