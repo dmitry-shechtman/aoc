@@ -103,12 +103,10 @@ namespace aoc.Internal
         public bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range,
             [MaybeNullWhen(false)] out TMulti multi)
         {
-            int width = 0, height = 1, x = 0, y = 0, i, j;
+            int width = 0, height = 1, x = 0, y = 0;
             char c, empty = DefaultEmptyChar;
-            var points = new HashSet<Vector>[format.Length + 1];
-            for (i = 0; i < points.Length; i++)
-                points[i] = new();
-            for (i = 0; i < input.Length; ++i, ++x)
+            var points = CreatePoints(format.Length);
+            for (int i = 0, j; i < input.Length; ++i, ++x)
             {
                 if ((c = input[i]) == empty)
                 {
@@ -135,11 +133,79 @@ namespace aoc.Internal
             }
             width = x > width ? x : width;
             range = new((Size)(width, height));
-            var grids = new TGrid[points.Length];
-            for (i = 0; i < points.Length; i++)
-                grids[i] = CreateGrid(points[i]);
-            multi = CreateMulti(grids);
+            multi = CreateMulti(points);
             return true;
+        }
+
+        public TMulti FromArray<TSize>(int[] array, TSize size)
+            where TSize : struct, ISize2D<TSize, int>
+        {
+            int min = int.MaxValue, max = 0;
+            for (int i = 0; i < array.Length; i++)
+                if (array[i] > 0)
+                    (min, max) = (Math.Min(min, array[i]), Math.Max(max, array[i]));
+            return FromArray(array, size, (min, max));
+        }
+
+        public TMulti FromArray<TSize>(int[] array, TSize size, Range range)
+            where TSize : struct, ISize2D<TSize, int>
+        {
+            var points = CreatePoints(range.Count);
+            for (int y = 0, i = 0; y < size.Height; y++)
+            {
+                for (int x = 0; x < size.Width; x++, i++)
+                {
+                    if (array[i] > 0)
+                    {
+                        points[array[i] - range.Min].Add((x, y));
+                        points[^1].Add((x, y));
+                    }
+                }
+            }
+            return CreateMulti(points);
+        }
+
+        public TMulti FromArray(int[,] array)
+        {
+            int min = int.MaxValue, max = 0;
+            for (int x = 0; x < array.GetLength(0); x++)
+                for (int y = 0; y < array.GetLength(1); y++)
+                    if (array[x, y] > 0)
+                        (min, max) = (Math.Min(min, array[x, y]), Math.Max(max, array[x, y]));
+            return FromArray(array, (min, max));
+        }
+
+        public TMulti FromArray(int[,] array, Range range)
+        {
+            var points = CreatePoints(range.Count);
+            for (int x = 0; x < array.GetLength(0); x++)
+            {
+                for (int y = 0; y < array.GetLength(1); y++)
+                {
+                    if (array[x, y] > 0)
+                    {
+                        points[array[x, y] - range.Min].Add((x, y));
+                        points[^1].Add((x, y));
+                    }
+                }
+            }
+            return CreateMulti(points);
+        }
+
+        private static HashSet<Vector>[] CreatePoints(int count)
+        {
+            var points = new HashSet<Vector>[count + 1];
+            for (int i = 0; i < points.Length; i++)
+                points[i] = new();
+            return points;
+        }
+
+        private TMulti CreateMulti(HashSet<Vector>[] points)
+        {
+            var grids = new TGrid[points.Length];
+            for (int i = 0; i < points.Length; i++)
+                grids[i] = CreateGrid(points[i]);
+            return CreateMulti(grids);
         }
 
         private static Span<char> GetFormat(ReadOnlySpan<char> input, Span<char> format) =>

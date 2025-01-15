@@ -3,35 +3,16 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace aoc.Grids.Builders
 {
-    public interface IMultiGridBuilder<TMulti, TGrid>
+    public interface IMultiGridBuilder<TMulti, TGrid> : IBaseGridBuilder<TMulti>
         where TMulti : MultiGrid<TMulti, TGrid>
         where TGrid : Grid<TGrid>
     {
-        string ToString(TMulti multi, Size size, ReadOnlySpan<char> format);
-        string ToString(TMulti multi, VectorRange range, ReadOnlySpan<char> format);
-
-        TMulti Parse(ReadOnlySpan<char> input);
-        bool TryParse(ReadOnlySpan<char> input,
-            [MaybeNullWhen(false)] out TMulti multi);
-
-        TMulti Parse(ReadOnlySpan<char> input, out VectorRange range);
-        bool TryParse(ReadOnlySpan<char> input, out VectorRange range,
-            [MaybeNullWhen(false)] out TMulti multi);
-
         TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate);
         bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate,
             [MaybeNullWhen(false)] out TMulti multi);
 
         TMulti Parse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range);
         bool TryParse(ReadOnlySpan<char> input, Func<char, bool> predicate, out VectorRange range,
-            [MaybeNullWhen(false)] out TMulti multi);
-
-        TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format);
-        bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format,
-            [MaybeNullWhen(false)] out TMulti multi);
-
-        TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range);
-        bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, out VectorRange range,
             [MaybeNullWhen(false)] out TMulti multi);
 
         TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator);
@@ -41,5 +22,10 @@ namespace aoc.Grids.Builders
         TMulti Parse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range);
         bool TryParse(ReadOnlySpan<char> input, ReadOnlySpan<char> format, ReadOnlySpan<char> separator, out VectorRange range,
             [MaybeNullWhen(false)] out TMulti multi);
+
+        TMulti FromArray<TSize>(int[] array, TSize size, Range range)
+            where TSize : struct, ISize2D<TSize, int>;
+
+        TMulti FromArray(int[,] array, Range range);
     }
 }

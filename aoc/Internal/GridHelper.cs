@@ -386,6 +386,27 @@ namespace aoc.Internal
             return true;
         }
 
+        public TGrid FromArray<TSize>(int[] array, TSize size)
+            where TSize : struct, ISize2D<TSize, int>
+        {
+            HashSet<Vector> points = new();
+            for (int y = 0, i = 0; y < size.Height; y++)
+                for (int x = 0; x < size.Width; x++, i++)
+                    if (array[i] > 0)
+                        points.Add((x, y));
+            return CreateGrid(points);
+        }
+
+        public TGrid FromArray(int[,] array)
+        {
+            HashSet<Vector> points = new();
+            for (int x = 0; x < array.GetLength(0); x++)
+                for (int y = 0; y < array.GetLength(1); y++)
+                    if (array[x, y] > 0)
+                        points.Add((x, y));
+            return CreateGrid(points);
+        }
+
         protected abstract TGrid CreateGrid(HashSet<Vector> points);
     }
 
