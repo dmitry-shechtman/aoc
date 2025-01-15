@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace aoc.Grids
 {
-    public abstract class Grid3D<TSelf> : Grid<TSelf, Vector3D, Size3D, Vector3DRange, int>
+    public abstract class Grid3D<TSelf> : Grid<TSelf, Vector3D>
         where TSelf : Grid3D<TSelf>
     {
         internal abstract class Helper<THelper, TGrid> : Internal.GridHelper<THelper, TGrid, Vector3D>

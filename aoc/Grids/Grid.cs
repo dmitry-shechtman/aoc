@@ -8,12 +8,9 @@ namespace aoc.Grids
 {
     using Helper = Grid.GridHelper;
 
-    public abstract class Grid<TSelf, TVector, TSize, TRange, T> : IGrid<TVector>, IReadOnlyCollection<TVector>
-        where TSelf : Grid<TSelf, TVector, TSize, TRange, T>
-        where TVector : struct, IVector<TVector, T>
-        where TSize : struct, ISize<TSize, TVector>
-        where TRange : struct, IRange<TRange, TVector, T>
-        where T : struct
+    public abstract class Grid<TSelf, TVector> : IGrid<TVector>, IReadOnlyCollection<TVector>
+        where TSelf : Grid<TSelf, TVector>
+        where TVector : struct, IVector<TVector>
     {
         protected Grid(IEnumerable<TVector> points) =>
             Points = new(points);
@@ -41,11 +38,11 @@ namespace aoc.Grids
         public bool Contains(TVector point) =>
             Points.Contains(point);
 
-        public static implicit operator HashSet<TVector>(Grid<TSelf, TVector, TSize, TRange, T> grid) =>
+        public static implicit operator HashSet<TVector>(Grid<TSelf, TVector> grid) =>
             grid.Points;
     }
 
-    public abstract class Grid2D<TSelf> : Grid<TSelf, Vector, Size, VectorRange, int>, IFormattableEx
+    public abstract class Grid2D<TSelf> : Grid<TSelf, Vector>, IFormattableEx
         where TSelf : Grid2D<TSelf>
     {
         internal sealed class GridHelper : Internal.Grid2DHelper<GridHelper, Grid>
