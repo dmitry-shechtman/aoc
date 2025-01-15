@@ -5,8 +5,8 @@ namespace aoc.Grids.Builders
 {
     public interface IBaseGridBuilder<TGrid>
     {
-        string ToString(TGrid grid, Size size, ReadOnlySpan<char> format);
-        string ToString(TGrid grid, VectorRange range, ReadOnlySpan<char> format);
+        string ToString<TSize>(TGrid grid, TSize size, ReadOnlySpan<char> format)
+            where TSize : struct, ISize2D<TSize, int>;
 
         TGrid Parse(ReadOnlySpan<char> input);
         bool TryParse(ReadOnlySpan<char> input,

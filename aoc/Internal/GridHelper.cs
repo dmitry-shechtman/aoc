@@ -269,16 +269,14 @@ namespace aoc.Internal
         public string ToString(TGrid grid, ReadOnlySpan<char> format, IFormatProvider? _) =>
             ToString(grid, grid.Range(), format);
 
-        public string ToString(TGrid grid, Size size, ReadOnlySpan<char> format) =>
-            ToString(grid, range: new(size), format);
-
-        public string ToString(TGrid grid, VectorRange range, ReadOnlySpan<char> format)
+        public string ToString<TSize>(TGrid grid, TSize size, ReadOnlySpan<char> format)
+            where TSize : struct, ISize2D<TSize, int>
         {
             GetSpecials(format, out var point, out var empty, out var separator);
-            var chars = new char[(range.Width + separator.Length) * range.Height];
-            for (int y = range.Min.Y, i = 0, k; y <= range.Max.Y; y++)
+            var chars = new char[(size.Width + separator.Length) * size.Height];
+            for (int y = 0, i = 0, k; y < size.Height; y++)
             {
-                for (int x = range.Min.X; x <= range.Max.X; x++)
+                for (int x = 0; x < size.Width; x++)
                     chars[i++] = grid.Contains((x, y))
                         ? point
                         : empty;

@@ -148,7 +148,7 @@ namespace aoc.Grids
             range.All(Points.Remove);
 
         public abstract string ToString(IFormatProvider? provider);
-        public abstract string ToString(string? format, IFormatProvider? formatProvider);
+        public abstract string ToString(string? format, IFormatProvider? provider = null);
     }
 
     public sealed class Grid : Grid<Grid>

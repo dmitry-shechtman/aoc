@@ -33,7 +33,7 @@ namespace aoc.Grids
             Grids[start..(start + length)];
 
         public abstract string ToString(IFormatProvider? provider);
-        public abstract string ToString(string? format, IFormatProvider? formatProvider);
+        public abstract string ToString(string? format, IFormatProvider? provider = null);
     }
 
     public sealed class MultiGrid : MultiGrid<MultiGrid, Grid>

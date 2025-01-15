@@ -21,4 +21,22 @@ namespace aoc
             where T : IVector<T> =>
                 new(pp.Min(), pp.Max());
     }
+
+    public static class Vector2DExtensions
+    {
+        public static VectorRange Range(this IEnumerable<Vector> pp) =>
+            new(pp.Min(), pp.Max());
+    }
+
+    public static class Vector3DExtensions
+    {
+        public static Vector3DRange Range(this IEnumerable<Vector3D> pp) =>
+            new(pp.Min(), pp.Max());
+    }
+
+    public static class Vector4DExtensions
+    {
+        public static Vector4DRange Range(this IEnumerable<Vector4D> pp) =>
+            new(pp.Min(), pp.Max());
+    }
 }

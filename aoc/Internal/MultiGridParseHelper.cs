@@ -20,24 +20,19 @@ namespace aoc.Internal
         public string ToString(TMulti multi, ReadOnlySpan<char> format, IFormatProvider? _) =>
             ToString(multi, multi[^1].Range(), format);
 
-        public string ToString(TMulti multi, Size size, ReadOnlySpan<char> format) =>
-            ToString(multi, range: new(size), format);
-
-        public string ToString(TMulti multi, VectorRange range, ReadOnlySpan<char> format)
+        public string ToString<TSize>(TMulti multi, TSize size, ReadOnlySpan<char> format)
+            where TSize : struct, ISize2D<TSize, int>
         {
             GetSpecials(format, out var empty, out var separator, multi.Count - 1);
-            var chars = new char[(range.Width + separator.Length) * range.Height];
-            for (int y = range.Min.Y, i = 0, j = 0, k; y <= range.Max.Y; y++)
+            var chars = new char[(size.Width + separator.Length) * size.Height];
+            for (int y = 0, i = 0, k; y < size.Height; y++)
             {
-                for (int x = range.Min.X; x <= range.Max.X; x++, i++)
-                {
-                    var index = multi[..^1].FindIndex(g => g.Contains((x, y)));
-                    chars[j++] = index >= 0
-                        ? format[index]
+                for (int x = 0; x < size.Width; x++)
+                    chars[i++] = multi[^1].Contains((x, y))
+                        ? format[multi[..^1].FindIndex(g => g.Contains((x, y)))]
                         : empty;
-                }
                 for (k = 0; k < separator.Length; k++)
-                    chars[j++] = separator[k];
+                    chars[i++] = separator[k];
             }
             return new(chars);
         }
