@@ -7,8 +7,9 @@ namespace aoc.Grids
     public abstract class Grid4D<TSelf> : Grid<TSelf, Vector4D, Size4D, Vector4DRange, int>
         where TSelf : Grid4D<TSelf>
     {
-        internal abstract class Helper<THelper> : Internal.GridHelper<THelper, TSelf, Vector4D, Size4D, Vector4DRange, int>
-            where THelper : Helper<THelper>
+        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper<THelper, TGrid, Vector4D, Size4D, Vector4DRange, int>
+            where THelper : Helper<THelper, TGrid>
+            where TGrid : Grid4D<TGrid>
         {
             protected Helper()
             {
@@ -51,11 +52,18 @@ namespace aoc.Grids
             };
         }
 
-        internal sealed class Helper : Helper<Helper>
+        internal sealed class Helper : Helper<Helper, Grid4D>
         {
             private Helper()
             {
             }
+
+            protected override Grid4D CreateGrid(HashSet<Vector4D> points) => new(points);
+        }
+
+        protected Grid4D(HashSet<Vector4D> points)
+            : base(points)
+        {
         }
 
         protected Grid4D(IEnumerable<Vector4D> points)
@@ -95,6 +103,11 @@ namespace aoc.Grids
     public sealed class Grid4D : Grid4D<Grid4D>, IGrid4D<Grid4D, Vector4D>
     {
         static new Helper Helper { get; } = Helper.Instance;
+
+        internal Grid4D(HashSet<Vector4D> points)
+            : base(points)
+        {
+        }
 
         public Grid4D(params Vector4D[] points)
             : base(points)

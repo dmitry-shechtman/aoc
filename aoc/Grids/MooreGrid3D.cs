@@ -5,9 +5,11 @@ namespace aoc.Grids
     public abstract class MooreGrid3D<TSelf> : Grid3D<TSelf>
         where TSelf : MooreGrid3D<TSelf>
     {
-        internal sealed class MooreHelper : Helper<MooreHelper>
+        internal abstract class MooreHelper<THelper, TGrid> : Helper<THelper, TGrid>
+            where THelper : MooreHelper<THelper, TGrid>
+            where TGrid : MooreGrid3D<TGrid>
         {
-            private MooreHelper()
+            protected MooreHelper()
             {
             }
 
@@ -28,7 +30,7 @@ namespace aoc.Grids
                             yield return new(x, y, z);
             }
 
-            public override int CountNeighbors(TSelf grid, Vector3D p)
+            public override int CountNeighbors(TGrid grid, Vector3D p)
             {
                 int count = 0;
                 for (var z = p.z - 1; z <= p.z + 1; z++)
@@ -38,7 +40,7 @@ namespace aoc.Grids
                 return count;
             }
 
-            public override int CountNeighborsAndSelf(TSelf grid, Vector3D p)
+            public override int CountNeighborsAndSelf(TGrid grid, Vector3D p)
             {
                 int count = 0;
                 for (var z = p.z - 1; z <= p.z + 1; z++)
@@ -47,6 +49,15 @@ namespace aoc.Grids
                             count += grid.Points.Contains((x, y, z)) ? 1 : 0;
                 return count;
             }
+        }
+
+        internal sealed class MooreHelper : MooreHelper<MooreHelper, MooreGrid3D>
+        {
+            private MooreHelper()
+            {
+            }
+
+            protected override MooreGrid3D CreateGrid(HashSet<Vector3D> points) => new(points);
         }
 
         protected MooreGrid3D(IEnumerable<Vector3D> points)
@@ -63,6 +74,11 @@ namespace aoc.Grids
     public sealed class MooreGrid3D : MooreGrid3D<MooreGrid3D>, IGrid3D<Grid3D, Vector3D>
     {
         static new MooreHelper Helper { get; } = MooreHelper.Instance;
+
+        internal MooreGrid3D(HashSet<Vector3D> points)
+            : base(points)
+        {
+        }
 
         public MooreGrid3D(params Vector3D[] points)
             : base(points)

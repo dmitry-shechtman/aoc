@@ -48,6 +48,11 @@ namespace aoc.Grids
             protected override DiagGrid CreateGrid(HashSet<Vector> points) => new(points);
         }
 
+        protected DiagGrid(HashSet<Vector> points)
+            : base(points)
+        {
+        }
+
         protected DiagGrid(IEnumerable<Vector> points)
             : base(points)
         {
@@ -57,6 +62,11 @@ namespace aoc.Grids
     public sealed class DiagGrid : DiagGrid<DiagGrid>, IGrid2D<DiagGrid, Vector>
     {
         static new Helper Helper { get; } = Helper.Instance;
+
+        internal DiagGrid(HashSet<Vector> points)
+            : base(points)
+        {
+        }
 
         public DiagGrid(params Vector[] points)
             : base(points)

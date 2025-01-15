@@ -53,6 +53,11 @@ namespace aoc.Grids
             protected override HexNSGrid CreateGrid(HashSet<Vector> points) => new(points);
         }
 
+        protected HexNSGrid(HashSet<Vector> points)
+            : base(points)
+        {
+        }
+
         protected HexNSGrid(IEnumerable<Vector> points)
             : base(points)
         {
@@ -65,6 +70,11 @@ namespace aoc.Grids
     public sealed class HexNSGrid : HexNSGrid<HexNSGrid>, IGrid2D<HexNSGrid, Vector>
     {
         static new Helper Helper { get; } = Helper.Instance;
+
+        internal HexNSGrid(HashSet<Vector> points)
+            : base(points)
+        {
+        }
 
         public HexNSGrid(params Vector[] points)
             : base(points)

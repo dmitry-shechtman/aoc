@@ -5,7 +5,7 @@ namespace aoc.Grids
     public interface IGrid<TVector>
         where TVector : struct, IVector<TVector>
     {
-        HashSet<TVector> Points { get; set; }
+        HashSet<TVector> Points { get; }
     }
 
     internal interface IGrid2D<TSelf, TVector> : IGrid<TVector>

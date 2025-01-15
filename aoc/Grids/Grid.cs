@@ -21,7 +21,7 @@ namespace aoc.Grids
         protected Grid(HashSet<TVector> points) =>
             Points = points;
 
-        protected HashSet<TVector> Points { get; private set; }
+        public HashSet<TVector> Points { get; }
 
         public IEnumerator<TVector> GetEnumerator() =>
             Points.GetEnumerator();
@@ -40,12 +40,6 @@ namespace aoc.Grids
 
         public bool Contains(TVector point) =>
             Points.Contains(point);
-
-        HashSet<TVector> IGrid<TVector>.Points
-        {
-            get => Points;
-            set => Points = value;
-        }
 
         public static implicit operator HashSet<TVector>(Grid<TSelf, TVector, TSize, TRange, T> grid) =>
             grid.Points;

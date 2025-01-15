@@ -65,6 +65,11 @@ namespace aoc.Grids
             protected override MooreGrid CreateGrid(HashSet<Vector> points) => new(points);
         }
 
+        protected MooreGrid(HashSet<Vector> points)
+            : base(points)
+        {
+        }
+
         protected MooreGrid(IEnumerable<Vector> points)
             : base(points)
         {
@@ -74,6 +79,11 @@ namespace aoc.Grids
     public sealed class MooreGrid : MooreGrid<MooreGrid>, IGrid2D<MooreGrid, Vector>
     {
         static new Helper Helper { get; } = Helper.Instance;
+
+        internal MooreGrid(HashSet<Vector> points)
+            : base(points)
+        {
+        }
 
         public MooreGrid(params Vector[] points)
             : base(points)
