@@ -110,10 +110,11 @@ namespace aoc.Grids
         public static Vector[] Headings =>
             Helper.Headings;
 
-        public static Builders.IHeadingBuilder         Heading => Helper;
-        public static Builders.IGridBuilder<HexNSGrid> Builder => Helper;
-        public static Builders.IVectorBuilder<Vector>  Vector  => Helper;
-        public static Builders.IPathBuilder<Vector>    Path    => Helper;
+        public static Builders.IHeadingBuilder                 Heading => Helper;
+        public static Builders.IGridBuilder<HexNSGrid>         Builder => Helper;
+        public static Builders.IVectorBuilder<Vector>          Vector  => Helper;
+        public static Builders.IPathBuilder<Vector>            Path    => Helper;
+        public static Builders.INextBuilder<HexNSGrid, Vector> Next    => Helper;
 
         public static HexNSGrid Parse(string input) =>
             Helper.Parse(input);

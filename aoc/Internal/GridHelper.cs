@@ -7,13 +7,12 @@ using System.Linq;
 
 namespace aoc.Internal
 {
-    abstract class GridHelper<TSelf, TGrid, TVector, TSize, TRange, T> : Singleton<TSelf>, IHeadingBuilder, IVectorBuilder<TVector>, IPathBuilder<TVector>
-        where TSelf : GridHelper<TSelf, TGrid, TVector, TSize, TRange, T>
+    abstract class GridHelper<TSelf, TGrid, TVector> : Singleton<TSelf>,
+            IHeadingBuilder, IVectorBuilder<TVector>, IPathBuilder<TVector>,
+            INextBuilder<TGrid, TVector>
+        where TSelf : GridHelper<TSelf, TGrid, TVector>
         where TGrid : IGrid<TVector>, IReadOnlyCollection<TVector>
-        where TVector : struct, IVector<TVector, T>
-        where TSize : struct, ISize<TSize, TVector, T>
-        where TRange : struct, IRange<TRange, TVector, T>
-        where T : struct
+        where TVector : struct, IVector<TVector>
     {
         public abstract TVector[] Headings { get; }
 
@@ -35,56 +34,46 @@ namespace aoc.Internal
             return count;
         }
 
-        public TGrid MoveNext(TGrid grid) =>
-            MoveNext(grid, (p, c) => DefaultFilterInclusive(grid, p, c));
+        public TGrid Move(TGrid grid) =>
+            Move(grid, (p, c) => DefaultFilterInclusive(grid, p, c));
 
-        public TGrid MoveNext(TGrid grid, TSize size) =>
-            MoveNext(grid, GetAllNeighborsAndSelf(grid, size), (p, c) => DefaultFilterInclusive(grid, p, c));
+        public TGrid Move<TSize>(TGrid grid, TSize size)
+            where TSize : struct, ISize<TSize, TVector> =>
+                Move(grid, GetAllNeighborsAndSelf(grid, size), (p, c) => DefaultFilterInclusive(grid, p, c));
 
-        public TGrid MoveNext(TGrid grid, TRange range) =>
-            MoveNext(grid, GetAllNeighborsAndSelf(grid, range), (p, c) => DefaultFilterInclusive(grid, p, c));
+        public TGrid Move(TGrid grid, Func<TVector, bool> predicate, bool inclusive) =>
+            Move(GetAllNeighbors(grid, inclusive), predicate);
 
-        public TGrid MoveNext(TGrid grid, Func<TVector, bool> predicate, bool inclusive) =>
-            MoveNext(GetAllNeighbors(grid, inclusive), predicate);
+        public TGrid Move<TSize>(TGrid grid, Func<TVector, bool> predicate, TSize size, bool inclusive)
+            where TSize : struct, ISize<TSize, TVector> =>
+                Move(GetAllNeighbors(grid, size, inclusive), predicate);
 
-        public TGrid MoveNext(TGrid grid, Func<TVector, bool> predicate, TSize size, bool inclusive) =>
-            MoveNext(GetAllNeighbors(grid, size, inclusive), predicate);
+        public TGrid Move(TGrid grid, Func<TVector, int, bool> filterInclusive) =>
+            Move(grid, GetAllNeighborsAndSelf(grid), filterInclusive);
 
-        public TGrid MoveNext(TGrid grid, Func<TVector, bool> predicate, TRange range, bool inclusive) =>
-            MoveNext(GetAllNeighbors(grid, range, inclusive), predicate);
+        public TGrid Move<TSize>(TGrid grid, Func<TVector, int, bool> filterInclusive, TSize size)
+            where TSize : struct, ISize<TSize, TVector> =>
+                Move(grid, GetAllNeighborsAndSelf(grid, size), filterInclusive);
 
-        public TGrid MoveNext(TGrid grid, Func<TVector, int, bool> filterInclusive) =>
-            MoveNext(grid, GetAllNeighborsAndSelf(grid), filterInclusive);
-
-        public TGrid MoveNext(TGrid grid, Func<TVector, int, bool> filterInclusive, TSize size) =>
-            MoveNext(grid, GetAllNeighborsAndSelf(grid, size), filterInclusive);
-
-        public TGrid MoveNext(TGrid grid, Func<TVector, int, bool> filterInclusive, TRange range) =>
-            MoveNext(grid, GetAllNeighborsAndSelf(grid, range), filterInclusive);
-
-        private TGrid MoveNext(ParallelQuery<TVector> pp, Func<TVector, bool> predicate) =>
+        private TGrid Move(ParallelQuery<TVector> pp, Func<TVector, bool> predicate) =>
             CreateGrid(pp.Where(predicate).ToHashSet());
 
-        private TGrid MoveNext(TGrid grid, ParallelQuery<TVector> pp, Func<TVector, int, bool> filterInclusive) =>
+        private TGrid Move(TGrid grid, ParallelQuery<TVector> pp, Func<TVector, int, bool> filterInclusive) =>
             CreateGrid(pp.Where(p => filterInclusive(p, CountNeighborsAndSelf(grid, p))).ToHashSet());
 
         private static bool DefaultFilterInclusive(TGrid grid, TVector p, int count) =>
             count == 3 || count == 4 && grid.Points.Contains(p);
 
-        private ParallelQuery<TVector> GetAllNeighborsAndSelf(TGrid grid, TSize size) =>
-            GetAllNeighbors(grid, size, true);
-
-        private ParallelQuery<TVector> GetAllNeighborsAndSelf(TGrid grid, TRange range) =>
-            GetAllNeighbors(grid, range, true);
+        private ParallelQuery<TVector> GetAllNeighborsAndSelf<TSize>(TGrid grid, TSize size)
+            where TSize : struct, ISize<TSize, TVector> =>
+                GetAllNeighbors(grid, size, true);
 
         private ParallelQuery<TVector> GetAllNeighborsAndSelf(TGrid grid) =>
             GetAllNeighbors(grid, true);
 
-        private ParallelQuery<TVector> GetAllNeighbors(TGrid grid, TSize size, bool inclusive) =>
-            GetAllNeighbors(grid, inclusive).Where(size.Contains);
-
-        private ParallelQuery<TVector> GetAllNeighbors(TGrid grid, TRange range, bool inclusive) =>
-            GetAllNeighbors(grid, inclusive).Where(range.Contains);
+        private ParallelQuery<TVector> GetAllNeighbors<TSize>(TGrid grid, TSize size, bool inclusive)
+            where TSize : struct, ISize<TSize, TVector> =>
+                GetAllNeighbors(grid, inclusive).Where(size.Contains);
 
         private ParallelQuery<TVector> GetAllNeighbors(TGrid grid, bool inclusive)
         {
@@ -251,7 +240,7 @@ namespace aoc.Internal
         protected abstract TGrid CreateGrid(HashSet<TVector> points);
     }
 
-    abstract class Grid2DHelper<TSelf, TGrid> : GridHelper<TSelf, TGrid, Vector, Size, VectorRange, int>, IGridBuilder<TGrid>
+    abstract class Grid2DHelper<TSelf, TGrid> : GridHelper<TSelf, TGrid, Vector>, IGridBuilder<TGrid>
         where TSelf : Grid2DHelper<TSelf, TGrid>
         where TGrid : Grid2D<TGrid>
     {

@@ -7,7 +7,7 @@ namespace aoc.Grids
     public abstract class Grid4D<TSelf> : Grid<TSelf, Vector4D, Size4D, Vector4DRange, int>
         where TSelf : Grid4D<TSelf>
     {
-        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper<THelper, TGrid, Vector4D, Size4D, Vector4DRange, int>
+        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper<THelper, TGrid, Vector4D>
             where THelper : Helper<THelper, TGrid>
             where TGrid : Grid4D<TGrid>
         {
@@ -144,8 +144,9 @@ namespace aoc.Grids
         public static Vector4D[] Headings =>
             Helper.Headings;
 
-        public static Builders.IHeadingBuilder          Heading => Helper;
-        public static Builders.IVectorBuilder<Vector4D> Vector  => Helper;
-        public static Builders.IPathBuilder<Vector4D>   Path    => Helper;
+        public static Builders.IHeadingBuilder                Heading => Helper;
+        public static Builders.IVectorBuilder<Vector4D>       Vector  => Helper;
+        public static Builders.IPathBuilder<Vector4D>         Path    => Helper;
+        public static Builders.INextBuilder<Grid4D, Vector4D> Next    => Helper;
     }
 }

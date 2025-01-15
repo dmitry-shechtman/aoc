@@ -107,7 +107,8 @@ namespace aoc.Grids
         public int CountNeighborsAndSelf(Vector3D p) =>
             Helper.CountNeighborsAndSelf(this, p);
 
-        public static Builders.IVectorBuilder<Vector3D> Vector => Helper;
-        public static Builders.IPathBuilder<Vector3D>   Path   => Helper;
+        public static Builders.IVectorBuilder<Vector3D>            Vector => Helper;
+        public static Builders.IPathBuilder<Vector3D>              Path   => Helper;
+        public static Builders.INextBuilder<MooreGrid3D, Vector3D> Next   => Helper;
     }
 }

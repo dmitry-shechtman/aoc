@@ -161,33 +161,6 @@ namespace aoc.Grids
         public int FloodFill(Vector from) =>
             Helper.FloodFill(this, from);
 
-        public Grid MoveNext() =>
-            Helper.MoveNext(this);
-
-        public Grid MoveNext(Size size) =>
-            Helper.MoveNext(this, size);
-
-        public Grid MoveNext(VectorRange range) =>
-            Helper.MoveNext(this, range);
-
-        public Grid MoveNext(Func<Vector, bool> predicate, bool inclusive = false) =>
-            Helper.MoveNext(this, predicate, inclusive);
-
-        public Grid MoveNext(Func<Vector, bool> predicate, Size size, bool inclusive = false) =>
-            Helper.MoveNext(this, predicate, size, inclusive);
-
-        public Grid MoveNext(Func<Vector, bool> predicate, VectorRange range, bool inclusive = false) =>
-            Helper.MoveNext(this, predicate, range, inclusive);
-
-        public Grid MoveNext(Func<Vector, int, bool> filterInclusive) =>
-            Helper.MoveNext(this, filterInclusive);
-
-        public Grid MoveNext(Func<Vector, int, bool> filterInclusive, Size size) =>
-            Helper.MoveNext(this, filterInclusive, size);
-
-        public Grid MoveNext(Func<Vector, int, bool> filterInclusive, VectorRange range) =>
-            Helper.MoveNext(this, filterInclusive, range);
-
         public static IEnumerable<Vector> GetNeighbors(Vector p) =>
             Helper.GetNeighbors(p);
 
@@ -212,10 +185,11 @@ namespace aoc.Grids
         public static Vector[] Headings =>
             Helper.Headings;
 
-        public static Builders.IHeadingBuilder        Heading => Helper;
-        public static Builders.IGridBuilder<Grid>     Builder => Helper;
-        public static Builders.IVectorBuilder<Vector> Vector  => Helper;
-        public static Builders.IPathBuilder<Vector>   Path    => Helper;
+        public static Builders.IHeadingBuilder            Heading => Helper;
+        public static Builders.IGridBuilder<Grid>         Builder => Helper;
+        public static Builders.IVectorBuilder<Vector>     Vector  => Helper;
+        public static Builders.IPathBuilder<Vector>       Path    => Helper;
+        public static Builders.INextBuilder<Grid, Vector> Next    => Helper;
 
         public static Grid Parse(string input) =>
             Helper.Parse(input);

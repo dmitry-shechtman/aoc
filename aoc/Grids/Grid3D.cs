@@ -7,7 +7,7 @@ namespace aoc.Grids
     public abstract class Grid3D<TSelf> : Grid<TSelf, Vector3D, Size3D, Vector3DRange, int>
         where TSelf : Grid3D<TSelf>
     {
-        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper<THelper, TGrid, Vector3D, Size3D, Vector3DRange, int>
+        internal abstract class Helper<THelper, TGrid> : Internal.GridHelper<THelper, TGrid, Vector3D>
             where THelper : Helper<THelper, TGrid>
             where TGrid : Grid3D<TGrid>
         {
@@ -130,8 +130,9 @@ namespace aoc.Grids
         public static Vector3D[] Headings =>
             Helper.Headings;
 
-        public static Builders.IHeadingBuilder          Heading => Helper;
-        public static Builders.IVectorBuilder<Vector3D> Vector  => Helper;
-        public static Builders.IPathBuilder<Vector3D>   Path    => Helper;
+        public static Builders.IHeadingBuilder                Heading => Helper;
+        public static Builders.IVectorBuilder<Vector3D>       Vector  => Helper;
+        public static Builders.IPathBuilder<Vector3D>         Path    => Helper;
+        public static Builders.INextBuilder<Grid3D, Vector3D> Next    => Helper;
     }
 }
