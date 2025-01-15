@@ -276,9 +276,9 @@ namespace aoc.Internal
         {
             GetSpecials(format, out var point, out var empty, out var separator);
             var chars = new char[(range.Width + separator.Length) * range.Height];
-            for (int y = range.Min.X, i = 0, k; y <= range.Max.Y; y++)
+            for (int y = range.Min.Y, i = 0, k; y <= range.Max.Y; y++)
             {
-                for (int x = range.Min.Y; x <= range.Max.Y; x++)
+                for (int x = range.Min.X; x <= range.Max.X; x++)
                     chars[i++] = grid.Contains((x, y))
                         ? point
                         : empty;
