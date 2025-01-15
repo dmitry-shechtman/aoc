@@ -84,7 +84,7 @@ namespace aoc
             return new(this);
         }
 
-        object ICloneable.Clone() => Clone();
+        readonly object ICloneable.Clone() => Clone();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly override bool Equals(object? obj) =>
@@ -108,7 +108,7 @@ namespace aoc
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override string ToString()
+        public override readonly string ToString()
         {
             StringBuilder sb = new();
             for (int i = _bits.Length - 1; i >= 0; i--)
@@ -117,7 +117,7 @@ namespace aoc
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int CompareTo(BitSet other)
+        public readonly int CompareTo(BitSet other)
         {
             for (int i = _bits.Length - 1; i >= 0; i--)
                 if (_bits[i] > other._bits[i])
@@ -326,7 +326,7 @@ namespace aoc
             GetEnumerator();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int Log2(long store) =>
+        private static int Log2(Store store) =>
             System.Numerics.BitOperations.Log2((ulong)store);
 
         private readonly string GetDebuggerDisplay()
