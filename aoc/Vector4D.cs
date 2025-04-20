@@ -218,7 +218,7 @@ namespace aoc
             left.Min(right);
 
         public readonly Vector4D Max(Vector4D other) =>
-            new(Math.Max(x, other.x), Math.Max(y, other.y), Math.Max(z, other.z), Math.Max(z, other.z));
+            new(Math.Max(x, other.x), Math.Max(y, other.y), Math.Max(z, other.z), Math.Max(w, other.w));
 
         public static Vector4D Max(Vector4D left, Vector4D right) =>
             left.Max(right);
