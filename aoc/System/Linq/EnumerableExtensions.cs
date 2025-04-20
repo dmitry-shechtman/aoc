@@ -57,6 +57,11 @@ namespace System.Linq
             source.Select()
                 .SingleOrDefault(t => predicate(t.Value, t.Index));
 
+        public static Dictionary<TKey, TValue> ToDictionary<TSource, TKey, TValue>(this IEnumerable<TSource> source, Func<TSource, int, TKey> keySelector, Func<TSource, int, TValue> valueSelector)
+            where TKey : notnull =>
+                source.Select()
+                    .ToDictionary(t => keySelector(t.Value, t.Index), t => valueSelector(t.Value, t.Index));
+
         public static TAccumulate Aggregate<TSource, TAccumulate>(this IEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, int, TAccumulate> selector) =>
             source.Select().Aggregate(seed, (a, v) => selector(a, v.Value, v.Index));
 
