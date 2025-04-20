@@ -180,6 +180,88 @@ namespace aoc
         public static IEnumerable<Vector4DRange> operator &(Vector4DRange left, Vector4DRange right) =>
             left.Intersect(right);
 
+        public IEnumerable<Vector4DRange> Subtract(IEnumerable<Vector4DRange> ranges)
+        {
+            HashSet<int> setX = new() { Min.X, Max.X == int.MaxValue ? Max.X : Max.X + 1 };
+            HashSet<int> setY = new() { Min.Y, Max.Y == int.MaxValue ? Max.Y : Max.Y + 1 };
+            HashSet<int> setZ = new() { Min.Z, Max.Z == int.MaxValue ? Max.Z : Max.Z + 1 };
+            HashSet<int> setW = new() { Min.W, Max.W == int.MaxValue ? Max.W : Max.W + 1 };
+            foreach (var ((minX, minY, minZ, minW), (maxX, maxY, maxZ, maxW)) in ranges)
+            {
+                setX.Add(minX);
+                setX.Add(maxX == int.MaxValue ? maxX : maxX + 1);
+                setY.Add(minY);
+                setY.Add(maxY == int.MaxValue ? maxY : maxY + 1);
+                setZ.Add(minZ);
+                setZ.Add(maxZ == int.MaxValue ? maxZ : maxZ + 1);
+                setW.Add(minW);
+                setW.Add(maxW == int.MaxValue ? maxW : maxW + 1);
+            }
+            var x = setX.ToArray();
+            Array.Sort(x);
+            var keyX = x.ToDictionary((v, _) => v, (_, i) => i);
+            var width = x.Length - 1;
+            var y = setY.ToArray();
+            Array.Sort(y);
+            var keyY = y.ToDictionary((v, _) => v, (_, i) => i);
+            var height = y.Length - 1;
+            var z = setZ.ToArray();
+            Array.Sort(z);
+            var keyZ = z.ToDictionary((v, _) => v, (_, i) => i);
+            var depth = z.Length - 1;
+            var w = setW.ToArray();
+            Array.Sort(w);
+            var keyW = w.ToDictionary((v, _) => v, (_, i) => i);
+            var anakata = w.Length - 1;
+            var grid = new bool[width * height * depth * anakata];
+            foreach (var ((minX, minY, minZ, minW), (maxX, maxY, maxZ, maxW)) in ranges)
+            {
+                var (i0, i1, j0, j1, k0, k1, l0, l1) = (keyX[minX], keyX[maxX == int.MaxValue ? maxX : maxX + 1], keyY[minY], keyY[maxY == int.MaxValue ? maxY : maxY + 1], keyZ[minZ], keyZ[maxZ == int.MaxValue ? maxZ : maxZ + 1], keyW[minW], keyW[maxW == int.MaxValue ? maxW : maxW + 1]);
+                for (int i = i0, a = i * height * depth * anakata; i < i1; i++, a += height * depth * anakata)
+                {
+                    for (int j = j0, b = a + j * depth * anakata; j < j1; j++, b += depth * anakata)
+                    {
+                        for (int k = k0, c = b + k * anakata; k < k1; k++, c += anakata)
+                        {
+                            for (int l = l0, d = c + l; l < l1; l++, d++)
+                            {
+                                grid[d] = true;
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (var range in Union(grid, x, keyX, y, keyY, z, keyZ, w, keyW))
+            {
+                yield return range;
+            }
+        }
+
+        private IEnumerable<Vector4DRange> Union(bool[] grid, int[] x, Dictionary<int, int> keyX, int[] y, Dictionary<int, int> keyY, int[] z, Dictionary<int, int> keyZ, int[] w, Dictionary<int, int> keyW)
+        {
+            var height = y.Length - 1;
+            var depth = z.Length - 1;
+            var anakata = w.Length - 1;
+            var (i0, i1, j0, j1, k0, k1, l0, l1) = (keyX[Min.X], keyX[Max.X == int.MaxValue ? Max.X : Max.X + 1], keyY[Min.Y], keyY[Max.Y == int.MaxValue ? Max.Y : Max.Y + 1], keyZ[Min.Z], keyZ[Max.Z == int.MaxValue ? Max.Z : Max.Z + 1], keyW[Min.W], keyW[Max.W == int.MaxValue ? Max.W : Max.W + 1]);
+            for (int i = i0, a = i * height * depth * anakata; i < i1; i++, a += height * depth * anakata)
+            {
+                for (int j = j0, b = a + j * depth * anakata; j < j1; j++, b += depth * anakata)
+                {
+                    for (int k = k0, c = b + k * anakata; k < k1; k++, c += anakata)
+                    {
+                        for (int l = l0, d = c + l; l < l1; l++, d++)
+                        {
+                            if (!grid[d])
+                            {
+                                yield return new(new Vector4D(x[i], y[j], z[k], w[l]), new(x[i + 1] == int.MaxValue ? x[i + 1] : x[i + 1] - 1, y[j + 1] == int.MaxValue ? y[j + 1] : y[j + 1] - 1, z[k + 1] == int.MaxValue ? z[k + 1] : z[k + 1] - 1, w[l + 1] == int.MaxValue ? w[l + 1] : w[l + 1] - 1));
+                                grid[d] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public readonly Vector4DRange Add(Vector4D vector) =>
             (Min + vector, Max + vector);
 

@@ -171,6 +171,74 @@ namespace aoc
         public static IEnumerable<Vector3DRange> operator &(Vector3DRange left, Vector3DRange right) =>
             left.Intersect(right);
 
+        public IEnumerable<Vector3DRange> Subtract(IEnumerable<Vector3DRange> ranges)
+        {
+            HashSet<int> setX = new() { Min.X, Max.X == int.MaxValue ? Max.X : Max.X + 1 };
+            HashSet<int> setY = new() { Min.Y, Max.Y == int.MaxValue ? Max.Y : Max.Y + 1 };
+            HashSet<int> setZ = new() { Min.Z, Max.Z == int.MaxValue ? Max.Z : Max.Z + 1 };
+            foreach (var ((minX, minY, minZ), (maxX, maxY, maxZ)) in ranges)
+            {
+                setX.Add(minX);
+                setX.Add(maxX == int.MaxValue ? maxX : maxX + 1);
+                setY.Add(minY);
+                setY.Add(maxY == int.MaxValue ? maxY : maxY + 1);
+                setZ.Add(minZ);
+                setZ.Add(maxZ == int.MaxValue ? maxZ : maxZ + 1);
+            }
+            var x = setX.ToArray();
+            Array.Sort(x);
+            var keyX = x.ToDictionary((v, _) => v, (_, i) => i);
+            var width = x.Length - 1;
+            var y = setY.ToArray();
+            Array.Sort(y);
+            var keyY = y.ToDictionary((v, _) => v, (_, i) => i);
+            var height = y.Length - 1;
+            var z = setZ.ToArray();
+            Array.Sort(z);
+            var keyZ = z.ToDictionary((v, _) => v, (_, i) => i);
+            var depth = z.Length - 1;
+            var grid = new bool[width * height * depth];
+            foreach (var ((minX, minY, minZ), (maxX, maxY, maxZ)) in ranges)
+            {
+                var (i0, i1, j0, j1, k0, k1) = (keyX[minX], keyX[maxX == int.MaxValue ? maxX : maxX + 1], keyY[minY], keyY[maxY == int.MaxValue ? maxY : maxY + 1], keyZ[minZ], keyZ[maxZ == int.MaxValue ? maxZ : maxZ + 1]);
+                for (int i = i0, a = i * height * depth; i < i1; i++, a += height * depth)
+                {
+                    for (int j = j0, b = a + j * depth; j < j1; j++, b += depth)
+                    {
+                        for (int k = k0, c = b + k; k < k1; k++, c++)
+                        {
+                            grid[c] = true;
+                        }
+                    }
+                }
+            }
+            foreach (var range in Union(grid, x, keyX, y, keyY, z, keyZ))
+            {
+                yield return range;
+            }
+        }
+
+        private IEnumerable<Vector3DRange> Union(bool[] grid, int[] x, Dictionary<int, int> keyX, int[] y, Dictionary<int, int> keyY, int[] z, Dictionary<int, int> keyZ)
+        {
+            var height = y.Length - 1;
+            var depth = z.Length - 1;
+            var (i0, i1, j0, j1, k0, k1) = (keyX[Min.X], keyX[Max.X == int.MaxValue ? Max.X : Max.X + 1], keyY[Min.Y], keyY[Max.Y == int.MaxValue ? Max.Y : Max.Y + 1], keyZ[Min.Z], keyZ[Max.Z == int.MaxValue ? Max.Z : Max.Z + 1]);
+            for (int i = i0, a = i * height * depth; i < i1; i++, a += height * depth)
+            {
+                for (int j = j0, b = a + j * depth; j < j1; j++, b += depth)
+                {
+                    for (int k = k0, c = b + k; k < k1; k++, c++)
+                    {
+                        if (!grid[c])
+                        {
+                            yield return new(new Vector3D(x[i], y[j], z[k]), new(x[i + 1] == int.MaxValue ? x[i + 1] : x[i + 1] - 1, y[j + 1] == int.MaxValue ? y[j + 1] : y[j + 1] - 1, z[k + 1] == int.MaxValue ? z[k + 1] : z[k + 1] - 1));
+                            grid[c] = true;
+                        }
+                    }
+                }
+            }
+        }
+
         public readonly Vector3DRange Add(Vector3D vector) =>
             (Min + vector, Max + vector);
 

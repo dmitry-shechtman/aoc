@@ -165,6 +165,60 @@ namespace aoc
         public static IEnumerable<VectorRange> operator &(VectorRange left, VectorRange right) =>
             left.Intersect(right);
 
+        public IEnumerable<VectorRange> Subtract(IEnumerable<VectorRange> ranges)
+        {
+            HashSet<int> setX = new() { Min.X, Max.X == int.MaxValue ? Max.X : Max.X + 1 };
+            HashSet<int> setY = new() { Min.Y, Max.Y == int.MaxValue ? Max.Y : Max.Y + 1 };
+            foreach (var ((minX, minY), (maxX, maxY)) in ranges)
+            {
+                setX.Add(minX);
+                setX.Add(maxX == int.MaxValue ? maxX : maxX + 1);
+                setY.Add(minY);
+                setY.Add(maxY == int.MaxValue ? maxY : maxY + 1);
+            }
+            var x = setX.ToArray();
+            Array.Sort(x);
+            var keyX = x.ToDictionary((v, _) => v, (_, i) => i);
+            var width = x.Length - 1;
+            var y = setY.ToArray();
+            Array.Sort(y);
+            var keyY = y.ToDictionary((v, _) => v, (_, i) => i);
+            var height = y.Length - 1;
+            var grid = new bool[width * height];
+            foreach (var ((minX, minY), (maxX, maxY)) in ranges)
+            {
+                var (i0, i1, j0, j1) = (keyX[minX], keyX[maxX == int.MaxValue ? maxX : maxX + 1], keyY[minY], keyY[maxY == int.MaxValue ? maxY : maxY + 1]);
+                for (int i = i0, a = i * height; i < i1; i++, a += height)
+                {
+                    for (int j = j0, b = a + j; j < j1; j++, b++)
+                    {
+                        grid[b] = true;
+                    }
+                }
+            }
+            foreach (var range in Union(grid, x, keyX, y, keyY))
+            {
+                yield return range;
+            }
+        }
+
+        private IEnumerable<VectorRange> Union(bool[] grid, int[] x, Dictionary<int, int> keyX, int[] y, Dictionary<int, int> keyY)
+        {
+            var height = y.Length - 1;
+            var (i0, i1, j0, j1) = (keyX[Min.X], keyX[Max.X == int.MaxValue ? Max.X : Max.X + 1], keyY[Min.Y], keyY[Max.Y == int.MaxValue ? Max.Y : Max.Y + 1]);
+            for (int i = i0, a = i * height; i < i1; i++, a += height)
+            {
+                for (int j = j0, b = a + j; j < j1; j++, b++)
+                {
+                    if (!grid[b])
+                    {
+                        yield return new(new Vector(x[i], y[j]), new(x[i + 1] == int.MaxValue ? x[i + 1] : x[i + 1] - 1, y[j + 1] == int.MaxValue ? y[j + 1] : y[j + 1] - 1));
+                        grid[b] = true;
+                    }
+                }
+            }
+        }
+
         public readonly VectorRange Add(Vector vector) =>
             new(Min + vector, Max + vector);
 
